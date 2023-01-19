@@ -936,7 +936,7 @@ public abstract class PageLoader {
             for (int i = mCurPage.titleLines; i < mCurPage.lines.size(); ++i) {
                 str = mCurPage.lines.get(i);
                 Log.d(TAG + "+绘制的文本", str + "   " + mMarginWidth + "  " + top);
-                canvas.drawText(str.replace("\n", ""), mMarginWidth, top, mTextPaint);
+                canvas.drawText(str.replace("\n", ""), mMarginWidth, top, mTextPaint);  //安卓13绘制不了/n符号
                 if (str.endsWith("\n")) {
                     top += para;
                 } else {
