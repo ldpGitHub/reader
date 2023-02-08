@@ -7,10 +7,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 
 import com.blankj.utilcode.util.BarUtils;
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +20,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,7 +95,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
 
-
     protected List<Fragment> createTabFragments() {
         initFragment();
         return mFragmentList;
@@ -120,7 +122,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         stMain.setViewPager(mVp);
         stMain.setOnTabListener((index, v) -> mVp.setCurrentItem(index, true));
     }
-
 
 
     protected List<String> createTabTitles() {
@@ -276,7 +277,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 

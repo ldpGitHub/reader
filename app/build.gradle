@@ -5,7 +5,7 @@ apply plugin: 'com.mob.sdk'
 apply plugin: 'com.didi.dokit'
 
 
-def do_kit = "3.7.1"
+def do_kit = "3.7.11"
 
 MobSDK {
     appKey "2dc105548a750"
@@ -38,7 +38,7 @@ MobSDK {
     }
 }
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
     signingConfigs {
         release {
             storeFile file('../reader.jks')
@@ -98,8 +98,7 @@ dokitExt {
             thresholdTime 10
         }
         normalMethod {
-            thresholdTime 10
-            packageNames = ['com.microtechmd.cgms']
+            thresholdTime 100
         }
     }
 }
