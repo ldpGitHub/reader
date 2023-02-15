@@ -26,6 +26,7 @@
         android:supportsRtl="true"
         android:persistent="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true"
 
         android:allowBackup="false"
         tools:replace="android:allowBackup"

@@ -104,7 +104,7 @@ public class PageView extends View {
         if (mViewWidth == 0 || mViewHeight == 0) return;
 
         switch (mPageMode) {
-            case SIMULATION:
+            case SIMULATION :
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
             case COVER:
