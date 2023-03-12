@@ -54,7 +54,7 @@ public class CollBookHolder extends ViewHolderImpl<CollBookBean>{
             Glide.with(getContext())
                     .load(value.getCover())
                     .placeholder(R.drawable.ic_book_loading)
-                    .error(R.drawable.ic_load_error)
+                    .error(R.drawable.ic_book_loading)
                     .fitCenter()
                     .into(mIvCover);
         }

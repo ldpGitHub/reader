@@ -68,9 +68,11 @@ public class RemoteRepository {
     private RemoteRepository() {
         mRetrofit = RemoteHelper.getInstance()
                 .getRetrofit();
+        mBookApi = mRetrofit.create(BookApi.class);
+
+
         mRetrofitByOwn = RemoteHelper.getInstance()
                 .getRetrofitByOwn();
-        mBookApi = mRetrofit.create(BookApi.class);
         mBookApiOwn = mRetrofitByOwn.create(BookApiOwn.class);
     }
 
