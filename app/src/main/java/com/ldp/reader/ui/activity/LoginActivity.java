@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.ldp.reader.R;
 import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
@@ -234,14 +235,14 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
 
     String registrationId = "";
     private void getRegId(){
-        Log.d(TAG, "preDirectLogin: registrationId");
+        LogUtils.d(TAG, "preDirectLogin: registrationId");
         registrationId = SharedPreUtils.getInstance().getString("registrationId");
-        Log.d(TAG, "onCallback: registrationId  " + registrationId);
+        LogUtils.d(TAG, "onCallback: registrationId  " + registrationId);
         if (TextUtils.isEmpty(registrationId)){
             MobPush.getRegistrationId(new MobPushCallback<String>() {
                 @Override
                 public void onCallback(String s) {
-                    Log.d(TAG, "onCallback: registrationId  " + s);
+                    LogUtils.e(TAG, "onCallback: registrationId  " + s);
                     registrationId = s;
                     SharedPreUtils.getInstance().putString("registrationId",registrationId);
                 }
