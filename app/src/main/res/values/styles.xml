@@ -10,22 +10,25 @@
         <item name="android:actionOverflowMenuStyle">@style/ActionButton.Overflow.Menu</item>
     </style>
 
-    <style name="AppTheme" parent="BaseAppTheme" />
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:background">@drawable/ic_transparent_logo</item>
+    </style>
 
-        <!--Splash-->
-        <style name="SplashTheme" parent="AppTheme">
-            <item name="android:background">@color/transparent</item>
-        </style>
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:background">@color/transparent</item>
+    </style>
 
-<!--    <style name="SplashTheme" parent="Theme.SplashScreen">-->
-<!--        &lt;!&ndash;启动画面背景颜色&ndash;&gt;-->
-<!--        <item name="windowSplashScreenBackground">@android:color/black</item>-->
-<!--        &lt;!&ndash; 启动画面icon图标：这里可以是图片、帧动画等&ndash;&gt;-->
-<!--        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>-->
-<!--        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>-->
-<!--        &lt;!&ndash; icon动画在关闭之前显示的时长：最长时间为1000毫秒&ndash;&gt;-->
-<!--        <item name="windowSplashScreenAnimationDuration">1000</item>-->
-<!--    </style>-->
+    <!--    <style name="SplashTheme" parent="Theme.SplashScreen">-->
+    <!--        &lt;!&ndash;启动画面背景颜色&ndash;&gt;-->
+    <!--        <item name="windowSplashScreenBackground">@android:color/transparent</item>-->
+    <!--        &lt;!&ndash; 启动画面icon图标：这里可以是图片、帧动画等&ndash;&gt;-->
+    <!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_transparent_logo</item>-->
+    <!--        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>-->
+    <!--        &lt;!&ndash; icon动画在关闭之前显示的时长：最长时间为1000毫秒&ndash;&gt;-->
+    <!--        <item name="windowSplashScreenAnimationDuration">1000</item>-->
+    <!--        <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar</item>-->
+
+    <!--    </style>-->
 
     <!--Dialog-->
     <style name="CommonDialog" parent="@style/Theme.AppCompat.Light.Dialog">
