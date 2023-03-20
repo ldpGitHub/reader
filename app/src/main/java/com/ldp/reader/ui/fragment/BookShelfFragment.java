@@ -6,9 +6,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -128,7 +130,8 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                         if (TextUtils.isEmpty(token)) {
                             ToastUtils.show("请登录");
                             return;
-                        } else if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
+                        }
+                        if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
                             mPresenter.getBookShelf(token);
                         } else {
                             String mobile = SharedPreUtils.getInstance().getString("userName");
@@ -225,19 +228,19 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         );
     }
 
-     RxPermissions rxPermissions ;
+    RxPermissions rxPermissions;
 
     @Override
     protected void processLogic() {
 
         super.processLogic();
-      //  mRvContent.startRefresh();
+        //  mRvContent.startRefresh();
     }
 
     @SuppressLint("CheckResult")
     private void getPermission() {
         rxPermissions
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
                     if (granted) { // Always true pre-M
                         // I can control the camera now
@@ -345,23 +348,29 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         }
     }
 
-    private void  synBook(){
+    private void synBook() {
         List<CollBookBean> collBookBeans = BookRepository.getInstance().getCollBooks();
         List<String> bookIds = new ArrayList<>();
-        for (CollBookBean collBookBean:collBookBeans ) {
-            if(!collBookBean.isLocal()){
+        for (CollBookBean collBookBean : collBookBeans) {
+            if (!collBookBean.isLocal()) {
                 bookIds.add(collBookBean.get_id());
             }
         }
-        if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))){
+
+        if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
             mPresenter.setBookShelf(bookIds);
-        }else {
+        } else {
             Log.e(TAG, "onClick:  正在删除中 同步书架");
-            String mobile  =  SharedPreUtils.getInstance().getString("userName");
-            String mobileToken =  SharedPreUtils.getInstance().getString("token");
-            mPresenter.setBookShelfByMobile(bookIds,mobile,mobileToken);
+            String mobileToken = SharedPreUtils.getInstance().getString("token");
+            String mobile = SharedPreUtils.getInstance().getString("userName");
+            if (mobileToken.isEmpty() || mobile.isEmpty()) {
+                return;
+            }
+
+            mPresenter.setBookShelfByMobile(bookIds, mobile, mobileToken);
         }
     }
+
     /*******************************************************************8*/
 
     @Override
@@ -427,7 +436,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                     .inflate(R.layout.footer_book_shelf, parent, false);
             view.setOnClickListener(
                     (v) -> {
-                        Intent intent = new Intent(getContext(),SearchActivity.class);
+                        Intent intent = new Intent(getContext(), SearchActivity.class);
                         startActivity(intent);
                         //设置RxBus回调
                     }
@@ -450,18 +459,19 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     }
 
     String registrationId;
-    private void getRegId(){
+
+    private void getRegId() {
         Log.d(TAG, "preDirectLogin: registrationId");
         registrationId = SharedPreUtils.getInstance().getString("registrationId");
         Log.d(TAG, "onCallback: registrationId  " + registrationId);
         MobPush.setShowBadge(true);
-        if (TextUtils.isEmpty(registrationId)){
+        if (TextUtils.isEmpty(registrationId)) {
             MobPush.getRegistrationId(new MobPushCallback<String>() {
                 @Override
                 public void onCallback(String s) {
                     Log.d(TAG, "onCallback: registrationId  " + s);
                     registrationId = s;
-                    SharedPreUtils.getInstance().putString("registrationId",registrationId);
+                    SharedPreUtils.getInstance().putString("registrationId", registrationId);
                 }
             });
         }
