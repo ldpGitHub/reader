@@ -15,7 +15,7 @@ import com.tencent.bugly.crashreport.CrashReport;
  */
 
 public class App extends Application {
-    private static final String TAG   = App.class.getSimpleName();
+    private static final String TAG = App.class.getSimpleName();
     private static Context sInstance;
 
 
@@ -27,11 +27,12 @@ public class App extends Application {
 //        startService(new Intent(getContext(), DownloadService.class));
         // 初始化内存分析工具
 
-        MobSDK.submitPolicyGrantResult(true, null);
-        getCertificateMD5();
+        MobSDK.submitPolicyGrantResult(true);
         if (BuildConfig.DEBUG) {
             new DoKit.Builder(this).debug(true).build();
         }
+
+
     }
 
     @Override
@@ -40,12 +41,7 @@ public class App extends Application {
         MultiDex.install(this);
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return sInstance;
-    }
-
-    private void getCertificateMD5()
-    {
-//        Log.d(TAG, "getCertificateMD5: " + AppUtils.getAppSignaturesMD5());
     }
 }
