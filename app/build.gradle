@@ -154,7 +154,8 @@ dependencies {
     })
 
     implementation 'com.orhanobut:logger:2.2.0'
-    implementation 'com.blankj:utilcode:1.30.6'
+    implementation 'com.blankj:utilcodex:1.31.1'
+
     //调试工具/性能监测工具
     debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
     releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
