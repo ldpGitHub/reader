@@ -72,6 +72,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
             @Override
             public void onComplete(Void data) {
                 Log.d(TAG, "onComplete: " + data);
+                directLogin();
                 //TODO处理成功的结果
             }
             @Override

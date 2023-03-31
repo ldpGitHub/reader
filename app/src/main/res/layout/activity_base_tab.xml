@@ -27,10 +27,10 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:fitsSystemWindows="true"
-                android:minHeight="?attr/actionBarSize"
+                android:minHeight="?android:actionBarSize"
                 android:theme="@style/Theme.ToolBar.Menu"
                 android:visibility="visible"
                 app:layout_scrollFlags="scroll|enterAlways" />
@@ -39,7 +39,7 @@
                 android:id="@+id/st_main"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"
                 app:lib_pub_stab_avag="true"
