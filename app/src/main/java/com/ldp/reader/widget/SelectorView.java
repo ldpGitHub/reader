@@ -24,7 +24,6 @@ import com.ldp.reader.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 
 /**
  * Created by ldp on 17-4-17.

@@ -1,8 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'kotlin-android' // 添加这一行来应用 Kotlin 插件
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'com.mob.sdk'
-apply plugin: 'com.didi.dokit'
+//apply plugin: 'com.didi.dokit'
 
 def do_kit = "3.7.11"
 
@@ -28,6 +31,7 @@ MobSDK {
         }
     }
 }
+
 android {
     compileSdkVersion 33
     signingConfigs {
@@ -51,9 +55,21 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        ndk {
+            // 添加项⽬所需CPU类型的最⼩集
+            //noinspection ChromeOsAbiSupport
+            abiFilters  "arm64-v8a"
+        }
+
     }
+    buildFeatures {
+        viewBinding true
+    }
+
+
     buildTypes {
         release {
             // 不显示Log
@@ -62,37 +78,44 @@ android {
             minifyEnabled false
             // 移除无用的resource文件
             shrinkResources false
+
+
             signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
+
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
             signingConfig signingConfigs.debug
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-}
-
-dokitExt {
-    comm {
-        gpsSwitch true
-        networkSwitch true
-        bigImgSwitch true
-        webViewSwitch false
+        sourceCompatibility 11
+        targetCompatibility 11
     }
 
-    slowMethod {
-        stackMethod {
-            thresholdTime 10
-        }
-        normalMethod {
-            thresholdTime 100
-        }
-    }
 }
+//
+//dokitExt {
+//    comm {
+//        gpsSwitch true
+//        networkSwitch true
+//        bigImgSwitch true
+//        webViewSwitch false
+//    }
+//
+//    slowMethod {
+//        stackMethod {
+//            thresholdTime 10
+//        }
+//        normalMethod {
+//            thresholdTime 100
+//        }
+//    }
+//}
 
 greendao {
     schemaVersion 9
@@ -108,15 +131,21 @@ dependencies {
     })
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+//    implementation "androidx.core:core-splashscreen:1.0.0"
+
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'androidx.cardview:cardview:1.0.0'
-    // View injection
-    implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
+//    // View injection
+//    implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+//    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
     // RxJava
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
@@ -130,7 +159,7 @@ dependencies {
     // ImageLoader
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.glideVersion"
-
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     // ORM Database
     implementation "org.greenrobot:greendao:$rootProject.greendaoVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
@@ -142,22 +171,20 @@ dependencies {
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     // Android Leak Analysis
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
-    // CrashReport
 
+
+    // CrashReport
     implementation "com.tencent.bugly:crashreport:$rootProject.buglyVersion"
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-//    implementation "com.tencent.bugly:nativecrashreport:$rootProject.buglyVersion"
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.airbnb.android:lottie:2.3.0'
     implementation('com.github.tbruyelle:rxpermissions:0.10.2', {
         exclude(group: 'com.android.support')
     })
 
-    implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.blankj:utilcodex:1.31.1'
 
     //调试工具/性能监测工具
-    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
-    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
+//    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
+//    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
 
 }

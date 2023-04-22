@@ -28,7 +28,7 @@ public interface BookDetailContract {
         void succeedToBookShelf();
     }
 
-    interface Presenter extends BaseContract.BasePresenter<View>{
+    interface Presenter<T extends BaseContract.BaseView> extends BaseContract.BasePresenter<T>{
         void refreshBookDetail(String bookId);
         //添加到书架上
         void addToBookShelf(CollBookBean collBook);

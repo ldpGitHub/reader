@@ -1,40 +1,50 @@
 package com.ldp.reader.ui.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ldp.reader.R;
+import com.ldp.reader.databinding.FragmentLocalBookBinding;
 import com.ldp.reader.model.local.BookRepository;
 import com.ldp.reader.ui.adapter.FileSystemAdapter;
 import com.ldp.reader.utils.media.MediaStoreHelper;
 import com.ldp.reader.widget.RefreshLayout;
 import com.ldp.reader.widget.itemdecoration.DividerItemDecoration;
 
-import butterknife.BindView;
 
 /**
  * Created by ldp on 17-5-27.
  * 本地书籍
  */
 
-public class LocalBookFragment extends BaseFileFragment{
-    @BindView(R.id.refresh_layout)
+public class LocalBookFragment extends BaseFileFragment<FragmentLocalBookBinding> {
     RefreshLayout mRlRefresh;
-    @BindView(R.id.local_book_rv_content)
     RecyclerView mRvContent;
-    @Override
-    protected int getContentId() {
-        return R.layout.fragment_local_book;
-    }
+
 
     @Override
     protected void initWidget(Bundle savedInstanceState) {
         super.initWidget(savedInstanceState);
+        if(getBinding() != null){
+            mRlRefresh = getBinding().refreshLayout;
+            mRvContent = getBinding().localBookRvContent;
+        }
+
         setUpAdapter();
     }
 
-    private void setUpAdapter(){
+    @Override
+    protected FragmentLocalBookBinding getViewBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentLocalBookBinding.inflate(inflater, container, false);
+    }
+
+    private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
@@ -48,7 +58,7 @@ public class LocalBookFragment extends BaseFileFragment{
                 (view, pos) -> {
                     //如果是已加载的文件，则点击事件无效。
                     String id = mAdapter.getItem(pos).getAbsolutePath();
-                    if (BookRepository.getInstance().getCollBook(id) != null){
+                    if (BookRepository.getInstance().getCollBook(id) != null) {
                         return;
                     }
 
@@ -56,7 +66,7 @@ public class LocalBookFragment extends BaseFileFragment{
                     mAdapter.setCheckedItem(pos);
 
                     //反馈
-                    if (mListener != null){
+                    if (mListener != null) {
                         mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
                     }
                 }
@@ -68,14 +78,13 @@ public class LocalBookFragment extends BaseFileFragment{
         super.processLogic();
         MediaStoreHelper.getAllBookFile(getActivity(),
                 (files) -> {
-                    if (files.isEmpty()){
+                    if (files.isEmpty()) {
                         mRlRefresh.showEmpty();
-                    }
-                    else {
+                    } else {
                         mAdapter.refreshItems(files);
                         mRlRefresh.showFinish();
                         //反馈
-                        if (mListener != null){
+                        if (mListener != null) {
                             mListener.onCategoryChanged();
                         }
                     }

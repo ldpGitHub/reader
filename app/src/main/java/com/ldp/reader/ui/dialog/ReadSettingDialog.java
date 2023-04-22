@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -21,8 +24,6 @@ import android.widget.TextView;
 
 import com.ldp.reader.R;
 import com.ldp.reader.model.local.ReadSettingManager;
-import com.ldp.reader.ui.activity.MoreSettingActivity;
-import com.ldp.reader.ui.activity.ReadActivity;
 import com.ldp.reader.ui.adapter.PageStyleAdapter;
 import com.ldp.reader.utils.BrightnessUtils;
 import com.ldp.reader.utils.ScreenUtils;
@@ -32,8 +33,6 @@ import com.ldp.reader.widget.page.PageStyle;
 
 import java.util.Arrays;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by ldp on 17-5-18.
@@ -43,38 +42,22 @@ public class ReadSettingDialog extends Dialog {
     private static final String TAG = "ReadSettingDialog";
     private static final int DEFAULT_TEXT_SIZE = 16;
 
-    @BindView(R.id.read_setting_iv_brightness_minus)
     ImageView mIvBrightnessMinus;
-    @BindView(R.id.read_setting_sb_brightness)
     SeekBar mSbBrightness;
-    @BindView(R.id.read_setting_iv_brightness_plus)
     ImageView mIvBrightnessPlus;
-    @BindView(R.id.read_setting_cb_brightness_auto)
     CheckBox mCbBrightnessAuto;
-    @BindView(R.id.read_setting_tv_font_minus)
     TextView mTvFontMinus;
-    @BindView(R.id.read_setting_tv_font)
     TextView mTvFont;
-    @BindView(R.id.read_setting_tv_font_plus)
     TextView mTvFontPlus;
-    @BindView(R.id.read_setting_cb_font_default)
     CheckBox mCbFontDefault;
-    @BindView(R.id.read_setting_rg_page_mode)
     RadioGroup mRgPageMode;
 
-    @BindView(R.id.read_setting_rb_simulation)
     RadioButton mRbSimulation;
-    @BindView(R.id.read_setting_rb_cover)
     RadioButton mRbCover;
-    @BindView(R.id.read_setting_rb_slide)
     RadioButton mRbSlide;
-    @BindView(R.id.read_setting_rb_scroll)
     RadioButton mRbScroll;
-    @BindView(R.id.read_setting_rb_none)
     RadioButton mRbNone;
-    @BindView(R.id.read_setting_rv_bg)
     RecyclerView mRvBg;
-    @BindView(R.id.read_setting_tv_more)
     TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
@@ -102,7 +85,6 @@ public class ReadSettingDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_read_setting);
-        ButterKnife.bind(this);
         setUpWindow();
         initData();
         initWidget();
@@ -131,6 +113,25 @@ public class ReadSettingDialog extends Dialog {
     }
 
     private void initWidget() {
+
+        mIvBrightnessMinus = (ImageView) findViewById(R.id.read_setting_iv_brightness_minus);
+        mSbBrightness = (SeekBar) findViewById(R.id.read_setting_sb_brightness);
+        mIvBrightnessPlus = (ImageView) findViewById(R.id.read_setting_iv_brightness_plus);
+        mCbBrightnessAuto = (CheckBox) findViewById(R.id.read_setting_cb_brightness_auto);
+        mTvFontMinus = (TextView) findViewById(R.id.read_setting_tv_font_minus);
+        mTvFont = (TextView) findViewById(R.id.read_setting_tv_font);
+        mTvFontPlus = (TextView) findViewById(R.id.read_setting_tv_font_plus);
+        mCbFontDefault = (CheckBox) findViewById(R.id.read_setting_cb_font_default);
+        mRgPageMode = (RadioGroup) findViewById(R.id.read_setting_rg_page_mode);
+        mRbSimulation = (RadioButton) findViewById(R.id.read_setting_rb_simulation);
+        mRbCover = (RadioButton) findViewById(R.id.read_setting_rb_cover);
+        mRbSlide = (RadioButton) findViewById(R.id.read_setting_rb_slide);
+        mRbScroll = (RadioButton) findViewById(R.id.read_setting_rb_scroll);
+        mRbNone = (RadioButton) findViewById(R.id.read_setting_rb_none);
+        mRvBg = (RecyclerView) findViewById(R.id.read_setting_rv_bg);
+        mTvMore = (TextView) findViewById(R.id.read_setting_tv_more);
+
+
         mSbBrightness.setProgress(mBrightness);
         mTvFont.setText(mTextSize + "");
         mCbBrightnessAuto.setChecked(isBrightnessAuto);
@@ -311,16 +312,17 @@ public class ReadSettingDialog extends Dialog {
         mPageStyleAdapter.setOnItemClickListener(
                 (view, pos) -> mPageLoader.setPageStyle(PageStyle.values()[pos])
         );
+        mTvMore.setVisibility(View.INVISIBLE);
 
-        //更多设置
-        mTvMore.setOnClickListener(
-                (v) -> {
-                    Intent intent = new Intent(getContext(), MoreSettingActivity.class);
-                    mActivity.startActivityForResult(intent, ReadActivity.REQUEST_MORE_SETTING);
-                    //关闭当前设置
-                    dismiss();
-                }
-        );
+//        //更多设置
+//        mTvMore.setOnClickListener(
+//                (v) -> {
+//                    Intent intent = new Intent(getContext(), MoreSettingActivity.class);
+//                    mActivity.startActivityForResult(intent, ReadActivity.REQUEST_MORE_SETTING);
+//                    //关闭当前设置
+//                    dismiss();
+//                }
+//        );
     }
 
     public boolean isBrightFollowSystem() {

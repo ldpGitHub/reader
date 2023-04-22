@@ -11,16 +11,20 @@ import java.util.List;
  * Created by ldp on 17-5-16.
  */
 
-public interface ReadContract extends BaseContract{
+public interface ReadContract extends BaseContract {
     interface View extends BaseContract.BaseView {
-        void showCategory(List<BookChapterBean> bookChapterList,String bookId ,boolean isBiqugeLoaded);
+        void showCategory(List<BookChapterBean> bookChapterList, String bookId, boolean isBiqugeLoaded);
+
         void finishChapter(boolean isRefresh);
+
         void errorChapter();
     }
 
-    interface Presenter extends BaseContract.BasePresenter<View>{
+    interface Presenter<T extends BaseView> extends BaseContract.BasePresenter<T> {
         void loadCategory(String bookId);
-        void loadChapter(String bookId,List<TxtChapter> bookChapterList);
-        void refreshChapter(String bookId, TxtChapter bookChapter , int sourceIndex);
+
+        void loadChapter(String bookId, List<TxtChapter> bookChapterList);
+
+        void refreshChapter(String bookId, TxtChapter bookChapter, int sourceIndex);
     }
 }

@@ -33,7 +33,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity
-            android:name="com.ldp.reader.ui.activity.SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -42,31 +42,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ldp.reader.ui.activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name="com.ldp.reader.ui.activity.BookDiscussionActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.DiscDetailActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BillboardActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BookSortActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BookSortListActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.SearchActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BookListActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BookListDetailActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BillBookActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.OtherBillBookActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.BookDetailActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.DownloadActivity" />
-        <activity
-            android:name="com.ldp.reader.ui.activity.ReadActivity"
             android:launchMode="singleTask" />
-        <activity android:name="com.ldp.reader.ui.activity.FileSystemActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.CommunityActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.MoreSettingActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.BookDetailActivity" />
+        <activity
+            android:name=".ui.activity.ReadActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".ui.activity.FileSystemActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
 
-        <service android:name="com.ldp.reader.service.DownloadService" />
+        <service android:name=".service.DownloadService" />
+
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BookDiscussionActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.DiscDetailActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BillboardActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BookSortActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BookSortListActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BookListActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BookListDetailActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.BillBookActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.OtherBillBookActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.DownloadActivity" />-->
+        <!--        -->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.CommunityActivity" />-->
+        <!--        <activity android:name="com.ldp.reader.ui.activity.MoreSettingActivity" />-->
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

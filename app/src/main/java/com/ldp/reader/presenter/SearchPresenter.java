@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SearchPresenter extends RxPresenter<SearchContract.View>
-        implements SearchContract.Presenter {
+        implements SearchContract.Presenter<SearchContract.View> {
     private static final String TAG  = SearchPresenter.class.getSimpleName();
     @Override
     public void searchHotWord() {

@@ -21,7 +21,7 @@ public interface BookShelfContract {
         void showErrorTip(String error);
     }
 
-    interface Presenter extends BaseContract.BasePresenter<View> {
+    interface Presenter<T extends BaseContract.BaseView> extends BaseContract.BasePresenter<T> {
         void refreshCollBooks();
 
         void createDownloadTask(CollBookBean collBookBean);

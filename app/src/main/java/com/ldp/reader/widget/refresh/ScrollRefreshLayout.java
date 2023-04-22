@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.ldp.reader.R;
 
-import butterknife.ButterKnife;
 
 /**
  * Created by ldp on 17-4-18.

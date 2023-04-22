@@ -40,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ReadPresenter extends RxPresenter<ReadContract.View>
-        implements ReadContract.Presenter {
+        implements ReadContract.Presenter<ReadContract.View> {
     private static final String TAG = ReadPresenter.class.getSimpleName();
 
     private Subscription mChapterSub;

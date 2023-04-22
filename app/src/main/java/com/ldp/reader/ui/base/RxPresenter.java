@@ -25,6 +25,7 @@ public class RxPresenter<T extends BaseContract.BaseView> implements BaseContrac
         mDisposable.add(subscription);
     }
 
+
     @Override
     public void attachView(T view) {
         this.mView = view;

@@ -3,6 +3,7 @@ package com.ldp.reader.presenter;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.airbnb.lottie.L;
 import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
@@ -31,7 +32,7 @@ import io.reactivex.functions.Consumer;
  */
 
 public class LoginPresenter extends RxPresenter<LoginContract.View>
-        implements LoginContract.Presenter {
+        implements LoginContract.Presenter<LoginContract.View> {
     private static final String TAG = LoginPresenter.class.getSimpleName();
     private String registrationId;
     @Override

@@ -11,20 +11,23 @@ import java.util.List;
 
 public interface SearchContract extends BaseContract {
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void finishHotWords(List<String> hotWords);
-        void finishKeyWords(List<String> keyWords);
-//        void finishBooks(List<SearchBookPackage.BooksBean> books);
-        void finishBooks(List<BookSearchResult> dataBeans);
 
+        void finishKeyWords(List<String> keyWords);
+
+        //        void finishBooks(List<SearchBookPackage.BooksBean> books);
+        void finishBooks(List<BookSearchResult> dataBeans);
 
         void errorBooks();
     }
 
-    interface Presenter extends BasePresenter<View>{
+    interface Presenter<T extends BaseView> extends BasePresenter<T> {
         void searchHotWord();
+
         //搜索提示
         void searchKeyWord(String query);
+
         //搜索书籍
         void searchBook(String query);
     }

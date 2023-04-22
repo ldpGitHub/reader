@@ -18,7 +18,7 @@ public interface LoginContract extends BaseContract {
         void finishSmsLogin(SmsLoginBean smsLoginBean);
     }
 
-    interface Presenter extends BasePresenter<View>{
+    interface Presenter<T extends BaseView> extends BasePresenter<T>{
         void userLogin(String userName,String passWord);
         void preDirectLogin();
 

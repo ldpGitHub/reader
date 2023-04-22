@@ -31,8 +31,10 @@ import com.mob.pushsdk.MobPush;
 import com.mob.pushsdk.MobPushCallback;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -48,7 +50,7 @@ import okhttp3.RequestBody;
  */
 
 public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
-        implements BookShelfContract.Presenter {
+        implements BookShelfContract.Presenter<BookShelfContract.View> {
     private static final String TAG = "BookShelfPresenter";
 
     @Override
@@ -135,11 +137,6 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(
                         bookIdBeans -> {
-//                            List<String> bookIdList = new ArrayList<>();
-//                            for (BookIdBean bookIdBean : bookIdBeans) {
-//                                bookIdList.add(bookIdBean.getBookId() + "");
-//                            }
-//                            getBookInfo(bookIdList);
                             List<Long> bookIdList = new ArrayList<>();
                             for (BookIdBean bookIdBean : bookIdBeans) {
                                 bookIdList.add((long) bookIdBean.getBookId());
@@ -282,7 +279,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                     BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
                     mView.complete();
                     mView.finishUpdate();
-                }, throwable ->{
+                }, throwable -> {
                     mView.complete();
                     mView.showErrorTip(throwable.getMessage());
                 });
@@ -298,7 +295,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                         addToBookShelf(bookDetailBeanInOwn);
                     }
 
-                    updateShelf();
+                    updateShelf(bookIdList);
                 }, throwable -> mView.showErrorTip(throwable.getMessage()));
         addDisposable(disposable);
     }
@@ -306,12 +303,21 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     /**
      * 更新书架,将未登录时的添加书籍同步给服务器
      */
-    private void updateShelf() {
+    private void updateShelf(List<Long> bookIdList) {
         List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
         List<String> bookIds = new ArrayList<>();
         for (CollBookBean collBookBean : collBooks) {
             bookIds.add(collBookBean.get_id());
         }
+        for (Long id : bookIdList) {
+            bookIds.add(id + "");
+        }
+
+        Set<String> bookIdSet = new HashSet<>(bookIds);
+        bookIds.clear();
+        bookIds.addAll(bookIdSet);
+
+
         String mobile = SharedPreUtils.getInstance().getString("userName");
         String mobileToken = SharedPreUtils.getInstance().getString("token");
         setBookShelfByMobile(bookIds, mobile, mobileToken);

@@ -2,10 +2,11 @@ package com.ldp.reader;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
-import com.didichuxing.doraemonkit.DoKit;
+//import com.didichuxing.doraemonkit.DoKit;
 import com.mob.MobSDK;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -25,14 +26,11 @@ public class App extends Application {
         sInstance = this;
         CrashReport.initCrashReport(getApplicationContext(), "ab86f05cf4", true);
 //        startService(new Intent(getContext(), DownloadService.class));
-        // 初始化内存分析工具
 
         MobSDK.submitPolicyGrantResult(true);
         if (BuildConfig.DEBUG) {
-            new DoKit.Builder(this).debug(true).build();
+//            new DoKit.Builder(this).debug(true).build();
         }
-
-
     }
 
     @Override
