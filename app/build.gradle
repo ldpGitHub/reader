@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'com.mob.sdk'
-//apply plugin: 'com.didi.dokit'
+apply plugin: 'com.didi.dokit'
 
 def do_kit = "3.7.11"
 
@@ -98,24 +98,24 @@ android {
     }
 
 }
-//
-//dokitExt {
-//    comm {
-//        gpsSwitch true
-//        networkSwitch true
-//        bigImgSwitch true
-//        webViewSwitch false
-//    }
-//
-//    slowMethod {
-//        stackMethod {
-//            thresholdTime 10
-//        }
-//        normalMethod {
-//            thresholdTime 100
-//        }
-//    }
-//}
+
+dokitExt {
+    comm {
+        gpsSwitch true
+        networkSwitch true
+        bigImgSwitch true
+        webViewSwitch false
+    }
+
+    slowMethod {
+        stackMethod {
+            thresholdTime 10
+        }
+        normalMethod {
+            thresholdTime 100
+        }
+    }
+}
 
 greendao {
     schemaVersion 9
@@ -135,7 +135,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
 
 
 //    implementation "androidx.core:core-splashscreen:1.0.0"
@@ -143,9 +143,6 @@ dependencies {
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'androidx.cardview:cardview:1.0.0'
-//    // View injection
-//    implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
-//    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
     // RxJava
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
@@ -184,7 +181,7 @@ dependencies {
     implementation 'com.blankj:utilcodex:1.31.1'
 
     //调试工具/性能监测工具
-//    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
-//    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
+    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
+    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
 
 }
