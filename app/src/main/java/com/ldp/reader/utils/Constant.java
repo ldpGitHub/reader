@@ -30,7 +30,7 @@ public class Constant {
 //    腾讯云
     public static final String API_BASE_URL_OWN = "http://42.192.230.227";
     //本地
-//    public static final String API_BASE_URL_OWN = "http://192.168.123.105";
+//    public static final String API_BASE_URL_OWN = "http://192.168.123.103";
 
 
 

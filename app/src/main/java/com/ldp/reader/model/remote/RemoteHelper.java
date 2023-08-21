@@ -25,13 +25,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RemoteHelper {
     private static final String TAG = "RemoteHelper";
     private static RemoteHelper sInstance;
-    private Retrofit mRetrofit,mRetrofitByOwn;
+    private Retrofit mRetrofit, mRetrofitByOwn;
     private OkHttpClient mOkHttpClient;
-    private RemoteHelper(){
+
+    private RemoteHelper() {
         Interceptor logIntercept = new HttpLoggingInterceptor();
         ((HttpLoggingInterceptor) logIntercept).setLevel(HttpLoggingInterceptor.Level.BODY);
         mOkHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(logIntercept)
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(2, TimeUnit.MINUTES)
+                .writeTimeout(2, TimeUnit.MINUTES)
                 .retryOnConnectionFailure(true).build();
 
         mRetrofit = new Retrofit.Builder()
@@ -40,7 +44,7 @@ public class RemoteHelper {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(Constant.API_BASE_URL)
                 .build();
-        mRetrofitByOwn= new Retrofit.Builder()
+        mRetrofitByOwn = new Retrofit.Builder()
                 .client(mOkHttpClient)
                 .addConverterFactory(LenientGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -49,8 +53,8 @@ public class RemoteHelper {
 
     }
 
-    public static RemoteHelper getInstance(){
-        if (sInstance == null){
+    public static RemoteHelper getInstance() {
+        if (sInstance == null) {
             synchronized (RemoteHelper.class) {
                 if (sInstance == null) {
                     sInstance = new RemoteHelper();
@@ -69,7 +73,7 @@ public class RemoteHelper {
     }
 
 
-    public OkHttpClient getOkHttpClient(){
+    public OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
     }
 }
