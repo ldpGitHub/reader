@@ -1,6 +1,7 @@
 package com.ldp.reader.presenter;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ldp.reader.model.bean.BookChapterBean;
@@ -99,6 +100,9 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
         // 将要下载章节，转换成网络请求。
         for (int i = 0; i < size; ++i) {
             TxtChapter bookChapter = bookChapters.get(i);
+            if(null == bookChapter.getTitle() || TextUtils.isEmpty(bookChapter.getTitle())){
+                continue;
+            }
             String pureLink = bookChapter.getLink();
             CollBookBean bean = BookRepository.getInstance().getCollBook(bookId);
             bookIdInBiquge = bean.get_id();
