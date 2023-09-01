@@ -17,6 +17,10 @@ import com.ldp.reader.utils.media.MediaStoreHelper;
 import com.ldp.reader.widget.RefreshLayout;
 import com.ldp.reader.widget.itemdecoration.DividerItemDecoration;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by ldp on 17-5-27.
@@ -31,7 +35,7 @@ public class LocalBookFragment extends BaseFileFragment<FragmentLocalBookBinding
     @Override
     protected void initWidget(Bundle savedInstanceState) {
         super.initWidget(savedInstanceState);
-        if(getBinding() != null){
+        if (getBinding() != null) {
             mRlRefresh = getBinding().refreshLayout;
             mRvContent = getBinding().localBookRvContent;
         }
@@ -81,7 +85,17 @@ public class LocalBookFragment extends BaseFileFragment<FragmentLocalBookBinding
                     if (files.isEmpty()) {
                         mRlRefresh.showEmpty();
                     } else {
-                        mAdapter.refreshItems(files);
+                        List<File> validFiles = new ArrayList<>();
+                        for (File file : files) {
+                            // Check if the file size is greater than 10KB
+                            if (file.length() > 1024 * 10) {
+                                // Check if the file name does not contain the word "log"
+                                if (!file.getName().toLowerCase().contains("log")) {
+                                    validFiles.add(file);
+                                }
+                            }
+                        }
+                        mAdapter.refreshItems(validFiles);
                         mRlRefresh.showFinish();
                         //反馈
                         if (mListener != null) {

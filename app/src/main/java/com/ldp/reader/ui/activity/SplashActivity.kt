@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
 
         PermissionUtils.permission(
             Manifest.permission.POST_NOTIFICATIONS,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
         )
             .callback { isAllGranted: Boolean, granted: List<String?>?, deniedForever: List<String?>, denied: List<String?> ->
                 if (isAllGranted) {

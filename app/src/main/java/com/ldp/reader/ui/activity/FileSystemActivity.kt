@@ -1,6 +1,10 @@
 package com.ldp.reader.ui.activity
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -149,6 +153,11 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
     override fun processLogic() {
         super.processLogic()
         mCurFragment = mLocalFragment
+        if(!isPermissionGranted()){
+            requestManageAllFilesAccessPermission()
+
+        }
+
     }
 
     /**
@@ -277,6 +286,20 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
         mVp.adapter = adapter
         mVp.offscreenPageLimit = 3
         mTlIndicator.setupWithViewPager(mVp)
+    }
+
+    fun requestManageAllFilesAccessPermission() {
+        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+        startActivity(intent)
+    }
+
+    // To check if permission is granted
+    fun isPermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            return  true
+        }
     }
 
     /**
