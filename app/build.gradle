@@ -5,9 +5,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'com.mob.sdk'
-apply plugin: 'com.didi.dokit'
+//apply plugin: 'com.didi.dokit'
 
 def do_kit = "3.7.11"
+def spider_man = "v1.2.0"
+
 
 MobSDK {
     appKey "2dc105548a750"
@@ -99,23 +101,23 @@ android {
 
 }
 
-dokitExt {
-    comm {
-        gpsSwitch true
-        networkSwitch true
-        bigImgSwitch true
-        webViewSwitch false
-    }
-
-    slowMethod {
-        stackMethod {
-            thresholdTime 10
-        }
-        normalMethod {
-            thresholdTime 100
-        }
-    }
-}
+//dokitExt {
+//    comm {
+//        gpsSwitch true
+//        networkSwitch true
+//        bigImgSwitch true
+//        webViewSwitch false
+//    }
+//
+//    slowMethod {
+//        stackMethod {
+//            thresholdTime 10
+//        }
+//        normalMethod {
+//            thresholdTime 100
+//        }
+//    }
+//}
 
 greendao {
     schemaVersion 9
@@ -179,9 +181,11 @@ dependencies {
     })
 
     implementation 'com.blankj:utilcodex:1.31.1'
+    debugImplementation "com.github.simplepeng.SpiderMan:spiderman:${spider_man}"
+    releaseImplementation "com.github.simplepeng.SpiderMan:spiderman-no-op:${spider_man}"
 
     //调试工具/性能监测工具
-    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
-    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
+//    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"
+//    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${do_kit}"
 
 }

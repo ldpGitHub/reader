@@ -20,21 +20,22 @@ class SplashActivity : AppCompatActivity() {
 
         PermissionUtils.permission(
             Manifest.permission.POST_NOTIFICATIONS,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
         )
             .callback { isAllGranted: Boolean, granted: List<String?>?, deniedForever: List<String?>, denied: List<String?> ->
                 if (isAllGranted) {
                     skipToMain()
                 } else {
-                    if (denied.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ToastUtils.showLong("请允许存储权限")
+                    if (denied.contains(Manifest.permission.MANAGE_EXTERNAL_STORAGE)) {
+//                        ToastUtils.showLong("请允许存储权限")
                     }
                     skipToMain()
                 }
-                if (!deniedForever.isEmpty()) {
-                    ToastUtils.showLong("请允许存储权限")
-                    PermissionUtils.launchAppDetailsSettings()
-                }
+
+//                if (!deniedForever.isEmpty()) {
+//                    ToastUtils.showLong("请允许存储权限")
+//                    PermissionUtils.launchAppDetailsSettings()
+//                }
             }.request()
         BarUtils.transparentStatusBar(this)
         requestWindowFeature(Window.FEATURE_NO_TITLE)

@@ -27,8 +27,8 @@ public class Constant {
     public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
     public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
 
-//    腾讯云
-    public static final String API_BASE_URL_OWN = "http://42.192.230.227";
+//    UC云
+    public static final String API_BASE_URL_OWN = "http://101.36.105.241";
     //本地
 //    public static final String API_BASE_URL_OWN = "http://192.168.123.103";
 

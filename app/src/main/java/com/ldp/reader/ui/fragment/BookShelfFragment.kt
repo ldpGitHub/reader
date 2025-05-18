@@ -203,28 +203,11 @@ class BookShelfFragment :
         }
     }
 
-    var rxPermissions: RxPermissions? = null
     override fun processLogic() {
         super.processLogic()
         //  mRvContent.startRefresh();
-    }// Oups permission denied
+    }
 
-    // Always true pre-M
-    // I can control the camera now
-    @get:SuppressLint("CheckResult")
-    private val permission: Unit
-        private get() {
-            rxPermissions?.request(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )?.subscribe { granted: Boolean ->
-                if (granted) { // Always true pre-M
-                    // I can control the camera now
-                } else {
-                    // Oups permission denied
-                }
-            }
-        }
 
     private fun openItemDialog(collBook: CollBookBean) {
         val menus: Array<String>
@@ -394,8 +377,8 @@ class BookShelfFragment :
 
     override fun onResume() {
         super.onResume()
-        rxPermissions = RxPermissions(this)
-        permission
+//        rxPermissions = RxPermissions(this)
+//        permission
         mPresenter!!.refreshCollBooks()
         initMobPush()
     }
