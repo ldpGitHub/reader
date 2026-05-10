@@ -612,6 +612,38 @@ public class DeprecatedZhuishuCleanupContractTest {
                 readPresenter, retiredPresenterTokens);
     }
 
+    @Test
+    public void orphanLegacyServiceLayoutsAndDrawablesAreRemoved() {
+        String[] retiredSources = {
+                "src/main/java/com/ldp/reader/ui/base/BaseService.java",
+                "src/main/res/layout/activity_retro.xml",
+                "src/main/res/layout/activity_scroll.xml",
+                "src/main/res/layout/dialog_sex_choose.xml",
+                "src/main/res/layout/novel_update_notification.xml",
+                "src/main/res/layout/one_ads.xml",
+                "src/main/res/layout/two_ads.xml",
+                "src/main/res/drawable/btn_sex_choose_boy.xml",
+                "src/main/res/drawable/btn_sex_choose_girl.xml",
+                "src/main/res/drawable-xhdpi/ic_notif_post.png",
+                "src/main/res/drawable-xhdpi/ic_notif_vote.png",
+                "src/main/res/drawable-xhdpi/ic_read_menu_download.png",
+                "src/main/res/drawable-xxhdpi/ic_download_complete.png",
+                "src/main/res/drawable-xxhdpi/ic_download_error.png",
+                "src/main/res/drawable-xxhdpi/ic_download_loading.png",
+                "src/main/res/drawable-xxhdpi/ic_download_pause.png",
+                "src/main/res/drawable-xxhdpi/ic_download_wait.png",
+                "src/main/res/drawable-xxhdpi/ic_menu_download.png",
+                "src/main/res/drawable-xxhdpi/ic_sex_logo.png",
+                "src/main/res/drawable-xxhdpi/ic_topic_distillate.png",
+                "src/main/res/drawable-xxhdpi/ic_topic_hot.png",
+                "src/main/res/drawable-xxhdpi/post_item_like.png",
+                "src/main/res/drawable-xxhdpi/rating_star_user_nor.png",
+                "src/main/res/drawable-xxhdpi/rating_star_user_press.png"
+        };
+
+        assertFilesRemoved("Remove orphan legacy service/layout/drawable source: ", retiredSources);
+    }
+
     private void assertFilesRemoved(String messagePrefix, String[] paths) {
         for (String path : paths) {
             assertFalse(messagePrefix + path, new File(path).exists());

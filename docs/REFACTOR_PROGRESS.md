@@ -355,3 +355,21 @@
   verified `ReadActivity`. Narrow logcat filtering for fatal/error bridge or app
   crashes was empty.
 - AI App Bridge note: no new bridge-library issue was found in this pass.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 12
+
+- Removed orphan legacy scaffolding left after the download/community cleanup:
+  unused `BaseService`, old retro/scroll demo layouts, the old sex-choice
+  dialog, ad placeholder layouts, notification layout, and their dedicated
+  download/community/sex-choice drawable assets.
+- Expanded `DeprecatedZhuishuCleanupContractTest` so these unused service,
+  layout, and drawable files fail if they return. The test failed first, then
+  passed after deletion.
+- Validation: targeted cleanup contract passed; full
+  `:app:testDebugUnitTest :app:assembleDebug` passed; APK install succeeded.
+- Bridge validation: launched `MainActivity`, verified `我的书架` and `找书`,
+  UIAutomator tapped `找书`, verified `SearchActivity` with `热门搜索` and
+  `换一批`, returned to the bookshelf, tapped `仙人消失之后`, and verified
+  `ReadActivity`. Narrow logcat filtering for fatal/error bridge or app crashes
+  was empty.
+- AI App Bridge note: no new bridge-library issue was found in this pass.
