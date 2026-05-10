@@ -65,14 +65,6 @@
     <string name="nb.book.word">|&#160;%1$d&#160;章节</string>
     <!--sort:每类的书-->
     <string name="nb.sort.book_count">%1$d 本</string>
-
-    <!--tag: 标签-->
-    <string name="nb.tag.all">全部</string>
-    <string name="nb.tag.sex">性别</string>
-    <string name="nb.tag.boy">男生</string>
-    <string name="nb.tag.girl">女生</string>
-
-
     <!--book_detail : -->
     <string name="nb.book_detail.chase_update">追更</string>
     <string name="nb.book_detail.give_up">放弃</string>

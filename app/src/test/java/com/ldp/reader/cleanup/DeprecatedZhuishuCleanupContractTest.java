@@ -644,6 +644,30 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertFilesRemoved("Remove orphan legacy service/layout/drawable source: ", retiredSources);
     }
 
+    @Test
+    public void unusedDownloadStatusConstantsAndTagStringsAreRemoved() throws Exception {
+        String collBookBean = readFile("src/main/java/com/ldp/reader/model/bean/CollBookBean.java");
+        String simplifiedChineseStrings = readFile("src/main/res/values/strings.xml");
+        String traditionalChineseStrings = readFile("src/main/res/values-zh-rTW/strings.xml");
+
+        String[] retiredStatusTokens = {
+                "STATUS_UNCACHE",
+                "STATUS_CACHING",
+                "STATUS_CACHED"
+        };
+
+        String[] retiredTagStringTokens = {
+                "nb.tag.all",
+                "nb.tag.sex",
+                "nb.tag.boy",
+                "nb.tag.girl"
+        };
+
+        assertTextAbsent("Remove unused download-status constant: ", collBookBean, retiredStatusTokens);
+        assertTextAbsent("Remove unused legacy tag string: ", simplifiedChineseStrings, retiredTagStringTokens);
+        assertTextAbsent("Remove unused legacy tag string: ", traditionalChineseStrings, retiredTagStringTokens);
+    }
+
     private void assertFilesRemoved(String messagePrefix, String[] paths) {
         for (String path : paths) {
             assertFalse(messagePrefix + path, new File(path).exists());
