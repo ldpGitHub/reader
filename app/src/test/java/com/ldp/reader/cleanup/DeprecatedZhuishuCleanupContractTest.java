@@ -210,6 +210,58 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertTextAbsent("Remove detail legacy traditional string token: ", traditionalChineseStrings, retiredStringTokens);
     }
 
+    @Test
+    public void remoteLayerDoesNotKeepUnreachableLegacyDiscoveryApis() throws Exception {
+        String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+
+        String[] retiredBookApiTokens = {
+                "getBookCommentList",
+                "getBookHelpList",
+                "getBookReviewList",
+                "getCommentDetailPackage",
+                "getReviewDetailPacakge",
+                "getHelpsDetailPackage",
+                "getBestCommentPackage",
+                "getCommentPackage",
+                "getBookCommentPackage",
+                "getBillboardPackage",
+                "getBillBookPackage",
+                "getBookSortPackage",
+                "getBookSubSortPackage",
+                "getSortBookPackage",
+                "getBookListPackage",
+                "getBookTagPackage",
+                "getBookListDetailPackage",
+                "getBookDetail(",
+                "getTagSearchPackage"
+        };
+
+        String[] retiredRepositoryTokens = {
+                "getBookComment(",
+                "getBookHelps(",
+                "getBookReviews(",
+                "getCommentDetail(",
+                "getReviewDetail(",
+                "getHelpsDetail(",
+                "getBestComments(",
+                "getDetailComments(",
+                "getDetailBookComments(",
+                "getBookSortPackage(",
+                "getBookSubSortPackage(",
+                "getSortBooks(",
+                "getBillboardPackage(",
+                "getBillBooks(",
+                "getBookLists(",
+                "getBookTags(",
+                "getBookListDetail(",
+                "getBookDetail("
+        };
+
+        assertTextAbsent("Remove unreachable legacy BookApi token: ", bookApi, retiredBookApiTokens);
+        assertTextAbsent("Remove unreachable legacy RemoteRepository token: ", remoteRepository, retiredRepositoryTokens);
+    }
+
     private void assertFilesRemoved(String messagePrefix, String[] paths) {
         for (String path : paths) {
             assertFalse(messagePrefix + path, new File(path).exists());

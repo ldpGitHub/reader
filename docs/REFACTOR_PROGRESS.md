@@ -193,3 +193,22 @@
   `ok=true` for a bridge-tree node whose tap center is outside the current
   viewport. Workaround for reader validation is to use UIAutomator-visible taps
   and verify the resulting activity/text after every navigation tap.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 5
+
+- Removed unreachable legacy Zhuishushenqi remote API declarations and
+  `RemoteRepository` wrappers for community posts/details/comments, rankings,
+  categories, theme book lists, old book detail, and tag search.
+- Kept the still-referenced legacy endpoints intact: recommendations used by
+  `BookShelfPresenter`, chapter metadata/content used by download/reading, and
+  search hot-word/auto-complete used by `SearchActivity`.
+- Expanded `DeprecatedZhuishuCleanupContractTest` so those unreachable remote
+  layer tokens fail if they return. The new test failed first, then passed after
+  the API/wrapper cleanup.
+- Validation: targeted cleanup contract passed; full
+  `:app:testDebugUnitTest :app:assembleDebug` passed; APK install succeeded.
+- Bridge validation: launched `MainActivity`, verified `我的书架` and `找书`,
+  tapped `找书` with UIAutomator-visible targeting, and verified `SearchActivity`
+  content `热门搜索` and `换一批`; logcat had no `AndroidRuntime` or
+  `FATAL EXCEPTION` output.
+- AI App Bridge note: no new bridge-library issue was found in this pass.
