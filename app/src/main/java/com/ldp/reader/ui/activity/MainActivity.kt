@@ -44,11 +44,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
     /**************init method */
     override fun setUpToolbar(toolbar: Toolbar?) {
         super.setUpToolbar(toolbar)
-        toolbar?.subtitle = "iReader"
+        toolbar?.title = ""
+        toolbar?.subtitle = ""
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         supportActionBar!!.title = ""
         setUpTabLayout()
+        setHomeStatusBar()
+    }
+
+    private fun setHomeStatusBar() {
         BarUtils.transparentStatusBar(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 
     protected fun createTabFragments(): List<Fragment> {
@@ -106,11 +115,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val token = SharedPreUtils.getInstance().getString("token")
+        val loginItem = menu.findItem(R.id.action_login)
         if (TextUtils.isEmpty(token)) {
-            menu.getItem(0).title = "请登录"
+            loginItem?.title = "请登录"
         } else {
             val userName = SharedPreUtils.getInstance().getString("userName")
-            menu.getItem(0).title = userName
+            loginItem?.title = userName
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -121,8 +131,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
         when (id) {
             R.id.action_search -> activityCls = SearchActivity::class.java
             R.id.action_login -> activityCls = LoginActivity::class.java
-            R.id.action_my_message -> {}
-//            R.id.action_download -> activityCls = DownloadActivity::class.java
             R.id.action_sync_bookshelf -> RxBus.getInstance().post(BookSyncEvent())
             R.id.action_scan_local_book -> {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -138,23 +146,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
                             PERMISSIONS,
                             PERMISSIONS_REQUEST_STORAGE
                         )
-                        return super.onOptionsItemSelected(item)
+                        return true
                     }
                 }
                 activityCls = FileSystemActivity::class.java
             }
-
-            R.id.action_wifi_book -> {}
-            R.id.action_feedback -> {}
-            R.id.action_night_mode -> {}
-//            R.id.action_settings -> activityCls = MoreSettingActivity::class.java
-            else -> {}
+            else -> return super.onOptionsItemSelected(item)
         }
         if (activityCls != null) {
             val intent = Intent(this, activityCls)
             startActivity(intent)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onPreparePanel(featureId: Int, view: View?, menu: Menu): Boolean {

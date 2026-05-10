@@ -3,13 +3,18 @@
 	android:id="@+id/rl_empty_view"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@color/home_bg"
 	android:layout_centerInParent="true"
 	android:orientation="vertical">
 	
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
+		android:layout_marginLeft="18dp"
+		android:layout_marginRight="18dp"
+		android:background="@drawable/bg_home_empty_panel"
+		android:gravity="center_horizontal"
 		android:orientation="vertical">
 		
 		<ImageView
@@ -17,28 +22,34 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="24dp"
 			android:background="@drawable/ic_book_shelf_empty"/>
 		
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
-			android:layout_marginBottom="20dp"
-			android:layout_marginTop="20dp"
+			android:layout_marginBottom="16dp"
+			android:layout_marginTop="18dp"
+			android:includeFontPadding="false"
 			android:text="添加你喜爱的小说"
-			android:textColor="@color/nb.text.common_h2"
-			android:textSize="16sp"/>
+			android:textColor="@color/home_text_secondary"
+			android:textSize="13sp"/>
 		
 		<TextView
 			android:id="@+id/book_shelf_tv_add"
 			android:layout_width="150dp"
 			android:layout_height="wrap_content"
-			android:background="@drawable/shape_common_green_corner"
+			android:layout_marginBottom="24dp"
+			android:background="@drawable/bg_home_add_button"
 			android:clickable="true"
 			android:drawableLeft="@drawable/ic_book_list_add"
 			android:drawablePadding="5dp"
-			android:padding="10dp"
+			android:gravity="center"
+			android:includeFontPadding="false"
+			android:padding="9dp"
 			android:text="去添加"
-			android:textColor="@color/white"/>
+			android:textColor="@color/white"
+			android:textSize="12sp"/>
 	</LinearLayout>
 </RelativeLayout>

@@ -30,6 +30,7 @@ import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.Void
 import com.ldp.reader.presenter.BookShelfPresenter
 import com.ldp.reader.presenter.contract.BookShelfContract
+import com.ldp.reader.ui.activity.FileSystemActivity
 import com.ldp.reader.ui.activity.ReadActivity
 import com.ldp.reader.ui.activity.SearchActivity
 import com.ldp.reader.ui.adapter.CollBookAdapter
@@ -38,7 +39,6 @@ import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.SharedPreUtils
 import com.ldp.reader.utils.ToastUtils
 import com.ldp.reader.widget.adapter.WholeAdapter
-import com.ldp.reader.widget.itemdecoration.DividerItemDecoration
 import com.ldp.reader.widget.refresh.ScrollRefreshRecyclerView
 import com.mob.pushsdk.MobPush
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -90,18 +90,20 @@ class BookShelfFragment :
         //添加Footer
         mCollBookAdapter = CollBookAdapter()
         mRvContent!!.setLayoutManager(LinearLayoutManager(context))
-        mRvContent!!.addItemDecoration(
-            DividerItemDecoration(
-                context
-            )
-        )
         mRvContent!!.setAdapter(mCollBookAdapter)
-        mRvContent!!.setColorSchemeColors(resources.getColor(R.color.light_pink))
+        mRvContent!!.getReyclerView().clipToPadding = false
+        mRvContent!!.setColorSchemeColors(resources.getColor(R.color.home_primary))
 
     }
 
     override fun initClick() {
         super.initClick()
+        binding?.homeSearchEntry?.setOnClickListener { openSearch() }
+        binding?.homeActionSearch?.setOnClickListener { openSearch() }
+        binding?.homeActionImport?.setOnClickListener { openLocalImport() }
+        binding?.homeActionSync?.setOnClickListener {
+            RxBus.getInstance().post(BookSyncEvent())
+        }
         //推荐书籍
         val recommendDisp = RxBus.getInstance()
             .toObservable(RecommendBookEvent::class.java)
@@ -201,6 +203,16 @@ class BookShelfFragment :
             openItemDialog(mCollBookAdapter!!.getItem(pos))
             true
         }
+    }
+
+    private fun openSearch() {
+        val ctx = context ?: return
+        startActivity(Intent(ctx, SearchActivity::class.java))
+    }
+
+    private fun openLocalImport() {
+        val ctx = context ?: return
+        startActivity(Intent(ctx, FileSystemActivity::class.java))
     }
 
     override fun processLogic() {

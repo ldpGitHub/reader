@@ -6,15 +6,17 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/home_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar_home"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/main_tl_tab"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/home_primary"
+        android:visibility="gone"
         app:tabIndicatorColor="@color/white"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/translucent_text">
@@ -24,6 +26,7 @@
         android:id="@+id/main_vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/home_bg"
         android:layout_weight="1">
     </androidx.viewpager.widget.ViewPager>
 </LinearLayout>

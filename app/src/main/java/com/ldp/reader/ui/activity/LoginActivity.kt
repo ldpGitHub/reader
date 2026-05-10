@@ -8,6 +8,7 @@ import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.blankj.utilcode.util.LogUtils
 //import com.didichuxing.doraemonkit.kit.core.DoKitServiceEnum
+import com.ldp.reader.R
 import com.ldp.reader.RxBus
 import com.ldp.reader.databinding.ActivityLoginBinding
 import com.ldp.reader.event.BookSyncEvent
@@ -66,6 +67,11 @@ class LoginActivity : LoginContract.View,
     override fun bindPresenter(): LoginContract.Presenter<LoginActivity> {
         return LoginPresenter() as LoginContract.Presenter<LoginActivity>
 
+    }
+
+    override fun initWidget() {
+        super.initWidget()
+        window.statusBarColor = resources.getColor(R.color.home_primary)
     }
 
 

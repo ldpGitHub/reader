@@ -81,7 +81,21 @@
         <item name="dropDownListViewStyle">@style/dropDownStyle</item>
     </style>
 
+    <style name="Theme.ToolBar.Home" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:colorBackground">@color/home_surface</item>
+        <item name="android:textColor">@color/home_text_primary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="actionOverflowButtonStyle">@style/ActionButton.Overflow.Home</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle.Home</item>
+        <item name="android:dropDownListViewStyle">@style/HomeDropDownStyle</item>
+        <item name="dropDownListViewStyle">@style/HomeDropDownStyle</item>
+    </style>
+
     <style name="ActionButton.Overflow.Menu" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_menu_overflow</item>
+    </style>
+
+    <style name="ActionButton.Overflow.Home" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_menu_overflow</item>
     </style>
 
@@ -89,11 +103,22 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <style name="OverflowMenuStyle.Home" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:popupBackground">@drawable/bg_home_menu_popup</item>
+    </style>
+
     <!--用于修改popmenu的分割线-->
     <style name="dropDownStyle" parent="android:style/Widget.Holo.ListView.DropDown">
         <item name="android:listSelector">@drawable/selector_common_bg</item>
         <item name="android:divider">@color/nb.divider.common</item>
         <item name="android:dividerHeight">@dimen/nb.divider.line</item>
+    </style>
+
+    <style name="HomeDropDownStyle" parent="android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@color/home_pressed</item>
+        <item name="android:divider">@color/home_line</item>
+        <item name="android:dividerHeight">0dp</item>
     </style>
 
     <!--Common-->
