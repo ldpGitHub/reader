@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.ChapterBean;
-import com.ldp.reader.model.bean.ChapterInfoBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.bean.ContentBean;
 import com.ldp.reader.model.local.BookRepository;

@@ -54,8 +54,6 @@
         <activity android:name=".ui.activity.FileSystemActivity" />
         <activity android:name=".ui.activity.LoginActivity" />
 
-        <service android:name=".service.DownloadService" />
-
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

@@ -25,7 +25,6 @@ public class App extends Application {
         super.onCreate();
         sInstance = this;
         CrashReport.initCrashReport(getApplicationContext(), "ab86f05cf4", true);
-//        startService(new Intent(getContext(), DownloadService.class));
 
         MobSDK.submitPolicyGrantResult(true);
         if (BuildConfig.DEBUG) {

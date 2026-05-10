@@ -11,7 +11,6 @@ import com.ldp.reader.model.bean.BookIdBean;
 import com.ldp.reader.model.bean.ChapterBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.bean.DirectSycBookShelfBean;
-import com.ldp.reader.model.bean.DownloadTaskBean;
 import com.ldp.reader.model.local.BookRepository;
 import com.ldp.reader.model.remote.RemoteRepository;
 import com.ldp.reader.presenter.contract.BookShelfContract;
@@ -52,18 +51,6 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
             Log.d("+书名", bookBean.getTitle());
         }
         mView.finishRefresh(collBooks);
-    }
-
-
-    @Override
-    public void createDownloadTask(CollBookBean collBookBean) {
-        DownloadTaskBean task = new DownloadTaskBean();
-        task.setTaskName(collBookBean.getTitle());
-        task.setBookId(collBookBean.get_id());
-        task.setBookChapters(collBookBean.getBookChapters());
-        task.setLastChapter(collBookBean.getBookChapters().size());
-
-        RxBus.getInstance().post(task);
     }
 
 

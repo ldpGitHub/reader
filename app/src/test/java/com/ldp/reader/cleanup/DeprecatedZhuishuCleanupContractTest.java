@@ -344,40 +344,12 @@ public class DeprecatedZhuishuCleanupContractTest {
                 "src/main/java/com/ldp/reader/model/gen/BookHelpfulBeanDao.java",
                 "src/main/java/com/ldp/reader/model/gen/BookHelpsBeanDao.java",
                 "src/main/java/com/ldp/reader/model/gen/BookReviewBeanDao.java",
-                "src/main/java/com/ldp/reader/model/gen/ReviewBookBeanDao.java"
+                "src/main/java/com/ldp/reader/model/gen/ReviewBookBeanDao.java",
+                "src/main/java/com/ldp/reader/model/local/LocalRepository.java"
         };
 
-        String localRepository = readFile("src/main/java/com/ldp/reader/model/local/LocalRepository.java");
         String rxUtils = readFile("src/main/java/com/ldp/reader/utils/RxUtils.java");
         String constants = readFile("src/main/java/com/ldp/reader/utils/Constant.java");
-
-        String[] retiredLocalRepositoryTokens = {
-                "SaveDbHelper",
-                "GetDbHelper",
-                "DeleteDbHelper",
-                "BookCommentBean",
-                "BookHelpsBean",
-                "BookReviewBean",
-                "BookHelpfulBean",
-                "ReviewBookBean",
-                "AuthorBean",
-                "BookSortPackage",
-                "BillboardPackage",
-                "saveBookComments",
-                "saveBookHelps",
-                "saveBookReviews",
-                "saveBookSortPackage",
-                "saveBillboardPackage",
-                "getBookComments",
-                "getBookHelps",
-                "getBookReviews",
-                "getBookSortPackage",
-                "getBillboardPackage",
-                "disposeOverflowData",
-                "queryOrderBy",
-                "queryToRx",
-                "deleteBookComments"
-        };
 
         String[] retiredRxTokens = {
                 "CommentBean",
@@ -396,7 +368,6 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         assertFilesRemoved("Remove legacy local-cache source: ", retiredSources);
-        assertTextAbsent("Remove legacy local-cache repository token: ", localRepository, retiredLocalRepositoryTokens);
         assertTextAbsent("Remove legacy comment-detail Rx helper token: ", rxUtils, retiredRxTokens);
         assertTextAbsent("Remove legacy local-cache constants token: ", constants, retiredConstantTokens);
     }
@@ -551,6 +522,75 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertTextAbsent("Remove unused recommendation presenter token: ", bookShelfPresenter, retiredShelfTokens);
         assertTextAbsent("Remove unused recommendation contract token: ", bookShelfContract, retiredShelfTokens);
         assertTextAbsent("Remove unused recommendation fragment token: ", bookShelfFragment, retiredShelfTokens);
+    }
+
+    @Test
+    public void unreachableDownloadCacheLayerIsRemoved() throws Exception {
+        String[] retiredSources = {
+                "src/main/java/com/ldp/reader/service/DownloadService.java",
+                "src/main/java/com/ldp/reader/event/DeleteResponseEvent.java",
+                "src/main/java/com/ldp/reader/event/DeleteTaskEvent.java",
+                "src/main/java/com/ldp/reader/event/DownloadMessage.java",
+                "src/main/java/com/ldp/reader/model/bean/DownloadTaskBean.java",
+                "src/main/java/com/ldp/reader/model/bean/ChapterInfoBean.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/ChapterInfoPackage.java",
+                "src/main/java/com/ldp/reader/model/gen/DownloadTaskBeanDao.java",
+                "src/main/java/com/ldp/reader/model/local/LocalRepository.java"
+        };
+
+        String manifest = readFile("src/main/AndroidManifest.xml");
+        String app = readFile("src/main/java/com/ldp/reader/App.java");
+        String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
+        String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
+        String bookShelfContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract.java");
+        String bookShelfFragment = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfFragment.kt");
+        String simplifiedChineseStrings = readFile("src/main/res/values/strings.xml");
+        String traditionalChineseStrings = readFile("src/main/res/values-zh-rTW/strings.xml");
+        String colors = readFile("src/main/res/values/colors.xml");
+
+        String[] retiredBookApiTokens = {
+                "ChapterInfoPackage",
+                "getChapterInfoPackage",
+                "chapter2.zhuishushenqi.com"
+        };
+
+        String[] retiredRepositoryTokens = {
+                "ChapterInfoBean",
+                "getChapterInfo("
+        };
+
+        String[] retiredDownloadLayerTokens = {
+                "DownloadService",
+                "DownloadTaskBean",
+                "DownloadTaskBeanDao",
+                "LocalRepository",
+                "DownloadMessage",
+                "DeleteTaskEvent",
+                "DeleteResponseEvent",
+                "createDownloadTask",
+                "downloadBook",
+                "nb.menu.action.cache",
+                "nb.menu.action.download",
+                "nb.download.",
+                "nb.read.download"
+        };
+
+        assertFilesRemoved("Remove unreachable download-cache source: ", retiredSources);
+        assertTextAbsent("Remove unreachable download-cache manifest token: ", manifest, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache app token: ", app, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove legacy chapter-content BookApi token: ", bookApi, retiredBookApiTokens);
+        assertTextAbsent("Remove legacy chapter-content repository token: ", remoteRepository, retiredRepositoryTokens);
+        assertTextAbsent("Remove unreachable download-cache repository token: ", bookRepository, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove legacy chapter-content presenter import token: ", readPresenter, retiredRepositoryTokens);
+        assertTextAbsent("Remove unreachable download-cache presenter token: ", bookShelfPresenter, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache contract token: ", bookShelfContract, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache fragment token: ", bookShelfFragment, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache simplified string token: ", simplifiedChineseStrings, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache traditional string token: ", traditionalChineseStrings, retiredDownloadLayerTokens);
+        assertTextAbsent("Remove unreachable download-cache color token: ", colors, retiredDownloadLayerTokens);
     }
 
     private void assertFilesRemoved(String messagePrefix, String[] paths) {

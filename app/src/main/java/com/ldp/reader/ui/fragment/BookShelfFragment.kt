@@ -21,9 +21,6 @@ import com.ldp.reader.RxBus
 import com.ldp.reader.databinding.FooterBookShelfBinding
 import com.ldp.reader.databinding.FragmentBookshelfBinding
 import com.ldp.reader.event.BookSyncEvent
-import com.ldp.reader.event.DeleteResponseEvent
-import com.ldp.reader.event.DeleteTaskEvent
-import com.ldp.reader.event.DownloadMessage
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.Void
@@ -103,14 +100,6 @@ class BookShelfFragment :
         binding?.homeActionSync?.setOnClickListener {
             RxBus.getInstance().post(BookSyncEvent())
         }
-        val downloadDisp = RxBus.getInstance()
-            .toObservable(DownloadMessage::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { event: DownloadMessage ->
-                //使用Toast提示
-                ToastUtils.show(event.message)
-            }
-        addDisposable(downloadDisp)
         val bookSyncDisp = RxBus.getInstance()
             .toObservable(BookSyncEvent::class.java)
             .subscribe(Consumer {
@@ -129,37 +118,6 @@ class BookShelfFragment :
         addDisposable(bookSyncDisp)
 
 
-        //删除书籍 (写的丑了点)
-        val deleteDisp = RxBus.getInstance()
-            .toObservable(DeleteResponseEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { event: DeleteResponseEvent ->
-                if (event.isDelete) {
-                    val progressDialog = ProgressDialog(context)
-                    progressDialog.setMessage("正在删除中")
-                    progressDialog.show()
-                    BookRepository.getInstance().deleteCollBookInRx(event.collBook)
-                        .compose({ upstream: Single<Void?>? -> RxUtils.toSimpleSingle(upstream) })
-                        .subscribe(
-                            { Void: Void? ->
-                                mCollBookAdapter!!.removeItem(event.collBook)
-                                progressDialog.dismiss()
-                            }
-                        )
-                } else {
-                    //弹出一个Dialog
-                    val tipDialog = AlertDialog.Builder(
-                        (context)!!
-                    )
-                        .setTitle("您的任务正在加载")
-                        .setMessage("先请暂停任务再进行删除")
-                        .setPositiveButton(
-                            "确定",
-                            { dialog: DialogInterface, which: Int -> dialog.dismiss() }).create()
-                    tipDialog.show()
-                }
-            }
-        addDisposable(deleteDisp)
         mRvContent!!.setOnRefreshListener { mPresenter!!.updateCollBooks(mCollBookAdapter!!.items) }
         mCollBookAdapter!!.setOnItemClickListener { view: View?, pos: Int ->
             //如果是本地文件，首先判断这个文件是否存在
@@ -241,20 +199,10 @@ class BookShelfFragment :
     private fun onItemMenuClick(which: String, collBook: CollBookBean) {
         when (which) {
             "置顶" -> {}
-            "缓存" ->                 //2. 进行判断，如果CollBean中状态为未更新。那么就创建Task，加入到Service中去。
-                //3. 如果状态为finish，并且isUpdate为true，那么就根据chapter创建状态
-                //4. 如果状态为finish，并且isUpdate为false。
-                downloadBook(collBook)
-
             "删除" -> deleteBook(collBook)
             "批量管理" -> {}
             else -> {}
         }
-    }
-
-    private fun downloadBook(collBook: CollBookBean) {
-        //创建任务
-        mPresenter!!.createDownloadTask(collBook)
     }
 
     /**
@@ -300,7 +248,6 @@ class BookShelfFragment :
             //从Adapter中删除
             mCollBookAdapter!!.removeItem(collBook)
             synBook()
-            RxBus.getInstance().post(DeleteTaskEvent(collBook))
         }
     }
 

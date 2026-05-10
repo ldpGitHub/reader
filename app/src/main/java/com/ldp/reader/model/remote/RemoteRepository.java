@@ -4,7 +4,6 @@ import com.ldp.reader.model.bean.BookDetailBeanInOwn;
 import com.ldp.reader.model.bean.BookIdBean;
 import com.ldp.reader.model.bean.BookSearchResult;
 import com.ldp.reader.model.bean.ChapterBean;
-import com.ldp.reader.model.bean.ChapterInfoBean;
 import com.ldp.reader.model.bean.ContentBean;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
@@ -109,17 +108,6 @@ public class RemoteRepository {
         return mBookApiOwn.setBookShelfByMobile(body);
     }
 
-
-    /**
-     * 注意这里用的是同步请求
-     *
-     * @param url
-     * @return
-     */
-    public Single<ChapterInfoBean> getChapterInfo(String url) {
-        return mBookApi.getChapterInfoPackage(url)
-                .map(bean -> bean.getChapter());
-    }
 
     /********************************书籍搜索*********************************************/
     /**

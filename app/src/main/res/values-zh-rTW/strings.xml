@@ -10,7 +10,6 @@
     <!--CollBook的长按点击-->
     <string-array name="nb_menu_net_book">
         <item>@string/nb.menu.action.top</item>
-        <item>@string/nb.menu.action.cache</item>
         <item>@string/nb.menu.action.delete</item>
         <item>@string/nb.menu.action.batch_manage</item>
     </string-array>
@@ -43,7 +42,6 @@
     <string name="nb.menu.action.search">搜索</string>
     <string name="nb.menu.action.login">請登錄</string>
     <string name="nb.menu.action.message">我的消息</string>
-    <string name="nb.menu.action.download">下載列表</string>
     <string name="nb.menu.action.sync">同步書架</string>
     <string name="nb.menu.action.scan">掃描本地書籍</string>
     <string name="nb.menu.action.transfer">WIFI傳書</string>
@@ -52,7 +50,6 @@
     <string name="nb.menu.action.setting">設置</string>
     
     <string name="nb.menu.action.top">置頂</string>
-    <string name="nb.menu.action.cache">緩存</string>
     <string name="nb.menu.action.delete">刪除</string>
     <string name="nb.menu.action.batch_manage">批量管理</string>
     
@@ -81,25 +78,6 @@
     <string name="nb.book_detail.give_up">放棄</string>
     <string name="nb.book_detail.start_read">開始閱讀</string>
     
-    <!--DownloadTask:书籍下载-->
-    <string name="nb.download.add_succeed">成功添加到下載列表</string>
-    <string name="nb.download.exist">該任務已存在</string>
-    <string name="nb.download.load_all">以緩存全部章節</string>
-    <string name="nb.download.progress">%1$d/%2$d</string>
-    <string name="nb.download.chapter_scope">(%1$d-%2$d章)</string>
-    
-    <string name="nb.download.start">繼續</string>
-    <string name="nb.download.pause">暫停</string>
-    <string name="nb.download.wait">等待</string>
-    <string name="nb.download.error">錯誤</string>
-    <string name="nb.download.finish">完成</string>
-    
-    <string name="nb.download.loading">下載中</string>
-    <string name="nb.download.waiting">等待中</string>
-    <string name="nb.download.pausing">暫停中</string>
-    <string name="nb.download.complete">已完成</string>
-    <string name="nb.download.source_error">資源或網路錯誤</string>
-    
     <!--mode-->
     <string name="nb.mode.night">夜間</string>
     <string name="nb.mode.morning">日間</string>
@@ -107,7 +85,6 @@
     <!--read-->
     <string name="nb.read.brief">簡介</string>
     <string name="nb.read.setting">設置</string>
-    <string name="nb.read.download">緩存</string>'
     <string name="nb.read.category">目錄</string>
     <string name="nb.read.no_chapter">第 %1$d 章(%2$d)</string>
     

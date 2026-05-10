@@ -4,28 +4,22 @@ import android.util.Log;
 
 import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.BookRecordBean;
-import com.ldp.reader.model.bean.ChapterInfoBean;
 import com.ldp.reader.model.bean.CollBookBean;
 
 import com.ldp.reader.model.gen.BookChapterBeanDao;
 import com.ldp.reader.model.gen.BookRecordBeanDao;
 import com.ldp.reader.model.gen.CollBookBeanDao;
 import com.ldp.reader.model.gen.DaoSession;
-import com.ldp.reader.model.gen.DownloadTaskBeanDao;
 import com.ldp.reader.utils.BookManager;
 import com.ldp.reader.utils.Constant;
 import com.ldp.reader.utils.FileUtils;
 import com.ldp.reader.utils.IOUtils;
 import com.ldp.reader.utils.StringUtils;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.util.List;
 
@@ -236,36 +230,6 @@ public class BookRepository {
                 .unique();
     }
 
-    //TODO:需要进行获取编码并转换的问题
-    public ChapterInfoBean getChapterInfoBean(String folderName,String fileName){
-        File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_NB);
-        if (!file.exists()) {
-            return null;
-        }
-        Reader reader = null;
-        String str = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            reader = new FileReader(file);
-            BufferedReader br = new BufferedReader(reader);
-            while ((str = br.readLine()) != null){
-                sb.append(str);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            IOUtils.close(reader);
-        }
-
-        ChapterInfoBean bean = new ChapterInfoBean();
-        bean.setTitle(fileName);
-        bean.setBody(sb.toString());
-        return bean;
-    }
-
     /************************************************************/
 
     /************************************************************/
@@ -275,8 +239,6 @@ public class BookRepository {
             public void subscribe(SingleEmitter<Void> e) throws Exception {
                 //查看文本中是否存在删除的数据
                 deleteBook(bean.get_id());
-                //删除任务
-                deleteDownloadTask(bean.get_id());
                 //删除目录
                 deleteBookChapter(bean.get_id());
                 //删除CollBook
@@ -308,15 +270,6 @@ public class BookRepository {
         mSession.getBookRecordBeanDao()
                 .queryBuilder()
                 .where(BookRecordBeanDao.Properties.BookId.eq(id))
-                .buildDelete()
-                .executeDeleteWithoutDetachingEntities();
-    }
-
-    //删除任务
-    public void deleteDownloadTask(String bookId){
-        mSession.getDownloadTaskBeanDao()
-                .queryBuilder()
-                .where(DownloadTaskBeanDao.Properties.BookId.eq(bookId))
                 .buildDelete()
                 .executeDeleteWithoutDetachingEntities();
     }

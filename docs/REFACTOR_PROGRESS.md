@@ -304,3 +304,32 @@
   `ReadActivity`, and logcat had no `AndroidRuntime`, `FATAL EXCEPTION`, or
   bridge error output.
 - AI App Bridge note: no new bridge-library issue was found in this pass.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 10
+
+- Removed the unreachable offline download cache chain: `DownloadService`,
+  download task events, `DownloadTaskBean`, the download task GreenDAO DAO,
+  `LocalRepository`, the bookshelf cache menu action, and the old download
+  strings/colors.
+- Removed the retired Zhuishushenqi chapter-content endpoint and wrappers:
+  `chapter2.zhuishushenqi.com`, `ChapterInfoBean`, `ChapterInfoPackage`,
+  `BookApi.getChapterInfoPackage`, and `RemoteRepository.getChapterInfo`.
+- Kept active bookshelf, search, and reading behavior intact. Active reading
+  still uses the app-owned `getBookContent` path through `ReadPresenter`.
+- Expanded `DeprecatedZhuishuCleanupContractTest` so the old download service,
+  task entity/DAO, RxBus events, menu strings, color resources, and old chapter
+  API tokens fail if they return. The new test failed first, then passed after
+  the cleanup.
+- Validation: targeted cleanup contract passed; full
+  `:app:testDebugUnitTest :app:assembleDebug` passed; APK install succeeded.
+- Bridge validation: launched `MainActivity`, `ai-app-bridge status
+  --package-name com.ldp.reader` reported `MainActivity`, `wait-text` verified
+  `我的书架`, `找书`, and `仙人消失之后`; a long press on the bookshelf item showed
+  `删除` while `wait-text 缓存` returned `text_not_found`; UIAutomator then tapped
+  `找书`, verified `SearchActivity` with `热门搜索` and `换一批`, returned to the
+  bookshelf, tapped `仙人消失之后`, and verified `ReadActivity`. Narrow logcat
+  filtering for fatal/error bridge or app crashes was empty.
+- AI App Bridge note: no new bridge-library issue was found in this pass.
+  Attempting `adb shell am startservice` only exposed an app-side fact: the
+  removed `DownloadService` was not exported and had no live in-app starter, so
+  it was cleanup evidence rather than a bridge defect.

@@ -24,8 +24,6 @@ public interface BookShelfContract {
     interface Presenter<T extends BaseContract.BaseView> extends BaseContract.BasePresenter<T> {
         void refreshCollBooks();
 
-        void createDownloadTask(CollBookBean collBookBean);
-
         void updateCollBooks(List<CollBookBean> collBookBeans);
 
         void getBookShelf(String token);
