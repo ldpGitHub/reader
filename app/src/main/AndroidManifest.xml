@@ -56,20 +56,6 @@
 
         <service android:name=".service.DownloadService" />
 
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BookDiscussionActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.DiscDetailActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BillboardActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BookSortActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BookSortListActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BookListActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BookListDetailActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.BillBookActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.OtherBillBookActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.DownloadActivity" />-->
-        <!--        -->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.CommunityActivity" />-->
-        <!--        <activity android:name="com.ldp.reader.ui.activity.MoreSettingActivity" />-->
-
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

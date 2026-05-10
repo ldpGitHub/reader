@@ -102,3 +102,26 @@
   launcher. This is recorded in
   `C:\CompanyProject\ai-app-bridge\docs\KNOWN_ISSUES.md`; reader validation now
   explicitly checks foreground activity/tree before trusting screenshots.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 1
+
+- Removed the first low-risk batch of obsolete Zhuishushenqi-era leftovers:
+  commented Manifest activity entries and whole-commented legacy source stubs
+  for the old discovery/community/book-list/ranking/download pages.
+- Kept active search, book-detail, bookshelf, reading, local import, and login
+  paths unchanged. This pass deliberately did not touch `BookApi`,
+  `RemoteRepository`, or active adapters still referenced by current screens.
+- Added `DeprecatedZhuishuCleanupContractTest`. The test first failed on the
+  commented Manifest entries and existing stub files, then passed after removal.
+- Validation: `:app:testDebugUnitTest --tests
+  com.ldp.reader.cleanup.DeprecatedZhuishuCleanupContractTest` passed after the
+  cleanup; full `:app:testDebugUnitTest :app:assembleDebug` passed; APK install
+  succeeded.
+- Bridge validation: started `com.ldp.reader/.ui.activity.MainActivity`
+  explicitly, `ai-app-bridge status --package-name com.ldp.reader` reported
+  `MainActivity` with app bridge `0.1.4`, `/v1/view/tree` verified `Reader`,
+  `今晚读点什么`, `搜索书名或作者`, `找书`, `导入`, `同步`, and `我的书架`
+  visible, and logcat did not show `AndroidRuntime` or `FATAL EXCEPTION`.
+- AI App Bridge note: no new bridge-library issue was found in this pass. The
+  existing foreground-activity/tree check remains required before trusting
+  visual capture while the phone is also being used manually.
