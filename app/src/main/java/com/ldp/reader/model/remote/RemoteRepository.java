@@ -33,7 +33,6 @@ import com.ldp.reader.model.bean.BookTagBean;
 import com.ldp.reader.model.bean.CommentBean;
 import com.ldp.reader.model.bean.CommentDetailBean;
 import com.ldp.reader.model.bean.HelpsDetailBean;
-import com.ldp.reader.model.bean.HotCommentBean;
 import com.ldp.reader.model.bean.ReviewDetailBean;
 import com.ldp.reader.model.bean.SortBookBean;
 import com.ldp.reader.model.bean.packages.SearchBookPackage;
@@ -349,15 +348,6 @@ public class RemoteRepository {
         return mBookApi.getBookDetail(bookId);
     }
 
-    public Single<List<HotCommentBean>> getHotComments(String bookId) {
-        return mBookApi.getHotCommnentPackage(bookId)
-                .map(bean -> bean.getReviews());
-    }
-
-    public Single<List<BookListBean>> getRecommendBookList(String bookId, int limit) {
-        return mBookApi.getRecommendBookListPackage(bookId, limit + "")
-                .map(bean -> bean.getBooklists());
-    }
     /********************************书籍搜索*********************************************/
     /**
      * 搜索热词

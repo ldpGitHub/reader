@@ -3,30 +3,20 @@ package com.ldp.reader.ui.activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.ldp.reader.R
 import com.ldp.reader.databinding.ActivityBookDetailBinding
 import com.ldp.reader.model.bean.BookDetailBeanInOwn
-import com.ldp.reader.model.bean.BookListBean
 import com.ldp.reader.model.bean.CollBookBean
-import com.ldp.reader.model.bean.HotCommentBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.presenter.BookDetailPresenter
 import com.ldp.reader.presenter.contract.BookDetailContract
-import com.ldp.reader.ui.adapter.BookListAdapter
-import com.ldp.reader.ui.adapter.HotCommentAdapter
 import com.ldp.reader.ui.base.BaseMVPActivity
 import com.ldp.reader.utils.ToastUtils
-import com.ldp.reader.widget.itemdecoration.DividerItemDecoration
-import com.tencent.bugly.proguard.bi
 
 /**
  * Created by ldp on 17-5-4.
@@ -35,8 +25,6 @@ class BookDetailActivity : BookDetailContract.View,
     BaseMVPActivity<BookDetailActivity, BookDetailContract.Presenter<BookDetailActivity>, ActivityBookDetailBinding>()
     {
     /** */
-    private var mHotCommentAdapter: HotCommentAdapter? = null
-    private var mBookListAdapter: BookListAdapter? = null
     private var mCollBookBean: CollBookBean? = null
     private var mProgressDialog: ProgressDialog? = null
 
@@ -142,24 +130,8 @@ class BookDetailActivity : BookDetailContract.View,
             bookDetailTvTitle.setText(bean.title)
             //作者
             bookDetailTvAuthor.setText(bean.author)
-            //类型
-            bookDetailTvType.setVisibility(View.GONE)
-
-            //总字数
-            bookDetailTvDayWordCount.setVisibility(View.GONE)
-            bookDetailTvLatelyUpdate.setVisibility(View.GONE)
-
-            //追书人数
-            bookDetailTvFollowerCount.setVisibility(View.GONE)
-            //存留率
-            bookDetailTvRetention.setVisibility(View.GONE)
-            //日更字数
-            bookDetailTvDayWordCount.setVisibility(View.GONE)
             //简介
             bookDetailTvBrief.setText(bean.desc)
-            bookDetailTvCommunity.setVisibility(View.GONE)
-            //帖子数
-            bookDetailTvPostsCount.setVisibility(View.GONE)
             mCollBookBean = BookRepository.getInstance().getCollBook(bean.bookId.toString() + "")
 
 
@@ -181,49 +153,6 @@ class BookDetailActivity : BookDetailContract.View,
             }
         }
 
-
-    }
-
-    override fun finishHotComment(beans: List<HotCommentBean>) {
-        if (beans.isEmpty()) {
-            return
-        }
-        binding?.apply {
-            mHotCommentAdapter = HotCommentAdapter()
-            bookDetailRvHotComment.setLayoutManager(object :
-                LinearLayoutManager(this@BookDetailActivity) {
-                override fun canScrollVertically(): Boolean {
-                    //与外部ScrollView滑动冲突
-                    return false
-                }
-            })
-            bookDetailRvHotComment.addItemDecoration(DividerItemDecoration(this@BookDetailActivity))
-            bookDetailRvHotComment.setAdapter(mHotCommentAdapter)
-            mHotCommentAdapter!!.addItems(beans)
-
-        }
-
-    }
-
-    override fun finishRecommendBookList(beans: List<BookListBean>) {
-        binding?.apply {
-            if (beans.isEmpty()) {
-                bookDetailRvRecommendBookList.setVisibility(View.GONE)
-                return
-            }
-            //推荐书单列表
-            mBookListAdapter = BookListAdapter()
-            bookDetailRvRecommendBookList.setLayoutManager(object :
-                LinearLayoutManager(this@BookDetailActivity) {
-                override fun canScrollVertically(): Boolean {
-                    //与外部ScrollView滑动冲突
-                    return false
-                }
-            })
-            bookDetailRvRecommendBookList.addItemDecoration(DividerItemDecoration(this@BookDetailActivity))
-            bookDetailRvRecommendBookList.setAdapter(mBookListAdapter)
-            mBookListAdapter!!.addItems(beans)
-        }
 
     }
 
@@ -298,4 +227,3 @@ class BookDetailActivity : BookDetailContract.View,
     }
 
 }
-

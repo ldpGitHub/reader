@@ -16,10 +16,8 @@ import com.ldp.reader.model.bean.packages.ChapterInfoPackage;
 import com.ldp.reader.model.bean.packages.CommentDetailPackage;
 import com.ldp.reader.model.bean.packages.CommentsPackage;
 import com.ldp.reader.model.bean.packages.HelpsDetailPackage;
-import com.ldp.reader.model.bean.packages.HotCommentPackage;
 import com.ldp.reader.model.bean.packages.HotWordPackage;
 import com.ldp.reader.model.bean.packages.KeyWordPackage;
-import com.ldp.reader.model.bean.packages.RecommendBookListPackage;
 import com.ldp.reader.model.bean.packages.RecommendBookPackage;
 import com.ldp.reader.model.bean.packages.ReviewDetailPackage;
 import com.ldp.reader.model.bean.packages.SearchBookPackage;
@@ -268,24 +266,6 @@ public interface BookApi {
 
 
     /*************************书籍详情**********************************/
-
-    /**
-     * 书籍热门评论
-     *
-     * @param book
-     * @return
-     */
-    @GET("/post/review/best-by-book")
-    Single<HotCommentPackage> getHotCommnentPackage(@Query("book") String book);
-
-    /**
-     * 书籍推荐书单
-     * @param bookId
-     * @param limit
-     * @return
-     */
-    @GET("/book-list/{bookId}/recommend")
-    Single<RecommendBookListPackage> getRecommendBookListPackage(@Path("bookId") String bookId, @Query("limit") String limit);
 
     /**
      * 书籍详情

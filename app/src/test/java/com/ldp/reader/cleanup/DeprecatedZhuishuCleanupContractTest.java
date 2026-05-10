@@ -143,9 +143,89 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertFilesRemoved("Remove unreachable legacy UI resource: ", retiredResources);
     }
 
+    @Test
+    public void bookDetailDoesNotKeepLegacyZhuishuCommunitySections() throws Exception {
+        String[] retiredSources = {
+                "src/main/java/com/ldp/reader/ui/adapter/BookListAdapter.java",
+                "src/main/java/com/ldp/reader/ui/adapter/HotCommentAdapter.java",
+                "src/main/java/com/ldp/reader/ui/adapter/view/BookListHolder.java",
+                "src/main/java/com/ldp/reader/ui/adapter/view/HotCommentHolder.java",
+                "src/main/java/com/ldp/reader/model/bean/HotCommentBean.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/HotCommentPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/RecommendBookListPackage.java"
+        };
+
+        String[] retiredResources = {
+                "src/main/res/layout/item_book_brief.xml",
+                "src/main/res/layout/item_hot_comment.xml"
+        };
+
+        String detailLayout = readFile("src/main/res/layout/activity_book_detail.xml");
+        String detailContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract.java");
+        String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String simplifiedChineseStrings = readFile("src/main/res/values/strings.xml");
+        String traditionalChineseStrings = readFile("src/main/res/values-zh-rTW/strings.xml");
+
+        String[] retiredDetailTokens = {
+                "book_detail_rv_hot_comment",
+                "book_detail_tv_more_comment",
+                "book_detail_rv_community",
+                "book_detail_tv_community",
+                "book_detail_tv_posts_count",
+                "book_detail_rv_recommend_book_list",
+                "book_list_tv_recommend_book_list",
+                "追书人数",
+                "读者留存率",
+                "日更新字数"
+        };
+
+        String[] retiredApiTokens = {
+                "finishHotComment",
+                "finishRecommendBookList",
+                "getHotCommnentPackage",
+                "getRecommendBookListPackage",
+                "getHotComments",
+                "getRecommendBookList",
+                "HotCommentBean",
+                "RecommendBookListPackage"
+        };
+
+        String[] retiredStringTokens = {
+                "nb.book_detail.hot_comment",
+                "nb.book_detail.community",
+                "nb.book_detail.posts_count",
+                "nb.book_detail.recommend_book_list",
+                "热门书评",
+                "推薦書單"
+        };
+
+        assertFilesRemoved("Remove detail legacy source: ", retiredSources);
+        assertFilesRemoved("Remove detail legacy resource: ", retiredResources);
+        assertTextAbsent("Remove detail legacy UI token: ", detailLayout, retiredDetailTokens);
+        assertTextAbsent("Remove detail legacy contract token: ", detailContract, retiredApiTokens);
+        assertTextAbsent("Remove detail legacy API token: ", bookApi, retiredApiTokens);
+        assertTextAbsent("Remove detail legacy repository token: ", remoteRepository, retiredApiTokens);
+        assertTextAbsent("Remove detail legacy simplified string token: ", simplifiedChineseStrings, retiredStringTokens);
+        assertTextAbsent("Remove detail legacy traditional string token: ", traditionalChineseStrings, retiredStringTokens);
+    }
+
     private void assertFilesRemoved(String messagePrefix, String[] paths) {
         for (String path : paths) {
             assertFalse(messagePrefix + path, new File(path).exists());
         }
+    }
+
+    private void assertTextAbsent(String messagePrefix, String text, String[] tokens) {
+        for (String token : tokens) {
+            assertFalse(messagePrefix + token, text.contains(token));
+        }
+    }
+
+    private String readFile(String path) throws Exception {
+        return new String(
+                Files.readAllBytes(new File(path).toPath()),
+                StandardCharsets.UTF_8
+        );
     }
 }

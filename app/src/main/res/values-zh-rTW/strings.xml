@@ -134,10 +134,6 @@
     
     
     <!--book_detail : -->
-    <string name="nb.book_detail.hot_comment">熱門書評</string>
-    <string name="nb.book_detail.community">%1$s的社區</string>
-    <string name="nb.book_detail.posts_count">共有%1$d個帖子</string>
-    <string name="nb.book_detail.recommend_book_list">推薦書單</string>
     <string name="nb.book_detail.chase_update">追更</string>
     <string name="nb.book_detail.give_up">放棄</string>
     <string name="nb.book_detail.start_read">開始閱讀</string>

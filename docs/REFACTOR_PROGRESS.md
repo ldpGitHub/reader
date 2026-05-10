@@ -165,3 +165,31 @@
   and `换一批` visible, and logcat had no `AndroidRuntime` or
   `FATAL EXCEPTION` output.
 - AI App Bridge note: no new bridge-library issue was found in this pass.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 4
+
+- Removed the active book-detail page's remaining Zhuishushenqi-era community
+  sections: hot comments, community/post count, recommended book lists, old
+  reader-count/update-word stats, their adapters/holders, package beans, item
+  layouts, API declarations, repository wrappers, and view contract callbacks.
+- Simplified `activity_book_detail.xml` to the still-active detail surface:
+  cover, title, author, chase/read actions, and description. Current bookshelf
+  and reading paths remain unchanged.
+- Expanded `DeprecatedZhuishuCleanupContractTest` so this detail cleanup fails
+  if the removed files, old API tokens, old detail view IDs, or old string
+  resources return. The expanded test failed before the implementation and
+  passed after cleanup.
+- Validation: targeted cleanup contract passed; full
+  `:app:testDebugUnitTest :app:assembleDebug` passed; APK install succeeded.
+- Bridge validation: started `MainActivity`, used visible bookshelf entry
+  `仙人消失之后` to enter `ReadActivity`, opened the top menu, tapped `简介`,
+  and `ai-app-bridge status --package-name com.ldp.reader` reported
+  `BookDetailActivity`. `wait-text` verified `书籍详情`, `简介`, and
+  `继续阅读`; UIAutomator tree search found no `追书人数`, `热门书评`,
+  `推荐书单`, `社区`, `日更新字数`, or `读者留存率`; logcat had no
+  `AndroidRuntime` or `FATAL EXCEPTION` output.
+- AI App Bridge note: found and recorded a new bridge-library issue in
+  `C:\CompanyProject\ai-app-bridge\docs\KNOWN_ISSUES.md`: `tap-text` can return
+  `ok=true` for a bridge-tree node whose tap center is outside the current
+  viewport. Workaround for reader validation is to use UIAutomator-visible taps
+  and verify the resulting activity/text after every navigation tap.
