@@ -5,7 +5,6 @@ import com.ldp.reader.model.bean.packages.ChapterInfoPackage;
 import com.ldp.reader.model.bean.packages.HotWordPackage;
 import com.ldp.reader.model.bean.packages.KeyWordPackage;
 import com.ldp.reader.model.bean.packages.RecommendBookPackage;
-import com.ldp.reader.model.bean.packages.SearchBookPackage;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
@@ -59,12 +58,4 @@ public interface BookApi {
     @GET("/book/auto-complete")
     Single<KeyWordPackage> getKeyWordPacakge(@Query("query") String query);
 
-    /**
-     * 书籍查询
-     *
-     * @param query:作者名或者书名
-     * @return
-     */
-    @GET("/book/fuzzy-search")
-    Single<SearchBookPackage> getSearchBookPackage(@Query("query") String query);
 }

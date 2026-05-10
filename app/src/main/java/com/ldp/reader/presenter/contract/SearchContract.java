@@ -16,7 +16,6 @@ public interface SearchContract extends BaseContract {
 
         void finishKeyWords(List<String> keyWords);
 
-        //        void finishBooks(List<SearchBookPackage.BooksBean> books);
         void finishBooks(List<BookSearchResult> dataBeans);
 
         void errorBooks();

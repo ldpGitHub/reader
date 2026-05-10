@@ -262,6 +262,56 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertTextAbsent("Remove unreachable legacy RemoteRepository token: ", remoteRepository, retiredRepositoryTokens);
     }
 
+    @Test
+    public void unusedLegacyPackageBeansAndImportsAreRemoved() throws Exception {
+        String[] retiredSources = {
+                "src/main/java/com/ldp/reader/model/bean/BookChapterBeanByBiquge.java",
+                "src/main/java/com/ldp/reader/model/bean/BookDetailBean.java",
+                "src/main/java/com/ldp/reader/model/bean/BookDetailBeanInBiquge.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BillBookPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookChapterPackageByBiquge.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookCommentPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookHelpsPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookListDetailPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookListPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookReviewPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookSubSortPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/BookTagPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/CommentDetailPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/CommentsPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/HelpsDetailPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/ReviewDetailPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/SearchBookPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/SearchBookPackageByBiquge.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/SortBookPackage.java",
+                "src/main/java/com/ldp/reader/model/bean/packages/TagSearchPackage.java"
+        };
+
+        String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.java");
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
+        String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
+        String bookDetailContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract.java");
+        String searchContract = readFile("src/main/java/com/ldp/reader/presenter/contract/SearchContract.java");
+        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+
+        String[] retiredTokens = {
+                "SearchBookPackage",
+                "getSearchBookPackage",
+                "BookChapterPackageByBiquge",
+                "BookChapterBeanByBiquge",
+                "BookDetailBeanInBiquge",
+                "BookDetailBean bean"
+        };
+
+        assertFilesRemoved("Remove unused legacy package bean: ", retiredSources);
+        assertTextAbsent("Remove legacy BookApi package token: ", bookApi, retiredTokens);
+        assertTextAbsent("Remove legacy read presenter import token: ", readPresenter, retiredTokens);
+        assertTextAbsent("Remove legacy shelf presenter import token: ", bookShelfPresenter, retiredTokens);
+        assertTextAbsent("Remove legacy detail contract comment token: ", bookDetailContract, retiredTokens);
+        assertTextAbsent("Remove legacy search contract comment token: ", searchContract, retiredTokens);
+        assertTextAbsent("Remove legacy repository comment token: ", bookRepository, retiredTokens);
+    }
+
     private void assertFilesRemoved(String messagePrefix, String[] paths) {
         for (String path : paths) {
             assertFalse(messagePrefix + path, new File(path).exists());

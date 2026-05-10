@@ -10,10 +10,6 @@ import com.ldp.reader.ui.base.BaseContract;
 
 public interface BookDetailContract {
     interface View extends BaseContract.BaseView{
-        /**
-         * @param bean
-         */
-//        void finishRefresh(BookDetailBean bean);
       void finishRefresh(BookDetailBeanInOwn bean);
 
         void waitToBookShelf();

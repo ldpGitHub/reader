@@ -134,15 +134,6 @@ public class BookRepository {
         }
         mCollBookDao.insertOrReplace(bean);
     }
-//    public void saveBook(BookDetailBeanInBiquge bean){
-//        Log.d(TAG, "22saveCollBookWithAsync : "+"进行存储" +  bean.toString());
-//        CollBookBean collBookBeanOrigin = BookRepository.getInstance().getCollBook(bean.getData().getId()+"");
-//        if(null != collBookBeanOrigin) {
-//            bean.setBookIdInBiquge(collBookBeanOrigin.getBookIdInBiquge());
-//        }
-//        mCollBookDao.insertOrReplace(bean);
-//    }
-
     public void saveCollBooks(List<CollBookBean> beans){
         Log.d(TAG, "33saveCollBookWithAsync : "+"进行存储" +  beans.toString());
         for (CollBookBean bookBean: beans) {

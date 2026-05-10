@@ -212,3 +212,24 @@
   content `热门搜索` and `换一批`; logcat had no `AndroidRuntime` or
   `FATAL EXCEPTION` output.
 - AI App Bridge note: no new bridge-library issue was found in this pass.
+
+## 2026-05-10 Deprecated Zhuishu Cleanup Pass 6
+
+- Removed the unused legacy package/model batch that became dead after the
+  remote-layer cleanup: old search result packages, Biquge detail/chapter beans,
+  discussion/comment/ranking/category/book-list packages, and their stale
+  imports or commented contract/repository references.
+- Removed the last unreachable `BookApi.getSearchBookPackage` declaration. The
+  active search page still uses hot-word/auto-complete plus the current search
+  result model, so this pass did not touch `SearchActivity` behavior.
+- Expanded `DeprecatedZhuishuCleanupContractTest` so these unused package beans,
+  imports, and old comments fail if they return. The new test failed first, then
+  passed after cleanup.
+- Validation: targeted cleanup contract passed; full
+  `:app:testDebugUnitTest :app:assembleDebug` passed; APK install succeeded.
+- Bridge validation: launched `MainActivity`, `ai-app-bridge status
+  --package-name com.ldp.reader` reported `MainActivity`, `wait-text` verified
+  `我的书架` and `找书`, UIAutomator tapped `找书`, `SearchActivity` opened, and
+  `wait-text` verified `热门搜索` plus `换一批`; logcat had no `AndroidRuntime` or
+  `FATAL EXCEPTION` output.
+- AI App Bridge note: no new bridge-library issue was found in this pass.

@@ -9,7 +9,6 @@ import com.ldp.reader.model.bean.ChapterBean;
 import com.ldp.reader.model.bean.ChapterInfoBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.bean.ContentBean;
-import com.ldp.reader.model.bean.packages.BookChapterPackageByBiquge;
 import com.ldp.reader.model.local.BookRepository;
 import com.ldp.reader.model.remote.RemoteRepository;
 import com.ldp.reader.presenter.contract.ReadContract;
