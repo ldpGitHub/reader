@@ -391,3 +391,25 @@
   `ReadActivity`. Narrow logcat filtering for fatal/error bridge or app crashes
   was empty.
 - AI App Bridge note: no new bridge-library issue was found in this pass.
+
+## Current Acceptance Snapshot
+
+- Home and login UI have been refactored and verified through resource contract
+  tests, full Gradle builds, APK installs, and ai-app-bridge device checks.
+- Deprecated Zhuishushenqi-era UI routes, hidden community/detail sections,
+  unreachable remote APIs, unused package beans, old local cache helpers,
+  offline download service/task flow, orphan events, old strings, and orphan
+  layouts/drawables have been removed across 13 committed cleanup passes.
+- Latest full validation after the cleanup passes:
+  `:app:testDebugUnitTest :app:assembleDebug` passed, APK install succeeded,
+  ai-app-bridge verified `MainActivity`, `SearchActivity`, and `ReadActivity`,
+  and narrow logcat filtering for fatal/error bridge or app crashes was empty.
+- Remaining old names are intentionally deferred rather than silently removed:
+  active search still uses the visible `SearchActivity` hot-word/auto-complete
+  path backed by `api.zhuishushenqi.com`; `BookChapterBean.validInZhuishu` and
+  `taskName` remain persisted GreenDAO schema fields; Biquge-named identifiers
+  are still part of active reading/content naming and require a schema/API
+  compatibility slice before renaming.
+- AI App Bridge known issues found during this reader validation are recorded
+  in `C:\CompanyProject\ai-app-bridge\docs\KNOWN_ISSUES.md`; the final cleanup
+  passes did not reveal additional bridge-library defects.
