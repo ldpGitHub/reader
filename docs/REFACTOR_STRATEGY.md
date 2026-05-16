@@ -127,6 +127,8 @@ future ObjectBox database.
      scroll-refresh RecyclerView wrappers.
    - Nineteenth done batch: Retrofit helper/repository wiring and lenient Gson
      converter factory.
+   - Twentieth done batch: read-setting persistence manager and MediaStore local
+     file loader.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

@@ -194,9 +194,15 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void localSettingsAndMediaLoaderBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/model/local/ReadSettingManager");
+        assertKotlinOnly("src/main/java/com/ldp/reader/utils/media/LocalFileLoader");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 129);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 25);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 131);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 23);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

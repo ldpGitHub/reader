@@ -3,7 +3,7 @@ package com.ldp.reader.utils
 import android.content.Context
 import androidx.annotation.StringRes
 import com.ldp.reader.App
-import com.ldp.reader.model.local.ReadSettingManager.SHARED_READ_CONVERT_TYPE
+import com.ldp.reader.model.local.ReadSettingManager.Companion.SHARED_READ_CONVERT_TYPE
 import com.zqc.opencc.android.lib.ChineseConverter
 import com.zqc.opencc.android.lib.ConversionType
 import java.text.DateFormat

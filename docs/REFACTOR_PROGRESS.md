@@ -1000,3 +1000,27 @@
   `/book/hot-word`, and narrow logcat checks for `FATAL EXCEPTION` and
   `E AndroidRuntime` were empty.
 
+## 2026-05-16 Kotlin Migration Batch 20
+
+- Migrated local read-setting and local media loading code from Java to Kotlin:
+  `ReadSettingManager` and `LocalFileLoader`.
+- Preserved the existing Java/Kotlin call contracts directly:
+  `ReadSettingManager.getInstance()`, JavaBean setters/getters,
+  `setAutoBrightness(boolean)`, static constant access, MMKV-backed setting
+  keys, and `LocalFileLoader.parseData(...)` cursor/category behavior remain
+  direct translations.
+- Source shape after this batch: 23 Java files and 131 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed after restoring the Kotlin constant
+  import and Java-facing `setAutoBrightness(boolean)` method.
+  `KotlinMigrationContractTest`, `StringUtilsRelativeTimeTest`,
+  `PageLoaderLayoutTest`, `FileSystemUiResourceContractTest`, and
+  `ViewBindingMigrationContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, opened a shelf book into
+  `ReadActivity`, opened the read-setting dialog and verified `默认`, navigated
+  through `我的 -> 设置 -> 本机书籍导入`, verified `FileSystemActivity`,
+  `智能导入`, `手机目录`, and `加入书架`, and app-pid logcat checks for
+  `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
