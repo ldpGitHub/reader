@@ -798,6 +798,29 @@
   `FileSystemActivity` and verified `智能导入` plus `加入书架`. Narrow logcat
   checks for app fatal output were empty.
 
+## 2026-05-16 Kotlin Migration Batch 16
+
+- Migrated text/screen utility classes from Java to Kotlin: `LogUtils`,
+  `SystemBarUtils`, `ScreenUtils`, `ReadingStatsUtils`, and `StringUtils`.
+- Preserved static Java call surfaces with `object` + `@JvmStatic`, including
+  existing relative-time formatting, reading-stat normalization, system-bar
+  flag handling, screen metric helpers, and text conversion behavior. This
+  slice does not add fallback defaults for missing resources, null paint/text,
+  or missing conversion context.
+- Source shape after this batch: 40 Java files and 114 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `ReadingStatsUtilsTest`, `StringUtilsRelativeTimeTest`,
+  `PageLoaderLayoutTest`, and `ReadingStatsViewModelTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity`, `书架`, `本周读`, and `黄昏分界`,
+  opened `ReadActivity`, returned to the shelf, opened `SearchActivity`, and
+  verified `热门搜索`. Narrow logcat checks for `FATAL EXCEPTION` and
+  `E AndroidRuntime` were empty; the observed `AndroidRuntime: Shutting down VM`
+  line belonged to the short-lived UiAutomator process used by bridge.
+
 ## 2026-05-16 Kotlin Migration Batch 8
 
 - Migrated a thin utility and adapter batch from Java to Kotlin: `Constant`,
