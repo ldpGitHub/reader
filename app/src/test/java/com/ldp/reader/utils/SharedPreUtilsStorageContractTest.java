@@ -14,15 +14,14 @@ public class SharedPreUtilsStorageContractTest {
 
     @Test
     public void sharedPreUtilsUsesMmkvOnly() throws IOException {
-        String sharedPreUtils = readFile("src/main/java/com/ldp/reader/utils/SharedPreUtils.java");
+        String sharedPreUtils = readFile("src/main/java/com/ldp/reader/utils/SharedPreUtils.kt");
 
-        assertTrue(sharedPreUtils.contains("import com.tencent.mmkv.MMKV;"));
+        assertTrue(sharedPreUtils.contains("import com.tencent.mmkv.MMKV"));
         assertTrue(sharedPreUtils.contains("MMKV.mmkvWithID(SHARED_NAME)"));
-        assertTrue(sharedPreUtils.contains("mmkv.decodeString(key,\"\""));
+        assertTrue(sharedPreUtils.contains("mmkv.decodeString(key, \"\")"));
         assertTrue(sharedPreUtils.contains("mmkv.decodeInt(key, def)"));
         assertTrue(sharedPreUtils.contains("mmkv.decodeLong(key, def)"));
         assertTrue(sharedPreUtils.contains("mmkv.decodeBool(key, def)"));
-        assertTrue(sharedPreUtils.contains("mmkv.encode(key,value)"));
         assertTrue(sharedPreUtils.contains("mmkv.encode(key, value)"));
 
         assertFalse(sharedPreUtils.contains("SharedPreferences"));
@@ -34,10 +33,10 @@ public class SharedPreUtilsStorageContractTest {
 
     @Test
     public void appInitializesMmkvBeforeStorageUse() throws IOException {
-        String app = readFile("src/main/java/com/ldp/reader/App.java");
+        String app = readFile("src/main/java/com/ldp/reader/App.kt");
 
-        assertTrue(app.contains("import com.tencent.mmkv.MMKV;"));
-        assertTrue(app.contains("MMKV.initialize(this);"));
+        assertTrue(app.contains("import com.tencent.mmkv.MMKV"));
+        assertTrue(app.contains("MMKV.initialize(this)"));
     }
 
     @Test

@@ -539,7 +539,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         String manifest = readFile("src/main/AndroidManifest.xml");
-        String app = readFile("src/main/java/com/ldp/reader/App.java");
+        String app = readFile("src/main/java/com/ldp/reader/App.kt");
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
         String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
         String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");

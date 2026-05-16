@@ -824,3 +824,23 @@
   `黄昏分界` into `ReadActivity`, verified `简介`, and narrow logcat checks for
   app fatal output were empty.
 
+## 2026-05-16 Kotlin Migration Batch 12
+
+- Migrated the app entrypoint, MMKV storage wrapper, and RxJava event bus from
+  Java to Kotlin: `App`, `SharedPreUtils`, and `RxBus`.
+- Kept MMKV as the only storage backend, preserved static Java call surfaces
+  (`App.getContext()`, `SharedPreUtils.getInstance()`, `RxBus.getInstance()`),
+  and kept `SharedPreUtils.getString()` non-null to match its old Java method
+  contract. The non-null assertion exposes an unexpected MMKV null directly.
+- Source shape after this batch: 60 Java files and 94 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `SharedPreUtilsStorageContractTest`, `DeprecatedZhuishuCleanupContractTest`,
+  `LoginUiResourceContractTest`, and `HomeUiResourceContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, opened `SearchActivity`
+  through the toolbar search icon, verified `热门搜索`, and narrow logcat checks
+  for app fatal output were empty.
+

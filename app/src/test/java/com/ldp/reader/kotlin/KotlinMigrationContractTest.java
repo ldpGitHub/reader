@@ -124,9 +124,16 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void appStorageAndEventBusBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/App");
+        assertKotlinOnly("src/main/java/com/ldp/reader/RxBus");
+        assertKotlinOnly("src/main/java/com/ldp/reader/utils/SharedPreUtils");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 91);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 63);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 94);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 60);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {
