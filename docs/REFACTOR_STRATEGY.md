@@ -27,16 +27,17 @@ future ObjectBox database.
 
 ## Current Baseline
 
-- Source shape: 131 Java files, 19 Kotlin files, and 42 layout XML files under
+- Source shape: 133 Java files, 21 Kotlin files, and 42 layout XML files under
   `app/src/main`.
 - Toolchain after the first MMKV slice: AGP 8.2.1, Gradle 8.2, JDK 17, Java
   and Kotlin bytecode target 17.
 - Storage: `SharedPreUtils` was the single SharedPreferences wrapper; first
   slice replaces it with MMKV.
-- Database: GreenDAO remains active for `CollBookBean` and `BookChapterBean`.
-  `BookRecord` production storage now uses ObjectBox through
-  `ObjectBoxBookRecordStore`; `BookRecordBean` is a plain model and no longer a
-  GreenDAO entity.
+- Database: GreenDAO has been removed from production code. Bookshelf,
+  chapter-list, and reading-record storage now use ObjectBox through
+  `ObjectBoxBookStore` and `ObjectBoxBookRecordStore`. The app keeps business
+  IDs (`bookId`, `_id`, and chapter `id`) separate from ObjectBox's long storage
+  IDs.
 - UI binding: `viewBinding true` is already enabled. Active ButterKnife usage is
   gone. The first Activity-level cleanup removed Search/Main/FileSystem residual
   lookups; remaining `findViewById` calls are mostly widgets, dialogs, base
@@ -73,9 +74,10 @@ future ObjectBox database.
      and keeps the app's string `bookId` as an indexed business key.
      `BookRepository.saveBookRecord`, `getBookRecord`, and `deleteBookRecord`
      now delegate to `ObjectBoxBookRecordStore`.
-   - Next database step: migrate `BookChapterBean` and `CollBookBean` only after
-     their chapter replacement, ordering, and relation behavior have
-     implementation-independent tests.
+    - The full database slice is now complete: `CollBookBean`,
+      `BookChapterBean`, and `BookRecordBean` are plain models; GreenDAO plugin,
+      generated DAOs, helper classes, and migration helpers are gone; repository
+      behavior is covered by source-contract and real ObjectBox JVM tests.
 
 3. Remove manual view lookup by migrating screens/widgets to ViewBinding.
    - Start with Activity/Dialog/Fragment classes, because they have generated
@@ -88,7 +90,8 @@ future ObjectBox database.
 4. Continue Java to Kotlin migration.
    - Prefer files that already sit next to Kotlin call sites or are being touched
      for ViewBinding/MVVM.
-   - Leave generated GreenDAO code as Java until the database decision is made.
+    - There is no generated GreenDAO code left. Generated ObjectBox sources stay
+      generated; app-owned models and stores can be migrated by feature slice.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

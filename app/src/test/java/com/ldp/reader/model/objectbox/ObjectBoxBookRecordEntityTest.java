@@ -61,6 +61,24 @@ public class ObjectBoxBookRecordEntityTest {
         assertTrue(helper.contains(".build()"));
     }
 
+    @Test
+    public void bookshelfAndChapterEntitiesUseObjectBoxIdsAndBusinessKeys() throws IOException {
+        String collBook = readFile("src/main/java/com/ldp/reader/model/objectbox/ObjectBoxCollBookEntity.java");
+        String chapter = readFile("src/main/java/com/ldp/reader/model/objectbox/ObjectBoxBookChapterEntity.java");
+
+        assertTrue(collBook.contains("@Entity"));
+        assertTrue(collBook.contains("@Id"));
+        assertTrue(collBook.contains("private long objectBoxId;"));
+        assertTrue(collBook.contains("@Index"));
+        assertTrue(collBook.contains("private String bookId;"));
+
+        assertTrue(chapter.contains("@Entity"));
+        assertTrue(chapter.contains("@Id"));
+        assertTrue(chapter.contains("private long objectBoxId;"));
+        assertTrue(chapter.contains("private String chapterBusinessId;"));
+        assertTrue(chapter.contains("private String bookId;"));
+    }
+
     private static String readFile(String path) throws IOException {
         return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8);
     }

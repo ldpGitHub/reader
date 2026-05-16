@@ -531,3 +531,31 @@
   `MainActivity`, `wait-text 书架` passed, the bookshelf item `黄昏分界` opened
   `ReadActivity`, backing out returned to `MainActivity`, and narrow logcat
   checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
+## 2026-05-16 Full GreenDAO Removal Slice
+
+- Migrated bookshelf and chapter storage from GreenDAO to ObjectBox. Production
+  `BookRepository` now uses `ObjectBoxBookStore` for `CollBookBean` and
+  `BookChapterBean`, plus `ObjectBoxBookRecordStore` for reading progress.
+- Kept ObjectBox storage IDs separate from app business IDs. Books are upserted
+  by `_id`, chapters are queried by `bookId` and ordered by `start`, and chapter
+  replacement remains delete-then-insert inside the repository transaction path.
+- Removed GreenDAO from the build and source tree: plugin, dependency/version,
+  generated DAOs, `DaoDbHelper`, `MyOpenHelper`, and old GreenDAO migration
+  helpers are gone. `CollBookBean`, `BookChapterBean`, and `BookRecordBean` are
+  plain model objects.
+- Added `ObjectBoxBookStoreTest` as a real JVM ObjectBox test for save, ordered
+  list query, chapter replacement, chapter deletion, and book deletion. Expanded
+  existing source-contract tests so GreenDAO build wiring and generated source
+  directories fail if they return.
+- Static validation found no `greendao`, `DaoSession`, `DaoMaster`,
+  `DaoDbHelper`, `BookChapterBeanDao`, or `CollBookBeanDao` references under
+  `app/src/main` or Gradle build files.
+- Validation: targeted ObjectBox/storage contract tests passed; full
+  `:app:testDebugUnitTest :app:assembleDebug :app:installDebug` passed. Runtime
+  validation launched `SplashActivity`, bridge status reported `MainActivity`,
+  `wait-text 书架` passed, and logcat had no app fatal/ObjectBox/GreenDAO storage
+  errors. Because old GreenDAO data is intentionally not migrated, the first
+  bookshelf state was empty; bridge then imported
+  `codex-local-import-probe.txt`, verified the new book on the shelf, tapped it,
+  and status reported `ReadActivity`.

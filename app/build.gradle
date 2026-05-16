@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'kotlin-android' // 添加这一行来应用 Kotlin 插件
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
@@ -128,19 +127,6 @@ android {
 //    }
 //}
 
-greendao {
-    schemaVersion 9
-    daoPackage 'com.ldp.reader.model.gen'
-    targetGenDir 'src/main/java'
-}
-
-tasks.matching { task ->
-    task.name.startsWith('kaptGenerateStubs')
-}.configureEach {
-    dependsOn tasks.named('greendao')
-}
-
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
@@ -177,8 +163,6 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.glideVersion"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    // ORM Database
-    implementation "org.greenrobot:greendao:$rootProject.greendaoVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     // OpenCC to convert Simp. Chinese to Trad. Chinese

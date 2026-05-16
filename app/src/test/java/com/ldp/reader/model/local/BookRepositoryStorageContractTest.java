@@ -17,14 +17,11 @@ public class BookRepositoryStorageContractTest {
 
         assertInOrder(repository,
                 "public  List<CollBookBean> getCollBooks()",
-                ".orderDesc(CollBookBeanDao.Properties.LastRead)",
-                ".list()");
+                "return mBookStore.getCollBooks()");
 
         assertInOrder(repository,
                 "public Single<List<BookChapterBean>> getBookChaptersInRx(String bookId)",
-                ".where(BookChapterBeanDao.Properties.BookId.eq(bookId))",
-                ".orderAsc(BookChapterBeanDao.Properties.Start)",
-                ".list()");
+                "e.onSuccess(mBookStore.getBookChapters(bookId))");
 
         assertInOrder(repository,
                 "public void saveBookRecord(BookRecordBean bean)",
@@ -40,8 +37,7 @@ public class BookRepositoryStorageContractTest {
 
         assertInOrder(repository,
                 "private void replaceBookChaptersInTx(String bookId, List<BookChapterBean> beans)",
-                "deleteBookChapterInTx(bookId);",
-                ".insertOrReplaceInTx(beans)");
+                "mBookStore.replaceBookChapters(bookId, beans)");
     }
 
     @Test
@@ -50,16 +46,16 @@ public class BookRepositoryStorageContractTest {
         String chapter = readFile("src/main/java/com/ldp/reader/model/bean/BookChapterBean.java");
         String record = readFile("src/main/java/com/ldp/reader/model/bean/BookRecordBean.java");
 
+        assertTrue("CollBookBean should no longer be a GreenDAO entity",
+                !collBook.contains("org.greenrobot.greendao.annotation"));
         assertInOrder(collBook,
-                "@Id",
                 "private String _id",
-                "@ToMany(referencedJoinProperty = \"bookId\")",
                 "private List<BookChapterBean> bookChapterList");
 
+        assertTrue("BookChapterBean should no longer be a GreenDAO entity",
+                !chapter.contains("org.greenrobot.greendao.annotation"));
         assertInOrder(chapter,
-                "@Id",
                 "private String id",
-                "@Index",
                 "private String bookId",
                 "private long start",
                 "private long end");
@@ -70,8 +66,20 @@ public class BookRepositoryStorageContractTest {
                 "private String bookId",
                 "private int chapter",
                 "private int pagePos");
-        assertTrue("BookRecordBeanDao should not remain after BookRecord moves to ObjectBox",
-                !new File("src/main/java/com/ldp/reader/model/gen/BookRecordBeanDao.java").exists());
+    }
+
+    @Test
+    public void greenDaoBuildAndGeneratedSourcesAreRemoved() throws IOException {
+        String appGradle = readFile("build.gradle");
+        String rootGradle = readFile("../build.gradle");
+        String gradleProperties = readFile("../gradle.properties");
+
+        assertTrue(!appGradle.contains("org.greenrobot.greendao"));
+        assertTrue(!appGradle.contains("greendao {"));
+        assertTrue(!rootGradle.contains("greendao-gradle-plugin"));
+        assertTrue(!gradleProperties.contains("greendaoVersion"));
+        assertTrue(!new File("src/main/java/com/ldp/reader/model/gen").exists());
+        assertTrue(!new File("src/main/java/com/ldp/reader/model/local/DaoDbHelper.java").exists());
     }
 
     private static void assertInOrder(String source, String... parts) {

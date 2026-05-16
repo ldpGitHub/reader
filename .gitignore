@@ -27,6 +27,7 @@ proguard/
 # Log Files
 *.log
 app/objectbox-jni-*.dll
+app/objectbox-models/*.bak
 
 # Android Studio Navigation editor temp files
 .navigation/

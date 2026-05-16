@@ -33,10 +33,154 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:6444255952669030699",
+      "lastPropertyId": "10:5599133930890085868",
+      "name": "ObjectBoxBookChapterEntity",
+      "properties": [
+        {
+          "id": "1:320995138464355150",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7922059367040843191",
+          "name": "chapterBusinessId",
+          "indexId": "2:8263177401618441054",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "3:3445631051733665451",
+          "name": "bookId",
+          "indexId": "3:5227101223154382205",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "4:2888523857903594470",
+          "name": "link",
+          "type": 9
+        },
+        {
+          "id": "5:4225214730918464379",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "6:7671246906055973597",
+          "name": "taskName",
+          "type": 9
+        },
+        {
+          "id": "7:333976195720590178",
+          "name": "unreadble",
+          "type": 1
+        },
+        {
+          "id": "8:1354586299978758239",
+          "name": "validInZhuishu",
+          "type": 1
+        },
+        {
+          "id": "9:7658110352790388427",
+          "name": "start",
+          "type": 6
+        },
+        {
+          "id": "10:5599133930890085868",
+          "name": "end",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8509749688166940921",
+      "lastPropertyId": "14:7022235265278453658",
+      "name": "ObjectBoxCollBookEntity",
+      "properties": [
+        {
+          "id": "1:6545882401436508069",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1568387860356336120",
+          "name": "bookId",
+          "indexId": "4:7303013910821351642",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "3:7176075024750617460",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "4:8724294008470949823",
+          "name": "author",
+          "type": 9
+        },
+        {
+          "id": "5:3880026025772171214",
+          "name": "shortIntro",
+          "type": 9
+        },
+        {
+          "id": "6:3132228563884662022",
+          "name": "cover",
+          "type": 9
+        },
+        {
+          "id": "7:5398506996332884738",
+          "name": "bookStatus",
+          "type": 9
+        },
+        {
+          "id": "8:5112208836057523194",
+          "name": "updated",
+          "type": 9
+        },
+        {
+          "id": "9:8158266233790123828",
+          "name": "lastRead",
+          "type": 9
+        },
+        {
+          "id": "10:2405120752157758979",
+          "name": "chaptersCount",
+          "type": 5
+        },
+        {
+          "id": "11:4439400380929934046",
+          "name": "lastChapter",
+          "type": 9
+        },
+        {
+          "id": "12:4697052595421789728",
+          "name": "isUpdate",
+          "type": 1
+        },
+        {
+          "id": "13:5063746100402101441",
+          "name": "isLocal",
+          "type": 1
+        },
+        {
+          "id": "14:7022235265278453658",
+          "name": "bookIdInBiquge",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:7121332184011210301",
-  "lastIndexId": "1:5953930775767565628",
+  "lastEntityId": "3:8509749688166940921",
+  "lastIndexId": "4:7303013910821351642",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

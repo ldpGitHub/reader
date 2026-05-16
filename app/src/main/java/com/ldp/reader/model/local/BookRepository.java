@@ -6,9 +6,7 @@ import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.BookRecordBean;
 import com.ldp.reader.model.bean.CollBookBean;
 
-import com.ldp.reader.model.gen.BookChapterBeanDao;
-import com.ldp.reader.model.gen.CollBookBeanDao;
-import com.ldp.reader.model.gen.DaoSession;
+import com.ldp.reader.model.objectbox.ObjectBoxBookStore;
 import com.ldp.reader.model.objectbox.ObjectBoxBookRecordStore;
 import com.ldp.reader.model.objectbox.ObjectBoxDbHelper;
 import com.ldp.reader.utils.BookManager;
@@ -24,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import io.objectbox.BoxStore;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
@@ -36,14 +35,12 @@ import io.reactivex.SingleOnSubscribe;
 public class BookRepository {
     private static final String TAG = "CollBookManager";
     private static volatile BookRepository sInstance;
-    private DaoSession mSession;
-    private CollBookBeanDao mCollBookDao;
+    private ObjectBoxBookStore mBookStore;
     private ObjectBoxBookRecordStore mBookRecordStore;
     private BookRepository(){
-        mSession = DaoDbHelper.getInstance()
-                .getSession();
-        mCollBookDao = mSession.getCollBookBeanDao();
-        mBookRecordStore = new ObjectBoxBookRecordStore(ObjectBoxDbHelper.getInstance().getStore());
+        BoxStore boxStore = ObjectBoxDbHelper.getInstance().getStore();
+        mBookStore = new ObjectBoxBookStore(boxStore);
+        mBookRecordStore = new ObjectBoxBookRecordStore(boxStore);
     }
 
     public static BookRepository getInstance(){
@@ -60,9 +57,8 @@ public class BookRepository {
     //存储已收藏书籍
     public void saveCollBookWithAsync(CollBookBean bean){
         //启动异步存储
-        mSession.startAsyncSession()
-                .runInTx(
-                        () -> {
+        mBookStore.runInTxAsync(
+                () -> {
                             if (bean.getBookChapters() != null){
                                 replaceBookChaptersInTx(bean.get_id(), bean.getBookChapters());
 
@@ -82,17 +78,13 @@ public class BookRepository {
                             BookRepository.getInstance().saveCollBook(bean);
 //                            mCollBookDao.insertOrReplaceInTx(bean);
                             Log.d(TAG, "saveCollBookWithAsync: "+"存储完成" + bean.getAuthor() +bean.getTitle()+bean.getShortIntro());
-                            List<CollBookBean> collBooksTest = mCollBookDao
-                                    .queryBuilder()
-                                    .orderDesc(CollBookBeanDao.Properties.LastRead)
-                                    .list();
+                            List<CollBookBean> collBooksTest = mBookStore.getCollBooks();
                             for (CollBookBean collBookBean: collBooksTest ) {
                                 Log.d(TAG, "+存储后: "+"进行存储" +   collBookBean.getTitle());
 
 
                             }
-                        }
-                );
+                        });
     }
     /**
      * 异步存储。
@@ -100,9 +92,8 @@ public class BookRepository {
      * @param beans
      */
     public void saveCollBooksWithAsync(List<CollBookBean> beans){
-        mSession.startAsyncSession()
-                .runInTx(
-                        () -> {
+        mBookStore.runInTxAsync(
+                () -> {
                             Log.d(TAG, "111saveCollBookWithAsync : "+"进行存储" +  beans.toString());
                             for (CollBookBean bean : beans){
                                 if (bean.getBookChapters() != null){
@@ -114,9 +105,8 @@ public class BookRepository {
                                 CollBookBean collBookBeanOrigin = BookRepository.getInstance().getCollBook(bookBean.get_id());
                                 bookBean.setBookIdInBiquge(collBookBeanOrigin.getBookIdInBiquge());
                             }
-                            mCollBookDao.insertOrReplaceInTx(beans);
-                        }
-                );
+                            mBookStore.saveCollBooks(beans);
+                        });
     }
 
     public void saveCollBook(CollBookBean bean){
@@ -125,7 +115,7 @@ public class BookRepository {
         if(null != collBookBeanOrigin) {
             bean.setBookIdInBiquge(collBookBeanOrigin.getBookIdInBiquge());
         }
-        mCollBookDao.insertOrReplace(bean);
+        mBookStore.saveCollBook(bean);
     }
     public void saveCollBooks(List<CollBookBean> beans){
         Log.d(TAG, "33saveCollBookWithAsync : "+"进行存储" +  beans.toString());
@@ -135,7 +125,7 @@ public class BookRepository {
                 bookBean.setBookIdInBiquge(collBookBeanOrigin.getBookIdInBiquge());
             }
         }
-        mCollBookDao.insertOrReplaceInTx(beans);
+        mBookStore.saveCollBooks(beans);
     }
 
     /**
@@ -143,9 +133,8 @@ public class BookRepository {
      * @param beans
      */
     public void saveBookChaptersWithAsync(List<BookChapterBean> beans){
-        mSession.startAsyncSession()
-                .runInTx(
-                        () -> {
+        mBookStore.runInTxAsync(
+                () -> {
 
                             if (beans == null || beans.isEmpty()) {
                                 return;
@@ -157,8 +146,7 @@ public class BookRepository {
                             }
 
                             Log.d(TAG, "saveBookChaptersWithAsync: "+"进行存储");
-                        }
-                );
+                        });
     }
 
     /**
@@ -190,18 +178,12 @@ public class BookRepository {
 
     /*****************************get************************************************/
     public CollBookBean getCollBook(String bookId){
-        CollBookBean bean = mCollBookDao.queryBuilder()
-                .where(CollBookBeanDao.Properties._id.eq(bookId))
-                .unique();
-        return bean;
+        return mBookStore.getCollBook(bookId);
     }
 
 
     public  List<CollBookBean> getCollBooks(){
-        return mCollBookDao
-                .queryBuilder()
-                .orderDesc(CollBookBeanDao.Properties.LastRead)
-                .list();
+        return mBookStore.getCollBooks();
     }
 
 
@@ -211,13 +193,7 @@ public class BookRepository {
         return Single.create(new SingleOnSubscribe<List<BookChapterBean>>() {
             @Override
             public void subscribe(SingleEmitter<List<BookChapterBean>> e) throws Exception {
-                List<BookChapterBean> beans = mSession
-                        .getBookChapterBeanDao()
-                        .queryBuilder()
-                        .where(BookChapterBeanDao.Properties.BookId.eq(bookId))
-                        .orderAsc(BookChapterBeanDao.Properties.Start)
-                        .list();
-                e.onSuccess(beans);
+                e.onSuccess(mBookStore.getBookChapters(bookId));
             }
         });
     }
@@ -239,7 +215,7 @@ public class BookRepository {
                 //删除目录
                 deleteBookChapter(bean.get_id());
                 //删除CollBook
-                mCollBookDao.delete(bean);
+                mBookStore.deleteCollBook(bean);
                 e.onSuccess(new Void());
             }
         });
@@ -247,32 +223,18 @@ public class BookRepository {
 
     //这个需要用rx，进行删除
     public void deleteBookChapter(String bookId){
-        mSession.getBookChapterBeanDao()
-                .queryBuilder()
-                .where(BookChapterBeanDao.Properties.BookId.eq(bookId))
-                .buildDelete()
-                .executeDeleteWithoutDetachingEntities();
+        mBookStore.deleteBookChapters(bookId);
     }
 
     private void replaceBookChaptersInTx(String bookId, List<BookChapterBean> beans) {
         if (bookId == null || beans == null) {
             return;
         }
-        deleteBookChapterInTx(bookId);
-        mSession.getBookChapterBeanDao()
-                .insertOrReplaceInTx(beans);
-    }
-
-    private void deleteBookChapterInTx(String bookId) {
-        mSession.getBookChapterBeanDao()
-                .queryBuilder()
-                .where(BookChapterBeanDao.Properties.BookId.eq(bookId))
-                .buildDelete()
-                .executeDeleteWithoutDetachingEntities();
+        mBookStore.replaceBookChapters(bookId, beans);
     }
 
     public void deleteCollBook(CollBookBean collBook){
-        mCollBookDao.delete(collBook);
+        mBookStore.deleteCollBook(collBook);
     }
 
     //删除书籍
@@ -284,7 +246,4 @@ public class BookRepository {
         mBookRecordStore.deleteBookRecord(id);
     }
 
-    public DaoSession getSession(){
-        return mSession;
-    }
 }
