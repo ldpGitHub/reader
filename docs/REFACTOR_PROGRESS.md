@@ -1258,6 +1258,33 @@
   responses for `getBookInfoBatch` and `getBookFolder`, and app-pid logcat
   checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
 
+## 2026-05-16 Kotlin Migration Batch 32
+
+- Migrated local TXT reading `LocalPageLoader` from Java to Kotlin while keeping
+  the existing Java `PageLoader` base for this slice.
+- Preserved local-file behavior directly: cached chapter conversion, charset
+  detection, chapter regex selection, virtual chapter splitting, byte-range
+  chapter loading, local progress persistence, and RxJava background parsing
+  remain in place. Missing local file path still fails directly at the old
+  contract boundary.
+- Updated source-contract tests from `.java` to `.kt` for the local loader and
+  added a Kotlin-only assertion for `LocalPageLoader`.
+- Source shape after this batch: 1 Java file and 152 Kotlin files under
+  `app/src/main`; the only remaining Java file is `PageLoader`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed.
+  `KotlinMigrationContractTest`, `HomeUiResourceContractTest`,
+  `PageLoaderLayoutTest`, `DeprecatedZhuishuCleanupContractTest`, and
+  `CollBookHolderLocalBookTest` passed. The full
+  `:app:testDebugUnitTest :app:assembleDebug :app:installDebug` sequence also
+  passed.
+- ai-app-bridge runtime validation used the existing logged-in app state:
+  launched `SplashActivity`, verified `MainActivity`/`书架`, opened the local
+  TXT `codex-local-import-probe` into `ReadActivity`, verified the full-screen
+  `PageView`, and checked logcat evidence for `LocalPageLoader +refreshChapterList`,
+  `PageLoader loadPages/drawContent`, and rendered local text. App-pid logcat
+  checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
 ## 2026-05-16 Kotlin Migration Batch 31
 
 - Migrated network reading `NetPageLoader` from Java to Kotlin while keeping it

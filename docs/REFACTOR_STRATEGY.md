@@ -140,6 +140,7 @@ future ObjectBox database.
    - Twenty-ninth done batch: reading `PageView` touch/animation host.
    - Thirtieth done batch: remove unused Java-only `EncryptUtils`.
    - Thirty-first done batch: network reading `NetPageLoader`.
+   - Thirty-second done batch: local TXT reading `LocalPageLoader`.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

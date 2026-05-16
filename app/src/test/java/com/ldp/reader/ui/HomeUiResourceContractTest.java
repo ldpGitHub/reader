@@ -420,9 +420,9 @@ public class HomeUiResourceContractTest {
         assertTrue(netLoader.contains("override fun onReadableEndReached()"));
         assertTrue(netLoader.contains("saveRecord()"));
 
-        String localLoader = readFile("src/main/java/com/ldp/reader/widget/page/LocalPageLoader.java");
-        assertTrue(localLoader.contains("protected void onReadableEndReached()"));
-        assertTrue(localLoader.contains("saveRecord();"));
+        String localLoader = readFile("src/main/java/com/ldp/reader/widget/page/LocalPageLoader.kt");
+        assertTrue(localLoader.contains("override fun onReadableEndReached()"));
+        assertTrue(localLoader.contains("saveRecord()"));
     }
 
     @Test
