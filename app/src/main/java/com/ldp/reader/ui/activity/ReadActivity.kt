@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.BarUtils
 import com.ldp.reader.R
 import com.ldp.reader.databinding.ActivityReadBinding
@@ -36,12 +37,10 @@ import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.ReadSettingManager
-import com.ldp.reader.presenter.ReadPresenter
-import com.ldp.reader.presenter.contract.ReadContract
 import com.ldp.reader.ui.activity.BookDetailActivity.Companion.startActivity
 import com.ldp.reader.ui.activity.MainActivity
 import com.ldp.reader.ui.adapter.CategoryAdapter
-import com.ldp.reader.ui.base.BaseMVPActivity
+import com.ldp.reader.ui.base.BaseActivity
 import com.ldp.reader.ui.dialog.ReadSettingDialog
 import com.ldp.reader.utils.BrightnessUtils
 import com.ldp.reader.utils.Constant
@@ -59,8 +58,7 @@ import io.reactivex.SingleTransformer
 /**
  * Created by ldp on 17-5-16.
  */
-class ReadActivity : ReadContract.View,
-    BaseMVPActivity<ReadActivity, ReadContract.Presenter<ReadActivity>, ActivityReadBinding>() {
+class ReadActivity : BaseActivity<ActivityReadBinding>() {
     // 注册 Brightness 的 uri
     private val BRIGHTNESS_MODE_URI =
         Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE)
@@ -78,6 +76,7 @@ class ReadActivity : ReadContract.View,
     private var mCategoryAdapter: CategoryAdapter? = null
     private var mCollBook: CollBookBean? = null
     private var readingSessionStartMs = 0L
+    private lateinit var viewModel: ReadViewModel
 
     //控制屏幕常亮
     private var mWakeLock: WakeLock? = null
@@ -150,10 +149,6 @@ class ReadActivity : ReadContract.View,
         super.onCreate(savedInstanceState)
     }
 
-    override fun bindPresenter(): ReadContract.Presenter<ReadActivity> {
-        return ReadPresenter() as ReadContract.Presenter<ReadActivity>
-    }
-
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
         mCollBook = intent.getParcelableExtra(EXTRA_COLL_BOOK)
@@ -182,6 +177,8 @@ class ReadActivity : ReadContract.View,
     @SuppressLint("InvalidWakeLockTag")
     override fun initWidget() {
         super.initWidget()
+        viewModel = ViewModelProvider(this)[ReadViewModel::class.java]
+        observeReadState()
         BarUtils.transparentStatusBar(this)
         BarUtils.setNavBarLightMode(this, false)
 
@@ -226,6 +223,18 @@ class ReadActivity : ReadContract.View,
 
         //初始化BottomMenu
         initBottomMenu()
+    }
+
+    private fun observeReadState() {
+        viewModel.categories.observe(this) { result ->
+            showCategory(result.bookChapterList, result.bookId, result.isBiqugeLoaded)
+        }
+        viewModel.chapterFinishedEvents.observe(this) { isRefresh ->
+            finishChapter(isRefresh)
+        }
+        viewModel.chapterErrorEvents.observe(this) {
+            errorChapter()
+        }
     }
 
     private fun initTopMenu() {
@@ -324,7 +333,7 @@ class ReadActivity : ReadContract.View,
 
                 override fun requestChapters(requestChapters: List<TxtChapter>) {
                     Log.d(TAG, "+requestChapters")
-                    mPresenter.loadChapter(mBookId, requestChapters)
+                    viewModel.loadChapter(mBookId, requestChapters)
                     mHandler.sendEmptyMessage(WHAT_CATEGORY)
                     //隐藏提示
                     binding!!.readTvPageTip.visibility = View.GONE
@@ -438,7 +447,7 @@ class ReadActivity : ReadContract.View,
 
         binding.tvChangeSource.setOnClickListener {
             sourceIndex++;
-            mPresenter.refreshChapter(
+            viewModel.refreshChapter(
                 mBookId,
                 mCategoryAdapter?.getItem(mPageLoader!!.chapterPos),
                 sourceIndex
@@ -511,20 +520,18 @@ class ReadActivity : ReadContract.View,
                     mPageLoader!!.collBook.bookChapters = bookChapterBeen
                     // 刷新章节列表
                     mPageLoader!!.refreshChapterList()
-                    mPresenter.loadCategory(mBookId)
+                    viewModel.loadCategory(mBookId)
                     LogUtils.e(throwable)
                 }
             addDisposable(disposable)
         } else {
             // 从网络中获取目录
-            mPresenter.loadCategory(mBookId)
+            viewModel.loadCategory(mBookId)
         }
     }
 
     /***************************view */
-    override fun showError() {}
-    override fun complete() {}
-    override fun showCategory(
+    private fun showCategory(
         bookChapters: List<BookChapterBean>,
         bookId: String,
         isBiqugeLoaded: Boolean
@@ -539,7 +546,7 @@ class ReadActivity : ReadContract.View,
         }
     }
 
-    override fun finishChapter(isRefresh: Boolean) {
+    private fun finishChapter(isRefresh: Boolean) {
         if (mPageLoader!!.pageStatus == PageLoader.STATUS_LOADING || isRefresh) {
             mHandler.sendEmptyMessage(WHAT_CHAPTER)
             Log.d("+finishChapter", "加载")
@@ -549,7 +556,7 @@ class ReadActivity : ReadContract.View,
         Log.d("+finishChapter", "完成")
     }
 
-    override fun errorChapter() {
+    private fun errorChapter() {
         if (mPageLoader!!.pageStatus == PageLoader.STATUS_LOADING) {
             mPageLoader!!.chapterError()
         }

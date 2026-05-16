@@ -1479,3 +1479,37 @@
   showed 200 responses for `/getBookInfoBatch`, `/getBookShelfByMobile`, and
   `/synBookShelfByMobile`; app-pid logcat checks for `FATAL EXCEPTION` and
   `AndroidRuntime` were empty.
+
+## 2026-05-16 Architecture Migration Batch 39
+
+- Migrated the read page from MVP callbacks to MVVM/LiveData.
+- Moved category loading, chapter content loading, chapter refresh/source
+  switching, and chapter subscription cancellation into `ReadViewModel`. It
+  still uses `RemoteRepository`, `BookRepository`, RxJava, and PageLoader-facing
+  contracts internally.
+- `ReadActivity` now extends `BaseActivity`, creates `ReadViewModel` with
+  `ViewModelProvider`, observes category/chapter-finished/chapter-error state,
+  and keeps PageLoader, reading menus, brightness observer, wake lock, reading
+  stats, back navigation, and collection flow in the Activity.
+- Removed `ReadPresenter`, `ReadContract`, `BaseMVPActivity`, `BaseContract`,
+  and `RxPresenter`. Main sources no longer contain an MVP presenter, contract,
+  or MVP base layer.
+- Source shape after this batch: 0 Java files and 143 Kotlin files under
+  `app/src/main`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed.
+  `KotlinMigrationContractTest`, `DeprecatedZhuishuCleanupContractTest`,
+  `HomeUiResourceContractTest`, `PageLoaderLayoutTest`, and
+  `CollBookHolderLocalBookTest` passed with
+  `-Dorg.gradle.jvmargs=-Xmx3072m`. The full `:app:testDebugUnitTest
+  :app:assembleDebug :app:installDebug` sequence also passed with the same heap
+  setting.
+- ai-app-bridge runtime validation used the existing SMS-login state: launched
+  `SplashActivity`, verified `MainActivity`/`书架`, opened the network shelf
+  book `叩问仙道` into `ReadActivity`, verified the full-screen `PageView`,
+  performed a horizontal read-page swipe, and observed 200 responses for
+  `/getBookFolder` and `/getBookContent`. It then returned to the shelf, opened
+  local TXT `codex-local-import-probe`, verified `ReadActivity`/`PageView`, and
+  performed another horizontal read-page swipe. App-pid logcat checks for
+  `FATAL EXCEPTION`, `AndroidRuntime`, `PageLoader`, and `LocalPageLoader`
+  errors were empty.

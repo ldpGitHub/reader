@@ -100,7 +100,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 val query = s.toString().trim { it <= ' ' }
                 if (isTag) {
                     mRlRefresh!!.showLoading()
-                    //                    mPresenter.searchBook(query);
                     isTag = false
                 } else {
                     //传递

@@ -57,7 +57,6 @@ public class KotlinMigrationContractTest {
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/IOUtils");
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/Charset");
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/media/LoaderCreator");
-        assertKotlinOnly("src/main/java/com/ldp/reader/ui/base/BaseContract");
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/base/adapter/IViewHolder");
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/base/adapter/BaseViewHolder");
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/base/adapter/ViewHolderImpl");
@@ -69,7 +68,6 @@ public class KotlinMigrationContractTest {
     public void apiAndPresenterContractBatchIsKotlin() {
         assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/BookApi");
         assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/BookApiOwn");
-        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/ReadContract");
     }
 
     @Test
@@ -201,8 +199,7 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
-    public void presenterBaseAndReadSettingDialogBatchIsKotlin() {
-        assertKotlinOnly("src/main/java/com/ldp/reader/ui/base/RxPresenter");
+    public void readSettingDialogBatchIsKotlin() {
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/dialog/ReadSettingDialog");
     }
 
@@ -238,8 +235,13 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
-    public void readPresenterBatchIsKotlin() {
-        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/ReadPresenter");
+    public void readFeatureIsMvvm() {
+        assertFalse(new File("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt").exists());
+        assertFalse(new File("src/main/java/com/ldp/reader/presenter/contract/ReadContract.kt").exists());
+        assertFalse(new File("src/main/java/com/ldp/reader/ui/base/BaseMVPActivity.kt").exists());
+        assertFalse(new File("src/main/java/com/ldp/reader/ui/base/BaseContract.kt").exists());
+        assertFalse(new File("src/main/java/com/ldp/reader/ui/base/RxPresenter.kt").exists());
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/activity/ReadViewModel");
     }
 
     @Test
@@ -293,7 +295,7 @@ public class KotlinMigrationContractTest {
 
     @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 147);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 143);
         assertTrue(countFiles(new File("src/main/java"), ".java") <= 0);
     }
 

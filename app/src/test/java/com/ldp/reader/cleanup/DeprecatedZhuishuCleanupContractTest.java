@@ -288,7 +288,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
+        String readViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/ReadViewModel.kt");
         String bookShelfViewModel = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfViewModel.kt");
         String bookDetailViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/BookDetailViewModel.kt");
         String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
@@ -304,7 +304,7 @@ public class DeprecatedZhuishuCleanupContractTest {
 
         assertFilesRemoved("Remove unused legacy package bean: ", retiredSources);
         assertTextAbsent("Remove legacy BookApi package token: ", bookApi, retiredTokens);
-        assertTextAbsent("Remove legacy read presenter import token: ", readPresenter, retiredTokens);
+        assertTextAbsent("Remove legacy read ViewModel import token: ", readViewModel, retiredTokens);
         assertTextAbsent("Remove legacy shelf ViewModel import token: ", bookShelfViewModel, retiredTokens);
         assertTextAbsent("Remove legacy detail ViewModel comment token: ", bookDetailViewModel, retiredTokens);
         assertTextAbsent("Remove legacy repository comment token: ", bookRepository, retiredTokens);
@@ -540,7 +540,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
         String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
         String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
+        String readViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/ReadViewModel.kt");
         String bookShelfViewModel = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfViewModel.kt");
         String bookShelfFragment = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfFragment.kt");
         String simplifiedChineseStrings = readFile("src/main/res/values/strings.xml");
@@ -580,7 +580,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         assertTextAbsent("Remove legacy chapter-content BookApi token: ", bookApi, retiredBookApiTokens);
         assertTextAbsent("Remove legacy chapter-content repository token: ", remoteRepository, retiredRepositoryTokens);
         assertTextAbsent("Remove unreachable download-cache repository token: ", bookRepository, retiredDownloadLayerTokens);
-        assertTextAbsent("Remove legacy chapter-content presenter import token: ", readPresenter, retiredRepositoryTokens);
+        assertTextAbsent("Remove legacy chapter-content presenter import token: ", readViewModel, retiredRepositoryTokens);
         assertTextAbsent("Remove unreachable download-cache presenter token: ", bookShelfViewModel, retiredDownloadLayerTokens);
         assertFalse(new File("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract.kt").exists());
         assertTextAbsent("Remove unreachable download-cache fragment token: ", bookShelfFragment, retiredDownloadLayerTokens);
@@ -593,7 +593,7 @@ public class DeprecatedZhuishuCleanupContractTest {
     public void deadZhuishuChapterValidityWritesAreRemoved() throws Exception {
         String bookDetailViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/BookDetailViewModel.kt");
         String bookShelfViewModel = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfViewModel.kt");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
+        String readViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/ReadViewModel.kt");
 
         String[] retiredPresenterTokens = {
                 "setValidInZhuishu",
@@ -604,8 +604,8 @@ public class DeprecatedZhuishuCleanupContractTest {
                 bookDetailViewModel, retiredPresenterTokens);
         assertTextAbsent("Remove dead Zhuishu chapter-validity write from shelf ViewModel: ",
                 bookShelfViewModel, retiredPresenterTokens);
-        assertTextAbsent("Remove dead Zhuishu chapter-validity write from read presenter: ",
-                readPresenter, retiredPresenterTokens);
+        assertTextAbsent("Remove dead Zhuishu chapter-validity write from read ViewModel: ",
+                readViewModel, retiredPresenterTokens);
     }
 
     @Test
@@ -683,4 +683,3 @@ public class DeprecatedZhuishuCleanupContractTest {
         );
     }
 }
-

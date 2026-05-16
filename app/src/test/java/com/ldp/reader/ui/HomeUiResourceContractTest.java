@@ -444,8 +444,8 @@ public class HomeUiResourceContractTest {
         assertTrue(repository.contains("replaceBookChaptersInTx"));
         assertTrue(repository.contains("mBookStore.replaceBookChapters(bookId, beans)"));
 
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
-        assertTrue(readPresenter.contains("start = bookChapterBeans.size.toLong()"));
+        String readViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/ReadViewModel.kt");
+        assertTrue(readViewModel.contains("start = bookChapterBeans.size.toLong()"));
         String shelfViewModel = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfViewModel.kt");
         assertTrue(shelfViewModel.contains("start = bookChapterBeans.size.toLong()"));
         assertTrue(shelfViewModel.contains("chaptersCount = bookChapterBeans.size"));

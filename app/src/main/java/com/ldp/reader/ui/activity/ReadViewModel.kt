@@ -1,21 +1,23 @@
-package com.ldp.reader.presenter
+package com.ldp.reader.ui.activity
 
 import android.text.TextUtils
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.ChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.bean.ContentBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.remote.RemoteRepository
-import com.ldp.reader.presenter.contract.ReadContract
-import com.ldp.reader.ui.base.RxPresenter
 import com.ldp.reader.utils.LogUtils
 import com.ldp.reader.utils.MD5Utils
 import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.widget.page.TxtChapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
@@ -25,12 +27,26 @@ import java.util.Arrays
 /**
  * Created by ldp on 17-5-16.
  */
-class ReadPresenter : RxPresenter<ReadContract.View>(),
-    ReadContract.Presenter<ReadContract.View> {
+class ReadViewModel : ViewModel() {
+    data class CategoryResult(
+        val bookChapterList: List<BookChapterBean>,
+        val bookId: String,
+        val isBiqugeLoaded: Boolean
+    )
+
+    private val disposables = CompositeDisposable()
+    private val _categories = MutableLiveData<CategoryResult>()
+    private val _chapterFinishedEvents = MutableLiveData<Boolean>()
+    private val _chapterErrorEvents = MutableLiveData<Int>()
+    private var chapterErrorVersion = 0
     private var mChapterSub: Subscription? = null
     private var bookIdInBiquge: String? = ""
 
-    override fun loadCategory(bookId: String?) {
+    val categories: LiveData<CategoryResult> = _categories
+    val chapterFinishedEvents: LiveData<Boolean> = _chapterFinishedEvents
+    val chapterErrorEvents: LiveData<Int> = _chapterErrorEvents
+
+    fun loadCategory(bookId: String?) {
         val bookChapterBeans: MutableList<BookChapterBean> = ArrayList()
         val collBookBean = BookRepository.getInstance().getCollBook(bookId)!!
 
@@ -53,20 +69,20 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
                     collBookBean.bookChapters = bookChapterBeans
                     collBookBean.chaptersCount = bookChapterBeans.size
                     Log.d(TAG, "accept: $bookChapterBeans")
-                    mView!!.showCategory(bookChapterBeans, bookId!!, true)
+                    _categories.value = CategoryResult(bookChapterBeans, bookId!!, true)
 
                     BookRepository.getInstance()
                         .saveCollBookWithAsync(collBookBean)
                 },
                 {
-                    mView!!.errorChapter()
+                    _chapterErrorEvents.value = ++chapterErrorVersion
                 }
             )
-        addDisposable(disposable)
+        disposables.add(disposable)
     }
 
     @Synchronized
-    override fun loadChapter(bookId: String?, bookChapterList: List<TxtChapter>) {
+    fun loadChapter(bookId: String?, bookChapterList: List<TxtChapter>) {
         val size = bookChapterList.size
         Log.e(TAG, "loadChapter  列表大小" + size + Arrays.asList(bookChapterList).toString())
 
@@ -115,13 +131,13 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
                         "+chapterBody",
                         "title" + titleInBiquge + titlesInBiquge + " " + contentBean.content
                     )
-                    mView!!.finishChapter(false)
+                    _chapterFinishedEvents.value = false
                     titleInBiquge = titlesInBiquge.poll()
                 }
 
                 override fun onError(t: Throwable) {
                     if (bookChapterList[0].title == titleInBiquge) {
-                        mView!!.errorChapter()
+                        _chapterErrorEvents.value = ++chapterErrorVersion
                     }
                     LogUtils.e(t)
                 }
@@ -132,7 +148,7 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
     }
 
     @Synchronized
-    override fun refreshChapter(bookId: String?, bookChapter: TxtChapter?, sourceIndex: Int) {
+    fun refreshChapter(bookId: String?, bookChapter: TxtChapter?, sourceIndex: Int) {
         val pureLink = bookChapter!!.link
         val bean = BookRepository.getInstance().getCollBook(bookId)!!
         bookIdInBiquge = bean.get_id()
@@ -146,23 +162,24 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
                         bookChapter.title,
                         contentBean.content
                     )
-                    mView!!.finishChapter(true)
+                    _chapterFinishedEvents.value = true
                 },
                 {
-                    mView!!.errorChapter()
+                    _chapterErrorEvents.value = ++chapterErrorVersion
                 }
             )
-        addDisposable(disposable)
+        disposables.add(disposable)
     }
 
-    override fun detachView() {
-        super.detachView()
+    override fun onCleared() {
         if (mChapterSub != null) {
             mChapterSub!!.cancel()
         }
+        disposables.clear()
+        super.onCleared()
     }
 
     companion object {
-        private val TAG = ReadPresenter::class.java.simpleName
+        private val TAG = ReadViewModel::class.java.simpleName
     }
 }

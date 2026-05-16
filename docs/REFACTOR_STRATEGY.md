@@ -27,7 +27,7 @@ future ObjectBox database.
 
 ## Current Baseline
 
-- Source shape: 0 Java files, 147 Kotlin files, and 42 layout XML files under
+- Source shape: 0 Java files, 143 Kotlin files, and 42 layout XML files under
   `app/src/main`.
 - Toolchain after the first MMKV slice: AGP 8.2.1, Gradle 8.2, JDK 17, Java
   and Kotlin bytecode target 17.
@@ -42,13 +42,13 @@ future ObjectBox database.
   `findViewById` calls are gone from `app/src/main`; a source-contract test now
   fails if either token returns.
 - Architecture: `ReadingStatsActivity` is the first MVVM/LiveData slice.
-  The remaining MVP presenter owns only the read flow. The global `RxBus` /
+  No MVP presenter, contract, or MVP base layer remains. The global `RxBus` /
   `BookSyncEvent` path has been removed; bookshelf sync requests are owned by
   Activity result contracts and direct `MainActivity` -> `BookShelfFragment`
   calls. Search, login, book detail, and bookshelf are now ViewModel + LiveData
-  screens. RxJava remains in Retrofit, repositories, the remaining read
-  presenter, the search/login/book-detail/bookshelf ViewModel internals, file
-  scanning, and page loading.
+  screens. The read page is also ViewModel + LiveData at the Activity boundary.
+  RxJava remains in Retrofit, repositories, ViewModel internals, file scanning,
+  page loading, and a few base Activity/Fragment disposable helpers.
 
 ## Refactor Order
 
@@ -111,8 +111,8 @@ future ObjectBox database.
      search-keyword/search-book adapter classes.
    - Seventh done batch: Retrofit API interfaces and active Presenter contract
      interfaces. The earlier `SearchContract`, `LoginContract`,
-     `BookDetailContract`, and `BookShelfContract` items were later removed in
-     architecture batches 35, 36, 37, and 38.
+     `BookDetailContract`, `BookShelfContract`, and `ReadContract` items were
+     later removed in architecture batches 35, 36, 37, 38, and 39.
    - Eighth done batch: thin constants/progress/network/Rx/MD5/FileStack
      utilities plus small category/page-style/keyword adapter classes.
    - Ninth done batch: remaining bookshelf/search/category/file list adapters
@@ -139,13 +139,15 @@ future ObjectBox database.
    - Twentieth done batch: read-setting persistence manager and MediaStore local
      file loader.
    - Twenty-first done batch: RxPresenter base class and read-setting dialog.
+     The earlier `RxPresenter` base was later removed in architecture batch 39.
    - Twenty-second done batch: shared file utility helpers.
    - Twenty-third done batch: legacy book cache manager.
    - Twenty-fourth done batch: search and login presenters. The earlier
      `SearchPresenter` and `LoginPresenter` items were later removed in
      architecture batches 35 and 36.
    - Twenty-fifth done batch: read and book-detail presenters. The earlier
-     `BookDetailPresenter` item was later removed in architecture batch 37.
+     `BookDetailPresenter` and `ReadPresenter` items were later removed in
+     architecture batches 37 and 39.
    - Twenty-sixth done batch: bookshelf presenter. The earlier
      `BookShelfPresenter` item was later removed in architecture batch 38.
    - Twenty-seventh done batch: ObjectBox-backed `BookRepository`.
@@ -178,7 +180,11 @@ future ObjectBox database.
      `LiveData` from `BookShelfViewModel`; `BookShelfPresenter`,
      `BookShelfContract`, and the now-unused `BaseMVPFragment` are removed from
      the running architecture.
-   - Candidate order: read page.
+   - Seventh done slice: `ReadActivity` now observes `LiveData` from
+     `ReadViewModel`; `ReadPresenter`, `ReadContract`, `BaseMVPActivity`,
+     `BaseContract`, and the now-unused `RxPresenter` are removed from the
+     running architecture.
+   - Candidate order: feature-level RxJava boundary cleanup.
    - Replace RxJava at feature boundaries only after Retrofit/repository return
      contracts have a tested coroutine or LiveData equivalent.
    - `RxBus` replacement is complete. Keep the remaining migrations on explicit
