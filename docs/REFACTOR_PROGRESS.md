@@ -712,3 +712,26 @@
   through the toolbar search icon and verified `热门搜索`, opened shelf item
   `黄昏分界` into `ReadActivity`, opened the read-setting dialog, verified
   `默认`, and narrow logcat checks for app fatal output were empty.
+
+## 2026-05-16 Kotlin Migration Batch 7
+
+- Migrated the active Retrofit API interfaces and Presenter contract interfaces
+  from Java to Kotlin: `BookApi`, `BookApiOwn`, `BookShelfContract`,
+  `BookDetailContract`, `LoginContract`, `ReadContract`, and `SearchContract`.
+- Kept method names, Retrofit annotations, RxJava return types, and MVP generic
+  ownership unchanged. Nullable parameters are used only at the Java/Kotlin
+  boundary where existing callers can already pass null through the old Java
+  interfaces.
+- Added `@JvmSuppressWildcards` on the migrated interfaces so existing Java
+  Presenter implementations keep exact `List<T>` override signatures.
+- Source shape after this batch: 93 Java files and 61 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `DeprecatedZhuishuCleanupContractTest`, `BookShelfPresenterFilterTest`, and
+  `BookShelfPresenterSyncTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, opened `SearchActivity`
+  through the toolbar search icon, verified `热门搜索`, and narrow logcat checks
+  for app fatal output were empty.

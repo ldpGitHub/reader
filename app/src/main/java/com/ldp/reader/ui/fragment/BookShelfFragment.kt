@@ -477,7 +477,7 @@ class BookShelfFragment :
         ToastUtils.show("书架同步成功")
     }
 
-    override fun showErrorTip(error: String) {
+    override fun showErrorTip(error: String?) {
 //        mRvContent.setTip(error);
 //        mRvContent.showTip();
         com.blankj.utilcode.util.ToastUtils.showLong(error)

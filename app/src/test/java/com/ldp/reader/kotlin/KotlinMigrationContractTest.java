@@ -67,9 +67,20 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void apiAndPresenterContractBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/BookApi");
+        assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/BookApiOwn");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/LoginContract");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/ReadContract");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/contract/SearchContract");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 54);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 100);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 61);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 93);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

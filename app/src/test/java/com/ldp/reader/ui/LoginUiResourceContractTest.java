@@ -78,8 +78,8 @@ public class LoginUiResourceContractTest {
         assertTrue(loginActivity.contains("override fun showDirectLoginError()"));
         assertTrue(loginActivity.contains("一键登录失败，请使用验证码登录"));
 
-        String loginContract = readFile("src/main/java/com/ldp/reader/presenter/contract/LoginContract.java");
-        assertTrue(loginContract.contains("void showDirectLoginError();"));
+        String loginContract = readFile("src/main/java/com/ldp/reader/presenter/contract/LoginContract.kt");
+        assertTrue(loginContract.contains("fun showDirectLoginError()"));
 
         String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.java");
         assertTrue(loginPresenter.contains("mView.showDirectLoginError();"));
