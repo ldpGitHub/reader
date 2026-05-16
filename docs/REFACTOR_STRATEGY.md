@@ -135,6 +135,7 @@ future ObjectBox database.
    - Twenty-fourth done batch: search and login presenters.
    - Twenty-fifth done batch: read and book-detail presenters.
    - Twenty-sixth done batch: bookshelf presenter.
+   - Twenty-seventh done batch: ObjectBox-backed `BookRepository`.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

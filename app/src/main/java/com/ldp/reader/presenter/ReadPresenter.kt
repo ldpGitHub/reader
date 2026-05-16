@@ -32,7 +32,7 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
 
     override fun loadCategory(bookId: String?) {
         val bookChapterBeans: MutableList<BookChapterBean> = ArrayList()
-        val collBookBean = BookRepository.getInstance().getCollBook(bookId)
+        val collBookBean = BookRepository.getInstance().getCollBook(bookId)!!
 
         Log.d(TAG, "loadCategory: $bookId$collBookBean")
         val disposable = RemoteRepository.getInstance()
@@ -84,7 +84,7 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
                 continue
             }
             val pureLink = bookChapter.link
-            val bean = BookRepository.getInstance().getCollBook(bookId)
+            val bean = BookRepository.getInstance().getCollBook(bookId)!!
             bookIdInBiquge = bean.get_id()
             Log.d("+收到的章节笔趣阁Id", bookIdInBiquge!!)
             val bookChapterBeanByBiqugeSingle = RemoteRepository.getInstance()
@@ -134,7 +134,7 @@ class ReadPresenter : RxPresenter<ReadContract.View>(),
     @Synchronized
     override fun refreshChapter(bookId: String?, bookChapter: TxtChapter?, sourceIndex: Int) {
         val pureLink = bookChapter!!.link
-        val bean = BookRepository.getInstance().getCollBook(bookId)
+        val bean = BookRepository.getInstance().getCollBook(bookId)!!
         bookIdInBiquge = bean.get_id()
         val disposable = RemoteRepository.getInstance()
             .getBookContent(bookIdInBiquge, pureLink, sourceIndex)

@@ -13,30 +13,30 @@ public class BookRepositoryStorageContractTest {
 
     @Test
     public void repositoryKeepsBookshelfChapterAndRecordStorageSemantics() throws IOException {
-        String repository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+        String repository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
 
         assertInOrder(repository,
-                "public  List<CollBookBean> getCollBooks()",
-                "return mBookStore.getCollBooks()");
+                "val collBooks: List<CollBookBean>",
+                "get() = mBookStore.getCollBooks()");
 
         assertInOrder(repository,
-                "public Single<List<BookChapterBean>> getBookChaptersInRx(String bookId)",
-                "e.onSuccess(mBookStore.getBookChapters(bookId))");
+                "fun getBookChaptersInRx(bookId: String?): Single<List<BookChapterBean>>",
+                "emitter.onSuccess(mBookStore.getBookChapters(bookId))");
 
         assertInOrder(repository,
-                "public void saveBookRecord(BookRecordBean bean)",
+                "fun saveBookRecord(bean: BookRecordBean)",
                 "mBookRecordStore.saveBookRecord(bean)");
 
         assertInOrder(repository,
-                "public BookRecordBean getBookRecord(String bookId)",
+                "fun getBookRecord(bookId: String?): BookRecordBean?",
                 "return mBookRecordStore.getBookRecord(bookId)");
 
         assertInOrder(repository,
-                "public void deleteBookRecord(String id)",
+                "fun deleteBookRecord(id: String?)",
                 "mBookRecordStore.deleteBookRecord(id)");
 
         assertInOrder(repository,
-                "private void replaceBookChaptersInTx(String bookId, List<BookChapterBean> beans)",
+                "private fun replaceBookChaptersInTx(bookId: String?, beans: List<BookChapterBean>?)",
                 "mBookStore.replaceBookChapters(bookId, beans)");
     }
 

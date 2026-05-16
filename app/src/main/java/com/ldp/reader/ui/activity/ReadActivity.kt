@@ -584,7 +584,7 @@ class ReadActivity : ReadContract.View,
                         Constant.FORMAT_BOOK_DATE
                     )
                     BookRepository.getInstance()
-                        .saveCollBookWithAsync(mCollBook)
+                        .saveCollBookWithAsync(mCollBook!!)
                     exit()
                 }
                 .setNegativeButton("取消") { dialog: DialogInterface?, which: Int -> exit() }

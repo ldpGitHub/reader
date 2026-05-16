@@ -292,7 +292,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.kt");
         String bookDetailContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract.kt");
         String searchContract = readFile("src/main/java/com/ldp/reader/presenter/contract/SearchContract.kt");
-        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
 
         String[] retiredTokens = {
                 "SearchBookPackage",
@@ -542,7 +542,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String app = readFile("src/main/java/com/ldp/reader/App.kt");
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
         String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
-        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+        String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
         String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.kt");
         String bookShelfContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract.kt");

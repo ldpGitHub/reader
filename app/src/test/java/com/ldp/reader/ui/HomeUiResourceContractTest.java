@@ -435,9 +435,9 @@ public class HomeUiResourceContractTest {
 
     @Test
     public void remoteFolderSaveReplacesStaleReadableChapterList() throws IOException {
-        String repository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
+        String repository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.kt");
         assertTrue(repository.contains("replaceBookChaptersInTx"));
-        assertTrue(repository.contains("mBookStore.replaceBookChapters(bookId, beans);"));
+        assertTrue(repository.contains("mBookStore.replaceBookChapters(bookId, beans)"));
 
         String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
         assertTrue(readPresenter.contains("start = bookChapterBeans.size.toLong()"));

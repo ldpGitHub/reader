@@ -1161,3 +1161,29 @@
   The final installed APK was launched again and opened `黄昏分界` into
   `ReadActivity`; app-pid logcat checks for `FATAL EXCEPTION` and
   `AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 27
+
+- Migrated the ObjectBox-backed `BookRepository` from Java to Kotlin.
+- Preserved the existing repository surface used by Java and Kotlin callers:
+  `BookRepository.getInstance()`, the Java-visible `getCollBooks()` property
+  getter, RxJava chapter/delete methods, chapter replacement transactions,
+  chapter file writes, and book-record delegation all keep the same storage
+  responsibilities. Existing explicit null branches remain, and missing
+  upstream data is not silently substituted.
+- Source shape after this batch: 13 Java files and 141 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed after making old platform-type
+  dereferences explicit at the existing call sites. `KotlinMigrationContractTest`,
+  `BookRepositoryStorageContractTest`, `ObjectBoxBookStoreTest`,
+  `ObjectBoxBookRecordStoreTest`, `HomeUiResourceContractTest`,
+  `DeprecatedZhuishuCleanupContractTest`, and `BookShelfPresenterFilterTest`
+  passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation kept the SMS-login state intact,
+  launched `SplashActivity`, ai-app-bridge verified `MainActivity` and `书架`,
+  opened `黄昏分界` into `ReadActivity`, opened the chapter drawer, and verified
+  real remote chapter rows. Bridge network capture showed 200 responses for
+  `getBookInfoBatch` and `getBookFolder`; app-pid logcat checks for
+  `FATAL EXCEPTION` and `AndroidRuntime` were empty.
