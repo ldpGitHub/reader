@@ -439,16 +439,16 @@ public class HomeUiResourceContractTest {
         assertTrue(repository.contains("replaceBookChaptersInTx"));
         assertTrue(repository.contains("mBookStore.replaceBookChapters(bookId, beans);"));
 
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
-        assertTrue(readPresenter.contains("setStart(bookChapterBeans.size())"));
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
+        assertTrue(readPresenter.contains("start = bookChapterBeans.size.toLong()"));
         String shelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
         assertTrue(shelfPresenter.contains("setStart(bookChapterBeans.size())"));
         assertTrue(shelfPresenter.contains("setChaptersCount(bookChapterBeans.size())"));
         assertTrue(shelfPresenter.contains("isReadableFolderStale"));
         assertTrue(shelfPresenter.contains("getBookRecord"));
-        String detailPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookDetailPresenter.java");
-        assertTrue(detailPresenter.contains("setStart(bookChapterBeans.size())"));
-        assertTrue(detailPresenter.contains("setChaptersCount(bookChapterBeans.size())"));
+        String detailPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookDetailPresenter.kt");
+        assertTrue(detailPresenter.contains("start = bookChapterBeans.size.toLong()"));
+        assertTrue(detailPresenter.contains("chaptersCount = bookChapterBeans.size"));
     }
 
     @Test

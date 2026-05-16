@@ -1109,3 +1109,26 @@
   checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty. Direct
   `LoginActivity` launch is not exported, so the login Presenter was verified
   through compile and contract tests without changing the current login state.
+
+## 2026-05-16 Kotlin Migration Batch 25
+
+- Migrated `ReadPresenter` and `BookDetailPresenter` from Java to Kotlin.
+- Preserved the existing Presenter contracts and RxJava repository flow:
+  category loading, chapter content loading/refreshing, book-detail refresh,
+  add-to-bookshelf, and server bookshelf sync remain direct translations. The
+  Kotlin code keeps the old fail-loud null behavior where Java called through
+  nullable contract values directly.
+- Source shape after this batch: 15 Java files and 139 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `DeprecatedZhuishuCleanupContractTest`, `HomeUiResourceContractTest`, and
+  `PageLoaderLayoutTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`
+  with the current SMS-login state intact, ai-app-bridge verified
+  `MainActivity` and `书架`, opened the remote shelf book `黄昏分界` into
+  `ReadActivity`, opened the chapter drawer and verified real remote chapter
+  rows, then opened `BookDetailActivity` through the read-page `简介` action
+  and verified `书籍详情`, `黄昏分界`, and `作品简介`. App-pid logcat checks for
+  `FATAL EXCEPTION` and `AndroidRuntime` were empty.

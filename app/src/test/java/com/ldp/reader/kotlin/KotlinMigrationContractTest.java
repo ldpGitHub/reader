@@ -222,9 +222,15 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void readAndDetailPresentersBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/ReadPresenter");
+        assertKotlinOnly("src/main/java/com/ldp/reader/presenter/BookDetailPresenter");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 137);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 17);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 139);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 15);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

@@ -288,7 +288,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
         String bookDetailContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract.kt");
         String searchContract = readFile("src/main/java/com/ldp/reader/presenter/contract/SearchContract.kt");
@@ -543,7 +543,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
         String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
         String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
         String bookShelfContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract.kt");
         String bookShelfFragment = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfFragment.kt");
@@ -595,9 +595,9 @@ public class DeprecatedZhuishuCleanupContractTest {
 
     @Test
     public void deadZhuishuChapterValidityWritesAreRemoved() throws Exception {
-        String bookDetailPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookDetailPresenter.java");
+        String bookDetailPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookDetailPresenter.kt");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
-        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
+        String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
 
         String[] retiredPresenterTokens = {
                 "setValidInZhuishu",

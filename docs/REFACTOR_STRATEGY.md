@@ -133,6 +133,7 @@ future ObjectBox database.
    - Twenty-second done batch: shared file utility helpers.
    - Twenty-third done batch: legacy book cache manager.
    - Twenty-fourth done batch: search and login presenters.
+   - Twenty-fifth done batch: read and book-detail presenters.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 
