@@ -132,6 +132,7 @@ future ObjectBox database.
    - Twenty-first done batch: RxPresenter base class and read-setting dialog.
    - Twenty-second done batch: shared file utility helpers.
    - Twenty-third done batch: legacy book cache manager.
+   - Twenty-fourth done batch: search and login presenters.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

@@ -1088,3 +1088,24 @@
   opened it into `ReadActivity`, opened the chapter drawer, verified visible
   local chapters `第1章(1)`, `第1章(2)`, and `第1章(3)`, and app-pid logcat
   checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 24
+
+- Migrated `SearchPresenter` and `LoginPresenter` from Java to Kotlin.
+- Preserved the existing Presenter contracts: search hot-word/key-word/book
+  flows still use RxJava and direct `mView` calls, while login keeps its
+  existing null-view guards around asynchronous callbacks, MobPush registration
+  lookup, SecVerify pre-verify, SMS login, and direct-login callbacks.
+- Source shape after this batch: 17 Java files and 137 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `LoginUiResourceContractTest`, `HomeUiResourceContractTest`,
+  `BookShelfPresenterFilterTest`, and `BookShelfPresenterSyncTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, opened `SearchActivity`
+  through the toolbar search action, verified `热门搜索`, and app-pid logcat
+  checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty. Direct
+  `LoginActivity` launch is not exported, so the login Presenter was verified
+  through compile and contract tests without changing the current login state.

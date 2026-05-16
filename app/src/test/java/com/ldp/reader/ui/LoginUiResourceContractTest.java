@@ -57,10 +57,10 @@ public class LoginUiResourceContractTest {
         assertTrue(loginActivity.contains("RxBus.getInstance().post(BookSyncEvent())"));
         assertFalse(loginActivity.contains("intent.getBooleanExtra"));
 
-        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.java");
-        int preLoginStart = loginPresenter.indexOf("public void preDirectLogin()");
-        int smsLoginStart = loginPresenter.indexOf("public void smsLogin", preLoginStart);
-        int autoDirectLogin = loginPresenter.indexOf("directLogin();", preLoginStart);
+        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.kt");
+        int preLoginStart = loginPresenter.indexOf("override fun preDirectLogin()");
+        int smsLoginStart = loginPresenter.indexOf("override fun smsLogin", preLoginStart);
+        int autoDirectLogin = loginPresenter.indexOf("directLogin()", preLoginStart);
         assertFalse(autoDirectLogin >= 0 && autoDirectLogin < smsLoginStart);
         assertTrue(loginPresenter.contains("if (mView == null)"));
     }
@@ -81,8 +81,8 @@ public class LoginUiResourceContractTest {
         String loginContract = readFile("src/main/java/com/ldp/reader/presenter/contract/LoginContract.kt");
         assertTrue(loginContract.contains("fun showDirectLoginError()"));
 
-        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.java");
-        assertTrue(loginPresenter.contains("mView.showDirectLoginError();"));
+        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.kt");
+        assertTrue(loginPresenter.contains("mView!!.showDirectLoginError()"));
     }
 
     private static String readFile(String path) throws IOException {
