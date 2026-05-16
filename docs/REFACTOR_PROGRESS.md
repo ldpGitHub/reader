@@ -929,3 +929,26 @@
   through the toolbar search icon, verified `热门搜索`, and narrow logcat checks
   for app fatal output were empty.
 
+## 2026-05-16 Kotlin Migration Batch 17
+
+- Migrated tab/selector/page-model widgets from Java to Kotlin:
+  `EasyRatingBar`, `SelectorView`, `TabTextView`, `TabViewGroup`, `ScrollTab`,
+  and `TxtChapter`.
+- Preserved the existing runtime contracts directly: XML custom-view
+  constructors still exist, tab click/listener behavior is unchanged, selector
+  popup state is still owned by the child item, and `TxtChapter` keeps both
+  field access for remaining Java page loaders and getter/setter access for
+  existing presenter/page code.
+- Source shape after this batch: 34 Java files and 120 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `ViewBindingMigrationContractTest`, `HomeUiResourceContractTest`,
+  `PageLoaderLayoutTest`, and `FileSystemUiResourceContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, navigated through
+  `我的 -> 设置 -> 本机书籍导入`, verified `FileSystemActivity`, `智能导入`,
+  `手机目录`, switched to the phone-directory tab, verified `加入书架`, and
+  narrow logcat checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
+

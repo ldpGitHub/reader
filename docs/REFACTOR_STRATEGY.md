@@ -27,7 +27,7 @@ future ObjectBox database.
 
 ## Current Baseline
 
-- Source shape: 40 Java files, 114 Kotlin files, and 42 layout XML files under
+- Source shape: 34 Java files, 120 Kotlin files, and 42 layout XML files under
   `app/src/main`.
 - Toolchain after the first MMKV slice: AGP 8.2.1, Gradle 8.2, JDK 17, Java
   and Kotlin bytecode target 17.
@@ -121,6 +121,8 @@ future ObjectBox database.
      transform, and Bezier evaluator utilities.
    - Sixteenth done batch: logging, system-bar, screen, reading-stats, and text
      formatting/conversion utilities.
+   - Seventeenth done batch: tab widgets, selector widget, rating widget, and
+     the `TxtChapter` page model.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 
