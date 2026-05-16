@@ -93,9 +93,19 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void remainingListAdapterBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/view/CategoryHolder");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/view/SearchBookHolder");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/view/FileHolder");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/view/CollBookHolder");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/CollBookAdapter");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/FileSystemAdapter");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 72);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 82);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 78);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 76);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

@@ -62,7 +62,7 @@ public class FileSystemUiResourceContractTest {
 
     @Test
     public void fileSystemAdapterChecksLoadedStateByBookIdHash() throws IOException {
-        String adapter = readFile("src/main/java/com/ldp/reader/ui/adapter/FileSystemAdapter.java");
+        String adapter = readFile("src/main/java/com/ldp/reader/ui/adapter/FileSystemAdapter.kt");
         assertTrue(adapter.contains("MD5Utils.strToMd5By16(path)"));
     }
 

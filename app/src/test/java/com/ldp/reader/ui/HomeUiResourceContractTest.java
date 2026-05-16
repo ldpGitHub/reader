@@ -384,11 +384,11 @@ public class HomeUiResourceContractTest {
         assertTrue(bookshelfLayout.contains("android:drawableTop=\"@drawable/ic_bookshelf_delete_24\""));
         assertTrue(bookshelfLayout.contains("android:drawablePadding=\"4dp\""));
 
-        String holder = readFile("src/main/java/com/ldp/reader/ui/adapter/view/CollBookHolder.java");
-        assertTrue(holder.contains("coverTitle(value.getTitle())"));
-        assertTrue(holder.contains("fileTypeLabel(value.getCover())"));
+        String holder = readFile("src/main/java/com/ldp/reader/ui/adapter/view/CollBookHolder.kt");
+        assertTrue(holder.contains("coverTitle(value.title)"));
+        assertTrue(holder.contains("fileTypeLabel(value.cover)"));
         assertTrue(holder.contains("progressLabel("));
-        assertTrue(holder.contains("mTvChapter.setVisibility(View.GONE)"));
+        assertTrue(holder.contains("mTvChapter.visibility = View.GONE"));
         assertFalse(holder.contains("BookshelfLocalBookUi"));
         assertFalse(holder.contains("String.format(\"  %s\""));
         assertFalse(holder.contains("R.drawable.ic_local_file"));
