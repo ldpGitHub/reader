@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.ViewModelProvider
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.blankj.utilcode.util.LogUtils
@@ -19,9 +20,7 @@ import com.ldp.reader.databinding.ActivityLoginBinding
 import com.ldp.reader.model.bean.DirectLoginResultBean
 import com.ldp.reader.model.bean.LoginResultBean
 import com.ldp.reader.model.bean.SmsLoginBean
-import com.ldp.reader.presenter.LoginPresenter
-import com.ldp.reader.presenter.contract.LoginContract
-import com.ldp.reader.ui.base.BaseMVPActivity
+import com.ldp.reader.ui.base.BaseActivity
 import com.ldp.reader.ui.home.BookshelfSyncRequest
 import com.ldp.reader.utils.SharedPreUtils
 import com.ldp.reader.utils.ToastUtils
@@ -30,8 +29,7 @@ import com.mob.pushsdk.MobPush
 /**
  * Created by ldp on 17-4-24.
  */
-class LoginActivity : LoginContract.View,
-    BaseMVPActivity<LoginActivity, LoginContract.Presenter<LoginActivity>, ActivityLoginBinding>() {
+class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     private val userName: String? = null
 
@@ -39,6 +37,7 @@ class LoginActivity : LoginContract.View,
     var smsCode = ""
     private var smsEventHandler: EventHandler? = null
     private var smsCodeCountDownTimer: CountDownTimer? = null
+    private lateinit var viewModel: LoginViewModel
 
     override fun initClick() {
         super.initClick()
@@ -55,7 +54,7 @@ class LoginActivity : LoginContract.View,
                 requestSmsCode()
             }
             btnDirectLogin.setOnClickListener {
-                mPresenter!!.directLogin()
+                viewModel.directLogin()
             }
             btnUserLogout.setOnClickListener {
                 userLogout()
@@ -66,13 +65,10 @@ class LoginActivity : LoginContract.View,
 
     }
 
-    override fun bindPresenter(): LoginContract.Presenter<LoginActivity> {
-        return LoginPresenter() as LoginContract.Presenter<LoginActivity>
-
-    }
-
     override fun initWidget() {
         super.initWidget()
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        observeLoginState()
         applyLoginStatusBar()
         binding.loginRoot.setPadding(0, getStatusBarHeight(), 0, 0)
     }
@@ -85,7 +81,7 @@ class LoginActivity : LoginContract.View,
                 Log.d(TAG, "processLogic: token空 ")
                 llUserNotLogin.setVisibility(View.VISIBLE)
                 llUserLogin.setVisibility(View.GONE)
-                mPresenter!!.preDirectLogin()
+                viewModel.preDirectLogin()
             } else {
                 Log.d(TAG, "processLogic: token " + SharedPreUtils.getInstance().getString("token"))
                 llUserNotLogin.setVisibility(View.GONE)
@@ -98,7 +94,17 @@ class LoginActivity : LoginContract.View,
 
     }
 
-    override fun finishLogin(loginResultBean: LoginResultBean) {
+    private fun observeLoginState() {
+        viewModel.loginResults.observe(this) { loginResultBean -> finishLogin(loginResultBean) }
+        viewModel.directLoginResults.observe(this) { loginResultBean ->
+            finishDirectLogin(loginResultBean)
+        }
+        viewModel.smsLoginResults.observe(this) { smsLoginBean -> finishSmsLogin(smsLoginBean) }
+        viewModel.loginErrors.observe(this) { showError() }
+        viewModel.directLoginErrors.observe(this) { showDirectLoginError() }
+    }
+
+    private fun finishLogin(loginResultBean: LoginResultBean) {
         if (200 == loginResultBean.code) {
             finishSuccessfulLogin("password", loginResultBean.data, userName.orEmpty())
         } else {
@@ -106,7 +112,7 @@ class LoginActivity : LoginContract.View,
         }
     }
 
-    override fun finishDirectLogin(loginResultBean: DirectLoginResultBean) {
+    private fun finishDirectLogin(loginResultBean: DirectLoginResultBean) {
         if (200 == loginResultBean.status) {
             finishSuccessfulLogin(
                 "telecom",
@@ -118,23 +124,18 @@ class LoginActivity : LoginContract.View,
         }
     }
 
-    override fun finishSmsLogin(smsLoginBean: SmsLoginBean) {
+    private fun finishSmsLogin(smsLoginBean: SmsLoginBean) {
         val loginPhone = smsLoginBean.phoneNumber.takeUnless { it.isNullOrEmpty() } ?: phoneNumber
         val loginToken = smsLoginBean.smsCode.takeUnless { it.isNullOrEmpty() } ?: smsCode
         finishSuccessfulLogin("telecom", loginToken, loginPhone)
     }
 
-    override fun showError() {
+    private fun showError() {
         ToastUtils.show("登录失败")
     }
 
-    override fun showDirectLoginError() {
+    private fun showDirectLoginError() {
         ToastUtils.show("一键登录失败，请使用验证码登录")
-    }
-
-    override fun complete() {
-
-
     }
 
 
@@ -165,7 +166,7 @@ class LoginActivity : LoginContract.View,
                     }
                     SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE -> runOnUiThread {
                         if (i1 == SMSSDK.RESULT_COMPLETE) {
-                            mPresenter!!.smsLogin(
+                            viewModel.smsLogin(
                                 phoneNumber,
                                 smsCode,
                                 registrationId

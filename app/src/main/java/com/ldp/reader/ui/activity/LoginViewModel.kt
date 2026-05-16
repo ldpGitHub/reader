@@ -1,10 +1,14 @@
-package com.ldp.reader.presenter
+package com.ldp.reader.ui.activity
 
 import android.text.TextUtils
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.ldp.reader.model.bean.DirectLoginResultBean
+import com.ldp.reader.model.bean.LoginResultBean
+import com.ldp.reader.model.bean.SmsLoginBean
 import com.ldp.reader.model.remote.RemoteRepository
-import com.ldp.reader.presenter.contract.LoginContract
-import com.ldp.reader.ui.base.RxPresenter
 import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.SharedPreUtils
 import com.mob.pushsdk.MobPush
@@ -14,35 +18,36 @@ import com.mob.secverify.SecVerify
 import com.mob.secverify.VerifyCallback
 import com.mob.secverify.common.exception.VerifyException
 import com.mob.secverify.datatype.VerifyResult
+import io.reactivex.disposables.CompositeDisposable
 
-/**
- * Created by ldp on 17-6-2.
- */
-class LoginPresenter : RxPresenter<LoginContract.View>(),
-    LoginContract.Presenter<LoginContract.View> {
+class LoginViewModel : ViewModel() {
+    private val disposable = CompositeDisposable()
+    private val _loginResults = MutableLiveData<LoginResultBean>()
+    private val _directLoginResults = MutableLiveData<DirectLoginResultBean>()
+    private val _smsLoginResults = MutableLiveData<SmsLoginBean>()
+    private val _loginErrors = MutableLiveData<Int>()
+    private val _directLoginErrors = MutableLiveData<Int>()
+    private var loginErrorVersion = 0
+    private var directLoginErrorVersion = 0
     private var registrationId: String? = null
 
-    override fun userLogin(userName: String?, passWord: String?) {
+    val loginResults: LiveData<LoginResultBean> = _loginResults
+    val directLoginResults: LiveData<DirectLoginResultBean> = _directLoginResults
+    val smsLoginResults: LiveData<SmsLoginBean> = _smsLoginResults
+    val loginErrors: LiveData<Int> = _loginErrors
+    val directLoginErrors: LiveData<Int> = _directLoginErrors
+
+    fun userLogin(userName: String?, passWord: String?) {
         val disposableLogin = RemoteRepository.getInstance().userLogin(userName, passWord)
             .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
             .subscribe(
-                { loginResultBean ->
-                    if (mView == null) {
-                        return@subscribe
-                    }
-                    mView!!.finishLogin(loginResultBean)
-                },
-                {
-                    if (mView == null) {
-                        return@subscribe
-                    }
-                    mView!!.showError()
-                }
+                { loginResultBean -> _loginResults.value = loginResultBean },
+                { _loginErrors.value = ++loginErrorVersion }
             )
-        addDisposable(disposableLogin)
+        disposable.add(disposableLogin)
     }
 
-    override fun preDirectLogin() {
+    fun preDirectLogin() {
         Log.d(TAG, "preDirectLogin: registrationId")
         registrationId = SharedPreUtils.getInstance().getString("registrationId")
         Log.d(TAG, "onCallback: registrationId  $registrationId")
@@ -66,34 +71,25 @@ class LoginPresenter : RxPresenter<LoginContract.View>(),
         })
     }
 
-    override fun smsLogin(phoneNumber: String?, smsCode: String?, registrationId: String?) {
-        val disposable = RemoteRepository.getInstance().smsLogin(phoneNumber, smsCode, registrationId)
+    fun smsLogin(phoneNumber: String?, smsCode: String?, registrationId: String?) {
+        val disp = RemoteRepository.getInstance().smsLogin(phoneNumber, smsCode, registrationId)
             .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
             .subscribe(
-                { smsLoginBean ->
-                    if (mView == null) {
-                        return@subscribe
-                    }
-                    mView!!.finishSmsLogin(smsLoginBean)
-                },
+                { smsLoginBean -> _smsLoginResults.value = smsLoginBean },
                 { throwable ->
                     throwable.printStackTrace()
-                    if (mView != null) {
-                        mView!!.showError()
-                    }
+                    _loginErrors.value = ++loginErrorVersion
                 }
             )
-        addDisposable(disposable)
+        disposable.add(disp)
     }
 
-    override fun directLogin() {
+    fun directLogin() {
         Log.d(TAG, "directLogin: ")
         registrationId = SharedPreUtils.getInstance().getString("registrationId")
         SecVerify.verify(object : VerifyCallback() {
             override fun onOtherLogin() {
-                if (mView != null) {
-                    mView!!.showDirectLoginError()
-                }
+                _directLoginErrors.postValue(++directLoginErrorVersion)
             }
 
             override fun onUserCanceled() {
@@ -105,36 +101,31 @@ class LoginPresenter : RxPresenter<LoginContract.View>(),
                 Log.e(TAG, "onComplete: " + data!!.token)
                 Log.e(TAG, "onComplete: registrationId $registrationId")
 
-                val disposable = RemoteRepository.getInstance().userDirectLogin(data, registrationId)
+                val disp = RemoteRepository.getInstance().userDirectLogin(data, registrationId)
                     .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
                     .subscribe(
-                        { directLoginResultBean ->
-                            if (mView == null) {
-                                return@subscribe
-                            }
-                            mView!!.finishDirectLogin(directLoginResultBean)
-                        },
+                        { directLoginResultBean -> _directLoginResults.value = directLoginResultBean },
                         { throwable ->
                             Log.e(TAG, "accept: " + throwable.message + throwable.cause)
-                            if (mView == null) {
-                                return@subscribe
-                            }
-                            mView!!.showError()
+                            _loginErrors.value = ++loginErrorVersion
                         }
                     )
-                addDisposable(disposable)
+                disposable.add(disp)
             }
 
             override fun onFailure(e: VerifyException?) {
                 Log.d(TAG, "onFailure: " + e.toString())
-                if (mView != null) {
-                    mView!!.showDirectLoginError()
-                }
+                _directLoginErrors.postValue(++directLoginErrorVersion)
             }
         })
     }
 
+    override fun onCleared() {
+        disposable.clear()
+        super.onCleared()
+    }
+
     companion object {
-        private val TAG = LoginPresenter::class.java.simpleName
+        private val TAG = LoginViewModel::class.java.simpleName
     }
 }

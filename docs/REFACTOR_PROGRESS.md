@@ -1395,3 +1395,27 @@
   observed a 200 response for `/search?bookName=xian`. The search result panel
   became visible and app-pid logcat checks for `FATAL EXCEPTION` and
   `AndroidRuntime` were empty.
+
+## 2026-05-16 Architecture Migration Batch 36
+
+- Migrated the login page from MVP callbacks to MVVM/LiveData.
+- Added `LoginViewModel` with `LiveData` streams for password-login results,
+  direct-login results, SMS-login results, login errors, and direct-login
+  prompts. It still uses the existing `RemoteRepository`, MobPush, SMSSDK
+  handoff, and SecVerify contracts internally so this slice changes UI ownership
+  without changing auth/network contracts.
+- `LoginActivity` now extends `BaseActivity`, creates the ViewModel with
+  `ViewModelProvider`, observes login state, and keeps SMS event-handler and
+  countdown lifecycle ownership in the Activity. `LoginPresenter` and
+  `LoginContract` are removed.
+- Source shape after this batch: 0 Java files and 150 Kotlin files under
+  `app/src/main`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed.
+  `KotlinMigrationContractTest` and `LoginUiResourceContractTest` passed. The
+  full `:app:testDebugUnitTest :app:assembleDebug :app:installDebug` sequence
+  passed with `-Dorg.gradle.jvmargs=-Xmx3072m`.
+- ai-app-bridge runtime validation used the existing logged-in app state:
+  launched `SplashActivity`, verified `MainActivity`/`书架`, navigated to
+  `我的` -> `账号`, opened `LoginActivity`, and verified `退出登录` was visible.
+  App-pid logcat checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.

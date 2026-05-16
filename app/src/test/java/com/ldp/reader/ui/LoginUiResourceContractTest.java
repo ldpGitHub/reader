@@ -54,18 +54,20 @@ public class LoginUiResourceContractTest {
         assertTrue(loginActivity.contains("finishSuccessfulLogin(\"telecom\", loginToken, loginPhone)"));
         assertTrue(loginActivity.contains("token.orEmpty()"));
         assertTrue(loginActivity.contains("name.orEmpty()"));
+        assertTrue(loginActivity.contains("ViewModelProvider(this)[LoginViewModel::class.java]"));
+        assertTrue(loginActivity.contains("viewModel.smsLogin("));
         assertTrue(loginActivity.contains("setResult(Activity.RESULT_OK, BookshelfSyncRequest.resultIntent())"));
         assertTrue(loginActivity.contains("fun shouldRequestBookShelfSync(data: Intent?): Boolean"));
         assertFalse(loginActivity.contains("RxBus"));
         assertFalse(loginActivity.contains("BookSyncEvent"));
         assertFalse(loginActivity.contains("intent.getBooleanExtra"));
 
-        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.kt");
-        int preLoginStart = loginPresenter.indexOf("override fun preDirectLogin()");
-        int smsLoginStart = loginPresenter.indexOf("override fun smsLogin", preLoginStart);
-        int autoDirectLogin = loginPresenter.indexOf("directLogin()", preLoginStart);
+        String loginViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/LoginViewModel.kt");
+        int preLoginStart = loginViewModel.indexOf("fun preDirectLogin()");
+        int smsLoginStart = loginViewModel.indexOf("fun smsLogin", preLoginStart);
+        int autoDirectLogin = loginViewModel.indexOf("directLogin()", preLoginStart);
         assertFalse(autoDirectLogin >= 0 && autoDirectLogin < smsLoginStart);
-        assertTrue(loginPresenter.contains("if (mView == null)"));
+        assertTrue(loginViewModel.contains("val smsLoginResults: LiveData<SmsLoginBean>"));
     }
 
     @Test
@@ -78,14 +80,12 @@ public class LoginUiResourceContractTest {
         assertTrue(loginActivity.contains("Color.TRANSPARENT"));
         assertTrue(loginActivity.contains("View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN"));
         assertTrue(loginActivity.contains("binding.loginRoot.setPadding(0, getStatusBarHeight(), 0, 0)"));
-        assertTrue(loginActivity.contains("override fun showDirectLoginError()"));
+        assertTrue(loginActivity.contains("private fun showDirectLoginError()"));
         assertTrue(loginActivity.contains("一键登录失败，请使用验证码登录"));
 
-        String loginContract = readFile("src/main/java/com/ldp/reader/presenter/contract/LoginContract.kt");
-        assertTrue(loginContract.contains("fun showDirectLoginError()"));
-
-        String loginPresenter = readFile("src/main/java/com/ldp/reader/presenter/LoginPresenter.kt");
-        assertTrue(loginPresenter.contains("mView!!.showDirectLoginError()"));
+        String loginViewModel = readFile("src/main/java/com/ldp/reader/ui/activity/LoginViewModel.kt");
+        assertTrue(loginViewModel.contains("val directLoginErrors: LiveData<Int>"));
+        assertTrue(loginViewModel.contains("_directLoginErrors.postValue(++directLoginErrorVersion)"));
     }
 
     private static String readFile(String path) throws IOException {
