@@ -238,9 +238,21 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void pageAnimationBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/AnimationProvider");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/PageAnimation");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/HorizonPageAnim");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/CoverPageAnim");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/SlidePageAnim");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/NonePageAnim");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/ScrollPageAnim");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/animation/SimulationPageAnim");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 141);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 13);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 149);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 5);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

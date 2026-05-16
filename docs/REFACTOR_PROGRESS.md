@@ -1187,3 +1187,28 @@
   real remote chapter rows. Bridge network capture showed 200 responses for
   `getBookInfoBatch` and `getBookFolder`; app-pid logcat checks for
   `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 28
+
+- Migrated the reading-page animation stack from Java to Kotlin:
+  `AnimationProvider`, `PageAnimation`, `HorizonPageAnim`, `CoverPageAnim`,
+  `SlidePageAnim`, `NonePageAnim`, `ScrollPageAnim`, and `SimulationPageAnim`.
+- Kept the existing `PageView` call surface and animation behavior: the page
+  mode classes, `PageAnimation.Direction`, `OnPageChangeListener`,
+  `HorizonPageAnim.changePage()`, `ScrollPageAnim.resetBitmap()`, bitmap
+  buffers, scroller usage, and page-cancel callbacks remain direct translations.
+- Source shape after this batch: 5 Java files and 149 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `HomeUiResourceContractTest`, `PageLoaderLayoutTest`, and
+  `DeprecatedZhuishuCleanupContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation kept the SMS-login state intact,
+  launched `SplashActivity`, ai-app-bridge verified `MainActivity` and `书架`,
+  opened `黄昏分界` into `ReadActivity`, verified the visible `PageView`, opened
+  the chapter drawer, performed a horizontal read-page swipe, and confirmed
+  `ReadActivity` remained current. Bridge network capture showed 200 responses
+  for `getBookInfoBatch`, `getBookFolder`, and multiple `getBookContent`
+  requests; app-pid logcat checks for `FATAL EXCEPTION` and `AndroidRuntime`
+  were empty.
