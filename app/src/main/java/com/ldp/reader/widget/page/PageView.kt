@@ -119,7 +119,7 @@ class PageView : View {
                     mViewWidth,
                     mViewHeight,
                     0,
-                    mPageLoader!!.getMarginHeight(),
+                    mPageLoader!!.marginHeight,
                     this,
                     mPageAnimListener
                 )

@@ -20,7 +20,7 @@ import java.io.FileReader
 class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pageView, collBook) {
     private var firstTime = true
 
-    private fun convertTxtChapter(bookChapters: List<BookChapterBean>): List<TxtChapter> {
+    private fun convertTxtChapter(bookChapters: List<BookChapterBean>): MutableList<TxtChapter> {
         val txtChapters = ArrayList<TxtChapter>(bookChapters.size)
         for (bean in bookChapters) {
             val chapter = TxtChapter()
@@ -43,7 +43,7 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
 
         // 目录加载完成，执行回调操作。
         if (mPageChangeListener != null) {
-            mPageChangeListener.onCategoryFinish(mChapterList)
+            mPageChangeListener!!.onCategoryFinish(mChapterList)
         }
 
         // 如果章节未打开
@@ -209,7 +209,7 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
         }
 
         if (chapters.isNotEmpty()) {
-            mPageChangeListener.requestChapters(chapters)
+            mPageChangeListener!!.requestChapters(chapters)
         }
     }
 

@@ -50,7 +50,7 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
         mStatus = STATUS_PARING
     }
 
-    private fun convertTxtChapter(bookChapters: List<BookChapterBean>): List<TxtChapter> {
+    private fun convertTxtChapter(bookChapters: List<BookChapterBean>): MutableList<TxtChapter> {
         val txtChapters = ArrayList<TxtChapter>(bookChapters.size)
         for (bean in bookChapters) {
             val chapter = TxtChapter()
@@ -341,7 +341,7 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
 
             // 提示目录加载完成
             if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(mChapterList)
+                mPageChangeListener!!.onCategoryFinish(mChapterList)
             }
 
             // 加载并显示当前章节
@@ -370,7 +370,7 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
 
                     // 提示目录加载完成
                     if (mPageChangeListener != null) {
-                        mPageChangeListener.onCategoryFinish(mChapterList)
+                        mPageChangeListener!!.onCategoryFinish(mChapterList)
                     }
 
                     // 存储章节到数据库

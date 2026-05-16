@@ -141,6 +141,7 @@ future ObjectBox database.
    - Thirtieth done batch: remove unused Java-only `EncryptUtils`.
    - Thirty-first done batch: network reading `NetPageLoader`.
    - Thirty-second done batch: local TXT reading `LocalPageLoader`.
+   - Thirty-third done batch: reading `PageLoader` base.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

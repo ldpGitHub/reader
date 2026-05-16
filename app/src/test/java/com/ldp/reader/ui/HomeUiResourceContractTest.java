@@ -412,9 +412,9 @@ public class HomeUiResourceContractTest {
 
     @Test
     public void readerStoresProgressWhenUserHitsReadableEnd() throws IOException {
-        String pageLoader = readFile("src/main/java/com/ldp/reader/widget/page/PageLoader.java");
-        assertTrue(pageLoader.contains("protected void onReadableEndReached()"));
-        assertTrue(pageLoader.contains("onReadableEndReached();"));
+        String pageLoader = readFile("src/main/java/com/ldp/reader/widget/page/PageLoader.kt");
+        assertTrue(pageLoader.contains("protected open fun onReadableEndReached()"));
+        assertTrue(pageLoader.contains("onReadableEndReached()"));
 
         String netLoader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.kt");
         assertTrue(netLoader.contains("override fun onReadableEndReached()"));

@@ -270,9 +270,14 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void pageLoaderBaseBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/page/PageLoader");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 152);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 1);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 153);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 0);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

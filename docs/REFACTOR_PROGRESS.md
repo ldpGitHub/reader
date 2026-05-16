@@ -1309,3 +1309,30 @@
   into `ReadActivity`, verified the full-screen `PageView`, observed 200
   responses for `getBookInfoBatch` and `getBookFolder`, and app-pid logcat
   checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 33
+
+- Migrated the reading `PageLoader` base from Java to Kotlin.
+- Preserved page status constants, layout/progress helpers, background and text
+  drawing, chapter parsing and preloading, page-turn cancellation, read-record
+  saving, readable-end callbacks, and the nested `OnPageChangeListener`
+  contract.
+- Source shape after this batch: 0 Java files and 153 Kotlin files under
+  `app/src/main`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed before this
+  slice's source-contract update. `KotlinMigrationContractTest`,
+  `HomeUiResourceContractTest`, `PageLoaderLayoutTest`,
+  `DeprecatedZhuishuCleanupContractTest`, and `CollBookHolderLocalBookTest`
+  passed. The full `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` sequence also passed.
+- ai-app-bridge runtime validation used the existing logged-in app state:
+  launched `SplashActivity`, verified `MainActivity`/`书架`, opened `黄昏分界`
+  into `ReadActivity`, verified the full-screen `PageView`, performed a
+  horizontal page swipe, and observed 200 responses for `getBookInfoBatch` and
+  `getBookFolder`. It then relaunched to the shelf, opened the local TXT
+  `codex-local-import-probe`, verified `ReadActivity`/`PageView`, performed a
+  horizontal page swipe, and checked logcat evidence for
+  `LocalPageLoader +refreshChapterList`, `PageLoader +loadPages`,
+  `PageLoader drawContent`, and rendered local text. App-pid logcat checks for
+  `FATAL EXCEPTION` and `AndroidRuntime` were empty in both passes.
