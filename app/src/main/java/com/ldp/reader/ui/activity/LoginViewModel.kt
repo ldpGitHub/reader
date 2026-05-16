@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ldp.reader.model.bean.DirectLoginResultBean
 import com.ldp.reader.model.bean.LoginResultBean
 import com.ldp.reader.model.bean.SmsLoginBean
 import com.ldp.reader.model.remote.RemoteRepository
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.SharedPreUtils
 import com.mob.pushsdk.MobPush
 import com.mob.pushsdk.MobPushCallback
@@ -18,10 +18,9 @@ import com.mob.secverify.SecVerify
 import com.mob.secverify.VerifyCallback
 import com.mob.secverify.common.exception.VerifyException
 import com.mob.secverify.datatype.VerifyResult
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-    private val disposable = CompositeDisposable()
     private val _loginResults = MutableLiveData<LoginResultBean>()
     private val _directLoginResults = MutableLiveData<DirectLoginResultBean>()
     private val _smsLoginResults = MutableLiveData<SmsLoginBean>()
@@ -38,13 +37,13 @@ class LoginViewModel : ViewModel() {
     val directLoginErrors: LiveData<Int> = _directLoginErrors
 
     fun userLogin(userName: String?, passWord: String?) {
-        val disposableLogin = RemoteRepository.getInstance().userLogin(userName, passWord)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { loginResultBean -> _loginResults.value = loginResultBean },
-                { _loginErrors.value = ++loginErrorVersion }
-            )
-        disposable.add(disposableLogin)
+        viewModelScope.launch {
+            try {
+                _loginResults.value = RemoteRepository.getInstance().userLogin(userName, passWord)
+            } catch (e: Throwable) {
+                _loginErrors.value = ++loginErrorVersion
+            }
+        }
     }
 
     fun preDirectLogin() {
@@ -72,16 +71,14 @@ class LoginViewModel : ViewModel() {
     }
 
     fun smsLogin(phoneNumber: String?, smsCode: String?, registrationId: String?) {
-        val disp = RemoteRepository.getInstance().smsLogin(phoneNumber, smsCode, registrationId)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { smsLoginBean -> _smsLoginResults.value = smsLoginBean },
-                { throwable ->
-                    throwable.printStackTrace()
-                    _loginErrors.value = ++loginErrorVersion
-                }
-            )
-        disposable.add(disp)
+        viewModelScope.launch {
+            try {
+                _smsLoginResults.value = RemoteRepository.getInstance().smsLogin(phoneNumber, smsCode, registrationId)
+            } catch (throwable: Throwable) {
+                throwable.printStackTrace()
+                _loginErrors.value = ++loginErrorVersion
+            }
+        }
     }
 
     fun directLogin() {
@@ -101,16 +98,14 @@ class LoginViewModel : ViewModel() {
                 Log.e(TAG, "onComplete: " + data!!.token)
                 Log.e(TAG, "onComplete: registrationId $registrationId")
 
-                val disp = RemoteRepository.getInstance().userDirectLogin(data, registrationId)
-                    .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-                    .subscribe(
-                        { directLoginResultBean -> _directLoginResults.value = directLoginResultBean },
-                        { throwable ->
-                            Log.e(TAG, "accept: " + throwable.message + throwable.cause)
-                            _loginErrors.value = ++loginErrorVersion
-                        }
-                    )
-                disposable.add(disp)
+                viewModelScope.launch {
+                    try {
+                        _directLoginResults.value = RemoteRepository.getInstance().userDirectLogin(data, registrationId)
+                    } catch (throwable: Throwable) {
+                        Log.e(TAG, "accept: " + throwable.message + throwable.cause)
+                        _loginErrors.value = ++loginErrorVersion
+                    }
+                }
             }
 
             override fun onFailure(e: VerifyException?) {
@@ -118,11 +113,6 @@ class LoginViewModel : ViewModel() {
                 _directLoginErrors.postValue(++directLoginErrorVersion)
             }
         })
-    }
-
-    override fun onCleared() {
-        disposable.clear()
-        super.onCleared()
     }
 
     companion object {

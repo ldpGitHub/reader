@@ -20,8 +20,14 @@ public class BookRepositoryStorageContractTest {
                 "get() = mBookStore.getCollBooks()");
 
         assertInOrder(repository,
-                "fun getBookChaptersInRx(bookId: String?): Single<List<BookChapterBean>>",
-                "emitter.onSuccess(mBookStore.getBookChapters(bookId))");
+                "fun getBookChapters(bookId: String?): List<BookChapterBean>",
+                "return mBookStore.getBookChapters(bookId)");
+
+        assertInOrder(repository,
+                "fun deleteCollBookWithFiles(bean: CollBookBean)",
+                "deleteBook(bean.get_id())",
+                "deleteBookChapter(bean.get_id())",
+                "mBookStore.deleteCollBook(bean)");
 
         assertInOrder(repository,
                 "fun saveBookRecord(bean: BookRecordBean)",

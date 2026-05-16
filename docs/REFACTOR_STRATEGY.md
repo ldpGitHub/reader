@@ -27,7 +27,7 @@ future ObjectBox database.
 
 ## Current Baseline
 
-- Source shape: 0 Java files, 143 Kotlin files, and 42 layout XML files under
+- Source shape: 0 Java files, 142 Kotlin files, and 42 layout XML files under
   `app/src/main`.
 - Toolchain after the first MMKV slice: AGP 8.2.1, Gradle 8.2, JDK 17, Java
   and Kotlin bytecode target 17.
@@ -47,8 +47,9 @@ future ObjectBox database.
   Activity result contracts and direct `MainActivity` -> `BookShelfFragment`
   calls. Search, login, book detail, and bookshelf are now ViewModel + LiveData
   screens. The read page is also ViewModel + LiveData at the Activity boundary.
-  RxJava remains in Retrofit, repositories, ViewModel internals, file scanning,
-  page loading, and a few base Activity/Fragment disposable helpers.
+  RxJava has been removed from main sources and Gradle dependencies. Retrofit
+  APIs now return `Call<T>`, `RemoteRepository` exposes suspending methods, and
+  ViewModels/PageLoaders use coroutine jobs for async work.
 
 ## Refactor Order
 
@@ -114,7 +115,8 @@ future ObjectBox database.
      `BookDetailContract`, `BookShelfContract`, and `ReadContract` items were
      later removed in architecture batches 35, 36, 37, 38, and 39.
    - Eighth done batch: thin constants/progress/network/Rx/MD5/FileStack
-     utilities plus small category/page-style/keyword adapter classes.
+     utilities plus small category/page-style/keyword adapter classes. The
+     earlier `RxUtils` utility was later removed in architecture batch 40.
    - Ninth done batch: remaining bookshelf/search/category/file list adapters
      and holder classes.
    - Tenth done batch: base RecyclerView/ListView adapter abstractions and
@@ -184,9 +186,10 @@ future ObjectBox database.
      `ReadViewModel`; `ReadPresenter`, `ReadContract`, `BaseMVPActivity`,
      `BaseContract`, and the now-unused `RxPresenter` are removed from the
      running architecture.
-   - Candidate order: feature-level RxJava boundary cleanup.
-   - Replace RxJava at feature boundaries only after Retrofit/repository return
-     contracts have a tested coroutine or LiveData equivalent.
+   - Eighth done slice: RxJava is removed from app main sources and Gradle
+     dependencies. Retrofit API interfaces now return `Call<T>`,
+     `RemoteRepository` runs calls through suspending IO execution, ViewModels
+     use `viewModelScope`, and page loaders use coroutine `Job` cancellation.
    - `RxBus` replacement is complete. Keep the remaining migrations on explicit
      state or feature-owned callbacks rather than adding a new global event-bus
      clone.

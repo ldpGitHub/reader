@@ -12,8 +12,11 @@ import com.ldp.reader.model.bean.SyncBookShelfBean
 import com.ldp.reader.utils.Constant.APP_KEY
 import com.ldp.reader.utils.Constant.APP_SECRET
 import com.mob.secverify.datatype.VerifyResult
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.HttpException
 import retrofit2.Retrofit
 
 class RemoteRepository private constructor() {
@@ -30,67 +33,77 @@ class RemoteRepository private constructor() {
         mBookApiOwn = mRetrofitByOwn.create(BookApiOwn::class.java)
     }
 
-    fun getSearchResult(bookName: String?): Single<List<BookSearchResult>> {
-        return mBookApiOwn.getSearchResult(bookName)
+    suspend fun getSearchResult(bookName: String?): List<BookSearchResult> {
+        return execute(mBookApiOwn.getSearchResult(bookName))
     }
 
-    fun getBookInfo(bookId: String?): Single<BookDetailBeanInOwn> {
-        return mBookApiOwn.getBookInfo(bookId)
+    suspend fun getBookInfo(bookId: String?): BookDetailBeanInOwn {
+        return execute(mBookApiOwn.getBookInfo(bookId))
     }
 
-    fun getBookInfoBatch(body: RequestBody?): Single<List<BookDetailBeanInOwn>> {
-        return mBookApiOwn.getBookInfoBatch(body)
+    suspend fun getBookInfoBatch(body: RequestBody?): List<BookDetailBeanInOwn> {
+        return execute(mBookApiOwn.getBookInfoBatch(body))
     }
 
-    fun getBookFolder(bookId: String?): Single<List<ChapterBean>> {
-        return mBookApiOwn.getBookFolder(bookId)
+    suspend fun getBookFolder(bookId: String?): List<ChapterBean> {
+        return execute(mBookApiOwn.getBookFolder(bookId))
     }
 
-    fun getBookContent(bookId: String?, chapterId: String?, sourceIndex: Int): Single<ContentBean> {
-        return mBookApiOwn.getBookContent(bookId, chapterId, sourceIndex)
+    suspend fun getBookContent(bookId: String?, chapterId: String?, sourceIndex: Int): ContentBean {
+        return execute(mBookApiOwn.getBookContent(bookId, chapterId, sourceIndex))
     }
 
-    fun userLogin(userNameInput: String?, passwordInput: String?): Single<LoginResultBean> {
-        return mBookApiOwn.userLogin(userNameInput, passwordInput)
+    suspend fun userLogin(userNameInput: String?, passwordInput: String?): LoginResultBean {
+        return execute(mBookApiOwn.userLogin(userNameInput, passwordInput))
     }
 
-    fun smsLogin(phoneNumber: String?, smsCode: String?, registrationId: String?): Single<SmsLoginBean> {
-        return mBookApiOwn.smsLogin(phoneNumber, smsCode, registrationId)
+    suspend fun smsLogin(phoneNumber: String?, smsCode: String?, registrationId: String?): SmsLoginBean {
+        return execute(mBookApiOwn.smsLogin(phoneNumber, smsCode, registrationId))
     }
 
-    fun userDirectLogin(verifyResult: VerifyResult?, registrationId: String?): Single<DirectLoginResultBean> {
-        return mBookApiOwn.userDirectLogin(
+    suspend fun userDirectLogin(verifyResult: VerifyResult?, registrationId: String?): DirectLoginResultBean {
+        return execute(mBookApiOwn.userDirectLogin(
             APP_KEY,
             APP_SECRET,
             verifyResult!!.token,
             verifyResult.opToken,
             verifyResult.operator,
             registrationId
-        )
+        ))
     }
 
-    fun getBookShelf(header: String?): Single<List<BookIdBean>> {
-        return mBookApiOwn.getBookShelf(header)
+    suspend fun getBookShelf(header: String?): List<BookIdBean> {
+        return execute(mBookApiOwn.getBookShelf(header))
     }
 
-    fun getBookShelfByMobile(mobile: String?, token: String?): Single<List<BookIdBean>> {
-        return mBookApiOwn.getBookShelfByMobile(mobile, token)
+    suspend fun getBookShelfByMobile(mobile: String?, token: String?): List<BookIdBean> {
+        return execute(mBookApiOwn.getBookShelfByMobile(mobile, token))
     }
 
-    fun setBookShelf(token: String?, body: RequestBody?): Single<SyncBookShelfBean> {
-        return mBookApiOwn.setBookShelf(token, body)
+    suspend fun setBookShelf(token: String?, body: RequestBody?): SyncBookShelfBean {
+        return execute(mBookApiOwn.setBookShelf(token, body))
     }
 
-    fun setBookShelfByMobile(body: RequestBody?): Single<SyncBookShelfBean> {
-        return mBookApiOwn.setBookShelfByMobile(body)
+    suspend fun setBookShelfByMobile(body: RequestBody?): SyncBookShelfBean {
+        return execute(mBookApiOwn.setBookShelfByMobile(body))
     }
 
-    fun getHotWords(): Single<List<String>> {
-        return mBookApi.getHotWordPackage().map { bean -> bean.hotWords!! }
+    suspend fun getHotWords(): List<String> {
+        return execute(mBookApi.getHotWordPackage()).hotWords!!
     }
 
-    fun getKeyWords(query: String?): Single<List<String>> {
-        return mBookApi.getKeyWordPacakge(query).map { bean -> bean.keywords!! }
+    suspend fun getKeyWords(query: String?): List<String> {
+        return execute(mBookApi.getKeyWordPacakge(query)).keywords!!
+    }
+
+    private suspend fun <T> execute(call: Call<T>): T {
+        return withContext(Dispatchers.IO) {
+            val response = call.execute()
+            if (!response.isSuccessful) {
+                throw HttpException(response)
+            }
+            response.body()!!
+        }
     }
 
     companion object {

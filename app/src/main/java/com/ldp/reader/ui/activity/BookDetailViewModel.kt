@@ -4,28 +4,23 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.BookDetailBeanInOwn
-import com.ldp.reader.model.bean.ChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.bean.DirectSycBookShelfBean
-import com.ldp.reader.model.bean.SyncBookShelfBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.remote.RemoteRepository
 import com.ldp.reader.ui.fragment.BookShelfViewModel
 import com.ldp.reader.utils.MD5Utils
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.SharedPreUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class BookDetailViewModel : ViewModel() {
-    private val disposable = CompositeDisposable()
     private val _bookDetails = MutableLiveData<BookDetailBeanInOwn>()
     private val _refreshErrors = MutableLiveData<Int>()
     private val _bookShelfAddWaitEvents = MutableLiveData<Int>()
@@ -55,37 +50,31 @@ class BookDetailViewModel : ViewModel() {
             .saveCollBookWithAsync(collBookBean)
         Log.d(TAG, "addToBookShelf: $bookId")
         _bookShelfAddWaitEvents.value = ++bookShelfAddWaitVersion
-        val disp = RemoteRepository.getInstance()
-            .getBookFolder(bookId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { chapterBeans: List<ChapterBean> ->
-                    for (chapterBean in chapterBeans) {
-                        val bookChapterBeanTemp = BookChapterBean()
-                        bookChapterBeanTemp.link = chapterBean.chapterId.toString()
-                        bookChapterBeanTemp.title = chapterBean.title
-                        bookChapterBeanTemp.id = MD5Utils.strToMd5By16(bookChapterBeanTemp.link!!)
-                        bookChapterBeanTemp.bookId = collBookBean.get_id()
-                        bookChapterBeanTemp.start = bookChapterBeans.size.toLong()
-                        bookChapterBeans.add(bookChapterBeanTemp)
-                    }
-                    collBookBean.bookChapters = bookChapterBeans
-                    collBookBean.chaptersCount = bookChapterBeans.size
-                    BookRepository.getInstance()
-                        .saveCollBookWithAsync(collBookBean)
-                    _bookShelfAddSuccessEvents.value = ++bookShelfAddSuccessVersion
-                    val collBookBeanResult = BookRepository.getInstance().getCollBook(bookId)
-                    Log.d(TAG, "addToBookShelf:collBookBeanResult $collBookBeanResult")
-
-                    synBookShelf()
-                },
-                {
-                    _bookShelfAddErrorEvents.value = ++bookShelfAddErrorVersion
+        viewModelScope.launch {
+            try {
+                val chapterBeans = RemoteRepository.getInstance().getBookFolder(bookId)
+                for (chapterBean in chapterBeans) {
+                    val bookChapterBeanTemp = BookChapterBean()
+                    bookChapterBeanTemp.link = chapterBean.chapterId.toString()
+                    bookChapterBeanTemp.title = chapterBean.title
+                    bookChapterBeanTemp.id = MD5Utils.strToMd5By16(bookChapterBeanTemp.link!!)
+                    bookChapterBeanTemp.bookId = collBookBean.get_id()
+                    bookChapterBeanTemp.start = bookChapterBeans.size.toLong()
+                    bookChapterBeans.add(bookChapterBeanTemp)
                 }
-            )
+                collBookBean.bookChapters = bookChapterBeans
+                collBookBean.chaptersCount = bookChapterBeans.size
+                BookRepository.getInstance()
+                    .saveCollBookWithAsync(collBookBean)
+                _bookShelfAddSuccessEvents.value = ++bookShelfAddSuccessVersion
+                val collBookBeanResult = BookRepository.getInstance().getCollBook(bookId)
+                Log.d(TAG, "addToBookShelf:collBookBeanResult $collBookBeanResult")
 
-        disposable.add(disp)
+                synBookShelf()
+            } catch (e: Throwable) {
+                _bookShelfAddErrorEvents.value = ++bookShelfAddErrorVersion
+            }
+        }
     }
 
     private fun synBookShelf() {
@@ -103,13 +92,12 @@ class BookDetailViewModel : ViewModel() {
     private fun setBookShelf(bookIds: List<String>) {
         val body = Gson().toJson(BookShelfViewModel.normalizeServerBookIds(bookIds)).toRequestBody(JSON)
         val token = SharedPreUtils.getInstance().getString("token")
-        val disp = RemoteRepository.getInstance().setBookShelf(token, body)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { _: SyncBookShelfBean -> },
-                {}
-            )
-        disposable.add(disp)
+        viewModelScope.launch {
+            try {
+                RemoteRepository.getInstance().setBookShelf(token, body)
+            } catch (e: Throwable) {
+            }
+        }
     }
 
     private fun setBookShelfByMobile(bookIds: List<String>, mobile: String?, mobileToken: String?) {
@@ -118,36 +106,22 @@ class BookDetailViewModel : ViewModel() {
         directSycBookShelfBean.mobile = mobile
         directSycBookShelfBean.mobileToken = mobileToken
         val body = Gson().toJson(directSycBookShelfBean).toRequestBody(JSON)
-        val disp = RemoteRepository.getInstance().setBookShelfByMobile(body)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { _: SyncBookShelfBean -> },
-                {}
-            )
-        disposable.add(disp)
+        viewModelScope.launch {
+            try {
+                RemoteRepository.getInstance().setBookShelfByMobile(body)
+            } catch (e: Throwable) {
+            }
+        }
     }
 
     private fun refreshBook() {
-        val disp = RemoteRepository
-            .getInstance()
-            .getBookInfo(bookId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { bookDetailBeanInOwn: BookDetailBeanInOwn ->
-                    _bookDetails.value = bookDetailBeanInOwn
-                },
-                {
-                    _refreshErrors.value = ++refreshErrorVersion
-                }
-            )
-
-        disposable.add(disp)
-    }
-
-    override fun onCleared() {
-        disposable.clear()
-        super.onCleared()
+        viewModelScope.launch {
+            try {
+                _bookDetails.value = RemoteRepository.getInstance().getBookInfo(bookId)
+            } catch (e: Throwable) {
+                _refreshErrors.value = ++refreshErrorVersion
+            }
+        }
     }
 
     companion object {

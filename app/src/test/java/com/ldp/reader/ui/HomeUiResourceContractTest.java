@@ -457,11 +457,12 @@ public class HomeUiResourceContractTest {
     }
 
     @Test
-    public void loginTriggeredBookshelfSyncToleratesEmptyOrPartialServerShelf() throws IOException {
+    public void loginTriggeredBookshelfSyncKeepsServerShelfContractDirect() throws IOException {
         String presenter = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfViewModel.kt");
 
-        assertTrue(presenter.contains("if (bookIdBeans != null)"));
-        assertTrue(presenter.contains("if (bookIdBean != null && bookIdBean.bookId != 0)"));
+        assertFalse(presenter.contains("if (bookIdBeans != null)"));
+        assertFalse(presenter.contains("if (bookIdBean != null"));
+        assertTrue(presenter.contains("if (bookIdBean.bookId != 0)"));
         assertTrue(presenter.contains("if (bookIdList == null || bookIdList.isEmpty())"));
         assertTrue(presenter.contains("updateShelf(ArrayList())"));
         assertTrue(presenter.contains("onlineBookIdsFrom(collBooks)"));

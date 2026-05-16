@@ -17,14 +17,15 @@ import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.ReadSettingManager
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.IOUtils
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.ScreenUtils
 import com.ldp.reader.utils.StringUtils
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
-import io.reactivex.SingleObserver
-import io.reactivex.SingleOnSubscribe
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -88,7 +89,8 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
     // 存储阅读记录类
     private lateinit var mBookRecord: BookRecordBean
 
-    private var mPreLoadDisp: Disposable? = null
+    private val loaderScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var mPreLoadJob: Job? = null
 
     // 当前的状态
     protected var mStatus = STATUS_LOADING
@@ -324,9 +326,7 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         // 将上一章的缓存设置为null
         mPrePageList = null
         // 如果当前下一章缓存正在执行，则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp!!.dispose()
-        }
+        mPreLoadJob?.cancel()
         // 将下一章缓存设置为null
         mNextPageList = null
 
@@ -631,9 +631,8 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         isChapterListPrepare = false
         isClose = true
 
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp!!.dispose()
-        }
+        mPreLoadJob?.cancel()
+        loaderScope.cancel()
 
         clearList(mChapterList)
         clearList(mCurPageList)
@@ -1108,29 +1107,18 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         }
 
         // 如果之前正在加载则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp!!.dispose()
-        }
+        mPreLoadJob?.cancel()
 
         // 调用异步进行预加载加载
-        Single.create(
-            SingleOnSubscribe { e: SingleEmitter<MutableList<TxtPage>> ->
-                e.onSuccess(loadPageList(nextChapter)!!)
+        mPreLoadJob = loaderScope.launch {
+            try {
+                mNextPageList = withContext(Dispatchers.IO) {
+                    loadPageList(nextChapter)!!
+                }
+            } catch (e: Throwable) {
+                // 无视错误
             }
-        ).compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(object : SingleObserver<MutableList<TxtPage>> {
-                override fun onSubscribe(d: Disposable) {
-                    mPreLoadDisp = d
-                }
-
-                override fun onSuccess(pages: MutableList<TxtPage>) {
-                    mNextPageList = pages
-                }
-
-                override fun onError(e: Throwable) {
-                    // 无视错误
-                }
-            })
+        }
     }
 
     // 取消翻页

@@ -45,15 +45,12 @@ import com.ldp.reader.ui.dialog.ReadSettingDialog
 import com.ldp.reader.utils.BrightnessUtils
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.LogUtils
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.ScreenUtils
 import com.ldp.reader.utils.StringUtils
 import com.ldp.reader.utils.ReadingStatsUtils
 import com.ldp.reader.widget.page.PageLoader
 import com.ldp.reader.widget.page.PageView.TouchListener
 import com.ldp.reader.widget.page.TxtChapter
-import io.reactivex.Single
-import io.reactivex.SingleTransformer
 
 /**
  * Created by ldp on 17-5-16.
@@ -333,7 +330,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
                 override fun requestChapters(requestChapters: List<TxtChapter>) {
                     Log.d(TAG, "+requestChapters")
-                    viewModel.loadChapter(mBookId, requestChapters)
+                    viewModel.loadChapter(mBookId, mCollBook!!, requestChapters)
                     mHandler.sendEmptyMessage(WHAT_CATEGORY)
                     //隐藏提示
                     binding!!.readTvPageTip.visibility = View.GONE
@@ -449,6 +446,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             sourceIndex++;
             viewModel.refreshChapter(
                 mBookId,
+                mCollBook!!,
                 mCategoryAdapter?.getItem(mPageLoader!!.chapterPos),
                 sourceIndex
             )
@@ -508,25 +506,15 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         super.processLogic()
         // 如果是已经收藏的，那么就从数据库中获取目录
         if (isCollected) {
-            val disposable = BookRepository.getInstance()
-                .getBookChaptersInRx(mBookId)
-                .compose { upstream: Single<List<BookChapterBean>> ->
-                    RxUtils.toSimpleSingle(
-                        upstream
-                    )
-                }
-                .subscribe { bookChapterBeen: List<BookChapterBean>?, throwable: Throwable? ->
-                    // 设置 CollBook
-                    mPageLoader!!.collBook.bookChapters = bookChapterBeen
-                    // 刷新章节列表
-                    mPageLoader!!.refreshChapterList()
-                    viewModel.loadCategory(mBookId)
-                    LogUtils.e(throwable)
-                }
-            addDisposable(disposable)
+            val bookChapterBeen = BookRepository.getInstance().getBookChapters(mBookId)
+            // 设置 CollBook
+            mPageLoader!!.collBook.bookChapters = bookChapterBeen
+            // 刷新章节列表
+            mPageLoader!!.refreshChapterList()
+            viewModel.loadCategory(mBookId, mCollBook!!)
         } else {
             // 从网络中获取目录
-            viewModel.loadCategory(mBookId)
+            viewModel.loadCategory(mBookId, mCollBook!!)
         }
     }
 

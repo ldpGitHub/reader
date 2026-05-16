@@ -1513,3 +1513,48 @@
   performed another horizontal read-page swipe. App-pid logcat checks for
   `FATAL EXCEPTION`, `AndroidRuntime`, `PageLoader`, and `LocalPageLoader`
   errors were empty.
+
+## 2026-05-16 Architecture Migration Batch 40
+
+- Removed RxJava from app main sources and Gradle dependencies.
+- Replaced Retrofit RxJava return types with `Call<T>` and removed
+  `adapter-rxjava2`. `RemoteRepository` now exposes suspending methods and
+  executes Retrofit calls on `Dispatchers.IO`, still failing directly on HTTP
+  errors or missing response bodies.
+- Converted `SearchViewModel`, `LoginViewModel`, `BookDetailViewModel`,
+  `BookShelfViewModel`, and `ReadViewModel` from `CompositeDisposable`/`Single`
+  subscriptions to `viewModelScope` coroutine jobs.
+- Replaced local repository Rx wrappers with direct methods:
+  `getBookChapters` and `deleteCollBookWithFiles`.
+- Removed `RxUtils`, the remaining RxJava disposable helpers from
+  `BaseActivity`/`BaseFragment`, and RxJava background parsing/preload usage in
+  `PageLoader` and `LocalPageLoader`.
+- Source shape after this batch: 0 Java files and 142 Kotlin files under
+  `app/src/main`.
+- Focused validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed.
+  `KotlinMigrationContractTest`, `BookRepositoryStorageContractTest`,
+  `DeprecatedZhuishuCleanupContractTest`, `HomeUiResourceContractTest`,
+  `PageLoaderLayoutTest`, and `CollBookHolderLocalBookTest` passed with
+  `-Dorg.gradle.jvmargs=-Xmx3072m`. Static search found no `io.reactivex`,
+  `RxUtils`, `Single<`, `Observable<`, `CompositeDisposable`,
+  `org.reactivestreams`, `adapter-rxjava`, `rxjavaVersion`, or
+  `rxandroidVersion` in main sources and Gradle files.
+- Runtime validation initially found two non-collected network read-path
+  crashes where `ReadViewModel` still assumed the book was already stored in
+  `BookRepository`. `ReadActivity` now passes the current `CollBookBean`
+  directly into category/chapter loading and source refresh, preserving the
+  non-collected read contract without adding fallback mapping.
+- Full validation:
+  `:app:testDebugUnitTest :app:assembleDebug :app:installDebug` passed with
+  `-Dorg.gradle.jvmargs=-Xmx3072m`.
+- ai-app-bridge runtime validation used the existing SMS-login state: launched
+  `SplashActivity`, verified `MainActivity`/`书架`, searched `xian`, opened
+  `遗落仙境` into `BookDetailActivity`, tapped `开始阅读`, verified
+  `ReadActivity`/`目录`, verified the visible full-screen `PageView`, and
+  performed a horizontal read-page swipe. Bridge network capture showed 200
+  responses for `/search?bookName=xian`, `/getBookInfo`, `/getBookFolder`, and
+  `/getBookContent`. It then relaunched the shelf, opened local TXT
+  `codex-local-import-probe`, verified `ReadActivity`/`PageView`, and performed
+  another horizontal read-page swipe. AndroidRuntime logcat checks were empty in
+  both passes.

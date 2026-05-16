@@ -4,7 +4,6 @@ import android.util.Log
 import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
-import com.ldp.reader.model.local.Void
 import com.ldp.reader.ui.home.BookshelfLocalProgressStore
 import com.ldp.reader.utils.Charset as ReaderCharset
 import com.ldp.reader.utils.Constant
@@ -12,13 +11,15 @@ import com.ldp.reader.utils.FileUtils
 import com.ldp.reader.utils.IOUtils
 import com.ldp.reader.utils.LogUtils
 import com.ldp.reader.utils.MD5Utils
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.StringUtils
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
-import io.reactivex.SingleObserver
-import io.reactivex.SingleOnSubscribe
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -44,7 +45,8 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
     // 编码类型
     private lateinit var mCharset: ReaderCharset
 
-    private var mChapterDisp: Disposable? = null
+    private val chapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var mChapterJob: Job? = null
 
     init {
         mStatus = STATUS_PARING
@@ -315,10 +317,9 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
 
     override fun closeBook() {
         super.closeBook()
-        if (mChapterDisp != null) {
-            mChapterDisp!!.dispose()
-            mChapterDisp = null
-        }
+        mChapterJob?.cancel()
+        mChapterJob = null
+        chapterScope.cancel()
     }
 
     override fun refreshChapterList() {
@@ -352,58 +353,51 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
             return
         }
 
-        // 通过RxJava异步处理分章事件
-        Single.create(
-            SingleOnSubscribe { e: SingleEmitter<Void> ->
-                loadChapters()
-                e.onSuccess(Void())
+        mChapterJob = chapterScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    loadChapters()
+                }
+                mChapterJob = null
+                isChapterListPrepare = true
+
+                // 提示目录加载完成
+                if (mPageChangeListener != null) {
+                    mPageChangeListener!!.onCategoryFinish(mChapterList)
+                }
+
+                // 存储章节到数据库
+                val bookChapterBeanList = ArrayList<BookChapterBean>()
+                for (i in 0 until mChapterList.size) {
+                    val chapter = mChapterList[i]
+                    val bean = BookChapterBean()
+                    bean.id = MD5Utils.strToMd5By16(
+                        mBookFile.absolutePath + File.separator + chapter.title
+                    )
+                    bean.title = chapter.getTitle()
+                    bean.start = chapter.getStart()
+                    bean.setUnreadble(false)
+                    bean.end = chapter.getEnd()
+                    bookChapterBeanList.add(bean)
+                }
+                mCollBook.setBookChapters(bookChapterBeanList)
+                mCollBook.chaptersCount = mChapterList.size
+                mCollBook.updated = lastModified
+
+                BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList)
+                BookRepository.getInstance().saveCollBook(mCollBook)
+
+                // 加载并显示当前章节
+                Log.e(TAG, "+refreshChapterList")
+                openChapter()
+            } catch (e: Throwable) {
+                if (e is CancellationException) {
+                    throw e
+                }
+                chapterError()
+                LogUtils.d(TAG, "file load error:$e")
             }
-        ).compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(object : SingleObserver<Void> {
-                override fun onSubscribe(d: Disposable) {
-                    mChapterDisp = d
-                }
-
-                override fun onSuccess(value: Void) {
-                    mChapterDisp = null
-                    isChapterListPrepare = true
-
-                    // 提示目录加载完成
-                    if (mPageChangeListener != null) {
-                        mPageChangeListener!!.onCategoryFinish(mChapterList)
-                    }
-
-                    // 存储章节到数据库
-                    val bookChapterBeanList = ArrayList<BookChapterBean>()
-                    for (i in 0 until mChapterList.size) {
-                        val chapter = mChapterList[i]
-                        val bean = BookChapterBean()
-                        bean.id = MD5Utils.strToMd5By16(
-                            mBookFile.absolutePath + File.separator + chapter.title
-                        )
-                        bean.title = chapter.getTitle()
-                        bean.start = chapter.getStart()
-                        bean.setUnreadble(false)
-                        bean.end = chapter.getEnd()
-                        bookChapterBeanList.add(bean)
-                    }
-                    mCollBook.setBookChapters(bookChapterBeanList)
-                    mCollBook.chaptersCount = mChapterList.size
-                    mCollBook.updated = lastModified
-
-                    BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList)
-                    BookRepository.getInstance().saveCollBook(mCollBook)
-
-                    // 加载并显示当前章节
-                    Log.e(TAG, "+refreshChapterList")
-                    openChapter()
-                }
-
-                override fun onError(e: Throwable) {
-                    chapterError()
-                    LogUtils.d(TAG, "file load error:$e")
-                }
-            })
+        }
     }
 
     override fun getChapterReader(chapter: TxtChapter): BufferedReader {

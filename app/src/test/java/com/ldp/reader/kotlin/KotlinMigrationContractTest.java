@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class KotlinMigrationContractTest {
 
@@ -79,7 +82,6 @@ public class KotlinMigrationContractTest {
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/view/PageStyleHolder");
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/CategoryAdapter");
         assertKotlinOnly("src/main/java/com/ldp/reader/ui/adapter/PageStyleAdapter");
-        assertKotlinOnly("src/main/java/com/ldp/reader/utils/RxUtils");
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/MD5Utils");
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/FileStack");
         assertKotlinOnly("src/main/java/com/ldp/reader/utils/NetworkUtils");
@@ -294,8 +296,30 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void rxJavaIsRemovedFromMainSourcesAndDependencies() throws IOException {
+        assertFalse(new File("src/main/java/com/ldp/reader/utils/RxUtils.kt").exists());
+
+        String appGradle = readFile("build.gradle");
+        String gradleProperties = readFile("../gradle.properties");
+        assertFalse(appGradle.contains("io.reactivex"));
+        assertFalse(appGradle.contains("adapter-rxjava2"));
+        assertFalse(gradleProperties.contains("rxandroidVersion"));
+        assertFalse(gradleProperties.contains("rxjavaVersion"));
+
+        assertTextAbsentInFiles(
+                new File("src/main/java"),
+                "io.reactivex",
+                "RxUtils",
+                "Single<",
+                "Observable<",
+                "CompositeDisposable",
+                "org.reactivestreams"
+        );
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 143);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 142);
         assertTrue(countFiles(new File("src/main/java"), ".java") <= 0);
     }
 
@@ -318,5 +342,26 @@ public class KotlinMigrationContractTest {
             }
         }
         return count;
+    }
+
+    private static void assertTextAbsentInFiles(File root, String... tokens) throws IOException {
+        File[] files = root.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                assertTextAbsentInFiles(file, tokens);
+            } else if (file.getName().endsWith(".kt") || file.getName().endsWith(".java")) {
+                String source = readFile(file.getPath());
+                for (String token : tokens) {
+                    assertFalse(file.getPath() + " should not contain " + token, source.contains(token));
+                }
+            }
+        }
+    }
+
+    private static String readFile(String path) throws IOException {
+        return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8);
     }
 }

@@ -5,22 +5,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ldp.reader.model.bean.BookChapterBean
-import com.ldp.reader.model.bean.ChapterBean
 import com.ldp.reader.model.bean.CollBookBean
-import com.ldp.reader.model.bean.ContentBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.remote.RemoteRepository
 import com.ldp.reader.utils.LogUtils
 import com.ldp.reader.utils.MD5Utils
-import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.widget.page.TxtChapter
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.ArrayDeque
 import java.util.Arrays
 
@@ -34,94 +28,75 @@ class ReadViewModel : ViewModel() {
         val isBiqugeLoaded: Boolean
     )
 
-    private val disposables = CompositeDisposable()
     private val _categories = MutableLiveData<CategoryResult>()
     private val _chapterFinishedEvents = MutableLiveData<Boolean>()
     private val _chapterErrorEvents = MutableLiveData<Int>()
     private var chapterErrorVersion = 0
-    private var mChapterSub: Subscription? = null
+    private var chapterJob: Job? = null
     private var bookIdInBiquge: String? = ""
 
     val categories: LiveData<CategoryResult> = _categories
     val chapterFinishedEvents: LiveData<Boolean> = _chapterFinishedEvents
     val chapterErrorEvents: LiveData<Int> = _chapterErrorEvents
 
-    fun loadCategory(bookId: String?) {
+    fun loadCategory(bookId: String?, collBookBean: CollBookBean) {
         val bookChapterBeans: MutableList<BookChapterBean> = ArrayList()
-        val collBookBean = BookRepository.getInstance().getCollBook(bookId)!!
 
         Log.d(TAG, "loadCategory: $bookId$collBookBean")
-        val disposable = RemoteRepository.getInstance()
-            .getBookFolder(bookId)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { chapterBeans: List<ChapterBean> ->
-                    for (chapterBean in chapterBeans) {
-                        val bookChapterBeanTemp = BookChapterBean()
-                        bookChapterBeanTemp.link = chapterBean.chapterId.toString()
-                        bookChapterBeanTemp.title = chapterBean.title
-                        bookChapterBeanTemp.id = MD5Utils.strToMd5By16(bookChapterBeanTemp.link!!)
-                        Log.d(TAG, "+章节名  " + chapterBean.title)
-                        bookChapterBeanTemp.bookId = collBookBean.get_id()
-                        bookChapterBeanTemp.start = bookChapterBeans.size.toLong()
-                        bookChapterBeans.add(bookChapterBeanTemp)
-                    }
-                    collBookBean.bookChapters = bookChapterBeans
-                    collBookBean.chaptersCount = bookChapterBeans.size
-                    Log.d(TAG, "accept: $bookChapterBeans")
-                    _categories.value = CategoryResult(bookChapterBeans, bookId!!, true)
-
-                    BookRepository.getInstance()
-                        .saveCollBookWithAsync(collBookBean)
-                },
-                {
-                    _chapterErrorEvents.value = ++chapterErrorVersion
+        viewModelScope.launch {
+            try {
+                val chapterBeans = RemoteRepository.getInstance().getBookFolder(bookId)
+                for (chapterBean in chapterBeans) {
+                    val bookChapterBeanTemp = BookChapterBean()
+                    bookChapterBeanTemp.link = chapterBean.chapterId.toString()
+                    bookChapterBeanTemp.title = chapterBean.title
+                    bookChapterBeanTemp.id = MD5Utils.strToMd5By16(bookChapterBeanTemp.link!!)
+                    Log.d(TAG, "+章节名  " + chapterBean.title)
+                    bookChapterBeanTemp.bookId = collBookBean.get_id()
+                    bookChapterBeanTemp.start = bookChapterBeans.size.toLong()
+                    bookChapterBeans.add(bookChapterBeanTemp)
                 }
-            )
-        disposables.add(disposable)
+                collBookBean.bookChapters = bookChapterBeans
+                collBookBean.chaptersCount = bookChapterBeans.size
+                Log.d(TAG, "accept: $bookChapterBeans")
+                _categories.value = CategoryResult(bookChapterBeans, bookId!!, true)
+
+                BookRepository.getInstance()
+                    .saveCollBookWithAsync(collBookBean)
+            } catch (e: Throwable) {
+                _chapterErrorEvents.value = ++chapterErrorVersion
+            }
+        }
     }
 
     @Synchronized
-    fun loadChapter(bookId: String?, bookChapterList: List<TxtChapter>) {
+    fun loadChapter(bookId: String?, sourceBook: CollBookBean, bookChapterList: List<TxtChapter>) {
         val size = bookChapterList.size
         Log.e(TAG, "loadChapter  列表大小" + size + Arrays.asList(bookChapterList).toString())
 
-        if (mChapterSub != null) {
-            mChapterSub!!.cancel()
-        }
-
-        val bookChapterSBeanByBiquge: MutableList<Single<ContentBean>> = ArrayList(bookChapterList.size)
+        chapterJob?.cancel()
 
         val titlesInBiquge = ArrayDeque<String>()
+        val readableChapters = ArrayList<TxtChapter>(bookChapterList.size)
 
         for (i in 0 until size) {
             val bookChapter = bookChapterList[i]
             if (bookChapter.title == null || TextUtils.isEmpty(bookChapter.title)) {
                 continue
             }
-            val pureLink = bookChapter.link
-            val bean = BookRepository.getInstance().getCollBook(bookId)!!
-            bookIdInBiquge = bean.get_id()
+            bookIdInBiquge = sourceBook.get_id()
             Log.d("+收到的章节笔趣阁Id", bookIdInBiquge!!)
-            val bookChapterBeanByBiqugeSingle = RemoteRepository.getInstance()
-                .getBookContent(bookIdInBiquge, pureLink, 0)
             Log.d("+收到的章节ID", bookChapter.link!!)
-            bookChapterSBeanByBiquge.add(bookChapterBeanByBiqugeSingle)
+            readableChapters.add(bookChapter)
             titlesInBiquge.add(bookChapter.title!!)
         }
 
-        Single.concat(bookChapterSBeanByBiquge)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Subscriber<ContentBean> {
-                var titleInBiquge: String? = titlesInBiquge.poll()
-
-                override fun onSubscribe(s: Subscription) {
-                    s.request(Int.MAX_VALUE.toLong())
-                    mChapterSub = s
-                }
-
-                override fun onNext(contentBean: ContentBean) {
+        chapterJob = viewModelScope.launch {
+            var titleInBiquge: String? = titlesInBiquge.poll()
+            try {
+                for (bookChapter in readableChapters) {
+                    val contentBean = RemoteRepository.getInstance()
+                        .getBookContent(bookIdInBiquge, bookChapter.link, 0)
                     BookRepository.getInstance().saveChapterInfo(
                         bookId,
                         titleInBiquge,
@@ -134,48 +109,37 @@ class ReadViewModel : ViewModel() {
                     _chapterFinishedEvents.value = false
                     titleInBiquge = titlesInBiquge.poll()
                 }
-
-                override fun onError(t: Throwable) {
-                    if (bookChapterList[0].title == titleInBiquge) {
-                        _chapterErrorEvents.value = ++chapterErrorVersion
-                    }
-                    LogUtils.e(t)
+            } catch (t: Throwable) {
+                if (bookChapterList[0].title == titleInBiquge) {
+                    _chapterErrorEvents.value = ++chapterErrorVersion
                 }
-
-                override fun onComplete() {
-                }
-            })
+                LogUtils.e(t)
+            }
+        }
     }
 
     @Synchronized
-    fun refreshChapter(bookId: String?, bookChapter: TxtChapter?, sourceIndex: Int) {
+    fun refreshChapter(bookId: String?, sourceBook: CollBookBean, bookChapter: TxtChapter?, sourceIndex: Int) {
         val pureLink = bookChapter!!.link
-        val bean = BookRepository.getInstance().getCollBook(bookId)!!
-        bookIdInBiquge = bean.get_id()
-        val disposable = RemoteRepository.getInstance()
-            .getBookContent(bookIdInBiquge, pureLink, sourceIndex)
-            .compose { upstream -> RxUtils.toSimpleSingle(upstream) }
-            .subscribe(
-                { contentBean ->
-                    BookRepository.getInstance().saveChapterInfo(
-                        bookId,
-                        bookChapter.title,
-                        contentBean.content
-                    )
-                    _chapterFinishedEvents.value = true
-                },
-                {
-                    _chapterErrorEvents.value = ++chapterErrorVersion
-                }
-            )
-        disposables.add(disposable)
+        bookIdInBiquge = sourceBook.get_id()
+        viewModelScope.launch {
+            try {
+                val contentBean = RemoteRepository.getInstance()
+                    .getBookContent(bookIdInBiquge, pureLink, sourceIndex)
+                BookRepository.getInstance().saveChapterInfo(
+                    bookId,
+                    bookChapter.title,
+                    contentBean.content
+                )
+                _chapterFinishedEvents.value = true
+            } catch (e: Throwable) {
+                _chapterErrorEvents.value = ++chapterErrorVersion
+            }
+        }
     }
 
     override fun onCleared() {
-        if (mChapterSub != null) {
-            mChapterSub!!.cancel()
-        }
-        disposables.clear()
+        chapterJob?.cancel()
         super.onCleared()
     }
 

@@ -346,15 +346,7 @@ public class DeprecatedZhuishuCleanupContractTest {
                 "src/main/java/com/ldp/reader/model/local/LocalRepository.java"
         };
 
-        String rxUtils = readFile("src/main/java/com/ldp/reader/utils/RxUtils.kt");
         String constants = readFile("src/main/java/com/ldp/reader/utils/Constant.kt");
-
-        String[] retiredRxTokens = {
-                "CommentBean",
-                "DetailBean",
-                "toCommentDetail",
-                "Function3"
-        };
 
         String[] retiredConstantTokens = {
                 "SHARED_SAVE_BOOK_SORT",
@@ -366,7 +358,6 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         assertFilesRemoved("Remove legacy local-cache source: ", retiredSources);
-        assertTextAbsent("Remove legacy comment-detail Rx helper token: ", rxUtils, retiredRxTokens);
         assertTextAbsent("Remove legacy local-cache constants token: ", constants, retiredConstantTokens);
     }
 

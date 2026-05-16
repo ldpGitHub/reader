@@ -108,7 +108,7 @@ class BookDetailActivity : BaseActivity<ActivityBookDetailBinding>() {
         binding?.apply {
             isCollected = if (isCollected) {
                 BookRepository.getInstance()
-                    .deleteCollBookInRx(mCollBookBean!!)
+                    .deleteCollBookWithFiles(mCollBookBean!!)
                 bookListAvChase.speed = -1f
                 bookListAvChase.playAnimation()
                 updateChaseButton(false)

@@ -2,7 +2,6 @@ package com.ldp.reader.utils
 
 import android.os.Environment
 import com.ldp.reader.App
-import io.reactivex.Single
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.File
@@ -156,15 +155,6 @@ object FileUtils {
             txtFiles.addAll(getTxtFiles(dir.path, layer + 1))
         }
         return txtFiles
-    }
-
-    @JvmStatic
-    fun getSDTxtFile(): Single<List<File>> {
-        val rootPath = Environment.getExternalStorageDirectory().path
-        return Single.create { emitter ->
-            val files = getTxtFiles(rootPath, 0)
-            emitter.onSuccess(files)
-        }
     }
 
     @JvmStatic

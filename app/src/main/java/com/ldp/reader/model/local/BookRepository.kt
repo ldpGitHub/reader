@@ -13,7 +13,6 @@ import com.ldp.reader.utils.FileUtils
 import com.ldp.reader.utils.IOUtils
 import com.ldp.reader.utils.StringUtils
 import io.objectbox.BoxStore
-import io.reactivex.Single
 import java.io.BufferedWriter
 import java.io.FileWriter
 import java.io.IOException
@@ -165,8 +164,8 @@ class BookRepository private constructor() {
         get() = mBookStore.getCollBooks()
 
     // 获取书籍列表
-    fun getBookChaptersInRx(bookId: String?): Single<List<BookChapterBean>> {
-        return Single.create { emitter -> emitter.onSuccess(mBookStore.getBookChapters(bookId)) }
+    fun getBookChapters(bookId: String?): List<BookChapterBean> {
+        return mBookStore.getBookChapters(bookId)
     }
 
     // 获取阅读记录
@@ -175,19 +174,15 @@ class BookRepository private constructor() {
     }
 
     /************************************************************/
-    fun deleteCollBookInRx(bean: CollBookBean): Single<Void> {
-        return Single.create { emitter ->
-            // 查看文本中是否存在删除的数据
-            deleteBook(bean.get_id())
-            // 删除目录
-            deleteBookChapter(bean.get_id())
-            // 删除CollBook
-            mBookStore.deleteCollBook(bean)
-            emitter.onSuccess(Void())
-        }
+    fun deleteCollBookWithFiles(bean: CollBookBean) {
+        // 查看文本中是否存在删除的数据
+        deleteBook(bean.get_id())
+        // 删除目录
+        deleteBookChapter(bean.get_id())
+        // 删除CollBook
+        mBookStore.deleteCollBook(bean)
     }
 
-    // 这个需要用rx，进行删除
     fun deleteBookChapter(bookId: String?) {
         mBookStore.deleteBookChapters(bookId)
     }

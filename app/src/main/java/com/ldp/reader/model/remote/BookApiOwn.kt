@@ -9,8 +9,8 @@ import com.ldp.reader.model.bean.DirectLoginResultBean
 import com.ldp.reader.model.bean.LoginResultBean
 import com.ldp.reader.model.bean.SmsLoginBean
 import com.ldp.reader.model.bean.SyncBookShelfBean
-import io.reactivex.Single
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -23,29 +23,29 @@ import retrofit2.http.Query
 @JvmSuppressWildcards
 interface BookApiOwn {
     @GET("/search")
-    fun getSearchResult(@Query("bookName") bookName: String?): Single<List<BookSearchResult>>
+    fun getSearchResult(@Query("bookName") bookName: String?): Call<List<BookSearchResult>>
 
     @GET("/getBookInfo")
-    fun getBookInfo(@Query("bookId") bookId: String?): Single<BookDetailBeanInOwn>
+    fun getBookInfo(@Query("bookId") bookId: String?): Call<BookDetailBeanInOwn>
 
     @POST("/getBookInfoBatch")
-    fun getBookInfoBatch(@Body body: RequestBody?): Single<List<BookDetailBeanInOwn>>
+    fun getBookInfoBatch(@Body body: RequestBody?): Call<List<BookDetailBeanInOwn>>
 
     @GET("/getBookFolder")
-    fun getBookFolder(@Query("bookId") bookId: String?): Single<List<ChapterBean>>
+    fun getBookFolder(@Query("bookId") bookId: String?): Call<List<ChapterBean>>
 
     @GET("/getBookContent")
     fun getBookContent(
         @Query("bookId") bookId: String?,
         @Query("chapterId") chapterId: String?,
         @Query("sourceIndex") sourceIndex: Int
-    ): Single<ContentBean>
+    ): Call<ContentBean>
 
     @POST("/login")
     fun userLogin(
         @Query("username") username: String?,
         @Query("password") password: String?
-    ): Single<LoginResultBean>
+    ): Call<LoginResultBean>
 
     @POST("/directLogin")
     fun userDirectLogin(
@@ -55,30 +55,30 @@ interface BookApiOwn {
         @Query("opToken") opToken: String?,
         @Query("operator") operator: String?,
         @Query("registrationId") registrationId: String?
-    ): Single<DirectLoginResultBean>
+    ): Call<DirectLoginResultBean>
 
     @POST("/getBookShelf")
-    fun getBookShelf(@Header("Authorization") header: String?): Single<List<BookIdBean>>
+    fun getBookShelf(@Header("Authorization") header: String?): Call<List<BookIdBean>>
 
     @GET("/getBookShelfByMobile")
     fun getBookShelfByMobile(
         @Query("mobile") mobile: String?,
         @Query("mobileToken") mobileToken: String?
-    ): Single<List<BookIdBean>>
+    ): Call<List<BookIdBean>>
 
     @POST("/synBookShelf")
     fun setBookShelf(
         @Header("Authorization") header: String?,
         @Body body: RequestBody?
-    ): Single<SyncBookShelfBean>
+    ): Call<SyncBookShelfBean>
 
     @POST("/synBookShelfByMobile")
-    fun setBookShelfByMobile(@Body body: RequestBody?): Single<SyncBookShelfBean>
+    fun setBookShelfByMobile(@Body body: RequestBody?): Call<SyncBookShelfBean>
 
     @POST("/smsLogin")
     fun smsLogin(
         @Query("phoneNumber") phoneNumber: String?,
         @Query("smsCode") smsCode: String?,
         @Query("registrationId") registrationId: String?
-    ): Single<SmsLoginBean>
+    ): Call<SmsLoginBean>
 }

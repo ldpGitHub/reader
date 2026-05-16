@@ -7,26 +7,15 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewbinding.ViewBinding
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 /**
  * Created by PC on 2016/9/8.
  */
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
-    protected var mDisposable: CompositeDisposable? = null
-
     private var mToolbar: Toolbar? = null
     protected lateinit var binding: VB
     /****************************abstract area */
     /************************init area */
-    protected fun addDisposable(d: Disposable?) {
-        if (mDisposable == null) {
-            mDisposable = CompositeDisposable()
-        }
-        mDisposable!!.add(d!!)
-    }
-
     /**
      * 配置Toolbar
      *
@@ -71,13 +60,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         if (mToolbar != null) {
             supportActionBar(mToolbar)
             setUpToolbar(mToolbar)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (mDisposable != null) {
-            mDisposable!!.dispose()
         }
     }
 

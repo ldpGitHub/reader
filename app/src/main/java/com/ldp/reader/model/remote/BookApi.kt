@@ -2,7 +2,7 @@ package com.ldp.reader.model.remote
 
 import com.ldp.reader.model.bean.packages.HotWordPackage
 import com.ldp.reader.model.bean.packages.KeyWordPackage
-import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,8 +12,8 @@ import retrofit2.http.Query
 @JvmSuppressWildcards
 interface BookApi {
     @GET("/book/hot-word")
-    fun getHotWordPackage(): Single<HotWordPackage>
+    fun getHotWordPackage(): Call<HotWordPackage>
 
     @GET("/book/auto-complete")
-    fun getKeyWordPacakge(@Query("query") query: String?): Single<KeyWordPackage>
+    fun getKeyWordPacakge(@Query("query") query: String?): Call<KeyWordPackage>
 }

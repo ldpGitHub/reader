@@ -6,7 +6,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -29,13 +28,11 @@ class RemoteHelper private constructor() {
         mRetrofit = Retrofit.Builder()
             .client(mOkHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .baseUrl(Constant.API_BASE_URL)
             .build()
         mRetrofitByOwn = Retrofit.Builder()
             .client(mOkHttpClient)
             .addConverterFactory(LenientGsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .baseUrl(Constant.API_BASE_URL_OWN)
             .build()
     }
