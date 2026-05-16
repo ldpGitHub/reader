@@ -67,9 +67,11 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
                             bookChapterBeanTemp.setTitle(chapterBean.getTitle());
                             bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
                             bookChapterBeanTemp.setBookId(collBookBean.get_id());
+                            bookChapterBeanTemp.setStart(bookChapterBeans.size());
                             bookChapterBeans.add(bookChapterBeanTemp);
                         }
                         collBookBean.setBookChapters(bookChapterBeans);
+                        collBookBean.setChaptersCount(bookChapterBeans.size());
                         //存储收藏
                         BookRepository.getInstance()
                                 .saveCollBookWithAsync(collBookBean);
@@ -94,10 +96,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 
     private void synBookShelf() {
         List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
-        List<String> bookIds = new ArrayList<>();
-        for (CollBookBean collBookBean : collBooks) {
-            bookIds.add(collBookBean.get_id());
-        }
+        List<String> bookIds = BookShelfPresenter.onlineBookIdsFrom(collBooks);
         if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
             setBookShelf(bookIds);
         } else {
@@ -110,7 +109,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private void setBookShelf(List<String> bookIds) {
-        RequestBody body = RequestBody.create(JSON, new Gson().toJson(bookIds));
+        RequestBody body = RequestBody.create(JSON, new Gson().toJson(BookShelfPresenter.normalizeServerBookIds(bookIds)));
         String token = SharedPreUtils.getInstance().getString("token");
         Disposable disposable = RemoteRepository.getInstance().setBookShelf(token, body)
                 .compose(RxUtils::toSimpleSingle)
@@ -128,7 +127,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 
     private void setBookShelfByMobile(List<String> bookIds, String mobile, String mobileToken) {
         DirectSycBookShelfBean directSycBookShelfBean = new DirectSycBookShelfBean();
-        directSycBookShelfBean.setBookIds(bookIds);
+        directSycBookShelfBean.setBookIds(BookShelfPresenter.normalizeServerBookIds(bookIds));
         directSycBookShelfBean.setMobile(mobile);
         directSycBookShelfBean.setMobileToken(mobileToken);
         RequestBody body = RequestBody.create(JSON, new Gson().toJson(directSycBookShelfBean));

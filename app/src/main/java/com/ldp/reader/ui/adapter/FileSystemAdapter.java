@@ -4,6 +4,7 @@ import com.ldp.reader.model.local.BookRepository;
 import com.ldp.reader.ui.adapter.view.FileHolder;
 import com.ldp.reader.ui.base.adapter.BaseListAdapter;
 import com.ldp.reader.ui.base.adapter.IViewHolder;
+import com.ldp.reader.utils.MD5Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -106,9 +107,10 @@ public class FileSystemAdapter extends BaseListAdapter<File>{
         notifyDataSetChanged();
     }
 
-    private boolean isFileLoaded(String id){
+    private boolean isFileLoaded(String path){
         //如果是已加载的文件，则点击事件无效。
-        if (BookRepository.getInstance().getCollBook(id) != null){
+        String bookId = MD5Utils.strToMd5By16(path);
+        if (BookRepository.getInstance().getCollBook(bookId) != null){
             return true;
         }
         return false;

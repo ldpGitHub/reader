@@ -6,6 +6,7 @@ import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.local.BookRepository;
 import com.ldp.reader.model.local.Void;
+import com.ldp.reader.ui.home.BookshelfLocalProgressStore;
 import com.ldp.reader.utils.Charset;
 import com.ldp.reader.utils.Constant;
 import com.ldp.reader.utils.FileUtils;
@@ -328,6 +329,13 @@ public class LocalPageLoader extends PageLoader {
             mCollBook.setLastChapter(mChapterList.get(mCurChapterPos).getTitle());
             mCollBook.setLastRead(StringUtils.
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            int progressTenths = PageLoader.calculateProgressTenths(
+                    mChapterList.size(),
+                    mCurChapterPos,
+                    getCurrentPagePosition(),
+                    getCurrentPageCount()
+            );
+            BookshelfLocalProgressStore.saveProgressTenths(mCollBook.get_id(), progressTenths);
             //直接更新
             BookRepository.getInstance()
                     .saveCollBook(mCollBook);
@@ -358,6 +366,7 @@ public class LocalPageLoader extends PageLoader {
                 && mCollBook.getBookChapters() != null) {
 
             mChapterList = convertTxtChapter(mCollBook.getBookChapters());
+            mCollBook.setChaptersCount(mChapterList.size());
             isChapterListPrepare = true;
 
             //提示目录加载完成
@@ -411,6 +420,7 @@ public class LocalPageLoader extends PageLoader {
                             bookChapterBeanList.add(bean);
                         }
                         mCollBook.setBookChapters(bookChapterBeanList);
+                        mCollBook.setChaptersCount(mChapterList.size());
                         mCollBook.setUpdated(lastModified);
 
                         BookRepository.getInstance().saveBookChaptersWithAsync(bookChapterBeanList);
@@ -441,5 +451,10 @@ public class LocalPageLoader extends PageLoader {
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
         return true;
+    }
+
+    @Override
+    protected void onReadableEndReached() {
+        saveRecord();
     }
 }

@@ -1,17 +1,18 @@
 package com.ldp.reader.ui.activity
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -22,11 +23,11 @@ import com.ldp.reader.RxBus
 import com.ldp.reader.databinding.ActivityMainBinding
 import com.ldp.reader.event.BookSyncEvent
 import com.ldp.reader.ui.base.BaseActivity
+import com.ldp.reader.ui.fragment.BookStoreFragment
 import com.ldp.reader.ui.fragment.BookShelfFragment
-import com.ldp.reader.utils.PermissionsChecker
+import com.ldp.reader.ui.fragment.MineFragment
+import com.ldp.reader.ui.widget.HomeMoreMenuView
 import com.ldp.reader.utils.SharedPreUtils
-import com.ldp.reader.utils.ToastUtils
-import java.util.Arrays
 
 /**
  * @author ldp
@@ -34,9 +35,13 @@ import java.util.Arrays
 class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener {
     /***************Object */
     private val mFragmentList = ArrayList<Fragment>()
+    private val visibleTabs = visibleHomeTabs()
+    private val menuIdToPageIndex = HashMap<Int, Int>()
 
-    private var mTitleList: List<String>? = null
-    private var mPermissionsChecker: PermissionsChecker? = null
+    private var mTitleList: List<String> = emptyList()
+    private var homeMoreMenuView: HomeMoreMenuView? = null
+    private var statusBarColorBeforeMenu = Color.TRANSPARENT
+    private var systemUiBeforeMenu = 0
 
     /*****************Params */
     private var isPrepareFinish = false
@@ -66,8 +71,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
     }
 
     private fun initFragment() {
-        val bookShelfFragment: Fragment = BookShelfFragment()
-        mFragmentList.add(bookShelfFragment)
+        mFragmentList.clear()
+        menuIdToPageIndex.clear()
+        visibleTabs.forEachIndexed { index, tab ->
+            mFragmentList.add(createFragment(tab.key))
+            menuIdToPageIndex[tab.menuItemId] = index
+        }
+    }
+
+    private fun createFragment(key: HomeTabKey): Fragment {
+        return when (key) {
+            HomeTabKey.BOOKSHELF -> BookShelfFragment()
+            HomeTabKey.BOOKSTORE -> BookStoreFragment()
+            HomeTabKey.MINE -> MineFragment()
+        }
     }
 
     private fun setUpTabLayout() {
@@ -80,19 +97,75 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
 
 
             mainVp.adapter = adapter;
-            mainVp.offscreenPageLimit = 3;
-
-//
-//        mainTlTab.setTitles(mTitleList);
-//        stMain.setViewPager(mVp);
-//        stMain.setOnTabListener((index, v) -> mVp.setCurrentItem(index, true));
+            mainVp.offscreenPageLimit = visibleTabs.size;
+            mainVp.addOnPageChangeListener(this@MainActivity)
+            homeNavBookshelf.setOnClickListener { selectHomeTab(HomeTabKey.BOOKSHELF) }
+            homeNavMine.setOnClickListener { selectHomeTab(HomeTabKey.MINE) }
+            if (visibleTabs.isNotEmpty()) {
+                updateBottomNavSelection(0)
+                updateToolbarTitle(0)
+            }
         }
 
     }
 
     protected fun createTabTitles(): List<String> {
-        val titles = resources.getStringArray(R.array.nb_fragment_title)
-        return Arrays.asList(*titles)
+        return visibleTabs.map { getString(it.titleRes) }
+    }
+
+    private fun updateToolbarTitle(position: Int) {
+        if (position < 0 || position >= mTitleList.size) {
+            return
+        }
+        val isMinePage = visibleTabs[position].key == HomeTabKey.MINE
+        findViewById<Toolbar>(R.id.toolbar)?.let { toolbar ->
+            toolbar.visibility = if (isMinePage) View.GONE else View.VISIBLE
+        }
+        findViewById<TextView>(R.id.home_toolbar_title)?.text = mTitleList[position]
+    }
+
+    fun selectHomeTab(tabKey: HomeTabKey) {
+        val index = visibleTabs.indexOfFirst { it.key == tabKey }
+        if (index < 0) {
+            return
+        }
+        binding?.mainVp?.setCurrentItem(index, false)
+        updateBottomNavSelection(index)
+        updateToolbarTitle(index)
+    }
+
+    private fun updateBottomNavSelection(position: Int) {
+        val selectedKey = visibleTabs.getOrNull(position)?.key ?: return
+        binding?.apply {
+            applyBottomNavItemState(
+                homeNavBookshelf,
+                homeNavBookshelfIcon,
+                homeNavBookshelfLabel,
+                selectedKey == HomeTabKey.BOOKSHELF
+            )
+            applyBottomNavItemState(
+                homeNavMine,
+                homeNavMineIcon,
+                homeNavMineLabel,
+                selectedKey == HomeTabKey.MINE
+            )
+        }
+    }
+
+    private fun applyBottomNavItemState(
+        item: View,
+        icon: ImageView,
+        label: TextView,
+        selected: Boolean
+    ) {
+        item.isSelected = selected
+        icon.isSelected = selected
+        label.isSelected = selected
+        val color = resources.getColor(
+            if (selected) R.color.home_primary else R.color.home_text_secondary
+        )
+        icon.imageTintList = ColorStateList.valueOf(color)
+        label.setTextColor(color)
     }
 
     override fun initWidget() {
@@ -109,44 +182,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val token = SharedPreUtils.getInstance().getString("token")
-        val loginItem = menu.findItem(R.id.action_login)
-        if (TextUtils.isEmpty(token)) {
-            loginItem?.title = "请登录"
-        } else {
-            val userName = SharedPreUtils.getInstance().getString("userName")
-            loginItem?.title = userName
-        }
-        return super.onPrepareOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         var activityCls: Class<*>? = null
         when (id) {
             R.id.action_search -> activityCls = SearchActivity::class.java
-            R.id.action_login -> activityCls = LoginActivity::class.java
-            R.id.action_sync_bookshelf -> RxBus.getInstance().post(BookSyncEvent())
-            R.id.action_scan_local_book -> {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                    if (mPermissionsChecker == null) {
-                        mPermissionsChecker = PermissionsChecker(this)
-                    }
-
-                    //获取读取和写入SD卡的权限
-                    if (mPermissionsChecker!!.lacksPermissions(*PERMISSIONS)) {
-                        //请求权限
-                        ActivityCompat.requestPermissions(
-                            this,
-                            PERMISSIONS,
-                            PERMISSIONS_REQUEST_STORAGE
-                        )
-                        return true
-                    }
-                }
-                activityCls = FileSystemActivity::class.java
-            }
+            R.id.action_more_custom -> showHomeMoreMenu()
             else -> return super.onOptionsItemSelected(item)
         }
         if (activityCls != null) {
@@ -172,31 +213,100 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
         return super.onPreparePanel(featureId, view, menu)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PERMISSIONS_REQUEST_STORAGE -> {
+    private fun showHomeMoreMenu() {
+        homeMoreMenuView?.dismiss()
+        val menuView = HomeMoreMenuView(this)
+        val token = SharedPreUtils.getInstance().getString("token")
+        val userName = SharedPreUtils.getInstance().getString("userName")
+        menuView.setAccountTitle(if (token.isNullOrEmpty()) "请登录" else userName)
+        menuView.onImportClick = { openLocalImport() }
+        menuView.onSyncClick = { syncBookShelf() }
+        menuView.onAccountClick = { openAccount() }
+        menuView.onDismiss = {
+            restoreMenuSystemBars()
+            homeMoreMenuView = null
+        }
+        homeMoreMenuView = menuView
+        dimMenuSystemBars()
+        (window.decorView as ViewGroup).addView(
+            menuView,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        menuView.showFrom(actionMenuItemView(R.id.action_more_custom))
+    }
 
-                // 如果取消权限，则返回的值为0
-                if (grantResults.size > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    //跳转到 FileSystemActivity
-                    val intent = Intent(this, FileSystemActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    ToastUtils.show("用户拒绝开启读写权限")
-                }
-                return
-            }
+    private fun dimMenuSystemBars() {
+        systemUiBeforeMenu = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            statusBarColorBeforeMenu = window.statusBarColor
+            window.statusBarColor = Color.TRANSPARENT
+        }
+        window.decorView.systemUiVisibility =
+            window.decorView.systemUiVisibility or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
         }
     }
 
+    private fun restoreMenuSystemBars() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = statusBarColorBeforeMenu
+        }
+        window.decorView.systemUiVisibility = systemUiBeforeMenu
+    }
+
+    private fun findMoreMenuAnchor(): View? {
+        val titleResId = resources.getIdentifier("nb.menu.action.more", "string", packageName)
+        val title = if (titleResId != 0) getString(titleResId) else "更多"
+        return findViewByContentDescription(window.decorView, title)
+    }
+
+    private fun actionMenuItemView(itemId: Int): View? {
+        return findViewById(itemId) ?: findMoreMenuAnchor()
+    }
+
+    private fun findViewByContentDescription(view: View, contentDescription: String): View? {
+        if (view.contentDescription?.toString() == contentDescription) {
+            return view
+        }
+        if (view is ViewGroup) {
+            for (index in 0 until view.childCount) {
+                val child = findViewByContentDescription(view.getChildAt(index), contentDescription)
+                if (child != null) {
+                    return child
+                }
+            }
+        }
+        return null
+    }
+
+    private fun openLocalImport() {
+        startActivity(Intent(this, FileSystemActivity::class.java))
+    }
+
+    private fun syncBookShelf() {
+        RxBus.getInstance().post(BookSyncEvent())
+    }
+
+    private fun openAccount() {
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
     override fun onBackPressed() {
+        if (homeMoreMenuView != null) {
+            homeMoreMenuView?.dismiss()
+            return
+        }
+        if (exitBookshelfFilterMenuIfNeeded()) {
+            return
+        }
+        if (exitBookshelfEditModeIfNeeded()) {
+            return
+        }
         if (!isPrepareFinish) {
 //            mVp.postDelayed(
 //                    () -> isPrepareFinish = false, WAIT_INTERVAL
@@ -208,9 +318,52 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
         }
     }
 
+    private fun exitBookshelfEditModeIfNeeded(): Boolean {
+        val currentIndex = binding?.mainVp?.currentItem ?: return false
+        val currentFragment = mFragmentList.getOrNull(currentIndex)
+        return (currentFragment as? BookShelfFragment)?.exitEditModeIfNeeded() == true
+    }
+
+    private fun exitBookshelfFilterMenuIfNeeded(): Boolean {
+        val currentIndex = binding?.mainVp?.currentItem ?: return false
+        val currentFragment = mFragmentList.getOrNull(currentIndex)
+        return (currentFragment as? BookShelfFragment)?.exitFilterMenuIfNeeded() == true
+    }
+
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-    override fun onPageSelected(position: Int) {}
+    override fun onPageSelected(position: Int) {
+        updateToolbarTitle(position)
+        if (position < 0 || position >= visibleTabs.size) {
+            return
+        }
+        updateBottomNavSelection(position)
+    }
     override fun onPageScrollStateChanged(state: Int) {}
+
+    private fun visibleHomeTabs(): List<HomeTab> {
+        return allHomeTabs().filter { it.visible }
+    }
+
+    private fun allHomeTabs(): List<HomeTab> {
+        return listOf(
+            HomeTab(HomeTabKey.BOOKSHELF, R.id.home_nav_bookshelf, R.string.home_tab_bookshelf, true),
+            HomeTab(HomeTabKey.BOOKSTORE, R.id.home_nav_bookstore, R.string.home_tab_bookstore, false),
+            HomeTab(HomeTabKey.MINE, R.id.home_nav_mine, R.string.home_tab_mine, true)
+        )
+    }
+
+    enum class HomeTabKey {
+        BOOKSHELF,
+        BOOKSTORE,
+        MINE
+    }
+
+    private data class HomeTab(
+        val key: HomeTabKey,
+        val menuItemId: Int,
+        val titleRes: Int,
+        val visible: Boolean
+    )
 
     /******************inner class */
     internal inner class TabFragmentPageAdapter(fm: FragmentManager?) : FragmentPagerAdapter(
@@ -225,17 +378,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), ViewPager.OnPageChange
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mTitleList!![position]
+            return mTitleList[position]
         }
     }
 
     companion object {
         /*************Constant */
         private const val WAIT_INTERVAL = 2000
-        private const val PERMISSIONS_REQUEST_STORAGE = 1
-        val PERMISSIONS = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
     }
 }

@@ -61,9 +61,7 @@ public class BookRepository {
                 .runInTx(
                         () -> {
                             if (bean.getBookChapters() != null){
-                                // 存储BookChapterBean
-                                mSession.getBookChapterBeanDao()
-                                        .insertOrReplaceInTx(bean.getBookChapters());
+                                replaceBookChaptersInTx(bean.get_id(), bean.getBookChapters());
 
                                 Log.d(TAG, "saveCollBookWithAsync: "+"进行存储" +  bean.getBookChapters());
                             }
@@ -105,9 +103,7 @@ public class BookRepository {
                             Log.d(TAG, "111saveCollBookWithAsync : "+"进行存储" +  beans.toString());
                             for (CollBookBean bean : beans){
                                 if (bean.getBookChapters() != null){
-                                    //存储BookChapterBean(需要修改，如果存在id相同的则无视)
-                                    mSession.getBookChapterBeanDao()
-                                            .insertOrReplaceInTx(bean.getBookChapters());
+                                    replaceBookChaptersInTx(bean.get_id(), bean.getBookChapters());
                                 }
                             }
                             //存储CollBook (确保先后顺序，否则出错)
@@ -148,9 +144,10 @@ public class BookRepository {
                 .runInTx(
                         () -> {
 
-                            //存储BookChapterBean
-                            mSession.getBookChapterBeanDao()
-                                    .insertOrReplaceInTx(beans);
+                            if (beans == null || beans.isEmpty()) {
+                                return;
+                            }
+                            replaceBookChaptersInTx(beans.get(0).getBookId(), beans);
                             for (BookChapterBean bookChapterBean: beans ) {
                                 Log.d("+存储", "saveBookChaptersWithAsync: "+bookChapterBean.getTitle());
 
@@ -216,6 +213,7 @@ public class BookRepository {
                         .getBookChapterBeanDao()
                         .queryBuilder()
                         .where(BookChapterBeanDao.Properties.BookId.eq(bookId))
+                        .orderAsc(BookChapterBeanDao.Properties.Start)
                         .list();
                 e.onSuccess(beans);
             }
@@ -250,6 +248,23 @@ public class BookRepository {
 
     //这个需要用rx，进行删除
     public void deleteBookChapter(String bookId){
+        mSession.getBookChapterBeanDao()
+                .queryBuilder()
+                .where(BookChapterBeanDao.Properties.BookId.eq(bookId))
+                .buildDelete()
+                .executeDeleteWithoutDetachingEntities();
+    }
+
+    private void replaceBookChaptersInTx(String bookId, List<BookChapterBean> beans) {
+        if (bookId == null || beans == null) {
+            return;
+        }
+        deleteBookChapterInTx(bookId);
+        mSession.getBookChapterBeanDao()
+                .insertOrReplaceInTx(beans);
+    }
+
+    private void deleteBookChapterInTx(String bookId) {
         mSession.getBookChapterBeanDao()
                 .queryBuilder()
                 .where(BookChapterBeanDao.Properties.BookId.eq(bookId))

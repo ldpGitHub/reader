@@ -62,9 +62,11 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                         bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
                         Log.d(TAG, "+章节名  " + chapterBean.getTitle());
                         bookChapterBeanTemp.setBookId(collBookBean.get_id());
+                        bookChapterBeanTemp.setStart(bookChapterBeans.size());
                         bookChapterBeans.add(bookChapterBeanTemp);
                     }
                     collBookBean.setBookChapters(bookChapterBeans);
+                    collBookBean.setChaptersCount(bookChapterBeans.size());
                     Log.d(TAG, "accept: " + bookChapterBeans);
                     mView.showCategory(bookChapterBeans, bookId, true);
 

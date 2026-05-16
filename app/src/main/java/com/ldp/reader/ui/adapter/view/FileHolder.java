@@ -16,6 +16,7 @@ import com.ldp.reader.utils.StringUtils;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by ldp on 17-5-27.
@@ -64,7 +65,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         String id = MD5Utils.strToMd5By16(file.getAbsolutePath());
 
         if (BookRepository.getInstance().getCollBook(id) != null){
-            mIvIcon.setImageResource(R.drawable.ic_file_loaded);
+            mIvIcon.setImageResource(R.drawable.ic_file_row_loaded_32);
             mIvIcon.setVisibility(View.VISIBLE);
             mCbSelect.setVisibility(View.GONE);
         }
@@ -79,6 +80,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvSubCount.setVisibility(View.GONE);
 
         mTvName.setText(file.getName());
+        mTvTag.setText(fileType(file));
         mTvSize.setText(FileUtils.getFileSize(file.length()));
         mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
     }
@@ -87,7 +89,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         //图片
         mIvIcon.setVisibility(View.VISIBLE);
         mCbSelect.setVisibility(View.GONE);
-        mIvIcon.setImageResource(R.drawable.ic_dir);
+        mIvIcon.setImageResource(R.drawable.ic_file_row_folder_32);
         //名字
         mTvName.setText(folder.getName());
         //介绍
@@ -95,6 +97,15 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvSubCount.setVisibility(View.VISIBLE);
 
         mTvSubCount.setText(getContext().getString(R.string.nb_file_sub_count,folder.list().length));
+    }
+
+    private String fileType(File file) {
+        String name = file.getName();
+        int index = name.lastIndexOf('.');
+        if (index >= 0 && index + 1 < name.length()) {
+            return name.substring(index + 1).toUpperCase(Locale.CHINA);
+        }
+        return "TXT";
     }
 
     @Override

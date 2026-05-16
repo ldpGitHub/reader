@@ -31,6 +31,14 @@
 
     <!--fragment_title:主页的名字-->
     <string name="nb.fragment.title.bookshelf">书架</string>
+    <string name="home_tab_bookshelf">书架</string>
+    <string name="home_tab_bookstore">书城</string>
+    <string name="home_tab_mine">我的</string>
+    <string name="home_bookstore_empty_title">书城暂未开放</string>
+    <string name="home_bookstore_empty_subtitle">接口接入后再展示入口。</string>
+    <string name="home_mine_title">我的</string>
+    <string name="home_mine_guest">未登录</string>
+    <string name="home_mine_guest_tip">登录后同步书架和阅读进度</string>
 
     <!--dialog-->
     <string name="nb.dialog.text.introduce">我们会根据您的喜好\n推荐相对应的小说</string>
@@ -43,7 +51,8 @@
     <string name="nb.menu.action.login">请登录</string>
     <string name="nb.menu.action.message">我的消息</string>
     <string name="nb.menu.action.sync">同步书架</string>
-    <string name="nb.menu.action.scan">扫描本地书籍</string>
+    <string name="nb.menu.action.scan">本机导入</string>
+    <string name="nb.menu.action.more">更多</string>
     <string name="nb.menu.action.transfer">WIFI传书</string>
     <string name="nb.menu.action.feedback">意见反馈</string>
     <string name="nb.menu.action.night_mode">夜间模式</string>
@@ -69,6 +78,8 @@
     <string name="nb.book_detail.chase_update">追更</string>
     <string name="nb.book_detail.give_up">放弃</string>
     <string name="nb.book_detail.start_read">开始阅读</string>
+    <string name="nb.book_detail.last_chapter">最新章节</string>
+    <string name="nb.book_detail.brief_title">作品简介</string>
 
     <!--mode-->
     <string name="nb.mode.night">夜间</string>
@@ -89,6 +100,9 @@
 
     <!--search-->
     <string name="nb.search.book.brief">%1$s | %2$s  | %3$s 著</string>
+    <string name="nb.search.hint">请输入书名或作者</string>
+    <string name="nb.search.assistant">智能找书，快速定位书名和作者</string>
+    <string name="nb.search.hot">热门搜索</string>
 
     <!--BookShelf-->
     <string name="nb.bookshelf.book_not_exist">文件不存在或者内容为空,是否删除?</string>

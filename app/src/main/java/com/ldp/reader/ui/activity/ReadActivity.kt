@@ -49,6 +49,7 @@ import com.ldp.reader.utils.LogUtils
 import com.ldp.reader.utils.RxUtils
 import com.ldp.reader.utils.ScreenUtils
 import com.ldp.reader.utils.StringUtils
+import com.ldp.reader.utils.ReadingStatsUtils
 import com.ldp.reader.widget.page.PageLoader
 import com.ldp.reader.widget.page.PageView.TouchListener
 import com.ldp.reader.widget.page.TxtChapter
@@ -76,6 +77,7 @@ class ReadActivity : ReadContract.View,
     private var mBottomOutAnim: Animation? = null
     private var mCategoryAdapter: CategoryAdapter? = null
     private var mCollBook: CollBookBean? = null
+    private var readingSessionStartMs = 0L
 
     //控制屏幕常亮
     private var mWakeLock: WakeLock? = null
@@ -610,10 +612,12 @@ class ReadActivity : ReadContract.View,
     override fun onResume() {
         super.onResume()
         mWakeLock!!.acquire()
+        readingSessionStartMs = System.currentTimeMillis()
     }
 
     override fun onPause() {
         super.onPause()
+        commitReadingDuration()
         mWakeLock!!.release()
         if (isCollected) {
             mPageLoader!!.saveRecord()
@@ -647,6 +651,15 @@ class ReadActivity : ReadContract.View,
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    private fun commitReadingDuration() {
+        if (readingSessionStartMs <= 0L) {
+            return
+        }
+        val endMs = System.currentTimeMillis()
+        ReadingStatsUtils.recordReading(mCollBook?._id, readingSessionStartMs, endMs)
+        readingSessionStartMs = 0L
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

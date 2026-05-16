@@ -35,7 +35,7 @@ class SearchActivity :
     var mIvBack: ImageView? = null
     var mEtInput: EditText? = null
     var mIvDelete: ImageView? = null
-    var mIvSearch: ImageView? = null
+    var mIvSearch: TextView? = null
     var mTvRefreshHot: TextView? = null
     var mTgHot: TagGroup? = null
     var mRlRefresh: RefreshLayout? = null

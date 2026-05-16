@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.local.BookRepository;
+import com.ldp.reader.ui.home.BookshelfLocalProgressStore;
 import com.ldp.reader.utils.BookManager;
 import com.ldp.reader.utils.Constant;
 import com.ldp.reader.utils.FileUtils;
@@ -51,6 +52,7 @@ public class NetPageLoader extends PageLoader {
 
         // 将 BookChapter 转换成当前可用的 Chapter
         mChapterList = convertTxtChapter(mCollBook.getBookChapters());
+        mCollBook.setChaptersCount(mChapterList.size());
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -210,22 +212,15 @@ public class NetPageLoader extends PageLoader {
             end = mChapterList.size() - 1;
         }
 
+        if (start > end || start >= mChapterList.size()) {
+            return;
+        }
 
         List<TxtChapter> chapters = new ArrayList<>();
-          if(start + 1 >= mChapterList.size()){
-              return;
-          }
-
-
-        chapters.add(mChapterList.get(start + 1));
-        Log.e(TAG,"+requestChapters  " +mChapterList.get(start + 1).getTitle());
 
 //        // 过滤，哪些数据已经加载了
         for (int i = start; i <= end; ++i) {
             TxtChapter txtChapter = mChapterList.get(i);
-            if (i == start + 1) {
-               continue;
-            }
             if (!hasChapterData(txtChapter)) {
                 chapters.add(txtChapter);
                 Log.e(TAG,"+requestChapters  " +txtChapter.getTitle());
@@ -246,9 +241,20 @@ public class NetPageLoader extends PageLoader {
             mCollBook.setIsUpdate(false);
             mCollBook.setLastRead(StringUtils.
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            int progressTenths = PageLoader.calculateProgressTenths(
+                    mChapterList.size(),
+                    mCurChapterPos,
+                    getCurrentPagePosition(),
+                    getCurrentPageCount()
+            );
+            BookshelfLocalProgressStore.saveProgressTenths(mCollBook.get_id(), progressTenths);
             //直接更新
             BookRepository.getInstance().saveCollBook(mCollBook);
         }
     }
-}
 
+    @Override
+    protected void onReadableEndReached() {
+        saveRecord();
+    }
+}

@@ -89,6 +89,59 @@ public class StringUtils {
         return "";
     }
 
+    public static String formatBookUpdateTime(String source) {
+        return formatBookUpdateTime(source, System.currentTimeMillis());
+    }
+
+    public static String formatBookUpdateTime(String source, long nowMillis) {
+        long updateMillis = parseBookUpdateMillis(source);
+        if (updateMillis <= 0L) {
+            return "";
+        }
+        long diffMillis = Math.max(0L, nowMillis - updateMillis);
+        long minuteMillis = 60L * 1000L;
+        long hourMillis = 60L * minuteMillis;
+        long dayMillis = 24L * hourMillis;
+        if (diffMillis < minuteMillis) {
+            return "刚刚";
+        }
+        if (diffMillis < hourMillis) {
+            return Math.max(1L, diffMillis / minuteMillis) + "分钟前";
+        }
+        if (diffMillis < dayMillis) {
+            return Math.max(1L, diffMillis / hourMillis) + "小时前";
+        }
+        if (diffMillis < 30L * dayMillis) {
+            return Math.max(1L, diffMillis / dayMillis) + "天前";
+        }
+        if (diffMillis < 365L * dayMillis) {
+            return Math.max(1L, diffMillis / (30L * dayMillis)) + "月前";
+        }
+        return Math.max(1L, diffMillis / (365L * dayMillis)) + "年前";
+    }
+
+    private static long parseBookUpdateMillis(String source) {
+        if (source == null || source.trim().length() == 0) {
+            return 0L;
+        }
+        String value = source.trim();
+        try {
+            long numeric = Long.parseLong(value);
+            if (numeric > 0L && numeric < 10_000_000_000L) {
+                return numeric * 1000L;
+            }
+            return numeric;
+        } catch (NumberFormatException ignored) {
+        }
+        DateFormat format = new SimpleDateFormat(Constant.FORMAT_BOOK_DATE, Locale.CHINA);
+        try {
+            Date date = format.parse(value);
+            return date == null ? 0L : date.getTime();
+        } catch (ParseException ignored) {
+        }
+        return 0L;
+    }
+
     public static String toFirstCapital(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }

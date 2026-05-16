@@ -43,7 +43,8 @@
     <string name="nb.menu.action.login">請登錄</string>
     <string name="nb.menu.action.message">我的消息</string>
     <string name="nb.menu.action.sync">同步書架</string>
-    <string name="nb.menu.action.scan">掃描本地書籍</string>
+    <string name="nb.menu.action.scan">本機導入</string>
+    <string name="nb.menu.action.more">更多</string>
     <string name="nb.menu.action.transfer">WIFI傳書</string>
     <string name="nb.menu.action.feedback">意見反饋</string>
     <string name="nb.menu.action.night_mode">夜間模式</string>
@@ -69,6 +70,8 @@
     <string name="nb.book_detail.chase_update">追更</string>
     <string name="nb.book_detail.give_up">放棄</string>
     <string name="nb.book_detail.start_read">開始閱讀</string>
+    <string name="nb.book_detail.last_chapter">最新章節</string>
+    <string name="nb.book_detail.brief_title">作品簡介</string>
     
     <!--mode-->
     <string name="nb.mode.night">夜間</string>
@@ -89,6 +92,9 @@
     
     <!--search-->
     <string name="nb.search.book.brief">%1$d人在追 | %2$s讀者留存 | %3$s著</string>
+    <string name="nb.search.hint">請輸入書名或作者</string>
+    <string name="nb.search.assistant">智能找書，快速定位書名和作者</string>
+    <string name="nb.search.hot">熱門搜索</string>
 
     <!--BookShelf-->
     <string name="nb.bookshelf.book_not_exist">文件不存在或者内容為空,是否刪除?</string>

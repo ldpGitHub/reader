@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="88dp"
+    android:layout_height="92dp"
     android:background="@drawable/bg_home_toolbar"
     android:fitsSystemWindows="true"
     android:minHeight="?attr/actionBarSize"
@@ -18,21 +18,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:layout_marginBottom="11dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginRight="104dp"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/home_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="Reader"
+            android:text="@string/home_tab_bookshelf"
             android:textColor="@color/home_text_primary"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
 
     </LinearLayout>
 </androidx.appcompat.widget.Toolbar>

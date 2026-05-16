@@ -52,10 +52,44 @@ public abstract class PageLoader {
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     // 默认的显示参数配置
-    private static final int DEFAULT_MARGIN_HEIGHT = 28;
+    private static final int DEFAULT_CONTENT_PADDING_VERTICAL = 8;
+    private static final int DEFAULT_FOOTER_AREA_HEIGHT = 28;
     private static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 4;
+
+    public static int calculateProgressTenths(int chapterCount, int chapterIndex, int pageIndex, int pageCount) {
+        int safeChapterCount = Math.max(1, chapterCount);
+        int safeChapterIndex = Math.max(0, Math.min(chapterIndex, safeChapterCount - 1));
+        int safePageCount = Math.max(0, pageCount);
+        int safePageIndex = Math.max(0, pageIndex);
+
+        if (safeChapterIndex >= safeChapterCount - 1
+                && (safePageCount <= 0 || safePageIndex >= Math.max(0, safePageCount - 2))) {
+            return 999;
+        }
+
+        float pageFraction;
+        if (safePageCount > 0) {
+            pageFraction = Math.min(safePageIndex + 1, safePageCount) / (float) safePageCount;
+        } else {
+            pageFraction = safePageIndex > 0 ? 0.01f : 0f;
+        }
+        int tenths = Math.round(((safeChapterIndex + pageFraction) / safeChapterCount) * 1000f);
+        return Math.max(1, Math.min(tenths, 998));
+    }
+
+    static int calculateContentTopMargin(int statusBarHeightPx, int contentPaddingPx) {
+        return Math.max(0, statusBarHeightPx) + Math.max(0, contentPaddingPx);
+    }
+
+    static int calculateContentBottomMargin(int contentPaddingPx) {
+        return Math.max(0, contentPaddingPx);
+    }
+
+    static int calculateVisibleContentHeight(int displayHeightPx, int topMarginPx, int bottomMarginPx) {
+        return Math.max(0, displayHeightPx - Math.max(0, topMarginPx) - Math.max(0, bottomMarginPx));
+    }
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
@@ -119,7 +153,9 @@ public abstract class PageLoader {
     private int mDisplayHeight;
     //间距
     private int mMarginWidth;
-    private int mMarginHeight;
+    private int mMarginTop;
+    private int mMarginBottom;
+    private int mFooterAreaHeight;
     //字体的颜色
     private int mTextColor;
     //标题的大小
@@ -173,7 +209,10 @@ public abstract class PageLoader {
         mPageStyle = mSettingManager.getPageStyle();
         // 初始化参数
         mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        mMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
+        int verticalPadding = ScreenUtils.dpToPx(DEFAULT_CONTENT_PADDING_VERTICAL);
+        mMarginTop = calculateContentTopMargin(ScreenUtils.getStatusBarHeight(), verticalPadding);
+        mMarginBottom = calculateContentBottomMargin(verticalPadding);
+        mFooterAreaHeight = ScreenUtils.dpToPx(DEFAULT_FOOTER_AREA_HEIGHT);
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize());
     }
@@ -483,7 +522,8 @@ public abstract class PageLoader {
      */
     public void setMargin(int marginWidth, int marginHeight) {
         mMarginWidth = marginWidth;
-        mMarginHeight = marginHeight;
+        mMarginTop = marginHeight;
+        mMarginBottom = marginHeight;
 
         // 如果是滑动动画，则需要重新创建了
         if (mPageMode == PageMode.SCROLL) {
@@ -545,6 +585,14 @@ public abstract class PageLoader {
         return mCurPage.position;
     }
 
+    protected int getCurrentPageCount() {
+        return mCurPageList == null ? 0 : mCurPageList.size();
+    }
+
+    protected int getCurrentPagePosition() {
+        return mCurPage == null ? 0 : mCurPage.position;
+    }
+
     /**
      * 获取当前章节的章节位置
      *
@@ -560,7 +608,7 @@ public abstract class PageLoader {
      * @return
      */
     public int getMarginHeight() {
-        return mMarginHeight;
+        return mMarginTop;
     }
 
     /**
@@ -802,7 +850,7 @@ public abstract class PageLoader {
         } else {
             //擦除区域
             mBgPaint.setColor(mBgColor);
-            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mMarginHeight + ScreenUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
+            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mFooterAreaHeight + ScreenUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
         }
 
         /******绘制电池********/
@@ -900,7 +948,7 @@ public abstract class PageLoader {
             if (mPageMode == PageMode.SCROLL) {
                 top = -mTextPaint.getFontMetrics().top;
             } else {
-                top = mMarginHeight - mTextPaint.getFontMetrics().top;
+                top = mMarginTop - mTextPaint.getFontMetrics().top;
             }
 
             //设置总距离
@@ -955,7 +1003,7 @@ public abstract class PageLoader {
 
         // 获取内容显示位置的大小
         mVisibleWidth = mDisplayWidth - mMarginWidth * 2;
-        mVisibleHeight = mDisplayHeight - mMarginHeight * 2;
+        mVisibleHeight = calculateVisibleContentHeight(mDisplayHeight, mMarginTop, mMarginBottom);
 
         // 重置 PageMode
         mPageView.setPageMode(mPageMode);
@@ -1077,6 +1125,7 @@ public abstract class PageLoader {
         }
 
         if (!hasNextChapter()) {
+            onReadableEndReached();
             return false;
         }
 
@@ -1097,6 +1146,9 @@ public abstract class PageLoader {
             return false;
         }
         return true;
+    }
+
+    protected void onReadableEndReached() {
     }
 
     synchronized boolean parseCurChapter() {

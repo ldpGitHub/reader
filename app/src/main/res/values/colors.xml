@@ -6,21 +6,27 @@
     <color name="nb.theme.background">@color/white</color>
 
     <!--home refresh-->
-    <color name="home_bg">#F6F7F3</color>
+    <color name="home_bg">#FFFFFF</color>
+    <color name="mine_bg">#F7F8FA</color>
     <color name="home_surface">#FFFFFF</color>
-    <color name="home_surface_soft">#F9FAF7</color>
-    <color name="home_primary">#B05A3C</color>
-    <color name="home_primary_dark">#2B3834</color>
-    <color name="home_primary_soft">#F1DDCE</color>
-    <color name="home_accent">#2F7D68</color>
-    <color name="home_text_primary">#28312E</color>
-    <color name="home_text_secondary">#66746E</color>
-    <color name="home_text_tertiary">#8C9892</color>
+    <color name="home_surface_soft">#F5F5F5</color>
+    <color name="home_primary">#208BFF</color>
+    <color name="home_primary_dark">#1B1D22</color>
+    <color name="home_primary_soft">#D8E9FF</color>
+    <color name="home_accent">#208BFF</color>
+    <color name="home_text_primary">#222222</color>
+    <color name="home_text_secondary">#A5A5A5</color>
+    <color name="home_text_tertiary">#B7BBC3</color>
     <color name="home_text_on_primary">#FFFFFF</color>
-    <color name="home_text_on_primary_soft">#F4E6D7</color>
-    <color name="home_line">#DDE4DC</color>
-    <color name="home_pressed">#EAF0EA</color>
-    <color name="home_menu_icon">#2B3834</color>
+    <color name="home_text_on_primary_soft">#DDEBFF</color>
+    <color name="home_line">#E9E9E9</color>
+    <color name="mine_text_primary">#171D29</color>
+    <color name="mine_text_secondary">#ADB2BC</color>
+    <color name="mine_line">#ECEEF2</color>
+    <color name="home_pressed">#F1F4F7</color>
+    <color name="home_menu_icon">#222222</color>
+    <color name="home_menu_item">#222222</color>
+    <color name="mine_card_shadow">#08000000</color>
 
     <!--common-->
     <color name="transparent">#00000000</color>

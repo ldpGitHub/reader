@@ -3,8 +3,10 @@ package com.ldp.reader.ui.activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
@@ -16,6 +18,7 @@ import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.presenter.BookDetailPresenter
 import com.ldp.reader.presenter.contract.BookDetailContract
 import com.ldp.reader.ui.base.BaseMVPActivity
+import com.ldp.reader.utils.SystemBarUtils
 import com.ldp.reader.utils.ToastUtils
 
 /**
@@ -54,6 +57,7 @@ class BookDetailActivity : BookDetailContract.View,
         super.initClick()
 
         binding?.apply {
+            bookDetailNavBack.setOnClickListener { finish() }
 
             //可伸缩的TextView
             bookDetailTvBrief.setOnClickListener { view ->
@@ -66,35 +70,8 @@ class BookDetailActivity : BookDetailContract.View,
                 }
             }
 
-            bookListAvChase.setOnClickListener { V ->
-                //点击存储
-                isCollected = if (isCollected) {
-                    //放弃点击
-                    BookRepository.getInstance()
-                        .deleteCollBookInRx(mCollBookBean)
-                    bookListTvChase.text = resources.getString(R.string.nb_book_detail_chase_update)
-                    val drawable = ResourcesCompat.getDrawable(
-                        resources, R.drawable.selector_btn_book_list,
-                        null
-                    )
-                    bookListLlChase.background = drawable
-                    bookListTvChase.background = drawable
-                    bookListAvChase.speed = -1f
-                    bookListAvChase.playAnimation()
-                    false
-                } else {
-                    mPresenter!!.addToBookShelf(mCollBookBean)
-                    bookListTvChase.setText(resources.getString(R.string.nb_book_detail_give_up))
-
-                    //修改背景
-                    val drawable = resources.getDrawable(R.drawable.shape_common_gray_corner)
-                    bookListLlChase.setBackground(drawable)
-                    bookListTvChase.setBackground(drawable)
-                    bookListAvChase.setSpeed(1f)
-                    bookListAvChase.playAnimation()
-                    true
-                }
-            }
+            bookListLlChase.setOnClickListener { toggleBookShelf() }
+            bookListAvChase.setOnClickListener { toggleBookShelf() }
             bookDetailTvRead.setOnClickListener { v ->
                 startActivityForResult(
                     Intent(this@BookDetailActivity, ReadActivity::class.java)
@@ -107,8 +84,51 @@ class BookDetailActivity : BookDetailContract.View,
 
     }
 
+    private fun toggleBookShelf() {
+        binding?.apply {
+            isCollected = if (isCollected) {
+                BookRepository.getInstance()
+                    .deleteCollBookInRx(mCollBookBean)
+                bookListAvChase.speed = -1f
+                bookListAvChase.playAnimation()
+                updateChaseButton(false)
+                false
+            } else {
+                mPresenter!!.addToBookShelf(mCollBookBean)
+                bookListAvChase.speed = 1f
+                bookListAvChase.playAnimation()
+                updateChaseButton(true)
+                true
+            }
+        }
+    }
+
+    private fun updateChaseButton(collected: Boolean) {
+        binding?.apply {
+            val drawable = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.bg_book_detail_action_secondary,
+                null
+            )
+            bookListLlChase.background = drawable
+            bookListTvChase.background = null
+            bookListTvChase.text = resources.getString(
+                if (collected) R.string.nb_book_detail_give_up else R.string.nb_book_detail_chase_update
+            )
+            bookListTvChase.setTextColor(
+                ResourcesCompat.getColor(resources, R.color.home_primary, null)
+            )
+        }
+    }
+
     override fun processLogic() {
         super.processLogic()
+        SystemBarUtils.showStableStatusBar(this)
+        SystemBarUtils.transparentStatusBar(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
         binding?.refreshLayout?.showLoading()
         mPresenter!!.refreshBookDetail(mBookId)
     }
@@ -130,6 +150,11 @@ class BookDetailActivity : BookDetailContract.View,
             bookDetailTvTitle.setText(bean.title)
             //作者
             bookDetailTvAuthor.setText(bean.author)
+            bookDetailTvLastChapter.text = if (bean.lastChapter.isNullOrBlank()) {
+                resources.getString(R.string.nb_book_detail_last_chapter)
+            } else {
+                resources.getString(R.string.nb_book_detail_last_chapter) + "  " + bean.lastChapter
+            }
             //简介
             bookDetailTvBrief.setText(bean.desc)
             mCollBookBean = BookRepository.getInstance().getCollBook(bean.bookId.toString() + "")
@@ -139,17 +164,14 @@ class BookDetailActivity : BookDetailContract.View,
             if (mCollBookBean != null) {
                 Log.d(TAG, "finishRefresh: " + "mCollBookBean != null")
                 isCollected = true
-                bookListTvChase.setText(resources.getString(R.string.nb_book_detail_give_up))
-                //修改背景
-                val drawable = resources.getDrawable(R.drawable.shape_common_gray_corner)
-                bookListTvChase.setBackground(drawable)
-                bookListLlChase.setBackground(drawable)
-                bookListAvChase.setSpeed(1f)
+                updateChaseButton(true)
+                bookListAvChase.speed = 1f
                 bookListAvChase.playAnimation()
                 bookDetailTvRead.setText("继续阅读")
             } else {
                 mCollBookBean = bean.collBookBean
                 Log.d(TAG, "finishRefresh: " + "mCollBookBean = bean.getCollBookBean()")
+                updateChaseButton(false)
             }
         }
 
@@ -202,11 +224,7 @@ class BookDetailActivity : BookDetailContract.View,
             isCollected = data.getBooleanExtra(RESULT_IS_COLLECTED, false)
             if (isCollected) {
                 binding?.apply {
-                    bookListTvChase.setText(resources.getString(R.string.nb_book_detail_give_up))
-                    //修改背景
-                    val drawable = resources.getDrawable(R.drawable.shape_common_gray_corner)
-                    bookListTvChase.setBackground(drawable)
-                    bookListLlChase.setBackground(drawable)
+                    updateChaseButton(true)
                     bookDetailTvRead.setText("继续阅读")
                 }
 

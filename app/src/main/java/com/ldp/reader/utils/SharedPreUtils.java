@@ -46,6 +46,11 @@ public class SharedPreUtils {
         sharedWritable.commit();
     }
 
+    public void putLong(String key,long value){
+        sharedWritable.putLong(key, value);
+        sharedWritable.commit();
+    }
+
     public void putBoolean(String key,boolean value){
         sharedWritable.putBoolean(key, value);
         sharedWritable.commit();
@@ -53,6 +58,10 @@ public class SharedPreUtils {
 
     public int getInt(String key,int def){
         return sharedReadable.getInt(key, def);
+    }
+
+    public long getLong(String key,long def){
+        return sharedReadable.getLong(key, def);
     }
 
     public boolean getBoolean(String key,boolean def){

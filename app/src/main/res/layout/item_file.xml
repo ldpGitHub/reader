@@ -1,88 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="horizontal"
-	android:layout_width="match_parent"
-	android:background="@drawable/selector_common_bg"
-	android:layout_height="60dp">
-	
-	<FrameLayout
-		android:id="@+id/file_fl_icon"
-		android:layout_width="60dp"
-		android:layout_height="match_parent">
-		<!--文件夹标识或已选文件标识-->
-		<ImageView
-			android:id="@+id/file_iv_icon"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:scaleType="center"
-			android:visibility="gone"
-			tools:src="@drawable/ic_dir"/>
-		<!--选择是否添加文件-->
-		<CheckBox
-			android:id="@+id/file_cb_select"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_gravity="center"
-			android:enabled="false"
-			android:clickable="false"
-			android:focusableInTouchMode="false"
-			android:button="@null"
-			android:background="@drawable/selector_cb_file" />
-	</FrameLayout>
-	
-	<RelativeLayout
-		android:layout_width="0dp"
-		android:layout_height="match_parent"
-		android:layout_weight="1"
-		android:paddingTop="8dp"
-		android:paddingBottom="8dp">
-		
-		<TextView
-			style="@style/NB.Theme.TextAppearance.Common.SingleLine"
-			android:id="@+id/file_tv_name"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="16sp"
-			android:text="英语四级"/>
-		
-		<LinearLayout
-			android:id="@+id/file_ll_brief"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-			android:gravity="center_vertical"
-			android:layout_alignParentBottom="true">
-			
-			<TextView
-				style="@style/NB.Theme.TextAppearance.File.Tag"
-				android:id="@+id/file_tv_tag"
-				android:layout_toRightOf="@+id/file_fl_icon"
-				android:layout_alignParentBottom="true"
-				android:layout_marginRight="15dp"
-				android:text="TXT"
-				android:background="@drawable/ic_tag_txt"/>
-			
-			<TextView
-				android:id="@+id/file_tv_size"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginRight="15dp"
-				tools:text="324kb"/>
-			
-			<TextView
-				android:id="@+id/file_tv_date"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				tools:text="2017-05-22"/>
-		</LinearLayout>
-		
-		<TextView
-			android:id="@+id/file_tv_sub_count"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
-			tools:text="0 项"
-			android:visibility="gone"/>
-	</RelativeLayout>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="102dp"
+    android:background="@color/home_surface"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="22dp"
+    android:paddingRight="20dp">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp">
+
+        <TextView
+            android:id="@+id/file_tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:textColor="@color/home_text_primary"
+            android:textSize="18sp"
+            tools:text="codex-local-import-probe.txt" />
+
+        <LinearLayout
+            android:id="@+id/file_ll_brief"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/file_tv_tag"
+                android:layout_width="48dp"
+                android:layout_height="24dp"
+                android:background="@drawable/bg_file_row_tag"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="TXT"
+                android:textColor="@color/home_text_on_primary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/file_tv_size"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="14dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:textColor="@color/home_text_tertiary"
+                android:textSize="15sp"
+                tools:text="23.29 kb" />
+
+            <TextView
+                android:id="@+id/file_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:textColor="@color/home_text_tertiary"
+                android:textSize="15sp"
+                tools:text="2026-05-16" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/file_tv_sub_count"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:textColor="@color/home_text_tertiary"
+            android:textSize="15sp"
+            android:visibility="gone"
+            tools:text="0 项" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/file_fl_icon"
+        android:layout_width="54dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|center_vertical">
+
+        <ImageView
+            android:id="@+id/file_iv_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:visibility="gone"
+            tools:src="@drawable/ic_file_row_folder_32" />
+
+        <CheckBox
+            android:id="@+id/file_cb_select"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:button="@drawable/selector_file_reader_check"
+            android:clickable="false"
+            android:enabled="false"
+            android:focusableInTouchMode="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp" />
+    </FrameLayout>
 </LinearLayout>

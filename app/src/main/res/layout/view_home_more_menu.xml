@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_menu_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.MainActivity">
+
+    <View
+        android:id="@+id/home_menu_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000" />
+
+    <ImageView
+        android:id="@+id/home_menu_arrow"
+        android:layout_width="14dp"
+        android:layout_height="7dp"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="28dp"
+        android:elevation="9dp"
+        android:src="@drawable/ic_home_more_popup_arrow" />
+
+    <LinearLayout
+        android:id="@+id/home_menu_popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="87dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_home_more_popup"
+        android:elevation="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/home_menu_import"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_home_menu_import_24"
+                android:tint="@color/home_menu_item" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:maxWidth="76dp"
+                android:text="@string/nb.menu.action.scan"
+                android:textColor="@color/home_menu_item"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/home_menu_sync"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_home_menu_sync_24"
+                android:tint="@color/home_menu_item" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:maxWidth="76dp"
+                android:text="@string/nb.menu.action.sync"
+                android:textColor="@color/home_menu_item"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/home_menu_account"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_home_menu_account_24"
+                android:tint="@color/home_menu_item" />
+
+            <TextView
+                android:id="@+id/home_menu_account_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:includeFontPadding="false"
+                android:maxEms="11"
+                android:maxLines="1"
+                android:maxWidth="104dp"
+                android:text="@string/nb.menu.action.login"
+                android:textColor="@color/home_menu_item"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

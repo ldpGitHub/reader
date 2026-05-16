@@ -2,6 +2,7 @@ package com.ldp.reader.ui.activity
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
@@ -25,6 +26,7 @@ import com.ldp.reader.ui.fragment.BaseFileFragment
 import com.ldp.reader.ui.fragment.BaseFileFragment.OnFileCheckedListener
 import com.ldp.reader.ui.fragment.FileCategoryFragment
 import com.ldp.reader.ui.fragment.LocalBookFragment
+import com.ldp.reader.ui.home.BookshelfLocalProgressStore
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.MD5Utils
 import com.ldp.reader.utils.StringUtils
@@ -76,7 +78,11 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
 
     override fun setUpToolbar(toolbar: Toolbar?) {
         super.setUpToolbar(toolbar)
-        supportActionBar!!.title = "本机导入"
+        supportActionBar!!.title = ""
+        toolbar?.setNavigationIcon(R.drawable.ic_book_detail_back_24)
+        window.statusBarColor = Color.WHITE
+        window.decorView.systemUiVisibility =
+            window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 
     //    /************Params*******************/
@@ -113,6 +119,12 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
 
                 override fun onPageScrollStateChanged(state: Int) {}
             })
+            fileSystemSearch.setOnClickListener {
+                ToastUtils.show("搜索本地文件暂未开放")
+            }
+            fileSystemFilter.setOnClickListener {
+                ToastUtils.show("当前仅显示可导入文件")
+            }
             fileSystemBtnAddBook!!.setOnClickListener { v: View? ->
                 //获取选中的文件
                 val files = mCurFragment!!.checkedFiles
@@ -173,6 +185,7 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
             if (!file.exists()) continue
             val collBook = CollBookBean()
             collBook._id = MD5Utils.strToMd5By16(file.absolutePath)
+            BookshelfLocalProgressStore.clear(collBook._id)
             collBook.title = file.name.replace(".txt", "")
             collBook.author = ""
             collBook.shortIntro = "无"
@@ -195,6 +208,7 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
         binding?.apply {
             //点击、删除状态的设置
             if (mCurFragment!!.checkedCount == 0) {
+                fileSystemSelectedCount.text = "已选 0 项"
                 fileSystemBtnAddBook!!.text = getString(R.string.nb_file_add_shelf)
                 //设置某些按钮的是否可点击
                 setMenuClickable(false)
@@ -203,6 +217,7 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
                     fileSystemCbSelectedAll!!.isChecked = mCurFragment!!.isCheckedAll
                 }
             } else {
+                fileSystemSelectedCount.text = "已选 ${mCurFragment!!.checkedCount} 项"
                 fileSystemBtnAddBook!!.text =
                     getString(R.string.nb_file_add_shelves, mCurFragment!!.checkedCount)
                 setMenuClickable(true)
@@ -236,10 +251,12 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
             //设置是否可删除
             fileSystemBtnDelete!!.isEnabled = isClickable
             fileSystemBtnDelete!!.isClickable = isClickable
+            fileSystemBtnDelete!!.alpha = if (isClickable) 1f else 0.36f
 
             //设置是否可添加书籍
             fileSystemBtnAddBook!!.isEnabled = isClickable
             fileSystemBtnAddBook!!.isClickable = isClickable
+            fileSystemBtnAddBook!!.alpha = if (isClickable) 1f else 0.72f
         }
     }
 
@@ -255,9 +272,11 @@ class FileSystemActivity : BaseActivity<ActivityFileSystemBinding>() {
             if (count > 0) {
                 fileSystemCbSelectedAll!!.isClickable = true
                 fileSystemCbSelectedAll!!.isEnabled = true
+                fileSystemCbSelectedAll!!.alpha = 1f
             } else {
                 fileSystemCbSelectedAll!!.isClickable = false
                 fileSystemCbSelectedAll!!.isEnabled = false
+                fileSystemCbSelectedAll!!.alpha = 0.36f
             }
 
         }
