@@ -27,7 +27,7 @@ future ObjectBox database.
 
 ## Current Baseline
 
-- Source shape: 133 Java files, 21 Kotlin files, and 42 layout XML files under
+- Source shape: 125 Java files, 29 Kotlin files, and 42 layout XML files under
   `app/src/main`.
 - Toolchain after the first MMKV slice: AGP 8.2.1, Gradle 8.2, JDK 17, Java
   and Kotlin bytecode target 17.
@@ -86,10 +86,13 @@ future ObjectBox database.
      `findViewById` calls.
 
 4. Continue Java to Kotlin migration.
-   - Prefer files that already sit next to Kotlin call sites or are being touched
-     for ViewBinding/MVVM.
-    - There is no generated GreenDAO code left. Generated ObjectBox sources stay
-      generated; app-owned models and stores can be migrated by feature slice.
+   - Prefer files that already sit next to Kotlin call sites or are low-risk
+     model/event classes with JavaBean-compatible getter/setter shape.
+   - There is no generated GreenDAO code left. Generated ObjectBox sources stay
+     generated; app-owned models and stores can be migrated by feature slice.
+   - First done batch: `BookSyncEvent`, `BaseBean`, `BookIdBean`,
+     `ChapterBean`, `ContentBean`, `HotWordPackage`, `KeyWordPackage`, and the
+     local `Void` marker.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

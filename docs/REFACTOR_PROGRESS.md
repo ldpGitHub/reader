@@ -586,3 +586,20 @@
   `scrollRefreshFlContent`.
 - Validation note: the app was manually logged in during this run, so the
   temporary LoginActivity navigation was not treated as a regression signal.
+
+## 2026-05-16 Kotlin Migration Batch 1
+
+- Migrated the first low-risk data/event batch from Java to Kotlin:
+  `BookSyncEvent`, `BaseBean`, `BookIdBean`, `ChapterBean`, `ContentBean`,
+  `HotWordPackage`, `KeyWordPackage`, and `model.local.Void`.
+- Kept the Java interop contract direct: mutable Kotlin properties still expose
+  JavaBean getters/setters for existing Retrofit/Gson/Presenter call sites, and
+  no field fallback or compatibility mapping was added.
+- Source shape after this batch: 125 Java files and 29 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin :app:compileDebugJavaWithJavac`
+  passed, and `KotlinMigrationContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge reported `MainActivity`, `wait-text 书架` passed, and narrow
+  logcat checks for app fatal output were empty.
