@@ -163,7 +163,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String detailLayout = readFile("src/main/res/layout/activity_book_detail.xml");
         String detailContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookDetailContract.kt");
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
         String simplifiedChineseStrings = readFile("src/main/res/values/strings.xml");
         String traditionalChineseStrings = readFile("src/main/res/values-zh-rTW/strings.xml");
 
@@ -213,7 +213,7 @@ public class DeprecatedZhuishuCleanupContractTest {
     @Test
     public void remoteLayerDoesNotKeepUnreachableLegacyDiscoveryApis() throws Exception {
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
 
         String[] retiredBookApiTokens = {
                 "getBookCommentList",
@@ -489,7 +489,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         };
 
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
         String bookShelfContract = readFile("src/main/java/com/ldp/reader/presenter/contract/BookShelfContract.kt");
         String bookShelfFragment = readFile("src/main/java/com/ldp/reader/ui/fragment/BookShelfFragment.kt");
@@ -541,7 +541,7 @@ public class DeprecatedZhuishuCleanupContractTest {
         String manifest = readFile("src/main/AndroidManifest.xml");
         String app = readFile("src/main/java/com/ldp/reader/App.kt");
         String bookApi = readFile("src/main/java/com/ldp/reader/model/remote/BookApi.kt");
-        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.java");
+        String remoteRepository = readFile("src/main/java/com/ldp/reader/model/remote/RemoteRepository.kt");
         String bookRepository = readFile("src/main/java/com/ldp/reader/model/local/BookRepository.java");
         String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.java");
         String bookShelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");

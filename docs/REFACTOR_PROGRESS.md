@@ -977,3 +977,26 @@
   navigated to `FileSystemActivity`, verified `智能导入` and `加入书架`, and
   narrow logcat checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
 
+## 2026-05-16 Kotlin Migration Batch 19
+
+- Migrated remote infrastructure from Java to Kotlin: `RemoteHelper`,
+  `RemoteRepository`, and `LenientGsonConverterFactory`.
+- Preserved Java-facing singleton entry points and network contracts:
+  `RemoteHelper.getInstance()`, `RemoteRepository.getInstance()`, Retrofit API
+  creation, RxJava `Single` return types, hot-word/key-word mapping, and the
+  lenient Gson request/response converter remain direct translations.
+- Source shape after this batch: 25 Java files and 129 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed after switching the converter to
+  OkHttp's Kotlin `toMediaTypeOrNull()` / `toRequestBody()` APIs.
+  `KotlinMigrationContractTest`, `DeprecatedZhuishuCleanupContractTest`,
+  `BookShelfPresenterFilterTest`, `BookShelfPresenterSyncTest`, and
+  `RemoteBookModelKotlinInteropTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, opened `SearchActivity`,
+  verified `热门搜索`, captured OkHttp records for `/getBookInfoBatch` and
+  `/book/hot-word`, and narrow logcat checks for `FATAL EXCEPTION` and
+  `E AndroidRuntime` were empty.
+

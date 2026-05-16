@@ -187,9 +187,16 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void remoteInfrastructureBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/RemoteHelper");
+        assertKotlinOnly("src/main/java/com/ldp/reader/model/remote/RemoteRepository");
+        assertKotlinOnly("src/main/java/com/ldp/reader/utils/LenientGsonConverterFactory");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 126);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 28);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 129);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 25);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {
