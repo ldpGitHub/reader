@@ -245,7 +245,7 @@ public class BookShelfPresenterFilterTest {
 
     @Test
     public void newChapterUpdateDoesNotUseDeviceVibration() throws IOException {
-        String presenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
+        String presenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.kt");
 
         assertFalse(presenter.contains("android.os.Vibrator"));
         assertFalse(presenter.contains("VIBRATOR_SERVICE"));

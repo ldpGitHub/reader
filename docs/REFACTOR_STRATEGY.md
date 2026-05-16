@@ -134,6 +134,7 @@ future ObjectBox database.
    - Twenty-third done batch: legacy book cache manager.
    - Twenty-fourth done batch: search and login presenters.
    - Twenty-fifth done batch: read and book-detail presenters.
+   - Twenty-sixth done batch: bookshelf presenter.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

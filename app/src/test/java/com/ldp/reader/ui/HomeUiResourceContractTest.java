@@ -441,9 +441,9 @@ public class HomeUiResourceContractTest {
 
         String readPresenter = readFile("src/main/java/com/ldp/reader/presenter/ReadPresenter.kt");
         assertTrue(readPresenter.contains("start = bookChapterBeans.size.toLong()"));
-        String shelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
-        assertTrue(shelfPresenter.contains("setStart(bookChapterBeans.size())"));
-        assertTrue(shelfPresenter.contains("setChaptersCount(bookChapterBeans.size())"));
+        String shelfPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.kt");
+        assertTrue(shelfPresenter.contains("start = bookChapterBeans.size.toLong()"));
+        assertTrue(shelfPresenter.contains("chaptersCount = bookChapterBeans.size"));
         assertTrue(shelfPresenter.contains("isReadableFolderStale"));
         assertTrue(shelfPresenter.contains("getBookRecord"));
         String detailPresenter = readFile("src/main/java/com/ldp/reader/presenter/BookDetailPresenter.kt");
@@ -453,12 +453,12 @@ public class HomeUiResourceContractTest {
 
     @Test
     public void loginTriggeredBookshelfSyncToleratesEmptyOrPartialServerShelf() throws IOException {
-        String presenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.java");
+        String presenter = readFile("src/main/java/com/ldp/reader/presenter/BookShelfPresenter.kt");
 
         assertTrue(presenter.contains("if (bookIdBeans != null)"));
-        assertTrue(presenter.contains("if (bookIdBean != null && bookIdBean.getBookId() != 0)"));
+        assertTrue(presenter.contains("if (bookIdBean != null && bookIdBean.bookId != 0)"));
         assertTrue(presenter.contains("if (bookIdList == null || bookIdList.isEmpty())"));
-        assertTrue(presenter.contains("updateShelf(new ArrayList<>())"));
+        assertTrue(presenter.contains("updateShelf(ArrayList())"));
         assertTrue(presenter.contains("onlineBookIdsFrom(collBooks)"));
     }
 

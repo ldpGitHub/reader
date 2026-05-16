@@ -1132,3 +1132,32 @@
   rows, then opened `BookDetailActivity` through the read-page `简介` action
   and verified `书籍详情`, `黄昏分界`, and `作品简介`. App-pid logcat checks for
   `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 26
+
+- Migrated `BookShelfPresenter` from Java to Kotlin.
+- Preserved the Java-visible static helper surface used by tests and UI:
+  `FilterKey`, filter labels, filter matching, empty-state text,
+  `onlineBookIdsFrom`, `onlineBookLongIdsFrom`,
+  `mergeServerAndLocalOnlineIds`, and `normalizeServerBookIds`. The Presenter
+  still uses RxJava repository flows for refresh, login-triggered shelf sync,
+  manual shelf sync, update checks, batch book-detail fetches, and chapter
+  folder refreshes.
+- Source shape after this batch: 14 Java files and 140 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed after marking server shelf list
+  elements nullable to preserve the existing partial-null contract.
+  `KotlinMigrationContractTest`, `DeprecatedZhuishuCleanupContractTest`,
+  `HomeUiResourceContractTest`, `BookShelfPresenterFilterTest`, and
+  `BookShelfPresenterSyncTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`
+  with the SMS-login state intact, ai-app-bridge verified `MainActivity`,
+  `书架`, and `黄昏分界`, opened the bookshelf filter, selected `本地书`,
+  verified the local shelf item, reset to `全部书籍`, triggered the `同步书架`
+  menu action, and bridge network capture showed 200 responses for
+  `getBookShelfByMobile`, `getBookInfoBatch`, and `synBookShelfByMobile`.
+  The final installed APK was launched again and opened `黄昏分界` into
+  `ReadActivity`; app-pid logcat checks for `FATAL EXCEPTION` and
+  `AndroidRuntime` were empty.
