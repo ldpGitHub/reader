@@ -1212,3 +1212,28 @@
   for `getBookInfoBatch`, `getBookFolder`, and multiple `getBookContent`
   requests; app-pid logcat checks for `FATAL EXCEPTION` and `AndroidRuntime`
   were empty.
+
+## 2026-05-16 Kotlin Migration Batch 29
+
+- Migrated `PageView` from Java to Kotlin.
+- Preserved the existing reading-page host responsibilities: page-mode
+  selection, animation creation, touch dispatch, menu-center detection,
+  `PageLoader` creation, bitmap handoff, auto page turns, and direct page
+  cancel callbacks remain the same. Existing direct nullable call sites are
+  explicit and no new fallback path was added.
+- Source shape after this batch: 4 Java files and 150 Kotlin files under
+  `app/src/main`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed after making
+  the old `ReadActivity` platform-type call explicit with `mCollBook!!`.
+  `KotlinMigrationContractTest`, `HomeUiResourceContractTest`,
+  `PageLoaderLayoutTest`, and `DeprecatedZhuishuCleanupContractTest` passed.
+  The full `:app:testDebugUnitTest :app:assembleDebug :app:installDebug`
+  sequence also passed.
+- ai-app-bridge runtime validation used the existing logged-in app state:
+  launched `SplashActivity`, verified `MainActivity`/`书架`, opened `黄昏分界`
+  into `ReadActivity`, verified the full-screen `PageView`, performed a
+  horizontal page swipe, opened the reading menu and chapter drawer, and
+  observed real chapter rows in `read_iv_category`. Bridge network capture
+  showed 200 responses for `getBookInfoBatch` and `getBookFolder`; app-pid
+  logcat checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.

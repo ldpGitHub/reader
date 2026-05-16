@@ -250,9 +250,14 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void pageViewBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/page/PageView");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 149);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 5);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 150);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 4);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

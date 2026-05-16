@@ -193,7 +193,7 @@ class ReadActivity : ReadContract.View,
 
         //获取页面加载器
         Log.d(TAG, "+initWidget")
-        mPageLoader = binding!!.readPvPage.getPageLoader(mCollBook)
+        mPageLoader = binding!!.readPvPage.getPageLoader(mCollBook!!)
         //禁止滑动展示DrawerLayout
         binding!!.readDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //侧边打开后，返回键能够起作用
