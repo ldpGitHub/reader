@@ -139,9 +139,16 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void localFileFragmentBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/fragment/BaseFileFragment");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/fragment/FileCategoryFragment");
+        assertKotlinOnly("src/main/java/com/ldp/reader/ui/fragment/LocalBookFragment");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 98);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 56);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 101);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 53);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

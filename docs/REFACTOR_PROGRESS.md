@@ -754,6 +754,27 @@
   `黄昏分界` into `ReadActivity`, opened the read-setting dialog, verified
   `默认`, and narrow logcat checks for app fatal output were empty.
 
+## 2026-05-16 Kotlin Migration Batch 14
+
+- Migrated the local file import fragments from Java to Kotlin:
+  `BaseFileFragment`, `FileCategoryFragment`, and `LocalBookFragment`.
+- Preserved the existing file-import contract directly: the tab listener,
+  checked-file methods, path-based loaded-book checks, directory sorting, and
+  null-exposure behavior remain aligned with the old Java implementation. No
+  compatibility fallback or alternate file lookup was added.
+- Source shape after this batch: 53 Java files and 101 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `FileSystemUiResourceContractTest`, and `HomeUiResourceContractTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, navigated through
+  `我的 -> 设置 -> 本机书籍导入` into `FileSystemActivity`, verified
+  `智能导入` and `手机目录`, switched to the phone-directory tab, observed the
+  storage path/list and bottom import actions, and narrow logcat checks for
+  app fatal output were empty.
+
 ## 2026-05-16 Kotlin Migration Batch 8
 
 - Migrated a thin utility and adapter batch from Java to Kotlin: `Constant`,
