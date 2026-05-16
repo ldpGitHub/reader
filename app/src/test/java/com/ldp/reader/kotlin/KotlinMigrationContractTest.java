@@ -260,9 +260,14 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void netPageLoaderBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/page/NetPageLoader");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 150);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 3);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 151);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 2);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

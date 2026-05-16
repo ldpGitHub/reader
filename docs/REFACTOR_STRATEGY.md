@@ -139,6 +139,7 @@ future ObjectBox database.
    - Twenty-eighth done batch: reading page animation stack.
    - Twenty-ninth done batch: reading `PageView` touch/animation host.
    - Thirtieth done batch: remove unused Java-only `EncryptUtils`.
+   - Thirty-first done batch: network reading `NetPageLoader`.
    - Keep model/API shape unchanged unless a test pins the behavior being
      changed.
 

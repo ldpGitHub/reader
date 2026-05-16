@@ -402,10 +402,10 @@ public class HomeUiResourceContractTest {
 
     @Test
     public void networkReaderPersistsProgressForFinishedFilter() throws IOException {
-        String netPageLoader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.java");
-        assertTrue(netPageLoader.contains("PageLoader.calculateProgressTenths"));
+        String netPageLoader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.kt");
+        assertTrue(netPageLoader.contains("calculateProgressTenths"));
         assertTrue(netPageLoader.contains("BookshelfLocalProgressStore.saveProgressTenths"));
-        assertTrue(netPageLoader.contains("mChapterList.size()"));
+        assertTrue(netPageLoader.contains("mChapterList.size"));
         assertTrue(netPageLoader.contains("getCurrentPagePosition()"));
         assertTrue(netPageLoader.contains("getCurrentPageCount()"));
     }
@@ -416,9 +416,9 @@ public class HomeUiResourceContractTest {
         assertTrue(pageLoader.contains("protected void onReadableEndReached()"));
         assertTrue(pageLoader.contains("onReadableEndReached();"));
 
-        String netLoader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.java");
-        assertTrue(netLoader.contains("protected void onReadableEndReached()"));
-        assertTrue(netLoader.contains("saveRecord();"));
+        String netLoader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.kt");
+        assertTrue(netLoader.contains("override fun onReadableEndReached()"));
+        assertTrue(netLoader.contains("saveRecord()"));
 
         String localLoader = readFile("src/main/java/com/ldp/reader/widget/page/LocalPageLoader.java");
         assertTrue(localLoader.contains("protected void onReadableEndReached()"));
@@ -427,10 +427,10 @@ public class HomeUiResourceContractTest {
 
     @Test
     public void networkReaderRequestsImmediateNextReadableChapter() throws IOException {
-        String loader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.java");
-        assertTrue(loader.contains("if (start > end || start >= mChapterList.size())"));
-        assertFalse(loader.contains("start + 1 >= mChapterList.size()"));
-        assertFalse(loader.contains("mChapterList.get(start + 1)"));
+        String loader = readFile("src/main/java/com/ldp/reader/widget/page/NetPageLoader.kt");
+        assertTrue(loader.contains("requestStart > requestEnd || requestStart >= mChapterList.size"));
+        assertFalse(loader.contains("start + 1 >= mChapterList.size"));
+        assertFalse(loader.contains("mChapterList[start + 1]"));
     }
 
     @Test

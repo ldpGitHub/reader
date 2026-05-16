@@ -1257,3 +1257,28 @@
   into `ReadActivity`, verified the full-screen `PageView`, observed 200
   responses for `getBookInfoBatch` and `getBookFolder`, and app-pid logcat
   checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
+
+## 2026-05-16 Kotlin Migration Batch 31
+
+- Migrated network reading `NetPageLoader` from Java to Kotlin while keeping it
+  on the existing Java `PageLoader` base for this slice.
+- Preserved network chapter behavior directly: chapter conversion, cached file
+  lookup, previous/current/next preload windows, immediate next-readable request
+  guard, `saveRecord()` progress persistence, and readable-end persistence all
+  remain in place. No fallback or compatibility mapping was added.
+- Updated source-contract tests from `.java` to `.kt` for the network loader and
+  added a Kotlin-only assertion for `NetPageLoader`.
+- Source shape after this batch: 2 Java files and 151 Kotlin files under
+  `app/src/main`; the remaining Java files are `PageLoader` and
+  `LocalPageLoader`.
+- Validation:
+  `:app:compileDebugKotlin :app:compileDebugJavaWithJavac` passed.
+  `KotlinMigrationContractTest`, `HomeUiResourceContractTest`,
+  `PageLoaderLayoutTest`, and `DeprecatedZhuishuCleanupContractTest` passed.
+  The full `:app:testDebugUnitTest :app:assembleDebug :app:installDebug`
+  sequence also passed.
+- ai-app-bridge runtime validation used the existing logged-in app state:
+  launched `SplashActivity`, verified `MainActivity`/`书架`, opened `黄昏分界`
+  into `ReadActivity`, verified the full-screen `PageView`, observed 200
+  responses for `getBookInfoBatch` and `getBookFolder`, and app-pid logcat
+  checks for `FATAL EXCEPTION` and `AndroidRuntime` were empty.
