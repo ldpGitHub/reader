@@ -625,3 +625,23 @@
   :app:installDebug` passed. Runtime validation launched `SplashActivity`,
   ai-app-bridge reported `MainActivity`, `wait-text 书架` passed, and narrow
   logcat checks for app fatal output were empty.
+
+## 2026-05-16 Kotlin Migration Batch 3
+
+- Migrated the ObjectBox-facing storage model batch from Java to Kotlin:
+  `BookRecordBean` and `BookChapterBean`.
+- Preserved the constructor and JavaBean method surface used by repository,
+  ObjectBox entity mappers, page loaders, and tests. `BookChapterBean` keeps the
+  existing `isUnreadble()`, `getUnreadble()`, `isValidInZhuishu()`, and
+  `getValidInZhuishu()` methods instead of adding alternate boolean mappings.
+- Source shape after this batch: 118 Java files and 36 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed. `KotlinMigrationContractTest`,
+  `ObjectBoxBookStoreTest`, `ObjectBoxBookRecordEntityTest`, and
+  `ObjectBoxBookRecordStoreTest` passed.
+- Full validation: after updating the storage contract test to read the current
+  Kotlin model sources, `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge reported `MainActivity`, `wait-text 书架` passed, and narrow
+  logcat checks for app fatal output were empty.
