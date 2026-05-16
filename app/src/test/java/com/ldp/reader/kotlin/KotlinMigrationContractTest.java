@@ -177,9 +177,19 @@ public class KotlinMigrationContractTest {
     }
 
     @Test
+    public void refreshWidgetBatchIsKotlin() {
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/RefreshLayout");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/ScrollRefreshLayout");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/refresh/RefreshLayout");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/refresh/RefreshRecyclerView");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/refresh/ScrollRefreshLayout");
+        assertKotlinOnly("src/main/java/com/ldp/reader/widget/refresh/ScrollRefreshRecyclerView");
+    }
+
+    @Test
     public void kotlinMigrationCountsMovedForward() {
-        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 120);
-        assertTrue(countFiles(new File("src/main/java"), ".java") <= 34);
+        assertTrue(countFiles(new File("src/main/java"), ".kt") >= 126);
+        assertTrue(countFiles(new File("src/main/java"), ".java") <= 28);
     }
 
     private static void assertKotlinOnly(String pathWithoutExtension) {

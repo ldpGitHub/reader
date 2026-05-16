@@ -952,3 +952,28 @@
   `手机目录`, switched to the phone-directory tab, verified `加入书架`, and
   narrow logcat checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
 
+## 2026-05-16 Kotlin Migration Batch 18
+
+- Migrated refresh/status widgets from Java to Kotlin:
+  `widget.RefreshLayout`, `widget.ScrollRefreshLayout`,
+  `widget.refresh.RefreshLayout`, `widget.refresh.RefreshRecyclerView`,
+  `widget.refresh.ScrollRefreshLayout`, and
+  `widget.refresh.ScrollRefreshRecyclerView`.
+- Preserved the existing XML/custom-view contracts: status transitions,
+  save/restore status, child-count enforcement, adapter observer behavior,
+  misspelled `getReyclerView()`, and the existing tip animation cancellation
+  behavior remain direct translations.
+- Source shape after this batch: 28 Java files and 126 Kotlin files under
+  `app/src/main`.
+- Focused validation: `:app:compileDebugKotlin
+  :app:compileDebugJavaWithJavac` passed after restoring the Kotlin
+  `emptyView` property call surface. `KotlinMigrationContractTest`,
+  `HomeUiResourceContractTest`, `FileSystemUiResourceContractTest`,
+  `ViewBindingMigrationContractTest`, and `PageLoaderLayoutTest` passed.
+- Full validation: `:app:testDebugUnitTest :app:assembleDebug
+  :app:installDebug` passed. Runtime validation launched `SplashActivity`,
+  ai-app-bridge verified `MainActivity` and `书架`, exercised the bookshelf
+  `ScrollRefreshRecyclerView`, opened `SearchActivity` and verified `热门搜索`,
+  navigated to `FileSystemActivity`, verified `智能导入` and `加入书架`, and
+  narrow logcat checks for `FATAL EXCEPTION` and `E AndroidRuntime` were empty.
+
