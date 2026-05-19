@@ -14,6 +14,7 @@ class DeterministicContentBelongingChecker(
         val markers = ArrayList<String>()
         markers.addAll(referenceDivergenceMarkers(content, input.referenceContents))
         markers.addAll(fragmentedTailMarkers(content))
+        markers.addAll(coherentForeignTailMarkers(content))
         val currentChapterKey = normalizer.normalize(input.chapterTitle).key
         val lineOffsets = lineOffsets(content)
         lineOffsets.forEach { lineOffset ->
@@ -42,6 +43,7 @@ class DeterministicContentBelongingChecker(
         if ("embedded-book-metadata" in distinctMarkers) score -= 30
         if ("cross-source-tail-divergence" in distinctMarkers) score -= 80
         if ("fragmented-tail-after-valid-prefix" in distinctMarkers) score -= 75
+        if ("coherent-foreign-tail-after-valid-prefix" in distinctMarkers) score -= 75
 
         return ContentBelongingReport(
             belongsToChapter = score >= MIN_BELONGING_SCORE,
@@ -83,6 +85,42 @@ class DeterministicContentBelongingChecker(
             bestTailSimilarity <= MAX_REFERENCE_TAIL_SIMILARITY
         ) {
             listOf("cross-source-tail-divergence", "foreign-content-after-valid-prefix")
+        } else {
+            emptyList()
+        }
+    }
+
+    private fun coherentForeignTailMarkers(content: String): List<String> {
+        val normalized = normalizeForComparison(content)
+        if (normalized.length < MIN_COHERENT_FOREIGN_CONTENT_CHARS) return emptyList()
+
+        val prefixText = content.take(COHERENT_FOREIGN_PREFIX_CHARS)
+        val tailText = content.drop(COHERENT_FOREIGN_TAIL_START_CHARS)
+        val normalizedTail = normalizeForComparison(tailText)
+        if (normalizedTail.length < MIN_COHERENT_FOREIGN_TAIL_CHARS) return emptyList()
+
+        val domainShift = tailDomainShiftMarkers(tailText)
+        if (domainShift.isEmpty()) return emptyList()
+
+        val prefixNames = personLikeNames(prefixText).toSet()
+        val tailNames = personLikeNames(tailText).toSet()
+        if (tailNames.size < MIN_COHERENT_FOREIGN_TAIL_NAMES) return emptyList()
+
+        val continuingNames = prefixNames.count { name -> normalizedTail.contains(name) }
+        val newTailNames = tailNames.count { name -> name !in prefixNames }
+        if (
+            continuingNames > MAX_COHERENT_FOREIGN_CONTINUING_NAMES ||
+            newTailNames < MIN_COHERENT_FOREIGN_NEW_NAMES
+        ) {
+            return emptyList()
+        }
+
+        val prefixTailOverlap = overlapRatio(
+            ngrams(normalizedTail, TOKEN_NGRAM_SIZE),
+            ngrams(normalizeForComparison(prefixText), TOKEN_NGRAM_SIZE)
+        )
+        return if (prefixTailOverlap <= MAX_COHERENT_FOREIGN_PREFIX_TAIL_OVERLAP) {
+            listOf("coherent-foreign-tail-after-valid-prefix", "foreign-content-after-valid-prefix") + domainShift
         } else {
             emptyList()
         }
@@ -251,6 +289,14 @@ class DeterministicContentBelongingChecker(
         private const val MIN_FRAGMENT_UNIQUE_NAMES = 5
         private const val MIN_FRAGMENT_NAME_PARAGRAPHS = 3
         private const val MAX_FRAGMENT_PREFIX_TAIL_OVERLAP = 0.22
+        private const val MIN_COHERENT_FOREIGN_CONTENT_CHARS = 420
+        private const val COHERENT_FOREIGN_PREFIX_CHARS = 180
+        private const val COHERENT_FOREIGN_TAIL_START_CHARS = 240
+        private const val MIN_COHERENT_FOREIGN_TAIL_CHARS = 180
+        private const val MIN_COHERENT_FOREIGN_TAIL_NAMES = 2
+        private const val MIN_COHERENT_FOREIGN_NEW_NAMES = 2
+        private const val MAX_COHERENT_FOREIGN_CONTINUING_NAMES = 1
+        private const val MAX_COHERENT_FOREIGN_PREFIX_TAIL_OVERLAP = 0.18
 
         private val CHAPTER_HEADING_PATTERNS = listOf(
             Regex("""^\s*第\s*[0-9０-９零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+\s*[章节回话卷].{0,50}$"""),
@@ -263,7 +309,8 @@ class DeterministicContentBelongingChecker(
         )
 
         private val FOREIGN_TAIL_PATTERNS = listOf(
-            Regex("""(出租屋|霓虹灯|飞碟|学生会|登山服|火车站|站牌|码头|面试|任务者|安德莉亚|半妖|蚊虫嗡嗡|道师的追杀)""")
+            Regex("""(出租屋|霓虹灯|飞碟|学生会|登山服|火车站|站牌|码头|面试|任务者|安德莉亚|半妖|蚊虫嗡嗡|道师的追杀)"""),
+            Regex("""(暴虐的王爷|王府里|选择题|选项|冰窖|黎筱雨|薇娅|万丈巨剑插在沙漠)""")
         )
 
         private val PERSON_NAME_START_CHARS = setOf(

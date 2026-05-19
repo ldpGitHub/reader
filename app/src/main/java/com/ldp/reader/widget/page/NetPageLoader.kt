@@ -44,8 +44,13 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
             mPageChangeListener!!.onCategoryFinish(mChapterList)
         }
 
+        val clampedChapter = clampCurrentChapterToAvailableCatalog()
+        if (clampedChapter) {
+            firstTime = true
+        }
+
         // 如果章节未打开
-        if (!isChapterOpen()) {
+        if (!isChapterOpen() || clampedChapter) {
             // 打开章节
             Log.e(TAG, "+refreshChapterList")
             openChapter()

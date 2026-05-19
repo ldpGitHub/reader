@@ -88,6 +88,8 @@ public class SourceEngineIsolationContractTest {
         assertTrue(sourceEngine.contains("KNOWN_TITLE_ALIAS_SEARCHES"));
         assertTrue(sourceEngine.contains("\"灵源仙路\" to listOf("));
         assertTrue(sourceEngine.contains("\"灵源仙途：我养的灵兽太懂感恩了\""));
+        assertTrue(sourceEngine.contains("\"斩神\" to listOf("));
+        assertTrue(sourceEngine.contains("\"我在精神病院学斩神\""));
         assertTrue(sourceEngine.contains("getCanonicalChapterList"));
         assertTrue(sourceEngine.contains("getCleanContent"));
         assertTrue(sourceEngine.contains("coherenceScore"));

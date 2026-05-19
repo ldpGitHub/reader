@@ -175,6 +175,7 @@ class BookDetailActivity : BaseActivity<ActivityBookDetailBinding>() {
             BookCoverLoader.load(
                 this@BookDetailActivity,
                 bean.cover,
+                bean.title,
                 bookDetailIvCover,
                 R.drawable.ic_book_cover_placeholder
             )

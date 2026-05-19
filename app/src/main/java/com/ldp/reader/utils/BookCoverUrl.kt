@@ -65,6 +65,7 @@ object BookCoverUrl {
         "lazy.gif",
         "loading.gif",
         "loader.gif",
+        "ttkg.jpg",
         "/lazy.",
         "/loading.",
         "/loader."

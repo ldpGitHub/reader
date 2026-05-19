@@ -32,7 +32,7 @@ class ChapterListFusion(
             .map { group ->
                 CanonicalChapter(
                     key = group.key,
-                    displayTitle = group.displayTitle,
+                    displayTitle = bestDisplayTitle(group),
                     ordinal = group.ordinal,
                     sourceChapters = group.sourceChapters.sortedBy { it.index }
                 )
@@ -134,11 +134,32 @@ class ChapterListFusion(
     }
 
     private fun titleSuffix(title: String): String {
+        val chapterMatch = CHINESE_ORDINAL_PATTERN.findAll(title)
+            .filter { match -> match.groupValues[2] != "卷" }
+            .lastOrNull()
+        if (chapterMatch != null) {
+            return titleKey(title.substring(chapterMatch.range.last + 1))
+        }
         return titleKey(
             ORDINAL_PREFIX_PATTERNS.fold(title) { value, pattern ->
                 pattern.replace(value, "")
             }
         )
+    }
+
+    private fun bestDisplayTitle(group: ChapterGroup): String {
+        return group.sourceChapters
+            .map { chapter -> normalizer.normalize(chapter.name).displayTitle }
+            .minWithOrNull(compareBy<String> { catalogTitlePenalty(it) }.thenBy { it.length })
+            ?: group.displayTitle
+    }
+
+    private fun catalogTitlePenalty(title: String): Int {
+        var penalty = 0
+        if (MALFORMED_TITLE_PATTERNS.any { pattern -> pattern.containsMatchIn(title) }) penalty += 100
+        if (title.contains("卷") && CHINESE_ORDINAL_PATTERN.findAll(title).count() > 1) penalty += 12
+        if (!CHINESE_ORDINAL_PATTERN.containsMatchIn(title) && !NUMERIC_PREFIX_PATTERN.containsMatchIn(title)) penalty += 30
+        return penalty + (title.length / 20)
     }
 
     private fun isAnnouncementEntry(title: String): Boolean {
@@ -286,6 +307,15 @@ class ChapterListFusion(
             Regex("""^\s*第\s*([0-9０-９]+|[零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+)\s*[章节回话卷]\s*"""),
             Regex("""^\s*([0-9０-９]+)\s*[.、]\s*""")
         )
+        private val CHINESE_ORDINAL_PATTERN =
+            Regex("""第\s*([0-9０-９]+|[零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+)\s*([章节回话卷])""")
+        private val NUMERIC_PREFIX_PATTERN = Regex("""^\s*[0-9０-９]+\s*[.、]\s*""")
+        private val MALFORMED_TITLE_PATTERNS = listOf(
+            Regex("""第\s*第"""),
+            Regex("""章\s*第"""),
+            Regex("""降真仙"""),
+            Regex("""一一章""")
+        )
         private val ANNOUNCEMENT_TITLE_MARKERS = listOf(
             "新书",
             "新书元尊",
@@ -324,6 +354,10 @@ class ChapterListFusion(
             "休息",
             "防盗",
             "重复",
+            "感谢",
+            "打赏",
+            "中奖",
+            "中奖名单",
             "发布",
             "本站",
             "推荐"

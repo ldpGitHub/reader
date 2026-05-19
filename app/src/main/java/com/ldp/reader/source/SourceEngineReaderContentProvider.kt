@@ -682,7 +682,7 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
             this.bookId = resolved.routeId.hashCode()
             title = detail.name
             author = cleanAuthor(detail.author)
-            cover = selectVerifiedCover(detail.coverUrl, resolved.book.coverUrl)
+            cover = selectCoverWithFallback(sourceBook, resolved)
             desc = cleanIntro(detail.intro)
             lastChapter = canonicalChapters.lastOrNull()?.displayTitle ?: detail.lastChapter
             chaptersCount = canonicalChapters.size
@@ -696,12 +696,66 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
         }
     }
 
-    private fun selectVerifiedCover(primary: String?, fallback: String?): String {
-        val primaryUrl = BookCoverUrl.clean(primary)
-        if (inspectCoverUrl(primaryUrl).usable) return primaryUrl
-        val fallbackUrl = BookCoverUrl.clean(fallback)
-        if (inspectCoverUrl(fallbackUrl).usable) return fallbackUrl
-        return BookCoverUrl.bestLikelyImage(primaryUrl, fallbackUrl)
+    private suspend fun selectCoverWithFallback(
+        requestedBook: SourceBook,
+        resolved: ResolvedSourceBook
+    ): String {
+        val direct = selectVerifiedCover(resolved.detail.coverUrl, resolved.book.coverUrl)
+        if (inspectCoverUrl(direct).usable) return direct
+        val fallback = findCoverFallback(requestedBook)
+        return selectVerifiedCover(direct, fallback)
+    }
+
+    private fun selectVerifiedCover(vararg candidates: String?): String {
+        val cleaned = candidates
+            .map { candidate -> BookCoverUrl.clean(candidate) }
+            .filter { candidate -> candidate.isNotBlank() }
+            .distinct()
+        cleaned.firstOrNull { candidate -> inspectCoverUrl(candidate).usable }?.let { return it }
+        return cleaned.fold("") { best, candidate -> BookCoverUrl.bestLikelyImage(best, candidate) }
+    }
+
+    private suspend fun findCoverFallback(sourceBook: SourceBook): String? {
+        val candidates = fallbackCandidatesFor(sourceBook).take(MAX_COVER_FALLBACK_CANDIDATES)
+        if (candidates.isEmpty()) return null
+        val probeScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        val semaphore = Semaphore(MAX_COVER_FALLBACK_CONCURRENT_PROBES)
+        return try {
+            val probes = candidates.mapIndexed { order, candidate ->
+                probeScope.async {
+                    semaphore.withPermit {
+                        val detail = runDetachedWithTimeout(COVER_FALLBACK_DETAIL_TIMEOUT_MS) {
+                            when (val value = detailProbeEngine.getBookDetail(candidate.book)) {
+                                is EngineResult.Success -> value.value
+                                is EngineResult.Failure -> null
+                            }
+                        } ?: return@withPermit null
+                        if (detailAgreementScore(candidate.book, detail) < 0) return@withPermit null
+                        val cover = selectVerifiedCover(detail.coverUrl, candidate.book.coverUrl)
+                        if (!inspectCoverUrl(cover).usable) return@withPermit null
+                        CoverFallback(order, candidate, cover)
+                    }
+                }
+            }
+            val resolved = withTimeoutOrNull(COVER_FALLBACK_TOTAL_TIMEOUT_MS) {
+                probes.awaitAll().filterNotNull()
+            }.orEmpty()
+            val best = resolved.sortedWith(
+                compareByDescending<CoverFallback> { knownAuthorMatchScore(it.ranked.book) }
+                    .thenBy { sourcePriorityIndex(it.ranked.book.source) }
+                    .thenBy { it.order }
+            ).firstOrNull()
+            if (best != null) {
+                Log.i(
+                    TAG,
+                    "operation=coverFallbackResolved provider=$providerName title=${sourceBook.name} " +
+                        "source=${sourceLabel(best.ranked.book)} cover=${best.coverUrl}"
+                )
+            }
+            best?.coverUrl
+        } finally {
+            probeScope.coroutineContext.cancelChildren()
+        }
     }
 
     override suspend fun getBookFolder(bookId: String?, collBookBean: CollBookBean): List<BookChapterBean> =
@@ -964,6 +1018,12 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
         val content: CleanContent
     )
 
+    private data class CoverFallback(
+        val order: Int,
+        val ranked: RankedSearchBook,
+        val coverUrl: String
+    )
+
     companion object {
         private const val TAG = "BookContentProvider"
         private const val MAX_SEARCH_SOURCES = 48
@@ -989,6 +1049,10 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
         private const val CONTENT_FALLBACK_DETAIL_TIMEOUT_MS = 6_000L
         private const val CONTENT_FALLBACK_CONTENT_TIMEOUT_MS = 6_000L
         private const val CONTENT_FALLBACK_TOTAL_TIMEOUT_MS = 24_000L
+        private const val MAX_COVER_FALLBACK_CANDIDATES = 24
+        private const val MAX_COVER_FALLBACK_CONCURRENT_PROBES = 8
+        private const val COVER_FALLBACK_DETAIL_TIMEOUT_MS = 4_000L
+        private const val COVER_FALLBACK_TOTAL_TIMEOUT_MS = 16_000L
         private const val MAX_CATALOG_TAIL_BACKTRACK_CHAPTERS = 2048
         private const val CATALOG_TAIL_CONTENT_TIMEOUT_MS = 2_500L
         private const val CATALOG_TAIL_TOTAL_TIMEOUT_MS = 90_000L
@@ -1093,6 +1157,15 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
             "大主宰",
             "一念永恒",
             "仙逆",
+            "十日终焉",
+            "我不是戏神",
+            "我在精神病院学斩神",
+            "灵境行者",
+            "宿命之环",
+            "万相之王",
+            "夜无疆",
+            "光阴之外",
+            "谁让他修仙的",
             "天蚕土豆",
             "辰东",
             "猫腻",
@@ -1128,9 +1201,30 @@ class SourceEngineReaderContentProvider : ReaderContentProvider {
             "元尊" to "天蚕土豆",
             "大主宰" to "天蚕土豆",
             "一念永恒" to "耳根",
-            "仙逆" to "耳根"
+            "仙逆" to "耳根",
+            "十日终焉" to "杀虫队队员",
+            "我不是戏神" to "三九音域",
+            "我在精神病院学斩神" to "三九音域",
+            "灵境行者" to "卖报小郎君",
+            "宿命之环" to "爱潜水的乌贼",
+            "万相之王" to "天蚕土豆",
+            "夜无疆" to "辰东",
+            "光阴之外" to "耳根",
+            "谁让他修仙的" to "最白的乌鸦",
+            "仙工开物" to "蛊真人",
+            "高武纪元" to "烽仙",
+            "大道之上" to "宅猪",
+            "赤心巡天" to "情何以甚",
+            "玄鉴仙族" to "季越人",
+            "叩问仙道" to "雨打青石",
+            "我在修仙界万古长青" to "快餐店",
+            "长生从炼丹宗师开始" to "雨去欲续",
+            "苟在妖武乱世修仙" to "文抄公"
         )
         private val KNOWN_TITLE_ALIAS_SEARCHES = mapOf(
+            "斩神" to listOf(
+                "我在精神病院学斩神"
+            ),
             "灵源仙路" to listOf(
                 "灵源仙途",
                 "灵源仙途：我养的灵兽太懂感恩了"

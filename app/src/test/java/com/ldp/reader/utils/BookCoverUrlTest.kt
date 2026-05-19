@@ -12,6 +12,11 @@ class BookCoverUrlTest {
                 "https://www.xbiquge.la/files/article/image/7/7877/7877s.jpg"
             )
         )
+        assertFalse(
+            BookCoverUrl.isLikelyImage(
+                "https://wap2.xinbiquge.org/images/ttkg.jpg"
+            )
+        )
     }
 
     @Test

@@ -190,6 +190,25 @@ class BookSearchRankerTest {
     }
 
     @Test
+    fun aliasSearchOutranksShortExactButLessExpectedTitle() {
+        val source = fixtureSource("A")
+        val ranked = BookSearchRanker().rank(
+            keyword = "斩神",
+            candidates = listOf(
+                SearchCandidate(fixtureBook(source, "斩神", "天刈留香"), sourceIndex = 0, searchQuery = "斩神"),
+                SearchCandidate(
+                    fixtureBook(source, "我在精神病院学斩神", "三九音域"),
+                    sourceIndex = 20,
+                    searchQuery = "我在精神病院学斩神"
+                )
+            ),
+            limit = 10
+        )
+
+        assertEquals("我在精神病院学斩神", ranked.first().book.name)
+    }
+
+    @Test
     fun completedAuthorTitleSearchOutranksTitleContainingAuthorName() {
         val source = fixtureSource("A")
         val ranked = BookSearchRanker().rank(

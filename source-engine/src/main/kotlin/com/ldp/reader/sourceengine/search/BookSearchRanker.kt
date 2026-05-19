@@ -278,6 +278,9 @@ class BookSearchRanker {
         if (query.isBlank() || searchQuery.isBlank() || searchQuery == query) return 0
         if (title != searchQuery) return 0
         if (searchQuery.startsWith(query)) return COMPLETION_TITLE_BONUS
+        if (query.length >= MIN_MEANINGFUL_CHARS && searchQuery.contains(query)) {
+            return CONTAINS_COMPLETION_TITLE_BONUS
+        }
         return if (isAuthorFieldMatch(query, author)) AUTHOR_COMPLETION_TITLE_BONUS else 0
     }
 
@@ -337,6 +340,7 @@ class BookSearchRanker {
         private const val MAX_CONSENSUS_BONUS = 6_400
         private const val AUTHOR_ONLY_TITLE_QUERY_PENALTY = 1_200
         private const val COMPLETION_TITLE_BONUS = 7_000
+        private const val CONTAINS_COMPLETION_TITLE_BONUS = 6_000
         private const val AUTHOR_COMPLETION_TITLE_BONUS = 7_000
         private val DERIVATIVE_PREFIX_SEPARATORS = setOf(':', '：', '-', '_', '·')
         private val HARD_REJECT_TITLE_MARKERS = listOf(

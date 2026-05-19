@@ -130,6 +130,39 @@ class ContentCleanerTest {
     }
 
     @Test
+    fun detectsCoherentForeignStoryTailAfterValidPrefix() {
+        val raw = buildString {
+            appendLine("眼看帝天子的身躯腐朽成沙，秦桑顿时惊悚，难道帝天子早已陨落！")
+            appendLine("那头自在天魔又在何处，已经和帝天子同归于尽，还是仍然潜伏在混沌星辰深处。")
+            appendLine("倘若那头自在天魔还活着，秦桑的下场可想而知。")
+            appendLine("随着帝天子身化飞沙，他身下的宝盖，以及面前那柄本应由秦桑拔起的灵剑，竟也和他的肉身一起腐朽了。")
+            appendLine("剑身表面剑光消散，只剩一点灵机在混沌中明灭。")
+            appendLine("在王府里也许是最好的，虽然要面对那个暴虐的王爷，可至少短时间内安全可以得到保证。")
+            appendLine("“黎筱雨，你这是选择题？我不可能选择第一个，你这不就相当于只给了我一个选项吗？”")
+            appendLine("我苦逼的抱怨道。")
+            appendLine("山就如同一把万丈巨剑插在沙漠，内部不仅仅是空心的，而且还充斥着大量的金色气雾。")
+            appendLine("这个男人的声音仿佛是从地狱里传来的一般，让薇娅的整个身体顿时就如同陷入了冰窖窟里一般。")
+            appendLine("倒是秦子皓瞥了二人一眼，没有太多的动作，手中的光球还在聚集。")
+            appendLine("黎筱雨低头看着那张泛黄的契约，指尖停在王府印章旁边，迟迟没有再往下按。")
+            appendLine("薇娅想要开口，却被身旁侍卫的目光逼了回去，只能跟着人群退到长廊尽头。")
+            appendLine("那位王爷站在阶前，像是在审视一件无关紧要的物品，语气里没有半分修士斗法的紧迫。")
+            appendLine("金色气雾从沙漠深处涌来，卷过巨剑的剑柄，又把王府里的灯火映得忽明忽暗。")
+        }
+
+        val result = ContentCleaner().clean(
+            rawContent = raw,
+            chapterTitle = "第二千六百九十章 宇宙洪荒，混沌星辰",
+            bookName = "叩问仙道",
+            author = "雨打青石"
+        )
+
+        assertTrue(result.report.toString(), result.report.coherenceScore < 70)
+        assertTrue(result.report.toString(), result.report.coherenceMarkers.contains("coherent-foreign-tail-after-valid-prefix"))
+        assertTrue(result.report.toString(), result.report.coherenceMarkers.contains("foreign-content-after-valid-prefix"))
+        assertTrue(result.report.toString(), result.report.warnings.contains("content-may-belong-to-other-book"))
+    }
+
+    @Test
     fun keepsCoherentXianxiaTailWithManyNamesAndSceneChanges() {
         val raw = buildString {
             appendLine("秦桑一只手捏着透明蜈蚣，另一只手按住玉屏风边缘，任由小洞天中的灵机缓缓沉降。")

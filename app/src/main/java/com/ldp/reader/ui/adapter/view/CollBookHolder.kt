@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.ldp.reader.R
 import com.ldp.reader.databinding.ItemCollBookBinding
 import com.ldp.reader.model.bean.BookRecordBean
@@ -12,6 +11,7 @@ import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.ui.adapter.CollBookAdapter
 import com.ldp.reader.ui.base.adapter.ViewHolderImpl
+import com.ldp.reader.ui.image.BookCoverLoader
 import com.ldp.reader.ui.home.BookshelfLocalProgressStore
 import com.ldp.reader.utils.StringUtils
 import com.ldp.reader.widget.page.PageLoader
@@ -54,12 +54,7 @@ class CollBookHolder(private val adapter: CollBookAdapter) : ViewHolderImpl<Coll
         } else {
             mIvCover.visibility = View.VISIBLE
             mLocalCover.visibility = View.GONE
-            Glide.with(getContext())
-                .load(value.cover)
-                .placeholder(R.drawable.ic_book_loading)
-                .error(R.drawable.ic_book_loading)
-                .centerCrop()
-                .into(mIvCover)
+            BookCoverLoader.load(getContext(), value.cover, value.title, mIvCover, R.drawable.ic_book_loading)
         }
 
         mTvName.text = value.title

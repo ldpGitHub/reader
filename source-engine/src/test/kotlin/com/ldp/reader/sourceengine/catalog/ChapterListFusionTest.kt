@@ -46,6 +46,36 @@ class ChapterListFusionTest {
     }
 
     @Test
+    fun parsesChapterOrdinalAfterVolumePrefix() {
+        val title = ChapterNormalizer().normalize("第十一卷 真仙降临 第两千四百三十七章 龙岛")
+
+        assertEquals(2437, title.ordinal)
+        assertEquals("n:2437", title.key)
+        assertEquals("第两千四百三十七章 龙岛", title.displayTitle)
+    }
+
+    @Test
+    fun repairsMalformedVolumePrefixedTailTitles() {
+        val source = fixtureSource("A")
+        val book = fixtureBook(source)
+        val rawCatalog = listOf(
+            chapter(source, book, 0, "第十一卷 真仙降临 第第两千四百三十七章 龙岛"),
+            chapter(source, book, 1, "第十一卷 真仙降临 第两千四百三十八章 三收获"),
+            chapter(source, book, 2, "第十一卷 真仙降临 第两千四百三十九章第 交易、大会"),
+            chapter(source, book, 3, "第十一卷 降真仙降临 第两千四百四十章 得果"),
+            chapter(source, book, 4, "第十一卷 真仙降临 第两千四百四十一一章 人族之变")
+        )
+
+        val result = ChapterListFusion().fuse(listOf(rawCatalog))
+
+        assertEquals("第两千四百三十七章 龙岛", result.chapters[0].displayTitle)
+        assertEquals("第两千四百三十八章 收获", result.chapters[1].displayTitle)
+        assertEquals("第两千四百三十九章 交易、大会", result.chapters[2].displayTitle)
+        assertEquals("第两千四百四十章 得果", result.chapters[3].displayTitle)
+        assertEquals("第两千四百四十一章 人族之变", result.chapters[4].displayTitle)
+    }
+
+    @Test
     fun dropsRecentUpdatePrefixWhenCatalogRestartsFromBeginning() {
         val source = fixtureSource("A")
         val book = fixtureBook(source)
@@ -142,13 +172,35 @@ class ChapterListFusionTest {
             chapter(source, book, 32, "新书，大道之上，在起点发布啦！"),
             chapter(source, book, 33, "完本感言"),
             chapter(source, book, 34, "更新计划"),
-            chapter(source, book, 35, "第二十六章 正文继续")
+            chapter(source, book, 35, "五月中奖名单"),
+            chapter(source, book, 36, "感谢Raincheck 打赏黄金。"),
+            chapter(source, book, 37, "第二十六章 正文继续")
         )
 
         val result = ChapterListFusion().fuse(listOf(rawCatalog))
 
         assertEquals(26, result.chapters.size)
         assertEquals("第二十六章 正文继续", result.chapters.last().displayTitle)
+    }
+
+    @Test
+    fun choosesCleanerDuplicateDisplayTitleFromOtherSources() {
+        val badSource = fixtureSource("bad")
+        val cleanSource = fixtureSource("clean")
+        val badBook = fixtureBook(badSource)
+        val cleanBook = fixtureBook(cleanSource)
+        val badCatalog = listOf(
+            chapter(badSource, badBook, 0, "第十一卷 真仙降临 第第两千四百三十七章 龙岛")
+        )
+        val cleanCatalog = listOf(
+            chapter(cleanSource, cleanBook, 0, "第两千四百三十七章 龙岛")
+        )
+
+        val result = ChapterListFusion().fuse(listOf(badCatalog, cleanCatalog))
+
+        assertEquals(1, result.chapters.size)
+        assertEquals(2437, result.chapters.first().ordinal)
+        assertEquals("第两千四百三十七章 龙岛", result.chapters.first().displayTitle)
     }
 
     @Test

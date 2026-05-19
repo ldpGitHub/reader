@@ -5,11 +5,11 @@ import java.util.Locale
 
 class ChapterNormalizer {
     fun normalize(rawTitle: String): NormalizedChapterTitle {
-        val displayTitle = rawTitle
+        val displayTitle = repairMalformedDisplayTitle(rawTitle
             .replace('\u3000', ' ')
             .replace('\u00a0', ' ')
             .trim()
-            .replace(Regex("""\s+"""), " ")
+            .replace(Regex("""\s+"""), " "))
         val ordinal = extractOrdinal(displayTitle)
         val key = ordinal?.let { "n:$it" } ?: titleKey(displayTitle)
         return NormalizedChapterTitle(
@@ -21,6 +21,16 @@ class ChapterNormalizer {
     }
 
     private fun extractOrdinal(title: String): Int? {
+        val chapterMatch = CHINESE_ORDINAL_PATTERN.findAll(title)
+            .filter { match -> match.groupValues[2] != "卷" }
+            .lastOrNull()
+        if (chapterMatch != null) {
+            return parseOrdinalToken(chapterMatch.groupValues[1])
+        }
+        val volumeMatch = CHINESE_ORDINAL_PATTERN.findAll(title).lastOrNull()
+        if (volumeMatch != null) {
+            return parseOrdinalToken(volumeMatch.groupValues[1])
+        }
         ORDINAL_PATTERNS.forEach { pattern ->
             val match = pattern.find(title)
             if (match != null) {
@@ -28,6 +38,36 @@ class ChapterNormalizer {
             }
         }
         return null
+    }
+
+    private fun repairMalformedDisplayTitle(title: String): String {
+        val normalized = title
+            .replace(Regex("""第\s*第"""), "第")
+            .replace(Regex("""([零〇一二两三四五六七八九壹贰叁肆伍陆柒捌玖])\1(?=\s*章)"""), "$1")
+            .replace(Regex("""章\s*第\s+"""), "章 ")
+            .trim()
+        val matches = CHINESE_ORDINAL_PATTERN.findAll(normalized).toList()
+        val chapterMatch = matches.lastOrNull { match -> match.groupValues[2] != "卷" }
+            ?: return normalized
+        val hasVolumeBeforeChapter = matches.any { match ->
+            match.groupValues[2] == "卷" && match.range.first < chapterMatch.range.first
+        }
+        if (!hasVolumeBeforeChapter) return normalized
+
+        val chapterOrdinal = parseOrdinalToken(chapterMatch.groupValues[1]) ?: 0
+        return normalized.substring(chapterMatch.range.first)
+            .replace(Regex("""章\s*第\s*"""), "章 ")
+            .let { value ->
+                if (chapterOrdinal >= LONG_CATALOG_ORDINAL) {
+                    STRAY_CHINESE_DIGIT_AFTER_CHAPTER.replace(value) { match ->
+                        match.groupValues[1] + " "
+                    }
+                } else {
+                    value
+                }
+            }
+            .replace(Regex("""\s+"""), " ")
+            .trim()
     }
 
     private fun parseOrdinalToken(raw: String): Int? {
@@ -79,8 +119,12 @@ class ChapterNormalizer {
     }
 
     companion object {
+        private val CHINESE_ORDINAL_PATTERN =
+            Regex("""第\s*([0-9０-９]+|[零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+)\s*([章节回话卷])""")
+        private const val LONG_CATALOG_ORDINAL = 1_000
+        private val STRAY_CHINESE_DIGIT_AFTER_CHAPTER =
+            Regex("""^(第\s*[0-9０-９零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+\s*[章节回话])\s*([一二两三四五六七八九壹贰叁肆伍陆柒捌玖])(?=[\u4e00-\u9fff])""")
         private val ORDINAL_PATTERNS = listOf(
-            Regex("""第\s*([0-9０-９]+|[零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+)\s*[章节回话卷]"""),
             Regex("""^\s*([0-9０-９]+)\s*[.、]\s*""")
         )
 
