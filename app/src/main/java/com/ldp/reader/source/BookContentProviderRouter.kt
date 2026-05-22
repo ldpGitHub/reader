@@ -64,6 +64,17 @@ object BookContentProviderRouter {
         return provider.getBookFolder(routeBookId, collBookBean)
     }
 
+    suspend fun getReadingBootstrapChapters(
+        bookId: String?,
+        collBookBean: CollBookBean,
+        limit: Int
+    ): List<BookChapterBean> {
+        val routeBookId = routeBookIdFor(bookId, collBookBean)
+        if (!SourceEngineBookRoute.isBookId(routeBookId)) return emptyList()
+        logRoute("catalogBootstrap", sourceEngineProvider, routeBookId)
+        return sourceEngineProvider.getReadingBootstrapChapters(routeBookId, collBookBean, limit)
+    }
+
     suspend fun prepareBookContentTier(
         bookId: String?,
         collBookBean: CollBookBean? = null,

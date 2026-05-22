@@ -597,9 +597,26 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
     @Synchronized
     fun openChapter() {
         Log.e(TAG, "+openChapter")
+        val startedAt = System.currentTimeMillis()
+        AiBridgeTrace.event(
+            "source_read_page_open_started",
+            collBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapterPos" to mCurChapterPos,
+                "current" to currentChapterTitle.orEmpty(),
+                "catalogReady" to isChapterListPrepare,
+                "chapterCount" to mChapterList.size,
+                "status" to mStatus
+            )
+        )
         isFirstOpen = false
 
         if (!mPageView!!.isPrepare()) {
+            AiBridgeTrace.event(
+                "source_read_page_open_skipped",
+                collBook.title.orEmpty(),
+                AiBridgeTrace.fields("reason" to "page_not_prepare", "durationMs" to (System.currentTimeMillis() - startedAt))
+            )
             return
         }
 
@@ -608,6 +625,16 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
             mStatus = STATUS_LOADING
             mPageView!!.drawCurPage(false)
             Log.e("+章节目录没有准备好", "parseCurChapter")
+            AiBridgeTrace.state(
+                "source_read_page_status",
+                collBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "status" to "loading",
+                    "reason" to "catalog_not_ready",
+                    "chapterPos" to mCurChapterPos,
+                    "durationMs" to (System.currentTimeMillis() - startedAt)
+                )
+            )
             return
         }
 
@@ -617,13 +644,23 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
             mPageView!!.drawCurPage(false)
             isInit = true
             Log.e("+如果获取到的章节目录为空", "parseCurChapter")
+            AiBridgeTrace.state(
+                "source_read_page_status",
+                collBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "status" to "category_empty",
+                    "reason" to "empty_catalog",
+                    "durationMs" to (System.currentTimeMillis() - startedAt)
+                )
+            )
 
             return
         }
         Log.e("+打开章节调用前", "parseCurChapter")
         clampCurrentChapterToAvailableCatalog()
 
-        if (parseCurChapter()) {
+        val parsed = parseCurChapter()
+        if (parsed) {
             Log.e("+打开章节", "openChapter")
 
             // 如果章节从未打开
@@ -646,6 +683,18 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         }
 
         mPageView!!.drawCurPage(false)
+        AiBridgeTrace.state(
+            "source_read_page_open_finished",
+            collBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "parsed" to parsed,
+                "status" to mStatus,
+                "chapterPos" to mCurChapterPos,
+                "current" to currentChapterTitle.orEmpty(),
+                "pages" to (mCurPageList?.size ?: 0),
+                "durationMs" to (System.currentTimeMillis() - startedAt)
+            )
+        )
         Log.e("+绘制页面", "drawCurPage")
     }
 
@@ -701,17 +750,40 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
     @Throws(Exception::class)
     fun loadPageList(chapterPos: Int): MutableList<TxtPage>? {
         Log.d(TAG, "loadPageList")
+        val startedAt = System.currentTimeMillis()
 
         // 获取章节
         val chapter = mChapterList[chapterPos]
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             Log.d(TAG, "chapterNull")
+            AiBridgeTrace.event(
+                "source_read_page_cache_miss",
+                collBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapterPos" to chapterPos,
+                    "chapter" to chapter.getTitle().orEmpty(),
+                    "status" to mStatus,
+                    "durationMs" to (System.currentTimeMillis() - startedAt)
+                )
+            )
             return null
         }
         // 获取章节的文本流
         val reader = getChapterReader(chapter)
-        return loadPages(chapter, reader)
+        val pages = loadPages(chapter, reader)
+        AiBridgeTrace.event(
+            "source_read_page_cache_hit",
+            collBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapterPos" to chapterPos,
+                "chapter" to chapter.getTitle().orEmpty(),
+                "pages" to pages.size,
+                "reader" to (reader != null),
+                "durationMs" to (System.currentTimeMillis() - startedAt)
+            )
+        )
+        return pages
     }
 
     /**
@@ -1102,11 +1174,14 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
     }
 
     private fun dealLoadPageList(chapterPos: Int) {
+        val startedAt = System.currentTimeMillis()
+        var outcome = "unknown"
         try {
             mCurPageList = loadPageList(chapterPos)
             if (mCurPageList != null) {
                 if (mCurPageList!!.isEmpty()) {
                     mStatus = STATUS_EMPTY
+                    outcome = "empty"
 
                     // 添加一个空数据
                     val page = TxtPage()
@@ -1115,10 +1190,12 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
                 } else {
                     Log.e("+完成", "STATUS_FINISH")
                     mStatus = STATUS_FINISH
+                    outcome = "finish"
                     isInit = true
                 }
             } else {
                 mStatus = STATUS_LOADING
+                outcome = "loading"
                 Log.e("+加载中", "STATUS_LOADING")
             }
         } catch (e: Exception) {
@@ -1126,7 +1203,20 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
 
             mCurPageList = null
             mStatus = STATUS_ERROR
+            outcome = "error_${e.javaClass.simpleName}"
         }
+        AiBridgeTrace.state(
+            "source_read_page_parse_result",
+            collBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "outcome" to outcome,
+                "status" to mStatus,
+                "chapterPos" to chapterPos,
+                "chapter" to mChapterList.getOrNull(chapterPos)?.getTitle().orEmpty(),
+                "pages" to (mCurPageList?.size ?: 0),
+                "durationMs" to (System.currentTimeMillis() - startedAt)
+            )
+        )
 
         // 回调
         Log.e("+回调", "STATUS_FINISH")
@@ -1405,6 +1495,14 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         if (mStatus != STATUS_ERROR) {
             return false
         }
+        AiBridgeTrace.event(
+            "source_read_page_retry",
+            collBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapterPos" to mCurChapterPos,
+                "chapter" to currentChapterTitle.orEmpty()
+            )
+        )
         mStatus = STATUS_LOADING
         openChapter()
         return true

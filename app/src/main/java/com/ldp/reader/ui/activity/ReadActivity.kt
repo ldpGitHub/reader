@@ -37,6 +37,8 @@ import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.ReadSettingManager
+import com.ldp.reader.source.AiBridgeTrace
+import com.ldp.reader.source.SourceEngineBookRoute
 import com.ldp.reader.ui.activity.BookDetailActivity.Companion.startActivity
 import com.ldp.reader.ui.activity.MainActivity
 import com.ldp.reader.ui.adapter.CategoryAdapter
@@ -72,7 +74,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
     private var mBottomOutAnim: Animation? = null
     private var mCategoryAdapter: CategoryAdapter? = null
     private var mCollBook: CollBookBean? = null
+    private var isDisplayCatalogReady = false
     private var readingSessionStartMs = 0L
+    private var readActivityStartedAtMs = 0L
     private lateinit var viewModel: ReadViewModel
 
     //控制屏幕常亮
@@ -156,6 +160,21 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             return
         }
         mBookId = mCollBook!!._id
+        readActivityStartedAtMs = System.currentTimeMillis()
+        AiBridgeTrace.event(
+            "source_read_activity_started",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "bookId" to mBookId.orEmpty(),
+                "sourceRoute" to (
+                    SourceEngineBookRoute.isBookId(mBookId) ||
+                        SourceEngineBookRoute.isBookId(mCollBook?.bookIdInBiquge)
+                    ),
+                "collected" to isCollected,
+                "parcelChapters" to (mCollBook?.getBookChapters()?.size ?: 0),
+                "lastChapter" to mCollBook?.lastChapter.orEmpty()
+            )
+        )
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -188,6 +207,16 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         //获取页面加载器
         Log.d(TAG, "+initWidget")
         mPageLoader = binding!!.readPvPage.getPageLoader(mCollBook!!)
+        AiBridgeTrace.event(
+            "source_read_page_loader_created",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "loader" to mPageLoader!!::class.java.simpleName,
+                "status" to mPageLoader!!.pageStatus,
+                "chapterPos" to mPageLoader!!.chapterPos,
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
         //禁止滑动展示DrawerLayout
         binding!!.readDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //侧边打开后，返回键能够起作用
@@ -330,6 +359,18 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
                 override fun requestChapters(requestChapters: List<TxtChapter>) {
                     Log.d(TAG, "+requestChapters")
+                    AiBridgeTrace.event(
+                        "source_read_page_request_delivered",
+                        mCollBook?.title.orEmpty(),
+                        AiBridgeTrace.fields(
+                            "requested" to requestChapters.size,
+                            "currentTitle" to mPageLoader!!.currentChapterTitle.orEmpty(),
+                            "firstRequest" to requestChapters.firstOrNull()?.title.orEmpty(),
+                            "chapterPos" to mPageLoader!!.chapterPos,
+                            "pageStatus" to mPageLoader!!.pageStatus,
+                            "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+                        )
+                    )
                     viewModel.loadChapter(
                         mBookId,
                         mCollBook!!,
@@ -345,7 +386,18 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                     for (chapter in chapters) {
                         chapter.title = chapter.title
                     }
-                    mCategoryAdapter!!.refreshItems(chapters)
+                    if (isDisplayCatalogReady) {
+                        mCategoryAdapter!!.refreshItems(chapters)
+                    } else {
+                        AiBridgeTrace.event(
+                            "source_read_catalog_display_suppressed",
+                            mCollBook?.title.orEmpty(),
+                            AiBridgeTrace.fields(
+                                "chapters" to chapters.size,
+                                "reason" to "bootstrap_not_trimmed"
+                            )
+                        )
+                    }
                 }
 
                 override fun onPageCountChange(count: Int) {
@@ -411,10 +463,12 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 mPageLoader!!.skipToChapter(position)
             }
         binding!!.readTvCategory.setOnClickListener { v: View? ->
-            //移动到指定位置
-            if (mCategoryAdapter!!.count > 0) {
-                binding!!.readIvCategory.setSelection(mPageLoader!!.chapterPos)
+            if (mCategoryAdapter!!.count <= 0) {
+                com.ldp.reader.utils.ToastUtils.show("目录加载中，请稍后再试")
+                return@setOnClickListener
             }
+            //移动到指定位置
+            binding!!.readIvCategory.setSelection(mPageLoader!!.chapterPos)
             //切换菜单
             toggleMenu(true)
             //打开侧滑动栏
@@ -515,10 +569,35 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
     override fun processLogic() {
         super.processLogic()
+        AiBridgeTrace.event(
+            "source_read_activity_process",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "collected" to isCollected,
+                "local" to (mCollBook?.isLocal() ?: false),
+                "bookId" to mBookId.orEmpty(),
+                "sourceRoute" to (
+                    SourceEngineBookRoute.isBookId(mBookId) ||
+                        SourceEngineBookRoute.isBookId(mCollBook?.bookIdInBiquge)
+                    ),
+                "cachedChapters" to (mCollBook?.getBookChapters()?.size ?: 0),
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
         // 如果是已经收藏的，那么就从数据库中获取目录
         if (isCollected) {
             val bookChapterBeen = BookRepository.getInstance().getBookChapters(mBookId)
+            AiBridgeTrace.event(
+                "source_read_cached_catalog_loaded",
+                mCollBook?.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapters" to bookChapterBeen.size,
+                    "last" to bookChapterBeen.lastOrNull()?.title.orEmpty(),
+                    "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+                )
+            )
             // 设置 CollBook
+            isDisplayCatalogReady = true
             mPageLoader!!.collBook.bookChapters = bookChapterBeen
             // 刷新章节列表
             mPageLoader!!.refreshChapterList()
@@ -538,17 +617,56 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         bookId: String,
         isBiqugeLoaded: Boolean
     ) {
+        val startedAt = System.currentTimeMillis()
+        isDisplayCatalogReady = isBiqugeLoaded
+        AiBridgeTrace.event(
+            "source_read_catalog_apply_started",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapters" to bookChapters.size,
+                "bookId" to bookId,
+                "biqugeLoaded" to isBiqugeLoaded,
+                "bootstrap" to !isBiqugeLoaded,
+                "first" to bookChapters.firstOrNull()?.title.orEmpty(),
+                "last" to bookChapters.lastOrNull()?.title.orEmpty(),
+                "elapsedMs" to (startedAt - readActivityStartedAtMs)
+            )
+        )
         mPageLoader!!.collBook.bookChapters = bookChapters
         mPageLoader!!.refreshChapterList()
+        AiBridgeTrace.state(
+            "source_read_catalog_applied",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapters" to bookChapters.size,
+                "chapterPos" to mPageLoader!!.chapterPos,
+                "current" to mPageLoader!!.currentChapterTitle.orEmpty(),
+                "pageStatus" to mPageLoader!!.pageStatus,
+                "bootstrap" to !isBiqugeLoaded,
+                "applyMs" to (System.currentTimeMillis() - startedAt),
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
 
         // 如果是目录更新的情况，那么就需要存储更新数据
-        if (mCollBook!!.isUpdate() && isCollected) {
+        if (isBiqugeLoaded && mCollBook!!.isUpdate() && isCollected) {
             BookRepository.getInstance()
                 .saveBookChaptersWithAsync(bookChapters)
         }
     }
 
     private fun finishChapter(isRefresh: Boolean) {
+        AiBridgeTrace.event(
+            "source_read_chapter_finish_event",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "refresh" to isRefresh,
+                "pageStatus" to mPageLoader!!.pageStatus,
+                "current" to mPageLoader!!.currentChapterTitle.orEmpty(),
+                "chapterPos" to mPageLoader!!.chapterPos,
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
         if (mPageLoader!!.pageStatus == PageLoader.STATUS_LOADING ||
             mPageLoader!!.pageStatus == PageLoader.STATUS_ERROR ||
             isRefresh
@@ -562,6 +680,16 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
     }
 
     private fun errorChapter() {
+        AiBridgeTrace.event(
+            "source_read_chapter_error_event",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "pageStatus" to mPageLoader!!.pageStatus,
+                "current" to mPageLoader!!.currentChapterTitle.orEmpty(),
+                "chapterPos" to mPageLoader!!.chapterPos,
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
         if (mPageLoader!!.pageStatus == PageLoader.STATUS_LOADING) {
             mPageLoader!!.chapterError()
         }
@@ -647,6 +775,15 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
+        AiBridgeTrace.event(
+            "source_read_activity_destroyed",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "pageStatus" to (mPageLoader?.pageStatus ?: -1),
+                "chapterPos" to (mPageLoader?.chapterPos ?: -1),
+                "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
+            )
+        )
         unregisterReceiver(mReceiver)
         mHandler.removeMessages(WHAT_CATEGORY)
         mHandler.removeMessages(WHAT_CHAPTER)

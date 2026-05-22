@@ -159,7 +159,18 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
 
         //书本的点击事件
         mSearchAdapter!!.setOnItemClickListener { view: View?, pos: Int ->
-            val bookId = mSearchAdapter!!.getItem(pos).id
+            val book = mSearchAdapter!!.getItem(pos)
+            val bookId = book.id
+            traceSearchUi(
+                "source_search_ui_result_clicked",
+                activeBookSearchQuery.ifBlank { mEtInput?.text?.toString()?.trim().orEmpty() },
+                AiBridgeTrace.fields(
+                    "pos" to pos,
+                    "title" to book.title.orEmpty(),
+                    "author" to book.author.orEmpty(),
+                    "route" to bookId.orEmpty()
+                )
+            )
             viewModel.cancelActiveBookWork()
             startActivity(this, bookId)
         }

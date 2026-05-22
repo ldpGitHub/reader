@@ -4,6 +4,7 @@ import android.util.Log
 import com.ldp.reader.model.bean.BookChapterBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
+import com.ldp.reader.source.AiBridgeTrace
 import com.ldp.reader.source.SourceEngineContentCachePolicy
 import com.ldp.reader.ui.home.BookshelfLocalProgressStore
 import com.ldp.reader.utils.BookManager
@@ -26,6 +27,7 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
             chapter.bookId = bean.bookId
             chapter.title = bean.title
             chapter.link = bean.link
+            chapter.start = bean.start
             txtChapters.add(chapter)
         }
         return txtChapters
@@ -33,11 +35,29 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
 
     override fun refreshChapterList() {
         Log.e(TAG, "refreshChapterList")
-        if (mCollBook.getBookChapters() == null) return
+        val startedAt = System.currentTimeMillis()
+        val bookChapters = mCollBook.getBookChapters()
+        AiBridgeTrace.event(
+            "source_read_page_catalog_refresh_started",
+            mCollBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "rawChapters" to (bookChapters?.size ?: 0),
+                "chapterPos" to mCurChapterPos,
+                "status" to mStatus
+            )
+        )
+        if (bookChapters == null) {
+            AiBridgeTrace.event(
+                "source_read_page_catalog_refresh_skipped",
+                mCollBook.title.orEmpty(),
+                AiBridgeTrace.fields("reason" to "null_catalog", "durationMs" to (System.currentTimeMillis() - startedAt))
+            )
+            return
+        }
         SourceEngineContentCachePolicy.ensureFresh(mCollBook)
 
         // 将 BookChapter 转换成当前可用的 Chapter
-        mChapterList = convertTxtChapter(mCollBook.getBookChapters()!!)
+        mChapterList = convertTxtChapter(bookChapters)
         mCollBook.chaptersCount = mChapterList.size
         isChapterListPrepare = true
 
@@ -57,6 +77,18 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
             Log.e(TAG, "+refreshChapterList")
             openChapter()
         }
+        AiBridgeTrace.state(
+            "source_read_page_catalog_ready",
+            mCollBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapters" to mChapterList.size,
+                "chapterPos" to mCurChapterPos,
+                "current" to currentChapterTitle.orEmpty(),
+                "clamped" to clampedChapter,
+                "status" to mStatus,
+                "durationMs" to (System.currentTimeMillis() - startedAt)
+            )
+        )
     }
 
     override fun getChapterReader(chapter: TxtChapter): BufferedReader? {
@@ -169,6 +201,7 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
 
     @Synchronized
     private fun requestChapters(start: Int, end: Int) {
+        val startedAt = System.currentTimeMillis()
         var requestStart = start
         var requestEnd = end
         Log.e(TAG, "+requestChapters  start:$requestStart   end:$requestEnd")
@@ -204,8 +237,46 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
             }
         }
 
+        AiBridgeTrace.event(
+            "source_read_page_request_plan",
+            mCollBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "inputStart" to start,
+                "inputEnd" to end,
+                "start" to requestStart,
+                "end" to requestEnd,
+                "chapterPos" to mCurChapterPos,
+                "current" to currentChapterTitle.orEmpty(),
+                "currentFirst" to (requestOrder.firstOrNull() == mCurChapterPos),
+                "order" to requestOrder.take(8).joinToString("|"),
+                "cacheHits" to (requestOrder.size - chapters.size),
+                "cacheMisses" to chapters.size,
+                "firstMiss" to chapters.firstOrNull()?.title.orEmpty(),
+                "durationMs" to (System.currentTimeMillis() - startedAt)
+            )
+        )
         if (chapters.isNotEmpty()) {
+            AiBridgeTrace.event(
+                "source_read_page_request_dispatched",
+                mCollBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "requested" to chapters.size,
+                    "first" to chapters.firstOrNull()?.title.orEmpty(),
+                    "current" to currentChapterTitle.orEmpty(),
+                    "chapterPos" to mCurChapterPos
+                )
+            )
             mPageChangeListener!!.requestChapters(chapters)
+        } else {
+            AiBridgeTrace.event(
+                "source_read_page_request_skipped",
+                mCollBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "reason" to "all_cached",
+                    "current" to currentChapterTitle.orEmpty(),
+                    "chapterPos" to mCurChapterPos
+                )
+            )
         }
     }
 

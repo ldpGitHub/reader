@@ -15,6 +15,7 @@ import com.ldp.reader.databinding.ActivityBookDetailBinding
 import com.ldp.reader.model.bean.BookDetailBeanInOwn
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
+import com.ldp.reader.source.AiBridgeTrace
 import com.ldp.reader.ui.base.BaseActivity
 import com.ldp.reader.ui.image.BookCoverLoader
 import com.ldp.reader.source.SourceEngineBookRoute
@@ -100,6 +101,18 @@ class BookDetailActivity : BaseActivity<ActivityBookDetailBinding>() {
                     ToastUtils.show("书籍信息加载中，请稍后")
                     return@setOnClickListener
                 }
+                AiBridgeTrace.event(
+                    "source_detail_read_clicked",
+                    collBook.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "bookId" to mBookId.orEmpty(),
+                        "collected" to isCollected,
+                        "sourceRoute" to SourceEngineBookRoute.isBookId(collBook.bookIdInBiquge),
+                        "cachedChapters" to (collBook.getBookChapters()?.size ?: 0),
+                        "chaptersCount" to collBook.chaptersCount,
+                        "last" to collBook.lastChapter.orEmpty()
+                    )
+                )
                 viewModel.cancelActiveBookWork()
                 startActivityForResult(
                     Intent(this@BookDetailActivity, ReadActivity::class.java)
@@ -163,6 +176,11 @@ class BookDetailActivity : BaseActivity<ActivityBookDetailBinding>() {
                 window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
         binding?.refreshLayout?.showLoading()
+        AiBridgeTrace.event(
+            "source_detail_activity_started",
+            mBookId.orEmpty(),
+            AiBridgeTrace.fields("sourceRoute" to SourceEngineBookRoute.isBookId(mBookId))
+        )
         viewModel.refreshBookDetail(mBookId)
     }
 
@@ -171,6 +189,18 @@ class BookDetailActivity : BaseActivity<ActivityBookDetailBinding>() {
     }
 
     private fun finishRefresh(bean: BookDetailBeanInOwn) {
+        AiBridgeTrace.state(
+            "source_detail_activity_render",
+            bean.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "author" to bean.author.orEmpty(),
+                "route" to bean.routeId.orEmpty(),
+                "cover" to BookCoverUrl.isLikelyImage(bean.cover),
+                "intro" to !bean.desc.isNullOrBlank(),
+                "chapters" to bean.chaptersCount,
+                "last" to bean.lastChapter.orEmpty()
+            )
+        )
         binding?.apply {
             //封面
             BookCoverLoader.load(

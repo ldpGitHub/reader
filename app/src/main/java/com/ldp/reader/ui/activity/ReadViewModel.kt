@@ -48,16 +48,39 @@ class ReadViewModel : ViewModel() {
 
     fun loadCategory(bookId: String?, collBookBean: CollBookBean) {
         Log.d(TAG, "loadCategory: $bookId$collBookBean")
+        if (categoryJob?.isActive == true || contentTierJob?.isActive == true) {
+            AiBridgeTrace.event(
+                "source_read_catalog_previous_cancelled",
+                collBookBean.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "categoryActive" to (categoryJob?.isActive == true),
+                    "tierActive" to (contentTierJob?.isActive == true)
+                )
+            )
+        }
         categoryJob?.cancel()
         contentTierJob?.cancel()
+        val startedAt = System.currentTimeMillis()
         AiBridgeTrace.event(
             "source_read_catalog_started",
             collBookBean.title.orEmpty(),
-            "bookId_${bookId.orEmpty().traceToken()}"
+            AiBridgeTrace.fields(
+                "bookId" to bookId.orEmpty(),
+                "cached" to (collBookBean.getBookChapters()?.size ?: 0),
+                "sourceRoute" to isSourceEngineBookRequest(bookId, collBookBean)
+            )
         )
         categoryJob = viewModelScope.launch {
+            publishReadingBootstrapCatalog(bookId, collBookBean, startedAt)
+            var attempt = 0
             while (true) {
+                attempt += 1
                 try {
+                    AiBridgeTrace.event(
+                        "source_read_catalog_request",
+                        collBookBean.title.orEmpty(),
+                        AiBridgeTrace.fields("attempt" to attempt, "elapsedMs" to (System.currentTimeMillis() - startedAt))
+                    )
                     val bookChapterBeans = BookContentProviderRouter.getBookFolder(bookId, collBookBean)
                     collBookBean.bookChapters = bookChapterBeans
                     collBookBean.chaptersCount = bookChapterBeans.size
@@ -67,7 +90,13 @@ class ReadViewModel : ViewModel() {
                     AiBridgeTrace.state(
                         "source_read_catalog_ready",
                         collBookBean.title.orEmpty(),
-                        "chapters_${bookChapterBeans.size}_last_${bookChapterBeans.lastOrNull()?.title.orEmpty().traceToken()}"
+                        AiBridgeTrace.fields(
+                            "chapters" to bookChapterBeans.size,
+                            "first" to bookChapterBeans.firstOrNull()?.title.orEmpty(),
+                            "last" to bookChapterBeans.lastOrNull()?.title.orEmpty(),
+                            "attempt" to attempt,
+                            "durationMs" to (System.currentTimeMillis() - startedAt)
+                        )
                     )
 
                     BookRepository.getInstance()
@@ -82,7 +111,11 @@ class ReadViewModel : ViewModel() {
                         AiBridgeTrace.event(
                             "source_read_catalog_retry",
                             collBookBean.title.orEmpty(),
-                            "error_${e.javaClass.simpleName.traceToken()}"
+                            AiBridgeTrace.fields(
+                                "attempt" to attempt,
+                                "error" to e.javaClass.simpleName,
+                                "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                            )
                         )
                         delay(SOURCE_ENGINE_RETRY_DELAY_MS)
                         continue
@@ -91,6 +124,60 @@ class ReadViewModel : ViewModel() {
                     return@launch
                 }
             }
+        }
+    }
+
+    private suspend fun publishReadingBootstrapCatalog(
+        bookId: String?,
+        collBookBean: CollBookBean,
+        startedAt: Long
+    ) {
+        if (!isSourceEngineBookRequest(bookId, collBookBean)) return
+        if (!collBookBean.getBookChapters().isNullOrEmpty()) return
+        val bootstrapStartedAt = System.currentTimeMillis()
+        try {
+            val bootstrapChapters = BookContentProviderRouter.getReadingBootstrapChapters(
+                bookId,
+                collBookBean,
+                READING_BOOTSTRAP_CHAPTERS
+            )
+            if (bootstrapChapters.isEmpty()) {
+                AiBridgeTrace.event(
+                    "source_read_catalog_bootstrap_skipped",
+                    collBookBean.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "reason" to "empty",
+                        "durationMs" to (System.currentTimeMillis() - bootstrapStartedAt),
+                        "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                    )
+                )
+                return
+            }
+            collBookBean.bookChapters = bootstrapChapters
+            collBookBean.chaptersCount = bootstrapChapters.size
+            _categories.value = CategoryResult(bootstrapChapters, requireNotNull(bookId), false)
+            AiBridgeTrace.state(
+                "source_read_catalog_bootstrap_ready",
+                collBookBean.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapters" to bootstrapChapters.size,
+                    "first" to bootstrapChapters.firstOrNull()?.title.orEmpty(),
+                    "durationMs" to (System.currentTimeMillis() - bootstrapStartedAt),
+                    "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                )
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            AiBridgeTrace.event(
+                "source_read_catalog_bootstrap_skipped",
+                collBookBean.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "reason" to e.javaClass.simpleName,
+                    "durationMs" to (System.currentTimeMillis() - bootstrapStartedAt),
+                    "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                )
+            )
         }
     }
 
@@ -103,6 +190,19 @@ class ReadViewModel : ViewModel() {
     ) {
         val size = bookChapterList.size
         Log.e(TAG, "loadChapter  列表大小$size $bookChapterList")
+        AiBridgeTrace.event(
+            "source_read_chapter_batch_received",
+            sourceBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "total" to size,
+                "current" to currentChapterTitle.orEmpty(),
+                "first" to bookChapterList.firstOrNull()?.title.orEmpty(),
+                "sourceRoute" to isSourceEngineBookRequest(bookId, sourceBook),
+                "activeCurrent" to (currentChapterJob?.isActive == true),
+                "prefetchActive" to prefetchJobs.size,
+                "prefetchPending" to pendingPrefetchChapters.size
+            )
+        )
 
         for (i in 0 until size) {
             val bookChapter = bookChapterList[i]
@@ -119,7 +219,12 @@ class ReadViewModel : ViewModel() {
                 AiBridgeTrace.event(
                     "source_read_current_chapter_queued",
                     sourceBook.title.orEmpty(),
-                    "chapter_${titleInBiquge.traceToken()}_total_${bookChapterList.size}"
+                    AiBridgeTrace.fields(
+                        "chapter" to titleInBiquge,
+                        "indexInBatch" to i,
+                        "total" to bookChapterList.size,
+                        "chapterRoute" to SourceEngineBookRoute.isChapterId(bookChapter.link)
+                    )
                 )
                 startCurrentChapterLoad(chapterKey, request)
             } else {
@@ -173,11 +278,27 @@ class ReadViewModel : ViewModel() {
         AiBridgeTrace.event(
             "source_read_tier_started",
             collBookBean.title.orEmpty(),
-            "persist_true_bookId_${bookId.orEmpty().traceToken()}"
+            AiBridgeTrace.fields(
+                "persist" to true,
+                "bookId" to bookId.orEmpty(),
+                "cached" to (collBookBean.getBookChapters()?.size ?: 0)
+            )
         )
         contentTierJob = viewModelScope.launch {
+            val startedAt = System.currentTimeMillis()
+            var attempt = 0
             var delayMs = SOURCE_ENGINE_TIER_INITIAL_BACKOFF_MS
             while (true) {
+                attempt += 1
+                AiBridgeTrace.event(
+                    "source_read_tier_attempt",
+                    collBookBean.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "attempt" to attempt,
+                        "persist" to true,
+                        "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                    )
+                )
                 val ready = try {
                     BookContentProviderRouter.prepareBookContentTier(
                         bookId,
@@ -190,7 +311,23 @@ class ReadViewModel : ViewModel() {
                     LogUtils.e(error)
                     false
                 }
-                if (ready) return@launch
+                if (ready) {
+                    AiBridgeTrace.state(
+                        "source_read_tier_ready",
+                        collBookBean.title.orEmpty(),
+                        AiBridgeTrace.fields("attempt" to attempt, "durationMs" to (System.currentTimeMillis() - startedAt))
+                    )
+                    return@launch
+                }
+                AiBridgeTrace.event(
+                    "source_read_tier_retry",
+                    collBookBean.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "attempt" to attempt,
+                        "nextDelayMs" to delayMs,
+                        "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                    )
+                )
                 delay(delayMs)
                 delayMs = (delayMs * 2).coerceAtMost(SOURCE_ENGINE_TIER_MAX_BACKOFF_MS)
             }
@@ -199,8 +336,27 @@ class ReadViewModel : ViewModel() {
 
     private fun startCurrentChapterLoad(chapterKey: String, request: ChapterLoadRequest) {
         if (chapterKey == currentChapterKey && currentChapterJob?.isActive == true) {
+            AiBridgeTrace.event(
+                "source_read_current_chapter_deduped",
+                request.sourceBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapter" to request.title,
+                    "queuedAgeMs" to (System.currentTimeMillis() - request.queuedAtMs)
+                )
+            )
             return
         }
+        AiBridgeTrace.event(
+            "source_read_current_chapter_cancel_background",
+            request.sourceBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapter" to request.title,
+                "oldCurrentActive" to (currentChapterJob?.isActive == true),
+                "tierActive" to (contentTierJob?.isActive == true),
+                "prefetchActive" to prefetchJobs.size,
+                "prefetchPending" to pendingPrefetchChapters.size
+            )
+        )
         currentChapterJob?.cancel()
         contentTierJob?.cancel()
         currentChapterKey = chapterKey
@@ -208,13 +364,22 @@ class ReadViewModel : ViewModel() {
         AiBridgeTrace.event(
             "source_read_current_chapter_started",
             request.sourceBook.title.orEmpty(),
-            "chapter_${request.title.traceToken()}"
+            AiBridgeTrace.fields(
+                "chapter" to request.title,
+                "queuedAgeMs" to (System.currentTimeMillis() - request.queuedAtMs),
+                "prefetchCleared" to true
+            )
         )
         currentChapterJob = startChapterLoad(
             request = request,
             notifyError = true
         ) {
             if (currentChapterKey == chapterKey) {
+                AiBridgeTrace.event(
+                    "source_read_current_chapter_finished",
+                    request.sourceBook.title.orEmpty(),
+                    AiBridgeTrace.fields("chapter" to request.title)
+                )
                 currentChapterKey = null
                 currentChapterJob = null
                 startReadingContentTierFill(request.bookId, request.sourceBook)
@@ -228,22 +393,66 @@ class ReadViewModel : ViewModel() {
             chapterKey in prefetchJobs ||
             chapterKey in pendingPrefetchChapters
         ) {
+            AiBridgeTrace.event(
+                "source_read_prefetch_skipped",
+                request.sourceBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapter" to request.title,
+                    "reason" to "duplicate_or_current",
+                    "active" to prefetchJobs.size,
+                    "pending" to pendingPrefetchChapters.size
+                )
+            )
             return
         }
         if (prefetchJobs.size + pendingPrefetchChapters.size >= PREFETCH_CHAPTER_LIMIT) {
+            AiBridgeTrace.event(
+                "source_read_prefetch_skipped",
+                request.sourceBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapter" to request.title,
+                    "reason" to "limit",
+                    "limit" to PREFETCH_CHAPTER_LIMIT,
+                    "active" to prefetchJobs.size,
+                    "pending" to pendingPrefetchChapters.size
+                )
+            )
             return
         }
         pendingPrefetchChapters[chapterKey] = request
+        AiBridgeTrace.event(
+            "source_read_prefetch_queued",
+            request.sourceBook.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "chapter" to request.title,
+                "active" to prefetchJobs.size,
+                "pending" to pendingPrefetchChapters.size
+            )
+        )
         drainPrefetchQueue()
     }
 
     private fun drainPrefetchQueue() {
         if (currentChapterJob?.isActive == true) {
+            AiBridgeTrace.event(
+                "source_read_prefetch_waiting_current",
+                currentChapterJob.toString(),
+                AiBridgeTrace.fields("active" to prefetchJobs.size, "pending" to pendingPrefetchChapters.size)
+            )
             return
         }
         while (prefetchJobs.size < MAX_PREFETCH_CONCURRENT_CHAPTERS && pendingPrefetchChapters.isNotEmpty()) {
             val entry = pendingPrefetchChapters.entries.first()
             pendingPrefetchChapters.remove(entry.key)
+            AiBridgeTrace.event(
+                "source_read_prefetch_started",
+                entry.value.sourceBook.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "chapter" to entry.value.title,
+                    "activeBefore" to prefetchJobs.size,
+                    "pendingAfterPop" to pendingPrefetchChapters.size
+                )
+            )
             prefetchJobs[entry.key] = startChapterLoad(
                 request = entry.value,
                 notifyError = false
@@ -255,6 +464,13 @@ class ReadViewModel : ViewModel() {
     }
 
     private fun cancelPrefetchLoads() {
+        if (pendingPrefetchChapters.isNotEmpty() || prefetchJobs.isNotEmpty()) {
+            AiBridgeTrace.event(
+                "source_read_prefetch_cancelled",
+                "reader",
+                AiBridgeTrace.fields("active" to prefetchJobs.size, "pending" to pendingPrefetchChapters.size)
+            )
+        }
         pendingPrefetchChapters.clear()
         prefetchJobs.values.forEach { job -> job.cancel() }
         prefetchJobs.clear()
@@ -266,9 +482,23 @@ class ReadViewModel : ViewModel() {
         onFinished: () -> Unit
     ): Job {
         return viewModelScope.launch {
+            val startedAt = System.currentTimeMillis()
+            var attempt = 0
             try {
                 while (true) {
+                    attempt += 1
                     try {
+                        AiBridgeTrace.event(
+                            "source_read_chapter_fetch_started",
+                            request.sourceBook.title.orEmpty(),
+                            AiBridgeTrace.fields(
+                                "chapter" to request.title,
+                                "notify" to notifyError,
+                                "attempt" to attempt,
+                                "chapterRoute" to SourceEngineBookRoute.isChapterId(request.bookChapter.link),
+                                "queuedAgeMs" to (System.currentTimeMillis() - request.queuedAtMs)
+                            )
+                        )
                         val content = BookContentProviderRouter.getBookContent(
                             request.bookId,
                             request.sourceBook,
@@ -280,7 +510,14 @@ class ReadViewModel : ViewModel() {
                         AiBridgeTrace.state(
                             "source_read_chapter_saved",
                             "${request.sourceBook.title.orEmpty()}#${request.title}",
-                            "chapter_${request.title.traceToken()}_notify_${notifyError}_chars_${content.length}"
+                            AiBridgeTrace.fields(
+                                "chapter" to request.title,
+                                "notify" to notifyError,
+                                "chars" to content.length,
+                                "attempt" to attempt,
+                                "durationMs" to (System.currentTimeMillis() - startedAt),
+                                "queuedAgeMs" to (System.currentTimeMillis() - request.queuedAtMs)
+                            )
                         )
                         _chapterFinishedEvents.value = false
                         return@launch
@@ -292,7 +529,12 @@ class ReadViewModel : ViewModel() {
                             AiBridgeTrace.event(
                                 "source_read_chapter_retry",
                                 request.sourceBook.title.orEmpty(),
-                                "chapter_${request.title.traceToken()}_error_${t.javaClass.simpleName.traceToken()}"
+                                AiBridgeTrace.fields(
+                                    "chapter" to request.title,
+                                    "attempt" to attempt,
+                                    "error" to t.javaClass.simpleName,
+                                    "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                                )
                             )
                             delay(SOURCE_ENGINE_RETRY_DELAY_MS)
                             continue
@@ -301,7 +543,12 @@ class ReadViewModel : ViewModel() {
                             AiBridgeTrace.state(
                                 "source_read_chapter_error",
                                 request.sourceBook.title.orEmpty(),
-                                "chapter_${request.title.traceToken()}_error_${t.javaClass.simpleName.traceToken()}"
+                                AiBridgeTrace.fields(
+                                    "chapter" to request.title,
+                                    "attempt" to attempt,
+                                    "error" to t.javaClass.simpleName,
+                                    "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                                )
                             )
                             _chapterErrorEvents.value = ++chapterErrorVersion
                         }
@@ -327,11 +574,13 @@ class ReadViewModel : ViewModel() {
         val bookId: String?,
         val sourceBook: CollBookBean,
         val bookChapter: TxtChapter,
-        val title: String
+        val title: String,
+        val queuedAtMs: Long = System.currentTimeMillis()
     )
 
     companion object {
         private val TAG = ReadViewModel::class.java.simpleName
+        private const val READING_BOOTSTRAP_CHAPTERS = 1
         private const val PREFETCH_CHAPTER_LIMIT = 5
         private const val MAX_PREFETCH_CONCURRENT_CHAPTERS = 1
         private const val SOURCE_ENGINE_RETRY_DELAY_MS = 2_000L

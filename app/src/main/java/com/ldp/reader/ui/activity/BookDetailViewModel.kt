@@ -118,19 +118,41 @@ class BookDetailViewModel : ViewModel() {
     private fun refreshBook() {
         refreshJob?.cancel()
         contentTierJob?.cancel()
+        val startedAt = System.currentTimeMillis()
+        AiBridgeTrace.event(
+            "source_detail_refresh_started",
+            bookId.orEmpty(),
+            AiBridgeTrace.fields("sourceRoute" to SourceEngineBookRoute.isBookId(bookId))
+        )
         val preliminaryPublished = publishPreliminarySourceEngineDetail(bookId)
         refreshJob = viewModelScope.launch {
             try {
                 val detail = BookContentProviderRouter.getBookInfo(bookId)
                 bookId = detail.routeId ?: bookId
                 _bookDetails.value = detail
+                AiBridgeTrace.state(
+                    "source_detail_refresh_ready",
+                    detail.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "author" to detail.author.orEmpty(),
+                        "route" to detail.routeId.orEmpty(),
+                        "cover" to BookCoverUrl.isLikelyImage(detail.cover),
+                        "intro" to !detail.desc.isNullOrBlank(),
+                        "chapters" to detail.chaptersCount,
+                        "last" to detail.lastChapter.orEmpty(),
+                        "durationMs" to (System.currentTimeMillis() - startedAt)
+                    )
+                )
                 startDetailContentTierFill(detail)
             } catch (e: Throwable) {
                 if (preliminaryPublished && SourceEngineBookRoute.isBookId(bookId)) {
                     AiBridgeTrace.state(
                         "source_detail_background_error",
                         _bookDetails.value?.title.orEmpty(),
-                        "error_${e.javaClass.simpleName.traceToken()}"
+                        AiBridgeTrace.fields(
+                            "error" to e.javaClass.simpleName,
+                            "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                        )
                     )
                     LogUtils.e(e)
                     return@launch
@@ -159,8 +181,13 @@ class BookDetailViewModel : ViewModel() {
         AiBridgeTrace.state(
             "source_detail_preliminary",
             route.name,
-            "author_${route.author.traceToken()}_cover_${BookCoverUrl.isLikelyImage(detail.cover)}" +
-                "_intro_${!detail.desc.isNullOrBlank()}_routeLast_${route.lastChapter.traceToken()}_last_hidden_until_catalog"
+            AiBridgeTrace.fields(
+                "author" to route.author,
+                "cover" to BookCoverUrl.isLikelyImage(detail.cover),
+                "intro" to !detail.desc.isNullOrBlank(),
+                "routeLast" to route.lastChapter,
+                "lastPolicy" to "hidden_until_catalog"
+            )
         )
         return true
     }
@@ -171,8 +198,21 @@ class BookDetailViewModel : ViewModel() {
         val collBookBean = detail.collBookBean
         contentTierJob?.cancel()
         contentTierJob = viewModelScope.launch {
+            val startedAt = System.currentTimeMillis()
+            var attempt = 0
             var delayMs = CONTENT_TIER_INITIAL_BACKOFF_MS
+            AiBridgeTrace.event(
+                "source_detail_tier_started",
+                detail.title.orEmpty(),
+                AiBridgeTrace.fields("route" to routeId, "persist" to false)
+            )
             while (bookId == routeId) {
+                attempt += 1
+                AiBridgeTrace.event(
+                    "source_detail_tier_attempt",
+                    detail.title.orEmpty(),
+                    AiBridgeTrace.fields("attempt" to attempt, "elapsedMs" to (System.currentTimeMillis() - startedAt))
+                )
                 val ready = try {
                     BookContentProviderRouter.prepareBookContentTier(routeId, collBookBean, persist = false)
                 } catch (error: CancellationException) {
@@ -182,9 +222,23 @@ class BookDetailViewModel : ViewModel() {
                     false
                 }
                 if (ready) {
+                    AiBridgeTrace.state(
+                        "source_detail_tier_ready",
+                        detail.title.orEmpty(),
+                        AiBridgeTrace.fields("attempt" to attempt, "durationMs" to (System.currentTimeMillis() - startedAt))
+                    )
                     refreshDetailAfterContentTier(routeId, detail, collBookBean)
                     return@launch
                 }
+                AiBridgeTrace.event(
+                    "source_detail_tier_retry",
+                    detail.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "attempt" to attempt,
+                        "nextDelayMs" to delayMs,
+                        "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                    )
+                )
                 delay(delayMs)
                 delayMs = (delayMs * 2).coerceAtMost(CONTENT_TIER_MAX_BACKOFF_MS)
             }
@@ -197,6 +251,12 @@ class BookDetailViewModel : ViewModel() {
         collBookBean: CollBookBean
     ) {
         try {
+            val startedAt = System.currentTimeMillis()
+            AiBridgeTrace.event(
+                "source_detail_verified_catalog_started",
+                detail.title.orEmpty(),
+                AiBridgeTrace.fields("route" to routeId)
+            )
             val chapters = BookContentProviderRouter.getBookFolder(routeId, collBookBean)
             if (chapters.isEmpty()) return
             collBookBean.bookChapters = chapters
@@ -207,8 +267,13 @@ class BookDetailViewModel : ViewModel() {
             AiBridgeTrace.state(
                 "source_detail_verified_catalog",
                 detail.title.orEmpty(),
-                "chapters_${chapters.size}_last_${detail.lastChapter.orEmpty().traceToken()}" +
-                    "_route_${routeId.traceToken()}"
+                AiBridgeTrace.fields(
+                    "chapters" to chapters.size,
+                    "first" to chapters.firstOrNull()?.title.orEmpty(),
+                    "last" to detail.lastChapter.orEmpty(),
+                    "route" to routeId,
+                    "durationMs" to (System.currentTimeMillis() - startedAt)
+                )
             )
             Log.i(
                 TAG,

@@ -80,8 +80,16 @@ class SearchViewModel : ViewModel() {
         val requestVersion = ++bookRequestVersion
         latestBookResults = emptyList()
         bookSearchStartedAtMs = System.currentTimeMillis()
-        AiBridgeTrace.event("source_search_ui_started", trimmedQuery, "version_$requestVersion")
-        AiBridgeTrace.event("source_search_ui_cleared", trimmedQuery, "version_$requestVersion")
+        AiBridgeTrace.event(
+            "source_search_ui_started",
+            trimmedQuery,
+            AiBridgeTrace.fields("version" to requestVersion, "queryLength" to trimmedQuery.length)
+        )
+        AiBridgeTrace.event(
+            "source_search_ui_cleared",
+            trimmedQuery,
+            AiBridgeTrace.fields("version" to requestVersion, "reason" to "new_search")
+        )
         bookJob = viewModelScope.launch {
             try {
                 val books = BookContentProviderRouter.searchBooksProgressively(trimmedQuery) { update ->
@@ -140,20 +148,39 @@ class SearchViewModel : ViewModel() {
         val sourceEngineBooks = books
             .filter { book -> SourceEngineBookRoute.isBookId(book.routeId) }
             .take(SEARCH_TIER_BACKGROUND_LIMIT)
-        if (sourceEngineBooks.isEmpty()) return
+        if (sourceEngineBooks.isEmpty()) {
+            AiBridgeTrace.event(
+                "source_search_tier_skipped",
+                query,
+                AiBridgeTrace.fields("reason" to "no_source_engine_books", "books" to books.size, "version" to requestVersion)
+            )
+            return
+        }
         contentTierJob?.cancel()
         AiBridgeTrace.event(
             "source_search_tier_started",
             query,
-            "books_${sourceEngineBooks.size}_version_$requestVersion"
+            AiBridgeTrace.fields("books" to sourceEngineBooks.size, "version" to requestVersion)
         )
         contentTierJob = viewModelScope.launch {
+            val startedAt = System.currentTimeMillis()
+            var attempt = 0
             withTimeoutOrNull(SEARCH_TIER_BACKGROUND_TIMEOUT_MS) {
                 var delayMs = CONTENT_TIER_INITIAL_BACKOFF_MS
                 while (
                     requestVersion == bookRequestVersion &&
                     activeBookQuery == query
                 ) {
+                    attempt += 1
+                    AiBridgeTrace.event(
+                        "source_search_tier_attempt",
+                        query,
+                        AiBridgeTrace.fields(
+                            "attempt" to attempt,
+                            "books" to sourceEngineBooks.size,
+                            "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                        )
+                    )
                     val allReady = sourceEngineBooks.all { book ->
                         try {
                             BookContentProviderRouter.prepareBookContentTier(
@@ -168,7 +195,27 @@ class SearchViewModel : ViewModel() {
                             false
                         }
                     }
-                    if (allReady) return@withTimeoutOrNull
+                    if (allReady) {
+                        AiBridgeTrace.state(
+                            "source_search_tier_ready",
+                            query,
+                            AiBridgeTrace.fields(
+                                "attempt" to attempt,
+                                "books" to sourceEngineBooks.size,
+                                "durationMs" to (System.currentTimeMillis() - startedAt)
+                            )
+                        )
+                        return@withTimeoutOrNull
+                    }
+                    AiBridgeTrace.event(
+                        "source_search_tier_retry",
+                        query,
+                        AiBridgeTrace.fields(
+                            "attempt" to attempt,
+                            "nextDelayMs" to delayMs,
+                            "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                        )
+                    )
                     delay(delayMs)
                     delayMs = (delayMs * 2).coerceAtMost(CONTENT_TIER_MAX_BACKOFF_MS)
                 }
@@ -176,7 +223,11 @@ class SearchViewModel : ViewModel() {
             AiBridgeTrace.event(
                 "source_search_tier_finished",
                 query,
-                "version_$requestVersion"
+                AiBridgeTrace.fields(
+                    "version" to requestVersion,
+                    "attempts" to attempt,
+                    "durationMs" to (System.currentTimeMillis() - startedAt)
+                )
             )
         }
     }
@@ -241,7 +292,13 @@ class SearchViewModel : ViewModel() {
             AiBridgeTrace.event(
                 "source_search_ui_cancelled",
                 cancelledQuery,
-                "reason_${reason}_nextVersion_${bookRequestVersion + 1}"
+                AiBridgeTrace.fields(
+                    "reason" to reason,
+                    "nextVersion" to (bookRequestVersion + 1),
+                    "bookActive" to (bookJob?.isActive == true),
+                    "coverActive" to (coverRefreshJob?.isActive == true),
+                    "tierActive" to (contentTierJob?.isActive == true)
+                )
             )
         }
         activeBookQuery = null
