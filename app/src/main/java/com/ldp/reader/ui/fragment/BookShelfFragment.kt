@@ -313,8 +313,8 @@ class BookShelfFragment : BaseFragment<FragmentBookshelfBinding>() {
             homeBookshelfEdit.text = if (isEditMode) "完成" else "编辑"
             homeBookshelfFilter.visibility = if (isEditMode) View.GONE else View.VISIBLE
             homeBookshelfToolDivider.visibility = if (isEditMode) View.GONE else View.VISIBLE
-            homeBookshelfSourceEngine.visibility = if (isEditMode) View.GONE else View.VISIBLE
-            homeBookshelfSourceDivider.visibility = if (isEditMode) View.GONE else View.VISIBLE
+            homeBookshelfSourceEngine.visibility = View.GONE
+            homeBookshelfSourceDivider.visibility = View.GONE
             homeBookshelfEditBar.visibility = if (isEditMode) View.VISIBLE else View.GONE
             updateFilterLabel()
             if (isEditMode) {

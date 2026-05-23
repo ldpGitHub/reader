@@ -44,6 +44,8 @@
     <color name="light_blue">#039BE5</color>
     <color name="light_translucent">#23000000</color>
     <color name="common_gray">#EEEEEE</color>
+    <color name="chapter_mark_wrong_text">#D93025</color>
+    <color name="chapter_mark_wrong_bg">#FFF1F0</color>
     
     <!--list-->
     <color name="nb.divider.common">#727272</color>
