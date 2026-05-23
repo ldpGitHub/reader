@@ -11,6 +11,7 @@ import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.ui.base.adapter.ViewHolderImpl
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.FileUtils
+import com.ldp.reader.utils.LocalBookImportFiles
 import com.ldp.reader.utils.MD5Utils
 import com.ldp.reader.utils.StringUtils
 import java.io.File
@@ -78,7 +79,7 @@ class FileHolder(private val mSelectedMap: HashMap<File, Boolean>) : ViewHolderI
         mTvName.text = folder.name
         mLlBrief.visibility = View.GONE
         mTvSubCount.visibility = View.VISIBLE
-        mTvSubCount.text = getContext().getString(R.string.nb_file_sub_count, folder.list()!!.size)
+        mTvSubCount.text = getContext().getString(R.string.nb_file_sub_count, LocalBookImportFiles.visibleChildCount(folder))
     }
 
     private fun fileType(file: File): String {
