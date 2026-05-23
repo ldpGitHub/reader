@@ -1012,3 +1012,34 @@
     treated as a candidate production baseline until the remaining high-volume
     true-positive clusters are start/middle/end audited and the hard-boundary
     fallback is measured on another corpus.
+
+## 2026-05-23 V5 Replay Performance Pass
+
+- Optimization approach:
+  - treat the current red/green and 101-book replay as the guardrail;
+  - remove only repeated computation, not thresholds or scoring semantics;
+  - keep an optimization only if the replay output set is unchanged.
+- First optimization:
+  - cache candidate term stats for real split chunks within one `analyze` call;
+  - fingerprint construction/refinement, final chunk scoring, and structural
+    fact construction now merge cached per-chunk stats instead of regenerating
+    n-gram candidates each time;
+  - 101-book replay stayed identical (`removed=0 added=0`) and remained
+    `29 books / 110 suggestions`;
+  - full replay time changed from `10m58s` to `10m26s`, about a 5% gain.
+- Second optimization:
+  - cache promoted alien entities per structural evidence range;
+  - this removes repeated extraction for the same suffix/run range across
+    cluster, continuity, novelty, graph absorption, V5 arc, and explanation
+    paths;
+  - targeted red/green replay passed;
+  - full 101-book replay output stayed identical to
+    `raw-corpus-target-replay-1779515352863` (`removed=0 added=0`);
+  - full replay time changed from `10m26s` to `5m12s`.
+- Current performance conclusion:
+  - the dominant hotspot was repeated segment-level alien extraction, not
+    file I/O and not basic chunk n-gram generation alone;
+  - this cache is worth keeping because it roughly halves replay time without
+    changing any suggestion;
+  - the next likely optimization is an inverted index for V5 same-book arc
+    lookup, but it should be tested separately behind the same replay diff.

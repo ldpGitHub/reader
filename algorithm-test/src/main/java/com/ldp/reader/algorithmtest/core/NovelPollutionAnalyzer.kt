@@ -10,6 +10,9 @@ class NovelPollutionAnalyzer(
 ) {
     private val traceLines = ArrayList<String>()
     private val qualityGate = ChapterQualityGate()
+    private val chunkStatsCache = LinkedHashMap<TextChunk, Map<String, MutableTermStats>>()
+    private val segmentAlienCache = LinkedHashMap<SegmentCacheKey, Map<String, SegmentEntity>>()
+    private var cacheableChunks: Set<TextChunk> = emptySet()
 
     fun analyze(
         title: String,
@@ -19,6 +22,9 @@ class NovelPollutionAnalyzer(
         progress: ((String) -> Unit)? = null
     ): CleanReport {
         traceLines.clear()
+        chunkStatsCache.clear()
+        segmentAlienCache.clear()
+        cacheableChunks = emptySet()
         progress?.invoke("input_start chapters=${chapters.size}")
         val sortedChapters = chapters
             .sortedBy { chapter -> chapter.index }
@@ -89,6 +95,7 @@ class NovelPollutionAnalyzer(
 
         progress?.invoke("split_start")
         val chunks = splitNovelIntoChunks(cleanedChapters)
+        cacheableChunks = chunks.toSet()
         log("chunk", "chunks=${chunks.size} size=${config.chunkSize} overlap=${config.chunkOverlap}")
         progress?.invoke("split_done chunks=${chunks.size}")
 
@@ -1315,6 +1322,13 @@ class NovelPollutionAnalyzer(
         bookModel: StructuralBookModel
     ): Map<String, SegmentEntity> {
         if (evidence.isEmpty()) return emptyMap()
+        val key = SegmentCacheKey(
+            chapterIndex = evidence.first().score.chunk.chapterIndex,
+            startOffset = evidence.first().score.chunk.startOffset,
+            endOffset = evidence.last().score.chunk.endOffset,
+            size = evidence.size
+        )
+        segmentAlienCache[key]?.let { cached -> return cached }
         val text = segmentText(evidence)
         val chunk = evidence.first().score.chunk
         val segmentStats = collectTermStats(
@@ -1337,8 +1351,10 @@ class NovelPollutionAnalyzer(
                 classifySegmentAlienCandidate(stat)
             }
             .toList()
-        return promoteSegmentAlienCandidates(candidates)
+        val promoted = promoteSegmentAlienCandidates(candidates)
             .associateBy { entity -> entity.text }
+        segmentAlienCache[key] = promoted
+        return promoted
     }
 
     private fun classifySegmentAlienCandidate(stat: MutableTermStats): SegmentEntityCandidate? {
@@ -1906,11 +1922,12 @@ class NovelPollutionAnalyzer(
     }
 
     private fun collectTermStats(chunks: List<TextChunk>): Map<String, MutableTermStats> {
+        if (chunks.size == 1) return cachedTermStats(chunks.first())
         val stats = LinkedHashMap<String, MutableTermStats>()
         chunks.forEach { chunk ->
-            candidateOccurrences(chunk.text).forEach { occurrence ->
-                val stat = stats.getOrPut(occurrence.term) { MutableTermStats(occurrence.term) }
-                stat.record(chunk, occurrence)
+            cachedTermStats(chunk).values.forEach { source ->
+                val stat = stats.getOrPut(source.text) { MutableTermStats(source.text) }
+                stat.mergeFrom(chunk.chapterIndex, source)
             }
         }
         return stats
@@ -1921,9 +1938,9 @@ class NovelPollutionAnalyzer(
 
         val lightStats = LinkedHashMap<String, LightTermStats>()
         chunks.forEach { chunk ->
-            candidateOccurrences(chunk.text).forEach { occurrence ->
-                val stat = lightStats.getOrPut(occurrence.term) { LightTermStats() }
-                stat.record(chunk.chapterIndex)
+            cachedTermStats(chunk).values.forEach { source ->
+                val stat = lightStats.getOrPut(source.text) { LightTermStats() }
+                stat.recordHits(chunk.chapterIndex, source.totalHitCount)
             }
         }
 
@@ -1939,11 +1956,25 @@ class NovelPollutionAnalyzer(
 
         val stats = LinkedHashMap<String, MutableTermStats>()
         chunks.forEach { chunk ->
-            candidateOccurrences(chunk.text).forEach occurrenceLoop@{ occurrence ->
-                if (occurrence.term !in keepTerms) return@occurrenceLoop
-                val stat = stats.getOrPut(occurrence.term) { MutableTermStats(occurrence.term) }
-                stat.record(chunk, occurrence)
+            for (source in cachedTermStats(chunk).values) {
+                if (source.text !in keepTerms) continue
+                val stat = stats.getOrPut(source.text) { MutableTermStats(source.text) }
+                stat.mergeFrom(chunk.chapterIndex, source)
             }
+        }
+        return stats
+    }
+
+    private fun cachedTermStats(chunk: TextChunk): Map<String, MutableTermStats> {
+        if (chunk !in cacheableChunks) return computeTermStats(chunk)
+        return chunkStatsCache.getOrPut(chunk) { computeTermStats(chunk) }
+    }
+
+    private fun computeTermStats(chunk: TextChunk): Map<String, MutableTermStats> {
+        val stats = LinkedHashMap<String, MutableTermStats>()
+        candidateOccurrences(chunk.text).forEach { occurrence ->
+            val stat = stats.getOrPut(occurrence.term) { MutableTermStats(occurrence.term) }
+            stat.record(chunk, occurrence)
         }
         return stats
     }
@@ -2506,6 +2537,13 @@ class NovelPollutionAnalyzer(
         val count: Int
     )
 
+    private data class SegmentCacheKey(
+        val chapterIndex: Int,
+        val startOffset: Int,
+        val endOffset: Int,
+        val size: Int
+    )
+
     private data class SegmentEntityCandidate(
         val text: String,
         val type: FeatureType,
@@ -2583,6 +2621,23 @@ class NovelPollutionAnalyzer(
             if (leftBoundaries.size < 12) occurrence.left?.let { char -> leftBoundaries.add(char) }
             if (rightBoundaries.size < 12) occurrence.right?.let { char -> rightBoundaries.add(char) }
         }
+
+        fun mergeFrom(chapterIndex: Int, source: MutableTermStats) {
+            totalHitCount += source.totalHitCount
+            runStartHitCount += source.runStartHitCount
+            standaloneHitCount += source.standaloneHitCount
+            if (lastChapterIndex != chapterIndex) {
+                chapterHitCount += 1
+                lastChapterIndex = chapterIndex
+            }
+            chunkHitCount += source.chunkHitCount
+            source.leftBoundaries.forEach { char ->
+                if (leftBoundaries.size < 12) leftBoundaries.add(char)
+            }
+            source.rightBoundaries.forEach { char ->
+                if (rightBoundaries.size < 12) rightBoundaries.add(char)
+            }
+        }
     }
 
     private data class MutableRelationStats(
@@ -2607,6 +2662,14 @@ class NovelPollutionAnalyzer(
     ) {
         fun record(chapterIndex: Int) {
             totalHitCount += 1
+            if (lastChapterIndex != chapterIndex) {
+                chapterHitCount += 1
+                lastChapterIndex = chapterIndex
+            }
+        }
+
+        fun recordHits(chapterIndex: Int, hits: Int) {
+            totalHitCount += hits
             if (lastChapterIndex != chapterIndex) {
                 chapterHitCount += 1
                 lastChapterIndex = chapterIndex

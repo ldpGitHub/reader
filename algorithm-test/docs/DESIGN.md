@@ -601,6 +601,15 @@ candidate. This is acceptable for the offline algorithm module and the 101-book
 replay, but production use should replace it with an inverted index over
 promoted entities and distinctive terms.
 
+Performance note: V5 keeps per-analysis caches for deterministic intermediate
+structures. Real split chunks cache their candidate term statistics so
+fingerprint refinement, final scoring, and structural facts do not regenerate
+the same n-gram candidates. Structural evidence ranges also cache promoted alien
+entity extraction, because the same range is consumed by cluster, continuity,
+novelty, absorption, explanation, and V5 arc checks. These caches are cleared at
+the start of each `analyze` call and do not change feature definitions or
+decision thresholds.
+
 ## Catalog Strategy
 
 Catalog experiments compare source catalogs by:
