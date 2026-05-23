@@ -1,6 +1,7 @@
 # Reading V5 Integration Design
 
 Date: 2026-05-23
+Last updated: 2026-05-24
 
 ## Core Decision
 
@@ -28,6 +29,30 @@ open reader
 
 Search and detail keep their existing behavior. They may fill in-memory tier
 evidence, but they do not trigger V5.
+
+## 2026-05-24 Implementation Status
+
+The production reading integration has been implemented and pushed on
+`codex/algorithmtest` as commit `3ade618 Implement V5 reading integration`.
+
+Important status boundaries:
+
+- Reading owns V5. Search and detail continue to use the existing source-engine
+  paths and must not emit V5 epoch events.
+- Catalog opening is anchor-first. The reader no longer waits for two trusted
+  sources before showing the table of contents.
+- V5 final marks are persisted and restored for unchanged catalog shape. V5
+  intermediate analyzer artifacts are still not persisted.
+- Quality/coherence failures are diagnostics and source-score evidence for
+  current-chapter reading. They no longer hard-block displayable cleaned text.
+- Hard content failures remain: missing detail, untrusted book detail, missing
+  chapter, fingerprint rejection, null content, and empty cleaned content.
+
+This last point is the current reading-content contract after the
+`元始法则 / 第九百九十章 月白风清` device investigation. That chapter produced
+low quality/coherence diagnostics, but it also produced non-empty cleaned body
+text; the reader now renders it and records the quality problem instead of
+staying in a terminal loading/error state.
 
 ## Implemented UX Contract
 
@@ -152,8 +177,10 @@ row by row while the user is reading.
   small core changes.
 - A source epoch commits once. The catalog adapter refreshes marks quietly and
   must not change the current reading position.
-- Current-chapter content fallback is bounded. When direct content and existing
-  tier/waterfall candidates cannot produce trusted text, the reader records a
+- Current-chapter content fallback is bounded. Quality/coherence diagnostics do
+  not force fallback by themselves. Direct/tier/candidate fallback continues
+  only when there is no displayable cleaned text or when source/chapter
+  resolution fails. If hard failures exhaust the path, the reader records a
   request failure and enters error state instead of retrying the same
   source-engine terminal failure.
 - If usable Book Memory is below 8 chapters, that source epoch is failed as
@@ -178,6 +205,12 @@ source_catalog_v5_cache_hit
 source_catalog_v5_secondary_similarity
 source_catalog_v5_secondary_skipped
 source_content_request_failed
+source_content_direct_quality_diagnostic
+source_content_tier_quality_diagnostic
+source_content_candidate_quality_diagnostic
+source_content_direct_trusted
+source_content_tier_trusted
+source_content_candidate_trusted
 source_content_global_refresh_skipped
 source_read_chapter_retry_exhausted
 source_content_load_failed
@@ -198,6 +231,8 @@ Search/detail should not emit V5 epoch events. Reading should.
 - Current chapter loading starts before V5 background probes.
 - V5 uses the final 100-book planner and the migrated analyzer core.
 - V5 marks wrong/non-story/bad-extraction chapters without deleting rows.
+- Low quality/coherence current-chapter content with non-empty cleaned text is
+  displayed and logged as diagnostic evidence, not blocked as a loading failure.
 - Reopening an unchanged catalog restores persisted V5 marks without rerunning
   the analyzer.
 - `显示错章` filters the adapter view without mutating the stored catalog.

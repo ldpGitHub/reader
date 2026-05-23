@@ -1,6 +1,7 @@
 # Source Quality Routing Design
 
 Date: 2026-05-20
+Last updated: 2026-05-24
 
 ## Goal
 
@@ -151,8 +152,18 @@ V5 evidence feeds routing like this:
 - a short polluted tail creates a local penalty but does not globally demote the
   source heavily;
 - a wrong current chapter creates a stronger book-source penalty;
+- low quality/coherence current-chapter content is recorded as diagnostic
+  source-quality evidence, but no longer blocks display when cleaned text is
+  non-empty;
 - a challenger source with more V5-valid latest chapters can rise in the
   dedicated tier and may become the next anchor at an epoch boundary.
+
+The routing layer must keep this distinction clear. Quality diagnostics can
+lower the local source/book score and make better routes win later, but the
+reading page should not keep waterfalling forever when the route already
+returned displayable cleaned text. Hard route failures are still detail failure,
+untrusted book detail, missing chapter, fingerprint rejection, null content, and
+empty cleaned content.
 
 V5 evidence must come from the production analyzer pipeline. Source routing may
 choose which source chapters to fetch and may cache duplicate content

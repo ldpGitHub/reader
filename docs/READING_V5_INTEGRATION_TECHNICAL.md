@@ -1,6 +1,7 @@
 # Reading V5 Integration Technical Notes
 
 Date: 2026-05-23
+Last updated: 2026-05-24
 
 ## Code Map
 
@@ -129,6 +130,51 @@ secondary V5 epoch is scheduled only when at least two matched text pairs are
 available and both max/average shingle similarity stay below the conservative
 thresholds.
 
+## Current Chapter Display Gate
+
+The production reader now keeps two separate content predicates:
+
+- `isReadableContent`: the stronger quality/coherence/readability gate used by
+  validation, routing, and source scoring.
+- `hasDisplayableContent`: the current-chapter display gate. It requires
+  non-blank cleaned text with positive cleaned length.
+
+Direct, tier, and candidate lookups can therefore return displayable text even
+when the quality score is low or coherence is zero. In that case the reader
+logs a diagnostic event and records source-score evidence, but it does not
+block the user from reading the chapter.
+
+Current diagnostic events:
+
+```text
+source_content_direct_quality_diagnostic
+source_content_tier_quality_diagnostic
+source_content_candidate_quality_diagnostic
+```
+
+Current trusted-display events:
+
+```text
+source_content_direct_trusted
+source_content_tier_trusted
+source_content_candidate_trusted
+```
+
+Hard failures still stop that route:
+
+```text
+detail
+untrusted_book
+missing_chapter
+fingerprint
+content_null
+empty_content
+```
+
+This split prevents a low confidence diagnostic from becoming a permanent
+single-chapter loading failure, while still preserving evidence for V5 and
+source-quality routing.
+
 ## Result Cache
 
 `SourceEngineV5MarkCache` persists final `V5ChapterMarkResult` lists under the
@@ -217,6 +263,25 @@ Full debug build:
 Use `--no-parallel` for this project because ObjectBox generated sources can
 race in parallel Gradle execution.
 
+Latest verification recorded on 2026-05-24:
+
+```powershell
+.\gradlew.bat :app:testDebugUnitTest --tests "com.ldp.reader.source.SourceEngineReaderContentProviderTest.displayableReadingContentDoesNotRequireReadableQualityThreshold" --tests "com.ldp.reader.source.SourceEngineReaderContentProviderTest.getBookContentDisplaysLowQualityDiagnosticContentInsteadOfBlocking" --no-parallel
+.\gradlew.bat :app:assembleDebug --no-parallel
+```
+
+Both commands passed. The APK was installed to device `b46093e6` for runtime
+validation.
+
+Do not treat the full `SourceEngineReaderContentProviderTest` class as green
+yet. The known remaining failures are:
+
+- unit-environment initialization failures around `BookManager/App`;
+- search/catalog selection expectations that still encode older routing
+  behavior;
+- progressive search deferral expectations that need to be reconciled with the
+  current source-quality ranking contract.
+
 ## Runtime Validation Target
 
 Recommended AI Bridge book:
@@ -255,6 +320,28 @@ Search page: no source_catalog_v5_epoch_* events
 Detail page: no source_catalog_v5_epoch_* events
 ```
 
+Latest runtime evidence, 2026-05-24:
+
+```text
+Book: 元始法则
+Chapter: 第九百九十章 月白风清
+
+source_content_direct_quality_diagnostic ... score_30 coherence_0 cleaned_1169 warnings_content-may-belong-to-other-book
+source_content_direct_trusted ... score_30 coherence_0 cleaned_1169
+source_content_tier_lookup_started ... resolvedBooks_4 limit_1 excluded_1
+source_content_tier_quality_diagnostic ... score_20 coherence_0 cleaned_1169
+source_content_tier_trusted
+source_content_tier_lookup_finished ... trusted_1 limit_1 resolvedBooks_4
+source_content_resolved ... trusted_2 score_30 coherence_0 cleaned_1169
+source_read_chapter_saved ... chars_1169 attempt_1 durationMs_2974
+source_read_page_parse_result ... outcome_finish ... pages_8
+```
+
+There was no candidate lookup, no `source_content_request_failed`, and no retry
+exhaustion in that validated path. This is the current proof that
+quality/coherence diagnostics no longer hard-block displayable current-chapter
+text.
+
 ## Drift Check
 
 The production result does not need to match every 100-book replay mark exactly,
@@ -266,5 +353,7 @@ corpus. The no-drift check is:
 - same target/context split;
 - same Book Memory size threshold;
 - tail pollution is marked, not cropped;
+- quality/coherence diagnostics are logged and scored but do not block
+  displayable current-chapter text;
 - source-specific differences appear as different mark states only when live
   content differs.

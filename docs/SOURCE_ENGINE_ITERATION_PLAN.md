@@ -104,6 +104,52 @@ This direction intentionally supersedes the 2026-05-21 checkpoint's strict
 reading-first-display rule. That checkpoint remains useful as implementation
 history, but it does not match the new UX target.
 
+## Current Validation Update - 2026-05-24
+
+The V5 reading integration has been committed and pushed on branch
+`codex/algorithmtest` as `3ade618 Implement V5 reading integration`.
+
+Current delivered behavior:
+
+- Reading catalog display is anchor-first and no longer waits for two trusted
+  sources.
+- Reading is the only page that starts V5. Search and detail keep their
+  existing source-engine behavior.
+- The production V5 planner is the tail-160 planner used by the latest
+  raw-corpus replay, not the older 50/50 source-experiment shape and not the
+  old 100-chapter cap.
+- Wrong, non-story, bad-extraction, and inconclusive results are written as
+  chapter marks instead of trimming the visible catalog.
+- V5 mark cache persists final marks by source/book/catalog shape. Analyzer
+  internals are not persisted yet.
+- Current-chapter content now separates readable-quality validation from
+  displayability. Low quality/coherence is logged and scored, but displayable
+  cleaned text is rendered instead of being blocked.
+
+Runtime proof added for the last point:
+
+- Device `b46093e6`.
+- Book/chapter: `元始法则 / 第九百九十章 月白风清`.
+- Direct and tier routes both logged quality/coherence diagnostics.
+- The same route then logged trusted display content, saved 1169 chars, parsed
+  8 pages, and did not hit request failure or retry exhaustion.
+
+Verification status:
+
+- Targeted regression tests for displayable low-quality content passed.
+- `.\gradlew.bat :app:assembleDebug --no-parallel` passed.
+- Full `SourceEngineReaderContentProviderTest` is not green yet. Known remaining
+  failures are unit-environment initialization and several search/catalog
+  expectation tests that still encode older routing behavior.
+
+Next work:
+
+- Reconcile the remaining provider tests with the current routing contract.
+- Continue red/green replay on `叩问仙道`, `苟在武道世界成圣`, and
+  `苟在两界修仙` after any V5 core change.
+- Watch for repeated content-load failures where hard failures, not diagnostics,
+  still exhaust the waterfall.
+
 ## Pause Checkpoint - 2026-05-21
 
 This checkpoint records the current source-engine tier redesign before the task

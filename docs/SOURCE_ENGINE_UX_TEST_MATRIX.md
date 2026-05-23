@@ -1,6 +1,7 @@
 # Source Engine UX Test Matrix
 
 Date: 2026-05-19
+Last updated: 2026-05-24
 
 Purpose: verify the user-visible reader experience after switching to
 source-engine. The pass must cover search relevance, cover selection, detail
@@ -25,12 +26,16 @@ chapter filtering.
 - Catalog middle: non-chapter announcements such as update plans, leave notes,
   new-book notices, and author notes are filtered when they are not ordinal
   chapters.
-- Catalog tail: latest polluted chapters are hidden when content quality or
-  coherence fails. The last visible chapter must be readable.
+- Catalog tail: latest polluted chapters are marked by V5 instead of being
+  removed from the stored catalog. With `显示错章` on, marked rows remain
+  visible; with it off, `WRONG`, `NON_STORY`, and `BAD_EXTRACTION` rows are
+  filtered from the adapter view. The last unmarked visible chapter must be
+  readable.
 - Reading: first chapter, a middle chapter, and last visible chapter can render
   body text without crash, blank page, or obvious unrelated-book tail.
-- Recovery: historical saved reading position beyond a newly trimmed catalog is
-  clamped to the last readable chapter.
+- Recovery: when `显示错章` is off, historical saved reading position inside a
+  filtered bad tail is clamped to the last unmarked readable chapter without
+  mutating the stored catalog.
 
 ## Search Coverage Set
 
@@ -96,9 +101,11 @@ Each full journey case must execute:
 4. Tap follow/add; return to shelf; verify one canonical shelf item and cover.
 5. Open reader from shelf or detail; verify body text renders.
 6. Open catalog; verify chapter 1 order near head.
-7. Jump or scroll to tail; verify last visible chapter and absence of known bad
-   tail/announcement entries.
-8. For selected cases, tap last visible chapter and verify body text renders.
+7. Jump or scroll to tail; verify known bad tail/announcement entries are
+   marked, and verify `显示错章` off hides those marked rows without mutating the
+   stored catalog.
+8. For selected cases, tap the last unmarked visible chapter and verify body
+   text renders.
 
 | ID | Book | Query | Why This Case |
 | --- | --- | --- | --- |
@@ -108,7 +115,7 @@ Each full journey case must execute:
 | F04 | 剑来 | 剑来 | non-Qidian long catalog, high chapter count |
 | F05 | 十日终焉 | 十日终焉 | Fanqie popular title |
 | F06 | 我不是戏神 | 我不是戏神 | Fanqie popular title, same author family as 斩神 |
-| F07 | 叩问仙道 | 叩问仙道 | known bad latest chapter and clamp recovery |
+| F07 | 叩问仙道 | 叩问仙道 | known bad latest chapter, mark/filter recovery |
 | F08 | 我在修仙界万古长青 | 我在修仙界万古长青 | known 200-300 char correct prefix then foreign tail |
 | F09 | 玄鉴仙族 | 玄鉴仙族 | live probe polluted latest chapter risk |
 | F10 | 灵源仙路 | 灵源仙路 | alias/current-title search |
@@ -119,6 +126,29 @@ Each full journey case must execute:
 
 Results are appended below during execution. Screenshots and raw MCP evidence
 are stored under `build/` with `ai-bridge-*` names.
+
+### 2026-05-24 V5 Reading Validation Checkpoint
+
+- The V5 reading integration is now the current catalog-tail UX target. The old
+  "trim bad tail from the catalog" expectation is replaced by mark-first
+  behavior plus the `显示错章` adapter filter.
+- Runtime checkpoint on device `b46093e6`:
+  - `元始法则 / 第九百九十章 月白风清` no longer stays in a loading/error state
+    because of low quality/coherence diagnostics.
+  - Logs showed direct and tier quality diagnostics, then trusted display
+    content, chapter save with 1169 chars, and page parse with 8 pages.
+  - No request failure or retry exhaustion was observed in that path.
+- Build/test checkpoint:
+  - targeted low-quality display regression tests passed;
+  - `.\gradlew.bat :app:assembleDebug --no-parallel` passed;
+  - the full provider test class still has known non-green cases and must not
+    be used as a completed validation signal yet.
+
+The red/green books for continued V5 migration verification are:
+
+- `叩问仙道`
+- `苟在武道世界成圣`
+- `苟在两界修仙`
 
 ### 2026-05-19 MCP Run
 
