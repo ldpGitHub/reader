@@ -67,6 +67,28 @@ class ChapterQualityGateTest {
     }
 
     @Test
+    fun classifiesBookRecommendationWithStoryExcerptAsNonStory() {
+        val result = gate.inspect(
+            ChapterInput(
+                index = 149,
+                title = "推一本书《前文明是我杀死的》",
+                content = """
+                    同区奇幻作者朋友的最新力作，赛博世界观的奇幻作品——《前文明是我杀死的》。
+                    11万字幼苗，现养现杀，看完还能随手投资一波赚点币，这还有什么好犹豫的？
+                    简介：无人机们不后退，机魂教派的战士们便一直抵抗着入侵的六大国军队。
+                    无量数据赛博钢王世尊望向这一幕，机械眼中光芒不断。
+                    钢王世尊大声道：“炮来！”
+                    地球大气层外数百门属于东夏联众国的天基武器齐齐朝着机械王都转头。
+                """.trimIndent()
+            )
+        )
+
+        assertEquals(ChapterQualityType.NON_STORY, result.type)
+        assertFalse(result.usableForStory)
+        assertTrue(result.reasons.any { reason -> reason.contains("non-story") })
+    }
+
+    @Test
     fun removesInlineSiteAdWithoutCuttingFollowingStory() {
         val result = gate.inspect(
             ChapterInput(

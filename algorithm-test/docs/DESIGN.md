@@ -582,6 +582,15 @@ Current V5 suppression gates:
 - short segments with no promoted foreign identity evidence are not reportable
   as story pollution.
 
+The "no promoted foreign identity" guard is not absolute. Real source pollution
+can be a sequence of unrelated narrative fragments where the entity extractor
+does not promote any stable alien entity. V5 therefore has a hard memory-boundary
+fallback: when a strong same-book prefix is followed by a segment with very high
+break/separation, very low Book Memory/prototype/graph/future absorption, and no
+non-story/title explanation, the segment remains reportable even without
+promoted alien entities. This is a structural state-model rule, not a
+book-specific exception.
+
 This layer is intentionally a confirmation/anti-false-positive layer. It does
 not replace the pollution detector and it does not allow target chapters to
 build the fingerprint. Logs use `v5.arc` for the computed evidence and

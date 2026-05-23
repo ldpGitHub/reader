@@ -948,3 +948,67 @@
     accuracy;
   - runtime cost is acceptable for the algorithm module but the V5 arc scan
     should be indexed before production integration.
+
+## 2026-05-23 V5 Diff Audit Follow-Up
+
+- Compared the previous `46 books / 144 suggestions` report with the first V5
+  `29 books / 107 suggestions` report.
+- Manual diff audit found that not all removed suggestions were correct:
+  - `夜无疆 726` is a real mixed-source chapter: normal `秦铭/八境生灵`
+    opening, then unrelated `慧妃/齐朗/刘子琪/江浩风/...` fragments;
+  - `苟在武道世界成圣 730` is a real mixed-source chapter: normal
+    `陈庆/搬山古猿精血` opening, then unrelated `冯裳/张连生/秦守/...`
+    fragments;
+  - `大不列颠之影 1073` is a real mixed-source chapter: normal
+    `亚瑟·黑斯廷斯` opening, then unrelated cultivation/game/urban fragments.
+- Root cause:
+  - V5's "no promoted foreign identity" guard was too absolute;
+  - these chapters had strong Book Memory/prototype/graph discontinuity, but
+    the entity extractor promoted zero or only weak alien entities because the
+    polluted suffix is a sequence of short unrelated fragments.
+- Fix:
+  - added a structural hard-memory-boundary fallback for zero/weak alien entity
+    cases;
+  - this fallback requires a strong same-book prefix, high break/separation,
+    very low prototype/graph/future absorption, and no non-story/title
+    explanation;
+  - added `推书/推一本书/推荐一本书` to the NON_STORY quality title gate and a
+    regression test using the real `大不列颠之影 149` recommendation pattern.
+- Targeted red/green replay:
+  - output:
+    `algorithm-test/algorithm-test/build/raw-corpus-target-replay-1779515201813`;
+  - command asserted:
+    `rawCorpusExpectedNoSuggestBooks=11,36,89,104` and
+    `rawCorpusExpectedSuggestIndexes=4=1528;15=726;17=730;42=5571;44=693,694;49=1073,1172;66=565`;
+  - result: `BUILD SUCCESSFUL in 2m 21s`;
+  - `大不列颠之影 149` is now `NON_STORY` and does not enter Book Memory or
+    target suggestions.
+- Full 101-book replay after the fix:
+  - output:
+    `algorithm-test/algorithm-test/build/raw-corpus-target-replay-1779515352863`;
+  - result: `BUILD SUCCESSFUL in 10m 58s`;
+  - books with target suggestions: `29`;
+  - target suggestions: `110`.
+- Diff result:
+  - restored from the old report but missing in first V5: exactly
+    `夜无疆 726`, `苟在武道世界成圣 730`, `大不列颠之影 1073`;
+  - new relative to the old report: `道爷要飞升 871`,
+    `从水猴子开始成神 1528`, `踏星 5571`, `大不列颠之影 1172`,
+    `文娱之我只是个演员 565`;
+  - manual reading confirms `道爷要飞升 871` is also mixed-source: normal
+    `玄黄老人/造化圣胎` opening, followed by unrelated `胖子/卫道/omg/西蒙/...`
+    fragments.
+- Still-removed old suggestions sampled after the fix remain consistent with
+  intended suppression:
+  - `北宋穿越指南 596/852/1337/1396/1398`, `盖世双谐 663/679/687/691`,
+    `夜的命名术 1642/1727/1807/1878/1882`, and sampled completed-book rows
+    such as `凡人修仙传 2333`, `诡秘之主 1469`, `黎明之剑 1342` read as
+    coherent same-book chapters;
+  - `大不列颠之影 149` is non-story recommendation content, not story
+    pollution.
+- Current conclusion:
+  - this audit supports the V5 direction after the hard-boundary fix;
+  - it is closer to production quality than the first V5 replay, but should be
+    treated as a candidate production baseline until the remaining high-volume
+    true-positive clusters are start/middle/end audited and the hard-boundary
+    fallback is measured on another corpus.

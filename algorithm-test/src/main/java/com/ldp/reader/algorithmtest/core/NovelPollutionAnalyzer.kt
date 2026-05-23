@@ -887,6 +887,36 @@ class NovelPollutionAnalyzer(
                 evidenceChars >= 800
         if (sameBookReferenceSegment) return false
 
+        val hardMemoryBoundaryWithoutEntities =
+            prefixBookStrength >= 0.65 &&
+                evidenceChars >= 320 &&
+                evidenceCoverage >= 0.30 &&
+                breakScore >= 0.70 &&
+                separation >= 0.85 &&
+                membershipLow >= 0.95 &&
+                graphAbsorption <= 0.10 &&
+                prototypeSimilarity <= 0.06 &&
+                futureIntegration <= 0.10 &&
+                titleAbsorption <= 0.0 &&
+                expositoryScore <= 0.25 &&
+                alienEntityCount == 0 &&
+                alienIdentityStrength <= 0.0
+        if (hardMemoryBoundaryWithoutEntities) return true
+
+        val weakEntityFragmentedBoundary =
+            prefixBookStrength >= 0.75 &&
+                evidenceChars >= 600 &&
+                breakScore >= 0.50 &&
+                separation >= 0.85 &&
+                membershipLow >= 0.55 &&
+                graphAbsorption <= 0.50 &&
+                prototypeSimilarity <= 0.08 &&
+                futureIntegration <= 0.10 &&
+                alienNovelty >= 0.85 &&
+                alienEntityCount in 1..3 &&
+                alienIdentityStrength <= 0.35
+        if (weakEntityFragmentedBoundary) return true
+
         val noForeignIdentityEvidence =
             alienEntityCount == 0 &&
                 alienCluster <= 0.0 &&
