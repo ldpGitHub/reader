@@ -20,7 +20,9 @@ class CategoryAdapter : EasyAdapter<TxtChapter>() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = super.getView(position, convertView, parent)
         val holder = view.tag as CategoryHolder
-        if (position == currentSelected) {
+        val item = getItem(position)
+        val catalogIndex = item.catalogIndex.takeIf { index -> index >= 0 } ?: position
+        if (catalogIndex == currentSelected) {
             holder.setSelectedChapter()
         }
         return view

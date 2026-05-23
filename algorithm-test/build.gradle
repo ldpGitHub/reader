@@ -63,6 +63,9 @@ android {
             systemProperty 'rawCorpusExpectedNoSuggestBooks', System.getProperty('rawCorpusExpectedNoSuggestBooks', '')
             systemProperty 'rawCorpusExpectedSuggestIndexes', System.getProperty('rawCorpusExpectedSuggestIndexes', '')
             systemProperty 'readerProjectRoot', rootProject.projectDir.absolutePath
+            if (System.getProperty('rawCorpusTargetReplay', 'false') == 'true') {
+                maxHeapSize = System.getProperty('rawCorpusTargetMaxHeap', '4096m')
+            }
         }
     }
 }

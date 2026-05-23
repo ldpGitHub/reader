@@ -1,13 +1,20 @@
 package com.ldp.reader.algorithmtest.core
 
 import com.ldp.reader.algorithmtest.source.BatchNovelTargets
+import com.ldp.reader.sourceengine.content.v5.ChapterInput as V5ChapterInput
+import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v5.V5ChapterValidationPlanner
+import com.ldp.reader.sourceengine.content.v5.V5DiagnosticSink
+import com.ldp.reader.sourceengine.content.v5.V5SourceChapterValidator
+import com.ldp.reader.sourceengine.content.v5.V5SourceRunRequest
+import com.ldp.reader.sourceengine.content.v5.V5ValidationChapter
 import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 class RawCorpusTargetReplayTest {
-    private val qualityGate = ChapterQualityGate()
+    private val validationPlanner = V5ChapterValidationPlanner()
 
     @Test
     fun replayTargetedFetchedRawCorpusWithMemoryBackfill() {
@@ -37,49 +44,85 @@ class RawCorpusTargetReplayTest {
         val summary = File(outputRoot, "summary.tsv")
         summary.writeText(
             "bookNo\ttitle\tauthor\tfullChapters\tanalysisChapters\ttargetChapters\tcontextChapters\t" +
-                "usableContext\tchunks\tsuggestions\tsuggestionIndexes\treportDir\n"
+                "usableContext\tchunks\twrongMarks\twrongMarkIndexes\tnonStoryMarks\tbadExtractionMarks\t" +
+                "rawSuggestions\trawSuggestionIndexes\treportDir\n"
         )
 
         items.forEach { item ->
             val reportDir = File(outputRoot, item.reportName).apply { mkdirs() }
             val chapterFiles = item.listChapters()
-            val sample = selectSample(chapterFiles)
-            if (sample.usableContext < MIN_USABLE_CONTEXT_CHAPTERS) {
-                failures.add("${item.reportName}: usable context ${sample.usableContext} < $MIN_USABLE_CONTEXT_CHAPTERS")
+            val selection = selectReplaySelection(chapterFiles)
+            if (selection.usableContext < V5ChapterValidationPlanner.MIN_USABLE_CONTEXT_CHAPTERS) {
+                failures.add(
+                    "${item.reportName}: usable context ${selection.usableContext} < " +
+                        V5ChapterValidationPlanner.MIN_USABLE_CONTEXT_CHAPTERS
+                )
             }
-            val chapters = sample.analysis.map { file -> file.readChapter() }
-            val report = NovelPollutionAnalyzer().analyze(
-                title = item.title,
-                author = item.author,
-                chapters = chapters,
-                seedChapterIndexes = sample.contextIndexes
+            val chapters = selection.analysis.map { file -> file.readChapter() }
+            val result = V5SourceChapterValidator().validate(
+                V5SourceRunRequest(
+                    title = item.title,
+                    author = item.author,
+                    sourceKey = item.reportName,
+                    chapters = chapters,
+                    seedChapterIndexes = selection.contextIndexes
+                )
             )
+            val report = result.report
             if (report.logs.any { line -> line.contains("quality.abort") }) {
                 failures.add("${item.reportName}: analyzer still requested more clean story context")
             }
 
-            val suggestionIndexes = report.suggestions
-                .filter { suggestion -> suggestion.chapterIndex in sample.targetIndexes }
+            val targetMarks = result.marks.filter { mark -> mark.chapterIndex in selection.targetIndexes }
+            val wrongMarkIndexes = targetMarks
+                .filter { mark -> mark.state == V5ChapterMarkState.WRONG }
+                .map { mark -> mark.chapterIndex }
+                .distinct()
+                .sorted()
+            val nonStoryCount = targetMarks.count { mark -> mark.state == V5ChapterMarkState.NON_STORY }
+            val badExtractionCount = targetMarks.count { mark -> mark.state == V5ChapterMarkState.BAD_EXTRACTION }
+            val rawSuggestionIndexes = report.suggestions
+                .filter { suggestion -> suggestion.chapterIndex in selection.targetIndexes }
                 .map { suggestion -> suggestion.chapterIndex }
                 .distinct()
                 .sorted()
-            if (item.bookNo in expectedNoSuggestBooks && suggestionIndexes.isNotEmpty()) {
+            if (item.bookNo in expectedNoSuggestBooks && wrongMarkIndexes.isNotEmpty()) {
                 failures.add(
-                    "${item.reportName}: expected no target suggestions, actual=${suggestionIndexes.joinToString(",")}"
+                    "${item.reportName}: expected no target wrong marks, actual=${wrongMarkIndexes.joinToString(",")}"
                 )
             }
             expectedSuggestIndexes[item.bookNo]?.let { expected ->
-                val missing = expected - suggestionIndexes.toSet()
+                val missing = expected - wrongMarkIndexes.toSet()
                 if (missing.isNotEmpty()) {
                     failures.add(
-                        "${item.reportName}: expected suggestions missing=${missing.sorted().joinToString(",")} " +
-                            "actual=${suggestionIndexes.joinToString(",")}"
+                        "${item.reportName}: expected wrong marks missing=${missing.sorted().joinToString(",")} " +
+                            "actual=${wrongMarkIndexes.joinToString(",")}"
                     )
                 }
             }
             File(reportDir, "algorithm-report.txt").writeText(report.humanSummary(maxFeatures = 20))
             File(reportDir, "algorithm-log.txt").writeText(report.logs.joinToString("\n"))
-            File(reportDir, "sampling-plan.txt").writeText(sample.describe())
+            File(reportDir, "v5-marks.tsv").writeText(
+                buildString {
+                    appendLine("index\trole\ttitle\tstate\tquality\tsuggestion\taction\tconfidence\treasons")
+                    result.marks.forEach { mark ->
+                        appendLine(
+                            listOf(
+                                mark.chapterIndex.toString(),
+                                selection.rolesByChapterIndex[mark.chapterIndex].orEmpty(),
+                                mark.chapterTitle,
+                                mark.state.name,
+                                mark.qualityType?.name.orEmpty(),
+                                mark.suggestionState?.name.orEmpty(),
+                                mark.action?.name.orEmpty(),
+                                "%.3f".format(mark.confidence),
+                                mark.reasons.joinToString("|")
+                            ).joinToString("\t")
+                        )
+                    }
+                }
+            )
+            File(reportDir, "validation-plan.txt").writeText(selection.describe())
             File(reportDir, "source-dir.txt").writeText(item.sourceDir.absolutePath)
             summary.appendText(
                 listOf(
@@ -87,13 +130,17 @@ class RawCorpusTargetReplayTest {
                     item.title,
                     item.author,
                     chapterFiles.size.toString(),
-                    sample.analysis.size.toString(),
-                    sample.targetIndexes.size.toString(),
-                    sample.contextIndexes.size.toString(),
-                    sample.usableContext.toString(),
+                    selection.analysis.size.toString(),
+                    selection.targetIndexes.size.toString(),
+                    selection.contextIndexes.size.toString(),
+                    selection.usableContext.toString(),
                     report.chunkCount.toString(),
-                    suggestionIndexes.size.toString(),
-                    suggestionIndexes.joinToString(","),
+                    wrongMarkIndexes.size.toString(),
+                    wrongMarkIndexes.joinToString(","),
+                    nonStoryCount.toString(),
+                    badExtractionCount.toString(),
+                    rawSuggestionIndexes.size.toString(),
+                    rawSuggestionIndexes.joinToString(","),
                     reportDir.absolutePath
                 ).joinToString("\t") + "\n"
             )
@@ -126,154 +173,20 @@ class RawCorpusTargetReplayTest {
             .toList()
     }
 
-    private fun selectSample(chapterFiles: List<TargetChapterFile>): TargetReplaySample {
-        val chapterCount = chapterFiles.size
-        if (chapterCount <= 0) {
-            return TargetReplaySample(emptyList(), emptySet(), emptySet(), emptyMap(), emptyList(), 0)
-        }
-        val tailStart = (chapterCount - TAIL_RISK_WINDOW_CHAPTERS).coerceAtLeast(0)
-        val targetRolesByPosition = selectTargetProbePositions(chapterCount, tailStart)
-        val targetPositions = targetRolesByPosition.keys.sorted()
-        val targetPositionSet = targetPositions.toSet()
-        val nearContextStart = (tailStart - NEAR_CONTEXT_SPAN).coerceAtLeast(0)
-        val nearContextPositions = evenlySpacedPositions(nearContextStart, tailStart, NEAR_CONTEXT_SAMPLES)
-        val midContextStart = (chapterCount * 35 / 100).coerceAtMost(nearContextStart)
-        val midContextPositions = evenlySpacedPositions(midContextStart, nearContextStart, MID_CONTEXT_SAMPLES)
-        val longAnchorPositions = evenlySpacedPositions(0, midContextStart, LONG_ANCHOR_SAMPLES)
-
-        val rolesByPosition = LinkedHashMap<Int, String>()
-        longAnchorPositions.forEach { position -> rolesByPosition[position] = "LONG_ANCHOR" }
-        midContextPositions.forEach { position -> rolesByPosition[position] = "MID_CONTEXT" }
-        nearContextPositions.forEach { position -> rolesByPosition[position] = "NEAR_CONTEXT" }
-        targetRolesByPosition.forEach { (position, role) -> rolesByPosition[position] = role }
-        targetPositions
-            .flatMap { center -> ((center - TARGET_NEIGHBOR_RADIUS)..(center + TARGET_NEIGHBOR_RADIUS)).toList() }
-            .filter { position -> position in 0 until chapterCount && position !in targetPositionSet }
-            .forEach { position -> rolesByPosition.putIfAbsent(position, "TARGET_NEIGHBOR_CONTEXT") }
-
-        val diagnostics = ArrayList<String>()
-        val contextIndexes = rolesByPosition
-            .filterKeys { position -> position !in targetPositionSet }
-            .map { (position, _) -> chapterFiles[position].index }
-            .toMutableSet()
-        var usableContext = usableContextCount(chapterFiles, contextIndexes)
-        val selectedPositions = rolesByPosition.keys.toMutableSet()
-        val backfill = rawContextBackfillPositions(
-            chapterCount = chapterCount,
-            tailStart = tailStart,
-            excludedPositions = selectedPositions,
-            targetPositions = targetPositionSet,
-            maxAttempts = MAX_CONTEXT_BACKFILL_ATTEMPTS
+    private fun selectReplaySelection(chapterFiles: List<TargetChapterFile>): TargetReplaySelection {
+        val plan = validationPlanner.selectChapters(
+            chapters = chapterFiles.map { file -> V5ValidationChapter(file.index, file.title) },
+            readContent = { position, _ -> chapterFiles[position].file.readText(Charsets.UTF_8) },
+            diagnosticSink = V5DiagnosticSink.None
         )
-        diagnostics.add("qualityBackfillStart usableContext=$usableContext candidates=${backfill.size}")
-        for (position in backfill) {
-            val file = chapterFiles[position]
-            val quality = qualityGate.inspect(file.readChapter())
-            diagnostics.add(
-                "qualityBackfillProbe position=$position chapter=${file.index} " +
-                    "quality=${quality.type} cleanChars=${quality.metrics.cleanedChars}"
-            )
-            if (quality.usableForStory) {
-                rolesByPosition[position] = "MEMORY_BACKFILL"
-                contextIndexes.add(file.index)
-                usableContext += 1
-                diagnostics.add("qualityBackfillAccept chapter=${file.index} usableContext=$usableContext")
-                if (usableContext >= MIN_USABLE_CONTEXT_CHAPTERS) break
-            }
-        }
-        diagnostics.add("qualityBackfillFinish usableContext=$usableContext analysis=${rolesByPosition.size}")
-
-        val selected = rolesByPosition.keys.sorted()
-        val analysis = selected.map { position -> chapterFiles[position] }
-        val targetIndexes = targetPositionSet.map { position -> chapterFiles[position].index }.toSet()
-        val rolesByChapterIndex = selected.associate { position ->
-            chapterFiles[position].index to rolesByPosition.getValue(position)
-        }
-        return TargetReplaySample(
-            analysis = analysis,
-            targetIndexes = targetIndexes,
-            contextIndexes = contextIndexes,
-            rolesByChapterIndex = rolesByChapterIndex,
-            diagnostics = diagnostics,
-            usableContext = usableContext
+        return TargetReplaySelection(
+            analysis = plan.analysisPositions.map { position -> chapterFiles[position] },
+            targetIndexes = plan.targetIndexes,
+            contextIndexes = plan.contextIndexes,
+            rolesByChapterIndex = plan.rolesByChapterIndex,
+            diagnostics = plan.diagnostics,
+            usableContext = plan.usableContext
         )
-    }
-
-    private fun selectTargetProbePositions(chapterCount: Int, tailStart: Int): Map<Int, String> {
-        val selected = LinkedHashMap<Int, String>()
-        val recentStart = (chapterCount - TARGET_RECENT_CHAPTERS).coerceAtLeast(tailStart)
-        (recentStart until chapterCount).forEach { position -> selected[position] = "TARGET_RECENT" }
-
-        val riskWindowSize = chapterCount - tailStart
-        val offsets = ArrayList<Int>()
-        var offset = 1
-        while (offset <= riskWindowSize) {
-            offsets.add(offset)
-            offset *= 2
-        }
-        if (chapterCount > TAIL_RISK_WINDOW_CHAPTERS) offsets.add(TAIL_RISK_WINDOW_CHAPTERS)
-        offset = TARGET_EXTENDED_MIN_OFFSET
-        while (offset <= chapterCount) {
-            offsets.add(offset)
-            offset *= 2
-        }
-        offsets
-            .filter { oneBasedOffset -> oneBasedOffset in 1..chapterCount }
-            .distinct()
-            .sorted()
-            .forEach { oneBasedOffset ->
-                val center = chapterCount - oneBasedOffset
-                val role = if (oneBasedOffset <= TAIL_RISK_WINDOW_CHAPTERS) "TARGET_TAIL" else "TARGET_EXTENDED"
-                selected.putIfAbsent(center, role)
-            }
-        return selected.toSortedMap()
-    }
-
-    private fun rawContextBackfillPositions(
-        chapterCount: Int,
-        tailStart: Int,
-        excludedPositions: Set<Int>,
-        targetPositions: Set<Int>,
-        maxAttempts: Int
-    ): List<Int> {
-        if (chapterCount <= 0 || maxAttempts <= 0) return emptyList()
-        val endExclusive = tailStart.takeIf { value -> value > 0 } ?: (chapterCount * 7 / 10).coerceAtLeast(1)
-        val selected = LinkedHashSet<Int>()
-        fun add(position: Int) {
-            if (position in 0 until endExclusive &&
-                position !in excludedPositions &&
-                position !in targetPositions
-            ) {
-                selected.add(position)
-            }
-        }
-
-        var offset = 1
-        while (offset <= endExclusive && selected.size < maxAttempts / 2) {
-            add(endExclusive - offset)
-            offset *= 2
-        }
-        val nearCount = minOf(24, maxAttempts)
-        val nearStart = (endExclusive - nearCount * 3).coerceAtLeast(0)
-        evenlySpacedPositions(nearStart, endExclusive, nearCount).asReversed().forEach(::add)
-        evenlySpacedPositions(0, endExclusive, maxAttempts).forEach(::add)
-        return selected.take(maxAttempts)
-    }
-
-    private fun usableContextCount(chapterFiles: List<TargetChapterFile>, contextIndexes: Set<Int>): Int {
-        return chapterFiles
-            .asSequence()
-            .filter { file -> file.index in contextIndexes }
-            .count { file -> qualityGate.inspect(file.readChapter()).usableForStory }
-    }
-
-    private fun evenlySpacedPositions(startInclusive: Int, endExclusive: Int, count: Int): List<Int> {
-        val size = endExclusive - startInclusive
-        if (size <= 0) return emptyList()
-        if (size <= count) return (startInclusive until endExclusive).toList()
-        return (0 until count).map { index ->
-            startInclusive + ((size - 1).toLong() * index / (count - 1).coerceAtLeast(1)).toInt()
-        }.distinct()
     }
 
     private fun TargetItem.listChapters(): List<TargetChapterFile> {
@@ -340,10 +253,10 @@ class RawCorpusTargetReplayTest {
         val title: String,
         val file: File
     ) {
-        fun readChapter(): ChapterInput = ChapterInput(index, title, file.readText(Charsets.UTF_8))
+        fun readChapter(): V5ChapterInput = V5ChapterInput(index, title, file.readText(Charsets.UTF_8))
     }
 
-    private data class TargetReplaySample(
+    private data class TargetReplaySelection(
         val analysis: List<TargetChapterFile>,
         val targetIndexes: Set<Int>,
         val contextIndexes: Set<Int>,
@@ -365,16 +278,4 @@ class RawCorpusTargetReplayTest {
         }
     }
 
-    private companion object {
-        private const val TAIL_RISK_WINDOW_CHAPTERS = 100
-        private const val TARGET_RECENT_CHAPTERS = 2
-        private const val TARGET_NEIGHBOR_RADIUS = 1
-        private const val TARGET_EXTENDED_MIN_OFFSET = 256
-        private const val NEAR_CONTEXT_SPAN = 300
-        private const val NEAR_CONTEXT_SAMPLES = 8
-        private const val MID_CONTEXT_SAMPLES = 2
-        private const val LONG_ANCHOR_SAMPLES = 1
-        private const val MIN_USABLE_CONTEXT_CHAPTERS = 8
-        private const val MAX_CONTEXT_BACKFILL_ATTEMPTS = 256
-    }
 }

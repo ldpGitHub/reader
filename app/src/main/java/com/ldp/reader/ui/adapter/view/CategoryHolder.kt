@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.ldp.reader.R
 import com.ldp.reader.databinding.ItemCategoryBinding
+import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
 import com.ldp.reader.ui.base.adapter.ViewHolderImpl
 import com.ldp.reader.utils.BookManager
 import com.ldp.reader.widget.page.TxtChapter
@@ -30,9 +31,16 @@ class CategoryHolder : ViewHolderImpl<TxtChapter>() {
         }
 
         mTvChapter.isSelected = false
-        mTvChapter.setTextColor(ContextCompat.getColor(getContext(), R.color.nb_text_default))
+        val markState = value.sourceIntegrityState
+        val color = when (markState) {
+            V5ChapterMarkState.WRONG.name,
+            V5ChapterMarkState.BAD_EXTRACTION.name -> R.color.light_red
+            V5ChapterMarkState.NON_STORY.name -> R.color.nb_text_common_h3
+            else -> R.color.nb_text_default
+        }
+        mTvChapter.setTextColor(ContextCompat.getColor(getContext(), color))
         mTvChapter.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
-        mTvChapter.text = value.title
+        mTvChapter.text = integrityDisplayTitle(value)
     }
 
     override fun getItemLayoutId(): Int {
@@ -42,5 +50,15 @@ class CategoryHolder : ViewHolderImpl<TxtChapter>() {
     fun setSelectedChapter() {
         mTvChapter.setTextColor(ContextCompat.getColor(getContext(), R.color.light_red))
         mTvChapter.isSelected = true
+    }
+
+    private fun integrityDisplayTitle(value: TxtChapter): String {
+        val title = value.title.orEmpty()
+        return when (value.sourceIntegrityState) {
+            V5ChapterMarkState.WRONG.name -> "$title  错"
+            V5ChapterMarkState.NON_STORY.name -> "$title  注"
+            V5ChapterMarkState.BAD_EXTRACTION.name -> "$title  抽"
+            else -> title
+        }
     }
 }

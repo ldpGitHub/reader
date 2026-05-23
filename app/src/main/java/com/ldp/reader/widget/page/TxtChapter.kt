@@ -14,6 +14,18 @@ class TxtChapter {
     var title: String? = null
 
     @JvmField
+    var catalogIndex = -1
+
+    @JvmField
+    var sourceIntegrityState: String? = null
+
+    @JvmField
+    var sourceIntegrityConfidence: Double = 0.0
+
+    @JvmField
+    var sourceIntegrityReason: String? = null
+
+    @JvmField
     var start = 0L
 
     @JvmField

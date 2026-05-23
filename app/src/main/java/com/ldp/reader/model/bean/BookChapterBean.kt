@@ -9,6 +9,9 @@ class BookChapterBean() : Serializable {
     var link: String? = null
     var title: String? = null
     var taskName: String? = null
+    var sourceIntegrityState: String? = null
+    var sourceIntegrityConfidence: Double = 0.0
+    var sourceIntegrityReason: String? = null
     private var unreadble: Boolean = false
     private var validInZhuishu: Boolean = true
     var bookId: String? = null

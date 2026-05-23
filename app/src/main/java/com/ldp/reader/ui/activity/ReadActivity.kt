@@ -38,7 +38,9 @@ import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.ReadSettingManager
 import com.ldp.reader.source.AiBridgeTrace
+import com.ldp.reader.source.SourceEngineCatalogMarkRegistry
 import com.ldp.reader.source.SourceEngineBookRoute
+import com.ldp.reader.source.hasHiddenSourceIntegrityMark
 import com.ldp.reader.ui.activity.BookDetailActivity.Companion.startActivity
 import com.ldp.reader.ui.activity.MainActivity
 import com.ldp.reader.ui.adapter.CategoryAdapter
@@ -64,6 +66,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
     private val BRIGHTNESS_URI = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS)
     private val BRIGHTNESS_ADJ_URI = Settings.System.getUriFor("screen_auto_brightness_adj")
     private var sourceIndex = 0
+    private var showWrongChapters = true
 
     /*****************view */
     private var mSettingDialog: ReadSettingDialog? = null
@@ -255,6 +258,40 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         viewModel.categories.observe(this) { result ->
             showCategory(result.bookChapterList, result.bookId, result.isBiqugeLoaded)
         }
+        SourceEngineCatalogMarkRegistry.updates.observe(this) { update ->
+            val loader = mPageLoader ?: return@observe
+            val chapters = loader.chapterCategory
+            val changed = SourceEngineCatalogMarkRegistry.applyTo(chapters)
+            val matched = SourceEngineCatalogMarkRegistry.countMatching(chapters)
+            if (changed <= 0) {
+                AiBridgeTrace.event(
+                    "source_read_catalog_marks_seen",
+                    mCollBook?.title.orEmpty(),
+                    AiBridgeTrace.fields(
+                        "changed" to changed,
+                        "matched" to matched,
+                        "chapters" to chapters.size,
+                        "source" to update.sourceLabel,
+                        "marks" to update.marks.size,
+                        "first" to chapters.firstOrNull()?.title.orEmpty(),
+                        "last" to chapters.lastOrNull()?.title.orEmpty()
+                    )
+                )
+                return@observe
+            }
+            refreshCategoryAdapter(chapters)
+            AiBridgeTrace.state(
+                "source_read_catalog_marks_applied",
+                mCollBook?.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "changed" to changed,
+                    "matched" to matched,
+                    "source" to update.sourceLabel,
+                    "marks" to update.marks.size,
+                    "showWrong" to showWrongChapters
+                )
+            )
+        }
         viewModel.chapterFinishedEvents.observe(this) { isRefresh ->
             finishChapter(isRefresh)
         }
@@ -265,7 +302,16 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
     private fun initTopMenu() {
         if (Build.VERSION.SDK_INT >= 19) {
-            binding!!.readAblTopMenu.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0)
+            val statusBarHeight = ScreenUtils.getStatusBarHeight()
+            binding!!.readAblTopMenu.setPadding(0, statusBarHeight, 0, 0)
+            binding!!.readLlCatalogDrawer.let { drawer ->
+                drawer.setPadding(
+                    drawer.paddingLeft,
+                    drawer.paddingTop + statusBarHeight,
+                    drawer.paddingRight,
+                    drawer.paddingBottom
+                )
+            }
         }
     }
 
@@ -383,18 +429,28 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 }
 
                 override fun onCategoryFinish(chapters: List<TxtChapter>) {
-                    for (chapter in chapters) {
-                        chapter.title = chapter.title
-                    }
-                    if (isDisplayCatalogReady) {
-                        mCategoryAdapter!!.refreshItems(chapters)
-                    } else {
+                    val changed = SourceEngineCatalogMarkRegistry.applyTo(chapters)
+                    val matched = SourceEngineCatalogMarkRegistry.countMatching(chapters)
+                    refreshCategoryAdapter(chapters)
+                    if (changed > 0 || matched > 0) {
                         AiBridgeTrace.event(
-                            "source_read_catalog_display_suppressed",
+                            "source_read_catalog_marks_refreshed",
+                            mCollBook?.title.orEmpty(),
+                            AiBridgeTrace.fields(
+                                "changed" to changed,
+                                "matched" to matched,
+                                "chapters" to chapters.size,
+                                "showWrong" to showWrongChapters
+                            )
+                        )
+                    }
+                    if (!isDisplayCatalogReady) {
+                        AiBridgeTrace.event(
+                            "source_read_catalog_bootstrap_displayed",
                             mCollBook?.title.orEmpty(),
                             AiBridgeTrace.fields(
                                 "chapters" to chapters.size,
-                                "reason" to "bootstrap_not_trimmed"
+                                "showWrong" to showWrongChapters
                             )
                         )
                     }
@@ -460,7 +516,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             AdapterView.OnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                 binding!!.readDlSlide.closeDrawer(Gravity.LEFT)
                 Log.d("+点击章节", position.toString() + "")
-                mPageLoader!!.skipToChapter(position)
+                mPageLoader!!.skipToChapter(fullChapterPositionForAdapterPosition(position))
             }
         binding!!.readTvCategory.setOnClickListener { v: View? ->
             if (mCategoryAdapter!!.count <= 0) {
@@ -468,11 +524,17 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 return@setOnClickListener
             }
             //移动到指定位置
-            binding!!.readIvCategory.setSelection(mPageLoader!!.chapterPos)
+            binding!!.readIvCategory.setSelection(adapterPositionForFullChapter(mPageLoader!!.chapterPos))
             //切换菜单
             toggleMenu(true)
             //打开侧滑动栏
             binding!!.readDlSlide.openDrawer(Gravity.LEFT)
+        }
+        binding!!.readCbShowWrongChapters.setOnCheckedChangeListener { _, isChecked ->
+            applyShowWrongChapterToggle(isChecked)
+        }
+        binding!!.readLlCatalogHeader.setOnClickListener {
+            binding!!.readCbShowWrongChapters.isChecked = !binding!!.readCbShowWrongChapters.isChecked
         }
         binding!!.readTvSetting.setOnClickListener { v: View? ->
             toggleMenu(false)
@@ -502,9 +564,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         binding!!.readTvBrief.setOnClickListener { startActivity(this@ReadActivity, mBookId) }
 
         binding.tvChangeSource.setOnClickListener {
-            val adapter = mCategoryAdapter
             val chapterPos = mPageLoader!!.chapterPos
-            if (adapter == null || adapter.count == 0 || chapterPos !in 0 until adapter.count) {
+            val chapter = mPageLoader!!.chapterCategory.getOrNull(chapterPos)
+            if (chapter == null) {
                 com.ldp.reader.utils.ToastUtils.show("目录加载中，请稍后再试")
                 return@setOnClickListener
             }
@@ -512,7 +574,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             viewModel.refreshChapter(
                 mBookId,
                 mCollBook!!,
-                adapter.getItem(chapterPos),
+                chapter,
                 sourceIndex
             )
         }
@@ -618,6 +680,8 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         isBiqugeLoaded: Boolean
     ) {
         val startedAt = System.currentTimeMillis()
+        val markChanged = SourceEngineCatalogMarkRegistry.applyToBookChapters(bookChapters)
+        val markMatched = SourceEngineCatalogMarkRegistry.countMatchingBookChapters(bookChapters)
         isDisplayCatalogReady = isBiqugeLoaded
         AiBridgeTrace.event(
             "source_read_catalog_apply_started",
@@ -629,6 +693,8 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 "bootstrap" to !isBiqugeLoaded,
                 "first" to bookChapters.firstOrNull()?.title.orEmpty(),
                 "last" to bookChapters.lastOrNull()?.title.orEmpty(),
+                "markChanged" to markChanged,
+                "markMatched" to markMatched,
                 "elapsedMs" to (startedAt - readActivityStartedAtMs)
             )
         )
@@ -653,6 +719,49 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             BookRepository.getInstance()
                 .saveBookChaptersWithAsync(bookChapters)
         }
+    }
+
+    private fun refreshCategoryAdapter(chapters: List<TxtChapter>) {
+        val currentChapterPos = mPageLoader?.chapterPos ?: 0
+        val visibleChapters = if (showWrongChapters) {
+            chapters
+        } else {
+            chapters.filterIndexed { index, chapter ->
+                !chapter.hasHiddenSourceIntegrityMark() ||
+                    (chapter.catalogIndex.takeIf { catalogIndex -> catalogIndex >= 0 } ?: index) == currentChapterPos
+            }
+        }
+        mCategoryAdapter!!.refreshItems(visibleChapters)
+        mCategoryAdapter!!.setChapter(currentChapterPos)
+    }
+
+    private fun applyShowWrongChapterToggle(isChecked: Boolean) {
+        showWrongChapters = isChecked
+        refreshCategoryAdapter(mPageLoader?.chapterCategory.orEmpty())
+        binding!!.readIvCategory.setSelection(adapterPositionForFullChapter(mPageLoader?.chapterPos ?: 0))
+        AiBridgeTrace.event(
+            "source_catalog_wrong_toggle_changed",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields("showWrong" to isChecked)
+        )
+    }
+
+    private fun fullChapterPositionForAdapterPosition(adapterPosition: Int): Int {
+        val adapter = mCategoryAdapter ?: return adapterPosition
+        val chapter = adapter.getItem(adapterPosition)
+        if (chapter.catalogIndex >= 0) return chapter.catalogIndex
+        val fullIndex = mPageLoader?.chapterCategory?.indexOf(chapter) ?: -1
+        return if (fullIndex >= 0) fullIndex else adapterPosition
+    }
+
+    private fun adapterPositionForFullChapter(fullChapterPosition: Int): Int {
+        val adapter = mCategoryAdapter ?: return fullChapterPosition
+        for (index in 0 until adapter.count) {
+            val chapter = adapter.getItem(index)
+            val catalogIndex = chapter.catalogIndex.takeIf { value -> value >= 0 } ?: index
+            if (catalogIndex == fullChapterPosition) return index
+        }
+        return fullChapterPosition.coerceAtMost((adapter.count - 1).coerceAtLeast(0))
     }
 
     private fun finishChapter(isRefresh: Boolean) {

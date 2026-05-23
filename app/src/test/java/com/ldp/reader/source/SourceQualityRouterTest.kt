@@ -347,6 +347,38 @@ class SourceQualityRouterTest {
     }
 
     @Test
+    fun v5ValidTailGainRaisesBookSourceDespiteSmallBadTail() {
+        val router = SourceQualityRouter(
+            storage = InMemorySourceQualityStorage(),
+            seed = seed(
+                sourceSeed("https://fast.example", "多一章有效源", 1, "general", 7_500),
+                sourceSeed("https://stale.example", "少一章有效源", 1, "general", 7_500)
+            )
+        )
+        val fast = book(source("多一章有效源", "https://fast.example"))
+        val stale = book(source("少一章有效源", "https://stale.example"))
+        router.recordCatalogResolved(stale, chapterCount = 1_000, rawChapterCount = 1_000)
+        router.recordCatalogResolved(fast, chapterCount = 1_000, rawChapterCount = 1_000)
+
+        router.recordV5ChapterMarks(
+            book = fast,
+            latestObservedOrdinal = 1_002,
+            latestNormalOrdinal = 1_001,
+            firstBadTailOrdinal = 1_002,
+            normalCount = 3,
+            wrongCount = 1,
+            nonStoryCount = 0,
+            badExtractionCount = 0,
+            inconclusiveCount = 0
+        )
+
+        assertTrue(router.bookSourceScore(fast) > router.bookSourceScore(stale))
+        assertEquals(1_002, router.bookSourceSnapshot(fast).latestObservedOrdinal)
+        assertEquals(1_001, router.bookSourceSnapshot(fast).latestVerifiedGoodOrdinal)
+        assertEquals(1_002, router.bookSourceSnapshot(fast).badTailStartOrdinal)
+    }
+
+    @Test
     fun parsesSourceSeedTsv() {
         val router = SourceQualityRouter(
             storage = InMemorySourceQualityStorage(),

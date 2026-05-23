@@ -174,7 +174,7 @@ dependencies {
     // AndroidTagGroup
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     // Android Leak Analysis
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
 
     // CrashReport

@@ -1,10 +1,13 @@
 package com.ldp.reader.source
 
+import android.util.Log
 import com.ldp.reader.App
 import com.ldp.reader.sourceengine.model.BookSource
 import com.ldp.reader.sourceengine.model.CleanContent
 import com.ldp.reader.sourceengine.model.SourceBook
 import com.ldp.reader.sourceengine.model.SourceChapter
+import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v5.V5SourceRunResult
 import com.tencent.mmkv.MMKV
 import java.security.MessageDigest
 import java.util.ArrayDeque
@@ -41,7 +44,24 @@ internal class SourceQualityRouter(
             .sortedWith(scoredSourceComparator)
             .map { it.source }
         val personalKeys = personalTier.mapTo(mutableSetOf()) { source -> sourceKey(source) }
-        return personalTier + waterfallSources(sources.filterNot { source -> sourceKey(source) in personalKeys })
+        val globalRemainder = waterfallSources(sources.filterNot { source -> sourceKey(source) in personalKeys })
+        val ordered = personalTier + globalRemainder
+        AiBridgeTrace.event(
+            "source_quality_book_waterfall",
+            bookName,
+            AiBridgeTrace.fields(
+                "sources" to sources.size,
+                "personal" to personalTier.size,
+                "global" to globalRemainder.size,
+                "first" to ordered.take(8).joinToString("|") { source -> source.sourceName }
+            )
+        )
+        Log.i(
+            TAG,
+            "operation=bookWaterfall book=$bookName sources=${sources.size} " +
+                "personal=${personalTier.size} first=${ordered.take(8).joinToString("|") { it.sourceName }}"
+        )
+        return ordered
     }
 
     private fun waterfallFromScored(scored: List<ScoredSource>): List<BookSource> {
@@ -128,7 +148,21 @@ internal class SourceQualityRouter(
             "unvalidated" -> -10
             else -> 0
         }
-        adjust(book, bookDelta + validationDelta)
+        val totalDelta = bookDelta + validationDelta
+        traceScoreEvidence(
+            eventName = "source_quality_search_validation",
+            book = book,
+            delta = totalDelta,
+            fields = arrayOf(
+                "chapterCount" to chapterCount,
+                "freshness" to freshnessHint,
+                "cover" to coverUsable,
+                "validation" to validation,
+                "catalogDelta" to bookDelta,
+                "validationDelta" to validationDelta
+            )
+        )
+        adjust(book, totalDelta)
         if (catalogSignal > 0) {
             updateBookRange(book, observed = catalogSignal, verifiedGood = null, badTailStart = null)
         }
@@ -144,6 +178,16 @@ internal class SourceQualityRouter(
             chapterCount > 0 -> -60
             else -> -120
         }
+        traceScoreEvidence(
+            eventName = "source_quality_catalog_resolved",
+            book = book,
+            delta = bookDelta,
+            fields = arrayOf(
+                "chapters" to chapterCount,
+                "raw" to rawChapterCount,
+                "completeness" to completeness
+            )
+        )
         adjust(book, bookDelta)
         updateBookRange(
             book = book,
@@ -166,6 +210,19 @@ internal class SourceQualityRouter(
         }
         val continuityBonus = verifiedGain * VERIFIED_NEW_CHAPTER_REWARD
         val bookDelta = (continuityBonus - pollutionPenalty).coerceIn(-180, 260)
+        traceScoreEvidence(
+            eventName = "source_quality_tail_trimmed",
+            book = book,
+            delta = bookDelta,
+            fields = arrayOf(
+                "kept" to kept,
+                "raw" to rawChapterCount,
+                "verifiedGain" to verifiedGain,
+                "badTail" to badTailCount,
+                "continuityBonus" to continuityBonus,
+                "pollutionPenalty" to pollutionPenalty
+            )
+        )
         adjust(book, bookDelta)
         updateBookRange(
             book = book,
@@ -184,6 +241,17 @@ internal class SourceQualityRouter(
             quality >= 75 && coherence >= 75 && length >= 300 -> 55
             else -> -90
         }
+        traceScoreEvidence(
+            eventName = "source_quality_content_resolved",
+            book = chapter.book,
+            delta = bookDelta,
+            fields = arrayOf(
+                "chapter" to chapter.name,
+                "quality" to quality,
+                "coherence" to coherence,
+                "length" to length
+            )
+        )
         adjust(chapter.book, bookDelta)
         chapterOrdinal(chapter.name)?.let { ordinal ->
             updateBookRange(
@@ -196,7 +264,91 @@ internal class SourceQualityRouter(
     }
 
     fun recordContentRejected(chapter: SourceChapter) {
+        traceScoreEvidence(
+            eventName = "source_quality_content_rejected",
+            book = chapter.book,
+            delta = -120,
+            fields = arrayOf("chapter" to chapter.name)
+        )
         adjust(chapter.book, bookDelta = -120)
+    }
+
+    fun recordV5SourceRun(book: SourceBook, run: V5SourceRunResult) {
+        val counts = run.marks.groupingBy { mark -> mark.state }.eachCount()
+        recordV5ChapterMarks(
+            book = book,
+            latestObservedOrdinal = run.latestObservedOrdinal,
+            latestNormalOrdinal = run.latestNormalOrdinal,
+            firstBadTailOrdinal = run.firstBadTailOrdinal,
+            normalCount = counts[V5ChapterMarkState.NORMAL] ?: 0,
+            wrongCount = counts[V5ChapterMarkState.WRONG] ?: 0,
+            nonStoryCount = counts[V5ChapterMarkState.NON_STORY] ?: 0,
+            badExtractionCount = counts[V5ChapterMarkState.BAD_EXTRACTION] ?: 0,
+            inconclusiveCount = counts[V5ChapterMarkState.INCONCLUSIVE] ?: 0
+        )
+    }
+
+    fun recordV5ChapterMarks(
+        book: SourceBook,
+        latestObservedOrdinal: Int,
+        latestNormalOrdinal: Int,
+        firstBadTailOrdinal: Int?,
+        normalCount: Int,
+        wrongCount: Int,
+        nonStoryCount: Int,
+        badExtractionCount: Int,
+        inconclusiveCount: Int
+    ) {
+        val key = bookSourceKey(book)
+        val stats = bookSourceStatsFor(book)
+        val previousVerified = stats.latestVerifiedGoodOrdinal
+        val verifiedGain = (latestNormalOrdinal - previousVerified).coerceAtLeast(0)
+        val normalChapterBonus = normalCount.coerceAtMost(V5_NORMAL_CHAPTER_REWARD_LIMIT) * V5_NORMAL_CHAPTER_REWARD
+        val verifiedGainBonus = verifiedGain * V5_VERIFIED_NEW_CHAPTER_REWARD
+        val noNormalPenalty = if (normalCount <= 0 && latestObservedOrdinal > 0) V5_NO_NORMAL_CHAPTER_PENALTY else 0
+        val badPenalty =
+            wrongCount * V5_WRONG_CHAPTER_PENALTY +
+                badExtractionCount * V5_BAD_EXTRACTION_PENALTY +
+                nonStoryCount * V5_NON_STORY_PENALTY +
+                inconclusiveCount * V5_INCONCLUSIVE_PENALTY +
+                noNormalPenalty
+        val bookDelta = (verifiedGainBonus + normalChapterBonus - badPenalty)
+            .coerceIn(-V5_BOOK_SOURCE_MAX_PENALTY, V5_BOOK_SOURCE_MAX_REWARD)
+        traceScoreEvidence(
+            eventName = "source_quality_v5_marks",
+            book = book,
+            delta = bookDelta,
+            fields = arrayOf(
+                "observed" to latestObservedOrdinal,
+                "normalOrdinal" to latestNormalOrdinal,
+                "badTail" to firstBadTailOrdinal,
+                "normal" to normalCount,
+                "wrong" to wrongCount,
+                "nonStory" to nonStoryCount,
+                "badExtraction" to badExtractionCount,
+                "inconclusive" to inconclusiveCount,
+                "verifiedGain" to verifiedGain,
+                "badPenalty" to badPenalty
+            )
+        )
+
+        stats.delta = (stats.delta + bookDelta).coerceIn(-BOOK_SOURCE_DYNAMIC_RANGE, BOOK_SOURCE_DYNAMIC_RANGE)
+        stats.events += 1
+        stats.successCount += normalCount
+        stats.failureCount += wrongCount + badExtractionCount
+        stats.wrongContentCount += wrongCount
+        stats.latestObservedOrdinal = maxOf(stats.latestObservedOrdinal, latestObservedOrdinal)
+        if (latestNormalOrdinal > 0) {
+            stats.latestVerifiedGoodOrdinal = maxOf(stats.latestVerifiedGoodOrdinal, latestNormalOrdinal)
+        }
+        if (firstBadTailOrdinal != null && firstBadTailOrdinal > 0) {
+            stats.badTailStartOrdinal = when (val current = stats.badTailStartOrdinal) {
+                0 -> firstBadTailOrdinal
+                else -> minOf(current, firstBadTailOrdinal)
+            }
+        }
+        stats.updatedAtMs = System.currentTimeMillis()
+        persistBookSourceStats(key, stats)
     }
 
     fun flush() {
@@ -206,10 +358,12 @@ internal class SourceQualityRouter(
     private fun adjust(book: SourceBook, bookDelta: Int) {
         val key = bookSourceKey(book)
         val stats = bookSourceStatsFor(book)
+        val before = stats.delta
         stats.delta = (stats.delta + bookDelta).coerceIn(-BOOK_SOURCE_DYNAMIC_RANGE, BOOK_SOURCE_DYNAMIC_RANGE)
         stats.events += 1
         stats.updatedAtMs = System.currentTimeMillis()
         persistBookSourceStats(key, stats)
+        traceScoreApplied(book, before, bookDelta, stats)
     }
 
     private fun updateBookRange(
@@ -220,6 +374,9 @@ internal class SourceQualityRouter(
     ) {
         val key = bookSourceKey(book)
         val stats = bookSourceStatsFor(book)
+        val beforeVerified = stats.latestVerifiedGoodOrdinal
+        val beforeObserved = stats.latestObservedOrdinal
+        val beforeBadTail = stats.badTailStartOrdinal
         stats.latestObservedOrdinal = maxOf(stats.latestObservedOrdinal, observed)
         if (verifiedGood != null) {
             stats.latestVerifiedGoodOrdinal = maxOf(stats.latestVerifiedGoodOrdinal, verifiedGood)
@@ -232,6 +389,57 @@ internal class SourceQualityRouter(
         }
         stats.updatedAtMs = System.currentTimeMillis()
         persistBookSourceStats(key, stats)
+        AiBridgeTrace.state(
+            "source_quality_range_updated",
+            book.name,
+            AiBridgeTrace.fields(
+                "source" to sourceLabel(book.source),
+                "observed" to stats.latestObservedOrdinal,
+                "verified" to stats.latestVerifiedGoodOrdinal,
+                "badTail" to stats.badTailStartOrdinal,
+                "beforeObserved" to beforeObserved,
+                "beforeVerified" to beforeVerified,
+                "beforeBadTail" to beforeBadTail
+            )
+        )
+    }
+
+    private fun traceScoreEvidence(
+        eventName: String,
+        book: SourceBook,
+        delta: Int,
+        fields: Array<Pair<String, Any?>>
+    ) {
+        AiBridgeTrace.event(
+            eventName,
+            book.name,
+            AiBridgeTrace.fields(
+                "source" to sourceLabel(book.source),
+                "delta" to delta,
+                *fields
+            )
+        )
+    }
+
+    private fun traceScoreApplied(book: SourceBook, beforeDelta: Int, appliedDelta: Int, stats: ScoreStats) {
+        AiBridgeTrace.state(
+            "source_quality_score_applied",
+            book.name,
+            AiBridgeTrace.fields(
+                "source" to sourceLabel(book.source),
+                "applied" to appliedDelta,
+                "beforeDelta" to beforeDelta,
+                "afterDelta" to stats.delta,
+                "events" to stats.events,
+                "bookScore" to bookSourceScore(book)
+            )
+        )
+        Log.i(
+            TAG,
+            "operation=sourceQualityApplied book=${book.name} source=${sourceLabel(book.source)} " +
+                "applied=$appliedDelta beforeDelta=$beforeDelta afterDelta=${stats.delta} events=${stats.events} " +
+                "bookScore=${bookSourceScore(book)}"
+        )
     }
 
     private fun sourceTier(source: BookSource): Int {
@@ -423,11 +631,22 @@ internal class SourceQualityRouter(
 
     companion object {
         private const val BOOK_SOURCE_SCOPE = "book_source"
+        private const val TAG = "SourceQualityRouter"
         private const val MIN_SCORE = 0
         private const val MAX_SCORE = 10_000
         private const val BASE_SOURCE_SCORE = 5_000
         private const val BOOK_SOURCE_DYNAMIC_RANGE = 5_000
         private const val VERIFIED_NEW_CHAPTER_REWARD = 20
+        private const val V5_VERIFIED_NEW_CHAPTER_REWARD = 120
+        private const val V5_NORMAL_CHAPTER_REWARD = 8
+        private const val V5_NORMAL_CHAPTER_REWARD_LIMIT = 6
+        private const val V5_WRONG_CHAPTER_PENALTY = 70
+        private const val V5_BAD_EXTRACTION_PENALTY = 45
+        private const val V5_NON_STORY_PENALTY = 25
+        private const val V5_INCONCLUSIVE_PENALTY = 8
+        private const val V5_NO_NORMAL_CHAPTER_PENALTY = 120
+        private const val V5_BOOK_SOURCE_MAX_REWARD = 360
+        private const val V5_BOOK_SOURCE_MAX_PENALTY = 260
         private const val BOOK_LOCAL_SCORE_MULTIPLIER = 2
         private const val BOOK_PERSONAL_TIER_MIN_EVENTS = 2
         private const val BOOK_PERSONAL_TIER_MIN_SCORE = 4_800

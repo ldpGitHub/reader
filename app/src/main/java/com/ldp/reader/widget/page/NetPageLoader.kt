@@ -27,6 +27,10 @@ class NetPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(pag
             chapter.bookId = bean.bookId
             chapter.title = bean.title
             chapter.link = bean.link
+            chapter.catalogIndex = bean.start.toInt()
+            chapter.sourceIntegrityState = bean.sourceIntegrityState
+            chapter.sourceIntegrityConfidence = bean.sourceIntegrityConfidence
+            chapter.sourceIntegrityReason = bean.sourceIntegrityReason
             chapter.start = bean.start
             txtChapters.add(chapter)
         }

@@ -690,12 +690,15 @@ Later experiments can replace the analyzer behind the same UI:
 ## 2026-05-23 Tail Sampling Replay Policy
 
 Raw-corpus replay no longer reads or analyzes whole books. The replay treats the
-last 100 chapters as a high-risk window, but does not run all 100 chapters. It
-uses a bounded deterministic probe plan:
+last 100 chapters as a high-risk window. For large books, the production replay
+now runs every chapter in that 100-chapter tail window as a target because the
+2026-05-23 red/green books exposed intermittent misses from sparse tail probes.
+It still uses bounded deterministic context outside the tail:
 
 - `TARGET_RECENT`: the last 2 chapters contiguously.
-- `TARGET_TAIL`: exponential offsets inside the last 100 chapters
-  (`1, 2, 4, 8, 16, 32, 64`, and the 100-chapter boundary when present).
+- `TARGET_TAIL`: every chapter in the last 100-chapter tail-risk window for
+  books with enough non-tail context. Short books may fall back to sparse tail
+  probes to preserve Book Memory.
 - `TARGET_EXTENDED`: if the book is longer than the 100-chapter risk window,
   probe farther back by coarse exponential offsets (`256, 512, 1024, ...`).
   This catches long pollution runs without scanning every chapter. It does not
@@ -728,3 +731,7 @@ target text contaminate the Book Memory.
 Every replay item logs phase timing: file listing, sampling, text read, analyzer
 run, audit extract writing, and total elapsed time. This is required because the
 same strategy must be deployable on-device, not just useful in an offline test.
+
+The larger target window needs a larger unit-test heap for full raw-corpus
+passes. `algorithm-test` accepts `-DrawCorpusTargetMaxHeap=4096m` when
+`-DrawCorpusTargetReplay=true`; smoke replays can still use the default heap.

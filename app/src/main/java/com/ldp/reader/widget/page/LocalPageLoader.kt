@@ -57,6 +57,7 @@ class LocalPageLoader(pageView: PageView, collBook: CollBookBean) : PageLoader(p
         for (bean in bookChapters) {
             val chapter = TxtChapter()
             chapter.title = bean.title
+            chapter.catalogIndex = bean.start.toInt()
             chapter.start = bean.start
             chapter.end = bean.end
             txtChapters.add(chapter)

@@ -72,6 +72,11 @@ class ReadViewModel : ViewModel() {
         )
         categoryJob = viewModelScope.launch {
             publishReadingBootstrapCatalog(bookId, collBookBean, startedAt)
+            if (isSourceEngineBookRequest(bookId, collBookBean) &&
+                !collBookBean.getBookChapters().isNullOrEmpty()
+            ) {
+                startReadingContentTierFill(bookId, collBookBean)
+            }
             var attempt = 0
             while (true) {
                 attempt += 1
@@ -274,6 +279,17 @@ class ReadViewModel : ViewModel() {
 
     private fun startReadingContentTierFill(bookId: String?, collBookBean: CollBookBean) {
         if (!isSourceEngineBookRequest(bookId, collBookBean)) return
+        if (contentTierJob?.isActive == true) {
+            AiBridgeTrace.event(
+                "source_read_tier_skipped",
+                collBookBean.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "reason" to "already_active",
+                    "bookId" to bookId.orEmpty()
+                )
+            )
+            return
+        }
         contentTierJob?.cancel()
         AiBridgeTrace.event(
             "source_read_tier_started",
@@ -303,7 +319,8 @@ class ReadViewModel : ViewModel() {
                     BookContentProviderRouter.prepareBookContentTier(
                         bookId,
                         collBookBean,
-                        persist = true
+                        persist = true,
+                        triggerV5 = true
                     )
                 } catch (error: CancellationException) {
                     throw error
@@ -526,18 +543,37 @@ class ReadViewModel : ViewModel() {
                     } catch (t: Throwable) {
                         LogUtils.e(t)
                         if (notifyError && SourceEngineBookRoute.isChapterId(request.bookChapter.link)) {
-                            AiBridgeTrace.event(
-                                "source_read_chapter_retry",
+                            val terminalSourceEngineFailure = isSourceEngineContentTerminalFailure(t)
+                            if (!terminalSourceEngineFailure && attempt < SOURCE_ENGINE_CHAPTER_MAX_ATTEMPTS) {
+                                AiBridgeTrace.event(
+                                    "source_read_chapter_retry",
+                                    request.sourceBook.title.orEmpty(),
+                                    AiBridgeTrace.fields(
+                                        "chapter" to request.title,
+                                        "attempt" to attempt,
+                                        "max" to SOURCE_ENGINE_CHAPTER_MAX_ATTEMPTS,
+                                        "error" to t.javaClass.simpleName,
+                                        "terminal" to terminalSourceEngineFailure,
+                                        "elapsedMs" to (System.currentTimeMillis() - startedAt)
+                                    )
+                                )
+                                delay(SOURCE_ENGINE_RETRY_DELAY_MS)
+                                continue
+                            }
+                            AiBridgeTrace.state(
+                                "source_read_chapter_retry_exhausted",
                                 request.sourceBook.title.orEmpty(),
                                 AiBridgeTrace.fields(
                                     "chapter" to request.title,
                                     "attempt" to attempt,
+                                    "max" to SOURCE_ENGINE_CHAPTER_MAX_ATTEMPTS,
                                     "error" to t.javaClass.simpleName,
+                                    "terminal" to terminalSourceEngineFailure,
                                     "elapsedMs" to (System.currentTimeMillis() - startedAt)
                                 )
                             )
-                            delay(SOURCE_ENGINE_RETRY_DELAY_MS)
-                            continue
+                            _chapterErrorEvents.value = ++chapterErrorVersion
+                            return@launch
                         }
                         if (notifyError) {
                             AiBridgeTrace.state(
@@ -570,6 +606,11 @@ class ReadViewModel : ViewModel() {
         return sourceBook.get_id().orEmpty() + "#" + title
     }
 
+    private fun isSourceEngineContentTerminalFailure(t: Throwable): Boolean {
+        return t is IllegalStateException &&
+            t.message.orEmpty().startsWith("Source-engine content request failed:")
+    }
+
     private data class ChapterLoadRequest(
         val bookId: String?,
         val sourceBook: CollBookBean,
@@ -580,10 +621,11 @@ class ReadViewModel : ViewModel() {
 
     companion object {
         private val TAG = ReadViewModel::class.java.simpleName
-        private const val READING_BOOTSTRAP_CHAPTERS = 1
+        private const val READING_BOOTSTRAP_CHAPTERS = 10_000
         private const val PREFETCH_CHAPTER_LIMIT = 5
         private const val MAX_PREFETCH_CONCURRENT_CHAPTERS = 1
         private const val SOURCE_ENGINE_RETRY_DELAY_MS = 2_000L
+        private const val SOURCE_ENGINE_CHAPTER_MAX_ATTEMPTS = 2
         private const val SOURCE_ENGINE_TIER_INITIAL_BACKOFF_MS = 2_000L
         private const val SOURCE_ENGINE_TIER_MAX_BACKOFF_MS = 30_000L
     }

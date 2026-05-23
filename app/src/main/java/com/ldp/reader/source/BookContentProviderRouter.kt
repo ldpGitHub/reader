@@ -78,7 +78,8 @@ object BookContentProviderRouter {
     suspend fun prepareBookContentTier(
         bookId: String?,
         collBookBean: CollBookBean? = null,
-        persist: Boolean = false
+        persist: Boolean = false,
+        triggerV5: Boolean = false
     ): Boolean {
         val routeBookId = if (collBookBean == null) {
             routeBookIdFor(bookId)
@@ -87,7 +88,7 @@ object BookContentProviderRouter {
         }
         if (!SourceEngineBookRoute.isBookId(routeBookId)) return true
         logRoute("contentTier", sourceEngineProvider, routeBookId)
-        return sourceEngineProvider.prepareBookContentTier(routeBookId, collBookBean, persist)
+        return sourceEngineProvider.prepareBookContentTier(routeBookId, collBookBean, persist, triggerV5)
     }
 
     suspend fun getBookContent(

@@ -67,6 +67,43 @@ stable cold-start order instead of repeatedly scanning a very large source set.
 
 Detailed rules are in `docs/SOURCE_QUALITY_ROUTING_DESIGN.md`.
 
+## Current Implementation Update - 2026-05-23
+
+The reader integration now replaces the old "two trusted sources before
+display" gate with a V5 marking flow. The detailed documents are:
+
+- `docs/READING_V5_INTEGRATION_DESIGN.md`
+- `docs/READING_V5_INTEGRATION_TECHNICAL.md`
+
+Implemented changes:
+
+- Opening a source-engine book can show one stable anchor catalog immediately
+  from a single readable anchor.
+- Current chapter loading has priority over V5, prefetch, and background tier
+  fill.
+- Search/detail do not trigger V5. Reading passes `triggerV5=true` when filling
+  the content tier.
+- V5 runs for the primary trusted source as soon as reading has persisted tier
+  or source evidence, restores cached marks when the catalog is unchanged, and
+  starts a second source only after conservative text-dissimilarity checks.
+- The V5 mark cache identity includes source identity, catalog size, first/last
+  title, and a digest of the last 160 titles, so tail catalog changes invalidate
+  old marks.
+- Wrong, non-story, and bad-extraction chapters are marked rather than silently
+  trimmed from the visible catalog.
+- The catalog dialog exposes `显示错章`; default on means the user sees marked
+  rows, and turning it off filters the adapter view only.
+- The dedicated tier and global waterfall remain the source-routing mechanism.
+  V5 supplies richer evidence for per-book score changes and chapter fallback,
+  not a replacement for tier/waterfall.
+- The production V5 planner is the audited tail-160 raw-corpus replay planner:
+  all last 160 tail-risk chapters are targets for large books, not the older 50/50
+  source-experiment defaults.
+
+This direction intentionally supersedes the 2026-05-21 checkpoint's strict
+reading-first-display rule. That checkpoint remains useful as implementation
+history, but it does not match the new UX target.
+
 ## Pause Checkpoint - 2026-05-21
 
 This checkpoint records the current source-engine tier redesign before the task

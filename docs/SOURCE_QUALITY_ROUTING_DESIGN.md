@@ -127,6 +127,55 @@ chapters can still beat a stale source, even if its last 4 chapters are bad. If
 two sources are aligned to the same verified/latest range, the one with fewer
 bad tail chapters ranks higher.
 
+## V5 Catalog Marking Integration
+
+The reader should no longer treat tail pollution as a pure trimming problem.
+The production V5 integration keeps the observed catalog and attaches chapter
+marks. As of 2026-05-23 this is implemented for the reading page only; search
+and detail keep their existing non-V5 behavior.
+
+- `OK`: usable story content.
+- `WRONG`: wrong-book story, polluted suffix, or polluted run.
+- `NON_STORY`: announcement, author note, leave note, postscript, or similar.
+- `BAD_EXTRACTION`: page shell, blank, preview-only, or broken extraction.
+- `INCONCLUSIVE`: checked but not enough evidence.
+
+Source scoring should still use `latestObservedOrdinal`,
+`latestVerifiedGoodOrdinal`, and `badTailStartOrdinal`, but the visible catalog
+should be derived from an anchor catalog plus marks. Filtering is a UI view
+controlled by `显示错章`, not mutation of the stored catalog.
+
+V5 evidence feeds routing like this:
+
+- valid chapter gain raises the book-source score;
+- a short polluted tail creates a local penalty but does not globally demote the
+  source heavily;
+- a wrong current chapter creates a stronger book-source penalty;
+- a challenger source with more V5-valid latest chapters can rise in the
+  dedicated tier and may become the next anchor at an epoch boundary.
+
+V5 evidence must come from the production analyzer pipeline. Source routing may
+choose which source chapters to fetch and may cache duplicate content
+signatures, but it must not silently change V5's cleaning, validation-plan
+chapter selection, Book Memory, target exclusion, or same-book arc confirmation
+rules. Any change to those inputs is a new algorithm version and needs the
+three-book red/green replay, the raw-corpus replay, and device validation before
+it is treated as production evidence.
+
+The production planner is `V5ChapterValidationPlanner`, shared by source-engine
+and the raw-corpus replay test. Its current defaults are the audited
+tail-160 target-replay defaults: all target chapters in the 160-chapter tail
+risk window for large books, last 2 recent targets, minimum 8 usable Book
+Memory context chapters, and bounded context backfill. The older 100-chapter
+tail cap is not production-valid after the `元始法则` miss.
+The earlier 50/50 source-experiment defaults must not be used for reader V5
+marking unless a new replay accepts that change.
+
+Reader V5 scheduling validates the primary trusted source by default. It starts
+a second source V5 epoch only after catalog-aligned primary/candidate chapter
+text is clearly dissimilar around an existing bad mark. Similar text is treated
+as shared upstream content and does not justify another V5 run.
+
 ## Request Waterfall
 
 Source routing uses one book-specific queue followed by the immutable global

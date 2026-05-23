@@ -154,6 +154,7 @@
 
     <!--侧滑栏-->
     <LinearLayout
+        android:id="@+id/read_ll_catalog_drawer"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -163,14 +164,36 @@
         android:paddingTop="@dimen/nb.padding.large"
         android:paddingBottom="@dimen/nb.padding.large">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/read_ll_catalog_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="8dp"
-            android:text="目录"
-            android:textColor="@color/nb.text.default"
-            android:textSize="20sp" />
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="56dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="目录"
+                android:textColor="@color/nb.text.default"
+                android:textSize="20sp" />
+
+            <CheckBox
+                android:id="@+id/read_cb_show_wrong_chapters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="显示错章"
+                android:textColor="@color/nb.text.common_h2"
+                android:textSize="13sp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

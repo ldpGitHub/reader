@@ -9,6 +9,8 @@ import com.ldp.reader.sourceengine.legado.LegadoSourceEngine
 import com.ldp.reader.sourceengine.model.CanonicalChapter
 import com.ldp.reader.sourceengine.model.CanonicalChapterList
 import com.ldp.reader.sourceengine.model.BookSource
+import com.ldp.reader.sourceengine.model.CleanContent
+import com.ldp.reader.sourceengine.model.ContentQualityReport
 import com.ldp.reader.sourceengine.model.SourceBook
 import com.ldp.reader.sourceengine.model.SourceChapter
 import com.ldp.reader.sourceengine.catalog.ChapterNormalizer
@@ -1066,6 +1068,91 @@ class SourceEngineReaderContentProviderTest {
     }
 
     @Test
+    fun displayableReadingContentDoesNotRequireReadableQualityThreshold() {
+        val provider = SourceEngineReaderContentProvider()
+        val displayableMethod = provider.javaClass.getDeclaredMethod("hasDisplayableContent", CleanContent::class.java)
+        val readableMethod = provider.javaClass.getDeclaredMethod("isReadableContent", CleanContent::class.java)
+        displayableMethod.isAccessible = true
+        readableMethod.isAccessible = true
+        val content = CleanContent(
+            rawContent = "月白风清 ".repeat(80),
+            cleanedContent = "月白风清 ".repeat(80),
+            report = ContentQualityReport(
+                qualityScore = 30,
+                rawLength = 400,
+                cleanedLength = 400,
+                paragraphCount = 8,
+                removedLineCount = 0,
+                duplicateLineCount = 0,
+                pollutionMarkers = emptyList(),
+                warnings = listOf("content-may-belong-to-other-book"),
+                coherenceScore = 0
+            )
+        )
+
+        assertFalse(readableMethod.invoke(provider, content) as Boolean)
+        assertTrue(displayableMethod.invoke(provider, content) as Boolean)
+    }
+
+    @Test
+    fun getBookContentDisplaysLowQualityDiagnosticContentInsteadOfBlocking() = runBlocking {
+        val source = changduSource("低质诊断源", "https://low-quality-display.example")
+        val chapterTitles = (1..12).map { index -> "第${index}章 正文" }
+        val engine = LegadoSourceEngine(
+            MapFetcher(
+                customCatalogFixture(
+                    baseUrl = "https://low-quality-display.example",
+                    title = "青山",
+                    author = "会说话的肘子",
+                    chapterTitles = chapterTitles,
+                    customChapterHtml = { index, _ ->
+                        if (index == 12) foreignButDisplayableChapterHtml() else qingShanReadableChapterHtml(index)
+                    }
+                )
+            )
+        )
+        val provider = SourceEngineReaderContentProvider(
+            engine = engine,
+            searchEngine = engine,
+            detailProbeEngine = engine,
+            sourceProvider = { listOf(source) },
+            sourceFinder = { source }
+        )
+        val book = SourceBook(
+            source = source,
+            name = "青山",
+            author = "会说话的肘子",
+            bookUrl = "https://low-quality-display.example/books/1/",
+            coverUrl = "file:///cover.jpg",
+            intro = "",
+            kind = "",
+            lastChapter = "第12章 正文"
+        )
+        val chapter = SourceChapter(
+            source = source,
+            book = book,
+            index = 11,
+            name = "第12章 正文",
+            chapterUrl = "https://low-quality-display.example/book/1/12.html"
+        )
+        val collBook = CollBookBean().apply {
+            title = "青山"
+            author = "会说话的肘子"
+        }
+        val txtChapter = TxtChapter().apply {
+            bookId = SourceEngineBookRoute.bookId(book)
+            link = SourceEngineBookRoute.chapterId(chapter)
+            title = chapter.name
+            start = 11L
+        }
+
+        val content = provider.getBookContent(txtChapter.bookId, collBook, txtChapter, 0)
+
+        assertTrue(content.contains("月白风清"))
+        assertTrue(content.contains("曼荼罗"))
+    }
+
+    @Test
     fun searchBooksRejectsCatalogBackedAuthorOnlyTitleQueryResult() = runBlocking {
         val source = changduSource("污染源", "https://polluted.example")
         val engine = LegadoSourceEngine(
@@ -1503,6 +1590,18 @@ class SourceEngineReaderContentProviderTest {
             "$chapterTitle 第${paragraph}段，$title 的故事继续推进。萧炎与药老在黑角域商议远行，" +
                 "$author 写下异火、斗气、宗门与旧友之间的因果。夜色落下，众人仍守着本心，" +
                 "把眼前的风雪、火焰和远处的大陆一一记清。"
+        }
+        return """
+            <html><body>
+              <div id="content">$body</div>
+            </body></html>
+        """.trimIndent()
+    }
+
+    private fun foreignButDisplayableChapterHtml(): String {
+        val body = (1..10).joinToString("\n") { paragraph ->
+            "第十二章 月白风清 第${paragraph}段，元始法则的曼荼罗殿在月色里摇晃，" +
+                "秦桑沿着石阶听见钟声，白鹿青、云海、剑阵和旧日仙盟的消息交错而来。"
         }
         return """
             <html><body>
