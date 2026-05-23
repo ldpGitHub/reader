@@ -1,0 +1,179 @@
+Imported sources: 6411
+Search matches: 2
+Source failures: 1
+- short catalog 笔趣阁22: 0 < 80
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=483, ordinals=465, gaps=3, score=1623.5
+First: 第一章 张文达
+Last: 第四百六十六章 绝境
+- 👍 55读书: chapters=483, dup=2, ord=465, gaps=3, score=1623.5
+Fused preview:
+1. 第一章 张文达
+2. 第二章 包子
+3. 第三章 攻击
+4. 第四章 规则
+5. 第五章 棒棒糖
+6. 第六章 少年宫
+7. 第七章 棋子
+8. 第八章 快乐
+9. 第九章 痛苦
+10. 第十章 红条
+11. 第十一章 门
+12. 第十二章 活物
+13. 第十三章 鲸鱼
+14. 第十四章 少年宫
+15. 第十五章 护卫
+16. 第十六章 回家
+17. 第十七章 钱
+18. 第十八章 兔子
+19. 第十九章 建国
+20. 第二十章 劫匪
+
+
+Sample validation issues: 0
+- none
+
+Novel: 旧域怪诞 / 狐尾的笔
+Chapters: 48, chunks: 175
+Core features: 67, support: 0
+Top features:
+- CHARACTER:张文达 weight=256.2 chapters=44 hits=566
+- ORGANIZATION:宋建国 weight=170.6 chapters=15 hits=102
+- CHARACTER:胡毛毛 weight=150.7 chapters=8 hits=39
+- CHARACTER:唐兴雄 weight=135.0 chapters=6 hits=26
+- CHARACTER:谭友根 weight=126.2 chapters=3 hits=28
+- CHARACTER:文达跟 weight=124.0 chapters=10 hits=11
+- CHARACTER:老舅 weight=118.2 chapters=5 hits=40
+- CHARACTER:文达此 weight=110.3 chapters=5 hits=11
+- CHARACTER:老太太 weight=109.7 chapters=6 hits=9
+- CHARACTER:连忙 weight=107.7 chapters=10 hits=15
+- CHARACTER:文达忽 weight=106.7 chapters=6 hits=8
+- CHARACTER:文达直接 weight=105.0 chapters=5 hits=6
+Suggestions: 25
+- chapter 279 第二百七十四章 三线: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=1300 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.64 separation=0.93 cohesion=0.50 evidenceChars=711
+  * v3 membershipLow=1.00 alienCluster=0.72 alienContinuity=0.40 alienNovelty=0.75 alienEntityCount=4
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.64 prefixAlien=0.00
+  * v3 world=0.89 futureIntegration=0.00 ood=0.01
+- chapter 294 第二百八十九章 出发: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.90 separation=0.95 cohesion=0.14 evidenceChars=1320
+  * v3 membershipLow=1.00 alienCluster=0.92 alienContinuity=0.41 alienNovelty=1.00 alienEntityCount=13
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.90 prefixAlien=0.00
+  * v3 world=0.96 futureIntegration=0.00 ood=0.03
+- chapter 308 第三百零三章 对抗: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=534 confidence=0.92 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.78 separation=0.87 cohesion=0.18 evidenceChars=665
+  * v3 membershipLow=1.00 alienCluster=0.88 alienContinuity=0.25 alienNovelty=0.57 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.05 prefixBook=0.78 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 338 第三百二十八章 规矩: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.86 separation=0.92 cohesion=0.12 evidenceChars=943
+  * v3 membershipLow=1.00 alienCluster=0.93 alienContinuity=0.22 alienNovelty=0.88 alienEntityCount=8
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.86 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 ood=0.01
+- chapter 461 第四百四十四章 胡毛毛: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.95 action=SUGGEST_DELETE
+  * v3 break=0.88 separation=0.87 cohesion=0.11 evidenceChars=973
+  * v3 membershipLow=1.00 alienCluster=0.85 alienContinuity=0.70 alienNovelty=1.00 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.88 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 462 第四百四十五章 答应: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.85 action=SUGGEST_DELETE
+  * v3 break=0.93 separation=0.89 cohesion=0.15 evidenceChars=921
+  * v3 membershipLow=1.00 alienCluster=0.61 alienContinuity=0.33 alienNovelty=0.67 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.93 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.00
+- chapter 463 第四百四十六章 祭祀: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.68 separation=0.89 cohesion=0.12 evidenceChars=938
+  * v3 membershipLow=1.00 alienCluster=0.93 alienContinuity=0.59 alienNovelty=0.92 alienEntityCount=12
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.68 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 464 第四百四十七章 12: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.77 separation=0.91 cohesion=0.08 evidenceChars=1535
+  * v3 membershipLow=1.00 alienCluster=0.94 alienContinuity=0.31 alienNovelty=0.85 alienEntityCount=13
+  * v3 graphAbsorption=0.00 prototype=0.05 prefixBook=0.77 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 465 第四百四十八章 人: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.75 separation=0.91 cohesion=0.15 evidenceChars=897
+  * v3 membershipLow=1.00 alienCluster=0.62 alienContinuity=0.50 alienNovelty=0.75 alienEntityCount=4
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.75 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 466 第四百四十九章 理想国: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=534 confidence=0.83 action=SUGGEST_DELETE
+  * v3 break=0.88 separation=0.86 cohesion=0.21 evidenceChars=649
+  * v3 membershipLow=1.00 alienCluster=0.54 alienContinuity=0.33 alienNovelty=0.67 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.88 prefixAlien=0.00
+  * v3 world=0.96 futureIntegration=0.00 ood=0.00
+- chapter 468 第四百五十一章 拉克夫: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.80 separation=0.90 cohesion=0.10 evidenceChars=1487
+  * v3 membershipLow=1.00 alienCluster=0.92 alienContinuity=0.36 alienNovelty=0.89 alienEntityCount=9
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.80 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 470 第四百五十三章 报告: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.95 action=SUGGEST_DELETE
+  * v3 break=0.60 separation=0.90 cohesion=0.09 evidenceChars=1324
+  * v3 membershipLow=0.94 alienCluster=0.96 alienContinuity=0.22 alienNovelty=0.94 alienEntityCount=16
+  * v3 graphAbsorption=0.06 prototype=0.03 prefixBook=0.66 prefixAlien=0.00
+  * v3 world=0.92 futureIntegration=0.00 ood=0.01
+- chapter 471 第四百五十四章 区域物: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.97 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.78 separation=0.94 cohesion=0.16 evidenceChars=1292
+  * v3 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.78 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 472 第四百五十五章 脸: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.82 action=SUGGEST_DELETE
+  * v3 break=0.87 separation=0.83 cohesion=0.13 evidenceChars=895
+  * v3 membershipLow=1.00 alienCluster=0.50 alienContinuity=0.50 alienNovelty=0.67 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.87 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.00
+- chapter 473 第四百五十六章 机会: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.79 action=SUGGEST_DELETE
+  * v3 break=0.51 separation=0.88 cohesion=0.13 evidenceChars=1061
+  * v3 membershipLow=0.66 alienCluster=0.96 alienContinuity=0.18 alienNovelty=0.90 alienEntityCount=10
+  * v3 graphAbsorption=0.44 prototype=0.08 prefixBook=0.85 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 474 第四百五十七章 天堂: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.77 separation=0.91 cohesion=0.16 evidenceChars=914
+  * v3 membershipLow=1.00 alienCluster=0.87 alienContinuity=0.56 alienNovelty=0.83 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.06 prefixBook=0.77 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 475 第四百五十八章 上课: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.98 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.82 cohesion=0.15 evidenceChars=957
+  * v3 membershipLow=1.00 alienCluster=0.97 alienContinuity=0.75 alienNovelty=0.90 alienEntityCount=10
+  * v3 graphAbsorption=0.00 prototype=0.08 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 476 第四百五十九章 数学: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.81 action=SUGGEST_DELETE
+  * v3 break=0.94 separation=0.85 cohesion=0.11 evidenceChars=913
+  * v3 membershipLow=1.00 alienCluster=0.54 alienContinuity=0.33 alienNovelty=0.33 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.94 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 477 第四百六十章 1: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.91 cohesion=0.15 evidenceChars=903
+  * v3 membershipLow=1.00 alienCluster=0.90 alienContinuity=0.27 alienNovelty=0.89 alienEntityCount=9
+  * v3 graphAbsorption=0.00 prototype=0.07 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.00
+- chapter 478 第四百六十一章 寻找: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.61 action=MARK_ONLY
+  * v3 break=0.76 separation=0.86 cohesion=0.14 evidenceChars=902
+  * v3 membershipLow=1.00 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0
+  * v3 graphAbsorption=0.00 prototype=0.07 prefixBook=0.76 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.00
+- chapter 479 第四百六十二章 攻击: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.90 separation=0.91 cohesion=0.14 evidenceChars=907
+  * v3 membershipLow=1.00 alienCluster=0.95 alienContinuity=0.25 alienNovelty=0.86 alienEntityCount=14
+  * v3 graphAbsorption=0.00 prototype=0.06 prefixBook=0.90 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.00
+- chapter 480 第四百六十三章 故人: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.87 separation=0.93 cohesion=0.14 evidenceChars=909
+  * v3 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.87 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 481 第四百六十四章 狂飙7号: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.83 action=SUGGEST_DELETE
+  * v3 break=0.64 separation=0.93 cohesion=0.12 evidenceChars=1099
+  * v3 membershipLow=0.68 alienCluster=0.91 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.18 prototype=0.08 prefixBook=0.95 prefixAlien=0.00
+  * v3 world=0.94 futureIntegration=0.00 ood=0.01
+- chapter 482 第四百六十五章 狂飙3号: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.80 separation=0.81 cohesion=0.09 evidenceChars=902
+  * v3 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.17 alienNovelty=0.91 alienEntityCount=11
+  * v3 graphAbsorption=0.00 prototype=0.06 prefixBook=0.80 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 483 第四百六十六章 绝境: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=534 confidence=0.95 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.83 separation=0.84 cohesion=0.20 evidenceChars=671
+  * v3 membershipLow=1.00 alienCluster=0.86 alienContinuity=0.14 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.10 prefixBook=0.83 prefixAlien=0.00
+  * v3 world=0.77 futureIntegration=0.00 ood=0.01
+

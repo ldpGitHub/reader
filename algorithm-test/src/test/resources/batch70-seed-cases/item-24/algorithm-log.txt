@@ -1,0 +1,20 @@
+input: chapters=48 title=异度旅社 author=远瞳
+chunk: chunks=235 size=800 overlap=150
+fingerprint.seed: seedChunks=121
+fingerprint.build: chunks=121 terms=47607 core=90 support=0 relations=128
+fingerprint.top: CHARACTER:小红帽:11/114|CHARACTER:艾琳:19/147|CHARACTER:胡狸:18/94|CHARACTER:元灵真:3/22|CHARACTER:宋成:5/34|CHARACTER:元灵:6/29|CHARACTER:元鹤真:4/13|CHARACTER:平常:10/14|ITEM:几秒钟:10/16|CHARACTER:平静:8/16
+refine: round=1 cleanChunks=188
+fingerprint.build: chunks=188 terms=72238 core=173 support=0 relations=244
+fingerprint.top: CHARACTER:小红帽:15/137|CHARACTER:艾琳:34/306|CHARACTER:胡狸:32/147|CHARACTER:洛达西姆:9/29|CHARACTER:郑直:11/111|CHARACTER:小东西:12/20|CHARACTER:平常:19/31|CHARACTER:元灵真:3/22|ITEM:几秒钟:14/21|CHARACTER:常情况:8/9
+refine: round=2 cleanChunks=198
+fingerprint.build: chunks=198 terms=75084 core=184 support=0 relations=248
+fingerprint.top: CHARACTER:小红帽:15/137|CHARACTER:艾琳:35/307|CHARACTER:胡狸:32/147|CHARACTER:洛达西姆:9/30|CHARACTER:郑直:11/111|CHARACTER:小东西:12/20|CHARACTER:平常:19/31|CHARACTER:元灵真:3/22|ITEM:几秒钟:14/22|CHARACTER:常情况:8/9
+v3.candidate: chapter=769 type=run start=267 confidence=0.90 break=0.00 separation=0.86 cohesion=0.11 membershipLow=1.00 alienCluster=0.66 alienContinuity=0.33 alienNovelty=1.00 alienEntityCount=5 graphAbsorption=0.00 prototype=0.02 world=0.94 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=971 aliens=严贵妃:2|王开始:1|罗大陆:1|苏秦乃:1|龙鳞金:1
+v3.candidate: chapter=770 type=run start=0 confidence=0.96 break=0.00 separation=0.50 cohesion=0.10 membershipLow=0.97 alienCluster=0.93 alienContinuity=0.30 alienNovelty=1.00 alienEntityCount=17 graphAbsorption=0.03 prototype=0.03 world=0.97 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=1178 aliens=叶楚宁:2|满威严:2|顾思睿:2|丁成明:1|余大军:1|史镜像:1|张良总:1|曾引起:1|李元明:1|林阳找:1|王弗苓:1|苏开阳:1
+v3.candidate: chapter=771 type=run start=267 confidence=0.96 break=0.71 separation=0.86 cohesion=0.16 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.14 alienNovelty=0.86 alienEntityCount=7 graphAbsorption=0.00 prototype=0.02 world=0.97 future=0.00 prefixBook=0.71 prefixAlien=0.00 evidenceChars=927 aliens=余庆蓉:1|吕仲简:1|姜北辰:1|潘舜坤:1|白傲雪:1|陆微芒:1|高康平:1
+v3.candidate: chapter=772 type=suffix start=650 confidence=0.95 break=0.69 separation=0.92 cohesion=0.14 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.86 alienNovelty=1.00 alienEntityCount=6 graphAbsorption=0.00 prototype=0.02 world=0.97 future=0.00 prefixBook=0.69 prefixAlien=0.00 evidenceChars=1219 aliens=龙瑾瑜:5|贺兰瑶:3|乌恒勇士:2|阴鬼黑雾:2|叶凤兰:1|苏如绘:1
+v3.candidate: chapter=773 type=run start=267 confidence=0.97 break=0.54 separation=0.85 cohesion=0.13 membershipLow=1.00 alienCluster=0.94 alienContinuity=0.62 alienNovelty=0.88 alienEntityCount=8 graphAbsorption=0.00 prototype=0.03 world=0.97 future=0.00 prefixBook=0.54 prefixAlien=0.00 evidenceChars=959 aliens=周振坤:3|电梯门:3|陈子欣:2|崔嬷嬷:1|张琪灵:1|徐公公:1|李洛追:1|赵忆云:1
+v3.candidate: chapter=774 type=run start=0 confidence=0.93 break=0.00 separation=0.50 cohesion=0.11 membershipLow=0.91 alienCluster=0.93 alienContinuity=0.63 alienNovelty=1.00 alienEntityCount=10 graphAbsorption=0.11 prototype=0.03 world=0.97 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=1170 aliens=江纯:3|齐宇:3|天道城:2|高男生:2|冯天南:1|方夜谭:1|曾陪伴:1|白发寸:1|韩语清:1|高跟鞋:1
+v3.candidate: chapter=775 type=run start=267 confidence=0.94 break=0.87 separation=0.85 cohesion=0.12 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7 graphAbsorption=0.00 prototype=0.03 world=0.91 future=0.00 prefixBook=0.87 prefixAlien=0.00 evidenceChars=933 aliens=林湾:2|白慕:2|孙悟空:1|望见公司:1|林金莲:1|见公司:1|贺欣欣:1
+v3.report: chapters=48 suggestions=6 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=99 prototypes=8
+report: suggestions=6

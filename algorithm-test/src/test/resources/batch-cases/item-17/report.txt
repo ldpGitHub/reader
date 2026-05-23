@@ -1,0 +1,63 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=2906, ordinals=2836, gaps=0, score=9805.4
+First: 第一章 他惊人的毅力并无观众
+Last: 第九十九章 为魔著史
+- 👍 55读书: chapters=2906, dup=9, ord=2836, gaps=0, score=9805.4
+Fused preview:
+1. 第一章 他惊人的毅力并无观众
+2. 第二章 洞真墟之主
+3. 第三章 此恨难偿！
+4. 第四章 请决死
+5. 第五章 你如果经历过我所经历的一切
+6. 第六章 信任不是错
+7. 第七章 旧事如忆
+8. 第八章 摇断头
+9. 第九章 态度！
+10. 第十章 一坯黄土，红颜白骨
+11. 第十一章 曾记否，仙人问道
+12. 第十二章 用之有弗盈
+13. 第十三章 晨接紫气，暮引丹霞
+14. 第十四章 此乃剑中天子
+15. 第十五章 一整个春天
+16. 第十六章 每一刹光阴
+17. 第十七章 谁有不平事
+18. 第十八章 又见高山，又向高山去
+19. 第十九章 小珠落玉盘
+20. 第二十章 一生姜安安
+
+
+Sample validation issues: 0
+- none
+
+Novel: 赤心巡天 / 情何以甚
+Chapters: 48, chunks: 512
+Core features: 480, support: 0
+Top features:
+- CHARACTER:姜望 weight=212.3 chapters=39 hits=619
+- CHARACTER:姬伯庸 weight=190.6 chapters=10 hits=126
+- CHARACTER:钟玄胤 weight=184.6 chapters=14 hits=85
+- CHARACTER:姬凤洲 weight=178.0 chapters=14 hits=67
+- CHARACTER:姬符仁 weight=177.6 chapters=9 hits=86
+- CHARACTER:吴斋雪 weight=177.2 chapters=8 hits=97
+- CHARACTER:宋淮 weight=170.6 chapters=13 hits=214
+- CHARACTER:王夷吾 weight=159.8 chapters=6 hits=62
+- CHARACTER:谢书友 weight=157.7 chapters=18 hits=27
+- CHARACTER:鱼琼枝 weight=156.2 chapters=7 hits=48
+- CHARACTER:余徙 weight=155.5 chapters=12 hits=99
+- ORGANIZATION:央帝国 weight=152.4 chapters=13 hits=50
+Suggestions: 2
+- chapter 1 第一章 他惊人的毅力并无观众: LOCAL_ABNORMAL start=1950 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.44 separation=0.98 cohesion=0.18
+  * v2 membershipLow=0.99 alienCluster=0.95 alienNovelty=1.00
+  * v2 graphAbsorption=0.01 prototype=0.01
+  * v2 world=0.77 futureIntegration=0.00 ood=0.01
+- chapter 884 第一百四十一章 万曈: LOCAL_ABNORMAL start=650 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.13
+  * v2 membershipLow=1.00 alienCluster=0.95 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.03
+  * v2 world=0.82 futureIntegration=0.00 ood=0.01
+

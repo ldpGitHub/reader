@@ -1,0 +1,80 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第959章纵论天下_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第959章纵论天下
+双方从前有过协议，但都不想好好执行，一个不想给，一个真敢要，都在千方百计钻漏洞、耍聪明。等到火烧摘星楼事件爆发以后，彼此信任的最后一点基础，也被这把火烧了个荡然无存。
+天宫与岨炬之间的猜疑和嫌隙不会消失，所以贺灵川认为，他们的内耗不可能停止。
+人无
+订阅本章：15币
+推荐
+皇恩荡漾天歌，九醉帝姬他的倾城意忱夏恋上草莓味的她驭君宋檀记事大帝姬校霸，你女朋友来了！豪门主母寒门大俗人盛世春天芳首辅娇娘长门好细腰帝君你家医妃又逆天了诱梨御兽从零分开始你刚好15度甜流鱼无恙
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

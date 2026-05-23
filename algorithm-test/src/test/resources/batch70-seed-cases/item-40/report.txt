@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1928, ordinals=1923, gaps=0, score=6598.2
+First: 第1章 戏鬼回家
+Last: 完本感言。
+- 👍 55读书: chapters=1928, dup=0, ord=1923, gaps=0, score=6598.2
+Fused preview:
+1. 第1章 戏鬼回家
+2. 第2章 我们在看着你
+3. 第3章 灾厄
+4. 第4章 它们存在
+5. 第5章 灰界
+6. 第6章 《陈氏编导法则》
+7. 第7章 全区封锁
+8. 第8章 杀局
+9. 第9章 爸，我饿
+10. 第10章 “观众”
+11. 第11章 【审判】
+12. 第12章 陈宴
+13. 第13章 第二只？
+14. 第14章 你也是个灾厄
+15. 第15章 是你！
+16. 第16章 杀戮舞曲
+17. 第17章 方针
+18. 第18章 神道
+19. 第19章 试探
+20. 第20章 融合者
+
+
+Sample validation issues: 0
+- none
+
+Novel: 我不是戏神 / 三九音域
+Chapters: 48, chunks: 187
+Core features: 168, support: 0
+Top features:
+- CHARACTER:陈伶 weight=220.6 chapters=48 hits=939
+- CHARACTER:李莱德 weight=185.0 chapters=11 hits=106
+- CHARACTER:黄昏社 weight=166.4 chapters=15 hits=42
+- CHARACTER:白银之王 weight=158.8 chapters=6 hits=42
+- CHARACTER:文明 weight=133.0 chapters=11 hits=50
+- CHARACTER:平静 weight=130.7 chapters=17 hits=28
+- CHARACTER:曾经 weight=126.2 chapters=14 hits=28
+- CHARACTER:孔明灯 weight=123.7 chapters=3 hits=24
+- ORGANIZATION:众妙之门 weight=122.6 chapters=6 hits=19
+- CHARACTER:陆循 weight=121.7 chapters=9 hits=34
+- CHARACTER:顾四周 weight=117.9 chapters=8 hits=10
+- CHARACTER:柳轻烟 weight=115.9 chapters=5 hits=15
+Suggestions: 0
+

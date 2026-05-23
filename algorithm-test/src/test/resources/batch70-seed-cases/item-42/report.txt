@@ -1,0 +1,63 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=5572, ordinals=5570, gaps=36, score=18913.4
+First: 第一章 陆隐
+Last: 第四章 未来
+- 👍 55读书: chapters=5572, dup=10, ord=5570, gaps=36, score=18913.4
+Fused preview:
+1. 第一章 陆隐
+2. 第二章 七圣刑营
+3. 第三章 降临
+4. 第四章 塑体决
+5. 第五章 修炼
+6. 第六章 骰子与天星功
+7. 第七章 城内
+8. 第八章 火焰晶体
+9. 第九章 天赋双瞳
+10. 第十章 掌出星辰现
+11. 第十一章 尸潮
+12. 第十二章 星空第十院
+13. 第十三章 刘少歌
+14. 第十四章 星能晶体
+15. 第十五章 金陵之战
+16. 第十六章 天星掌之威
+17. 第十七章 破入探境
+18. 第十八章 试炼任务
+19. 第十九章 天赋四点
+20. 第二十章 末日根源
+
+
+Sample validation issues: 0
+- none
+
+Novel: 踏星 / 随散飘风
+Chapters: 48, chunks: 231
+Core features: 248, support: 0
+Top features:
+- CHARACTER:陆隐 weight=219.5 chapters=44 hits=1583
+- SKILL:原宝阵法 weight=189.6 chapters=16 hits=132
+- CHARACTER:方寸之距 weight=185.7 chapters=15 hits=49
+- CHARACTER:文明 weight=179.2 chapters=22 hits=206
+- CHARACTER:陆通天 weight=169.9 chapters=12 hits=55
+- ORGANIZATION:天上宗 weight=165.5 chapters=21 hits=63
+- CHARACTER:王文 weight=164.3 chapters=15 hits=154
+- CHARACTER:方寸 weight=158.2 chapters=18 hits=96
+- CHARACTER:宰级战力 weight=157.0 chapters=9 hits=26
+- CHARACTER:陆源老祖 weight=156.2 chapters=10 hits=24
+- CHARACTER:老祖 weight=153.3 chapters=17 hits=85
+- CHARACTER:老家伙 weight=147.4 chapters=11 hits=26
+Suggestions: 2
+- chapter 5570 第二章 那些年 那些人: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=534 confidence=0.77 action=SUGGEST_DELETE
+  * v3 break=0.54 separation=0.88 cohesion=0.25 evidenceChars=624
+  * v3 membershipLow=0.71 alienCluster=0.69 alienContinuity=0.25 alienNovelty=1.00 alienEntityCount=4
+  * v3 graphAbsorption=0.25 prototype=0.02 prefixBook=0.83 prefixAlien=0.00
+  * v3 world=0.89 futureIntegration=0.00 ood=0.01
+- chapter 5571 第三章 至高载体: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.54 separation=0.92 cohesion=0.11 evidenceChars=1405
+  * v3 membershipLow=1.00 alienCluster=0.85 alienContinuity=0.44 alienNovelty=0.86 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.54 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.01
+

@@ -1,0 +1,20 @@
+input: chapters=48 title=谁教你这么御兽的 author=二次下海
+chunk: chunks=317 size=800 overlap=150
+fingerprint.seed: seedChunks=165
+fingerprint.build: chunks=165 terms=45530 core=152 support=0 relations=361
+fingerprint.top: CHARACTER:苏平:22/916|CHARACTER:董牧云:8/85|CHARACTER:万木之狼:9/38|CHARACTER:小家伙:13/48|CHARACTER:万灵之:9/45|CHARACTER:林狼:13/132|CHARACTER:万灵图录:9/28|CHARACTER:万灵:13/79|CHARACTER:小乌鸦:5/37|CHARACTER:老沙:8/64
+refine: round=1 cleanChunks=298
+fingerprint.build: chunks=298 terms=73897 core=332 support=0 relations=1000
+fingerprint.top: CHARACTER:苏平:43/1533|CHARACTER:万灵之:26/143|CHARACTER:万灵:30/184|CHARACTER:蓝星:29/191|CHARACTER:董牧云:10/102|CHARACTER:小火苗:11/73|CHARACTER:元素:23/123|CHARACTER:万木之狼:9/38|CHARACTER:小家伙:13/48|CHARACTER:林狼:13/132
+refine: round=2 cleanChunks=303
+fingerprint.build: chunks=303 terms=74742 core=335 support=0 relations=1000
+fingerprint.top: CHARACTER:苏平:43/1533|CHARACTER:万灵之:26/143|CHARACTER:蓝星:29/195|CHARACTER:万灵:30/184|CHARACTER:董牧云:10/102|CHARACTER:小火苗:11/73|CHARACTER:元素:23/123|CHARACTER:万木之狼:9/38|CHARACTER:小家伙:13/48|CHARACTER:林狼:13/132
+v3.skip: chapter=420 state=NON_STORY reason=non-story title=请假条
+v3.skip: chapter=450 state=NON_STORY reason=non-story title=请假条
+v3.candidate: chapter=967 type=run start=650 confidence=0.90 break=0.41 separation=0.90 cohesion=0.11 membershipLow=0.84 alienCluster=0.93 alienContinuity=0.58 alienNovelty=0.82 alienEntityCount=17 graphAbsorption=0.09 prototype=0.01 world=0.93 future=0.00 prefixBook=0.57 prefixAlien=0.00 evidenceChars=1444 aliens=云千峰:2|冯君:2|古拉斯:2|沈云初:2|火灵境:2|神霄玄门:2|霄玄门:2|于元婴:1|利于元婴:1|夏洛克:1|方吃药:1|方甩掉:1
+v3.candidate: chapter=968 type=run start=267 confidence=0.93 break=0.95 separation=0.89 cohesion=0.22 membershipLow=1.00 alienCluster=0.76 alienContinuity=0.80 alienNovelty=1.00 alienEntityCount=5 graphAbsorption=0.00 prototype=0.01 world=0.97 future=0.00 prefixBook=0.95 prefixAlien=0.00 evidenceChars=667 aliens=吕香儿:4|安聪琳:2|雷皇:2|吕二娘:1|陈琅琊:1
+v3.candidate: chapter=979 type=run start=650 confidence=0.92 break=0.93 separation=0.94 cohesion=0.06 membershipLow=1.00 alienCluster=0.73 alienContinuity=0.60 alienNovelty=1.00 alienEntityCount=6 graphAbsorption=0.00 prototype=0.02 world=0.84 future=0.00 prefixBook=0.93 prefixAlien=0.00 evidenceChars=1384 aliens=寒风谷:4|方家主:2|贾正金:1|邵抬起:1|马儿突:1|马欺近:1
+v3.candidate: chapter=986 type=suffix start=534 confidence=0.69 break=0.45 separation=0.91 cohesion=0.23 membershipLow=0.55 alienCluster=0.78 alienContinuity=0.57 alienNovelty=1.00 alienEntityCount=5 graphAbsorption=0.54 prototype=0.01 world=0.98 future=0.00 prefixBook=0.90 prefixAlien=0.00 evidenceChars=654 aliens=卢冰瑶:2|张泽:2|万世公:1|张五官:1|白领们:1
+v3.candidate: chapter=986 type=suffix start=801 confidence=0.89 break=0.90 separation=0.88 cohesion=0.50 membershipLow=1.00 alienCluster=0.80 alienContinuity=0.57 alienNovelty=0.40 alienEntityCount=5 graphAbsorption=0.00 prototype=0.02 world=0.97 future=0.00 prefixBook=0.90 prefixAlien=0.00 evidenceChars=387 aliens=卢冰瑶:2|张泽:2|万世公:1|张五官:1|白领们:1
+v3.report: chapters=48 suggestions=4 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=209 prototypes=8
+report: suggestions=4

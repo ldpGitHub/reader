@@ -1,0 +1,54 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 1
+- blank content 52书库.net #513 第514页
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=514, ordinals=0, gaps=0, score=1028.0
+First: 第1页
+Last: 第514页
+- 52书库.net: chapters=514, dup=0, ord=0, gaps=0, score=1028.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 吞噬星空2起源大陆 / 我吃西红柿
+Chapters: 47, chunks: 235
+Core features: 461, support: 0
+Top features:
+- SKILL:修行者阵 weight=193.2 chapters=19 hits=127
+- LOCATION:源世界 weight=182.2 chapters=26 hits=287
+- SKILL:天生浑源阵 weight=181.8 chapters=14 hits=69
+- CHARACTER:元老哥 weight=163.9 chapters=13 hits=47
+- CHARACTER:高等浑源 weight=159.8 chapters=10 hits=30
+- ORGANIZATION:炎风古国 weight=158.2 chapters=12 hits=42
+- CHARACTER:罗撒 weight=151.6 chapters=10 hits=123
+- CHARACTER:元老 weight=150.8 chapters=17 hits=77
+- ORGANIZATION:无限大蛇一族 weight=149.4 chapters=8 hits=30
+- CHARACTER:施展 weight=148.3 chapters=23 hits=51
+- SKILL:冰峰阵 weight=146.7 chapters=13 hits=53
+- LOCATION:无限世界 weight=146.3 chapters=8 hits=74
+Suggestions: 0
+

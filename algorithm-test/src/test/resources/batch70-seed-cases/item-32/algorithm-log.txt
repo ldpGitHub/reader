@@ -1,0 +1,16 @@
+input: chapters=48 title=剑出衡山 author=一片苏叶
+chunk: chunks=329 size=800 overlap=150
+fingerprint.seed: seedChunks=196
+fingerprint.build: chunks=196 terms=90283 core=272 support=0 relations=1000
+fingerprint.top: CHARACTER:赵荣:23/825|ORGANIZATION:衡山派:20/152|CHARACTER:莫大先:13/79|CHARACTER:令狐冲:6/98|CHARACTER:莫大:13/166|ORGANIZATION:嵩山派:9/69|CHARACTER:宁女侠:5/48|CHARACTER:衡阳:16/80|ORGANIZATION:衡州府:12/44|ORGANIZATION:岳剑派:13/43
+refine: round=1 cleanChunks=287
+fingerprint.build: chunks=287 terms=128111 core=463 support=0 relations=1000
+fingerprint.top: CHARACTER:赵荣:32/967|ORGANIZATION:衡山派:34/212|CHARACTER:莫大先:14/80|CHARACTER:令狐冲:7/119|CHARACTER:衡阳:29/124|ORGANIZATION:衡州府:22/68|CHARACTER:莫大:14/167|CHARACTER:曲非烟:11/49|CHARACTER:邹松清:9/61|CHARACTER:武林:27/71
+refine: round=2 cleanChunks=320
+fingerprint.build: chunks=320 terms=140012 core=500 support=26 relations=1000
+fingerprint.top: CHARACTER:赵荣:33/968|ORGANIZATION:衡山派:34/216|CHARACTER:莫大先:14/80|CHARACTER:令狐冲:7/119|CHARACTER:邹松清:12/77|CHARACTER:衡阳:30/127|ORGANIZATION:衡州府:22/68|CHARACTER:莫大:14/167|CHARACTER:曲非烟:11/49|CHARACTER:武林:29/77
+v3.skip: chapter=173 state=NON_STORY reason=non-story title=作家的话
+v3.skip: chapter=253 state=NON_STORY reason=non-story title=作者的话
+v3.skip: chapter=260 state=NON_STORY reason=non-story title=新书《剑出大唐》已发布
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=445 prototypes=8
+report: suggestions=0

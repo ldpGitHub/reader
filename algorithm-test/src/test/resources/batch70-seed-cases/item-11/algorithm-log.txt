@@ -1,0 +1,19 @@
+input: chapters=48 title=苟在初圣魔门当人材 author=鹤守月满池
+chunk: chunks=254 size=800 overlap=150
+fingerprint.seed: seedChunks=89
+fingerprint.build: chunks=89 terms=30917 core=54 support=0 relations=73
+fingerprint.top: CHARACTER:吕阳:21/399|CHARACTER:老龙君:3/22|REALM:筑基真人:6/22|CHARACTER:万灵:4/21|ITEM:万灵幡:4/21|CHARACTER:索唤:3/21|CHARACTER:怀疑:7/10|CHARACTER:闻言顿:5/5|LOCATION:虚瞑光海:2/15|SKILL:报世法:2/12
+refine: round=1 cleanChunks=170
+fingerprint.build: chunks=170 terms=54520 core=128 support=0 relations=215
+fingerprint.top: CHARACTER:吕阳:39/734|ORGANIZATION:超脱之门:7/33|ORGANIZATION:紫霄宫:11/28|CHARACTER:禄天命:6/21|CHARACTER:老龙君:4/23|CHARACTER:万物:12/18|CHARACTER:焦贵仁:3/19|REALM:筑基真人:7/35|CHARACTER:阴阳:6/29|CHARACTER:易道尊:6/10
+refine: round=2 cleanChunks=211
+fingerprint.build: chunks=211 terms=66652 core=178 support=0 relations=349
+fingerprint.top: CHARACTER:吕阳:39/734|ORGANIZATION:超脱之门:9/39|ORGANIZATION:紫霄宫:13/41|CHARACTER:禄天命:7/29|CHARACTER:焦贵仁:4/39|CHARACTER:阴阳:10/38|CHARACTER:元神:12/31|CHARACTER:易道尊:7/16|CHARACTER:老龙君:4/23|ITEM:禄天命书:7/29
+v3.skip: chapter=288 state=NON_STORY reason=non-story title=月票抽奖结果公布！
+v3.candidate: chapter=432 type=suffix start=1300 confidence=0.47 break=0.39 separation=0.92 cohesion=0.19 membershipLow=0.56 alienCluster=0.55 alienContinuity=0.71 alienNovelty=0.00 alienEntityCount=3 graphAbsorption=1.00 prototype=0.11 world=0.97 future=0.00 prefixBook=0.83 prefixAlien=0.86 evidenceChars=971 aliens=白莲教:5|吕阳先:1|王安平:1
+v3.skip: chapter=624 state=NON_STORY reason=non-story title=七月月票抽奖+更新提醒
+v3.skip: chapter=1564 state=NON_STORY reason=non-story title=正文完+一段想说的话！
+v3.skip: chapter=1572 state=NON_STORY reason=non-story title=二月中奖名单！
+v3.skip: chapter=1580 state=NON_STORY reason=non-story title=完结感言+新书预告！
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=138 prototypes=8
+report: suggestions=0

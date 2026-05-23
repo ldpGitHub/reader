@@ -1,0 +1,55 @@
+Novel: 苟在两界修仙 / 文抄公
+Chapters: 18, chunks: 84
+Core features: 94, support: 0
+Top features:
+- CHARACTER:方青 weight=164.4 chapters=12 hits=187
+- CHARACTER:桑吉 weight=133.8 chapters=8 hits=58
+- CHARACTER:金刚 weight=111.0 chapters=6 hits=26
+- CHARACTER:金刚力度 weight=108.9 chapters=4 hits=9
+- CHARACTER:白骨 weight=101.7 chapters=5 hits=20
+- LOCATION:东海修仙界 weight=100.5 chapters=5 hits=11
+- CHARACTER:万寿龟 weight=98.7 chapters=2 hits=13
+- CHARACTER:老夫 weight=97.9 chapters=4 hits=19
+- CHARACTER:曾经 weight=91.3 chapters=6 hits=10
+- ORGANIZATION:碧海门 weight=89.7 chapters=2 hits=13
+- ITEM:道生珠 weight=88.5 chapters=5 hits=12
+- CHARACTER:莫非 weight=87.5 chapters=4 hits=11
+- REALM:筑基修士 weight=87.0 chapters=4 hits=14
+- CHARACTER:终於 weight=86.4 chapters=5 hits=9
+- CHARACTER:终究 weight=84.6 chapters=6 hits=7
+- CHARACTER:青盘膝 weight=83.2 chapters=3 hits=5
+- CHARACTER:青鸾 weight=83.0 chapters=3 hits=13
+- CHARACTER:青摇摇 weight=82.8 chapters=4 hits=4
+- SKILL:紫府法 weight=82.1 chapters=3 hits=9
+- CHARACTER:施主 weight=82.0 chapters=3 hits=11
+Suggestions: 6
+- chapter 409 第407章_拉人头: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.93 action=SUGGEST_DELETE
+  * v3 break=0.80 separation=0.89 cohesion=0.15 evidenceChars=910
+  * v3 membershipLow=1.00 alienCluster=0.86 alienContinuity=0.25 alienNovelty=0.71 alienEntityCount=7 alienIdentity=0.38
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.80 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 441 第439章_示现（加更求订阅）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.88 action=SUGGEST_DELETE
+  * v3 break=0.70 separation=0.81 cohesion=0.13 evidenceChars=913
+  * v3 membershipLow=1.00 alienCluster=0.73 alienContinuity=0.38 alienNovelty=0.67 alienEntityCount=6 alienIdentity=0.43
+  * v3 graphAbsorption=0.00 prototype=0.09 prefixBook=0.70 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 457 第455章_突破: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.98 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.12 evidenceChars=1163
+  * v3 membershipLow=1.00 alienCluster=0.92 alienContinuity=0.18 alienNovelty=1.00 alienEntityCount=10 alienIdentity=0.48
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 465 第463章_求金: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.91 action=SUGGEST_DELETE
+  * v3 break=0.49 separation=0.88 cohesion=0.13 evidenceChars=907
+  * v3 membershipLow=1.00 alienCluster=0.76 alienContinuity=0.73 alienNovelty=0.83 alienEntityCount=6 alienIdentity=0.56
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.49 prefixAlien=0.00
+  * v3 world=0.89 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.03
+- chapter 469 第467章_元雷宫: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.76 separation=0.87 cohesion=0.15 evidenceChars=898
+  * v3 membershipLow=1.00 alienCluster=0.86 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7 alienIdentity=0.48
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.76 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.02
+- chapter 471 第469章_开战: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.85 action=SUGGEST_DELETE
+  * v3 break=0.89 separation=0.82 cohesion=0.12 evidenceChars=916
+  * v3 membershipLow=1.00 alienCluster=0.59 alienContinuity=0.33 alienNovelty=0.67 alienEntityCount=3 alienIdentity=0.13
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.89 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01

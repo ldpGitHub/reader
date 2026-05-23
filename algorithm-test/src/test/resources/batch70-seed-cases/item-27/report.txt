@@ -1,0 +1,128 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=608, ordinals=560, gaps=1, score=2004.0
+First: 第1章 起点
+Last: 第557章 有人针对我内阁派
+- 👍 55读书: chapters=608, dup=7, ord=560, gaps=1, score=2004.0
+Fused preview:
+1. 第1章 起点
+2. 第2章 父辈
+3. 第3章 起因
+4. 第4章三花聚顶本是幻
+5. 第5章炼气化精
+6. 第6章吕金山
+7. 第7章 踏破心障
+8. 第8章生命补剂
+9. 第9章 林知宴
+10. 第10章命骨
+11. 第11章训斥
+12. 第12章 讲道
+13. 第13章 精神淬炼功法
+14. 第14章 搜山
+15. 第15章 接触
+16. 第16章后山
+17. 第17章山的另一边
+18. 第18章钢铁般的战士
+19. 第19章 任务
+20. 第20章 争执
+
+
+Sample validation issues: 0
+- none
+
+Novel: 以神通之名 / 猪心虾仁
+Chapters: 48, chunks: 208
+Core features: 134, support: 0
+Top features:
+- CHARACTER:陆昭 weight=206.6 chapters=34 hits=713
+- CHARACTER:林知宴 weight=194.2 chapters=13 hits=132
+- CHARACTER:刘瀚文 weight=174.6 chapters=9 hits=82
+- CHARACTER:古神圈 weight=161.2 chapters=7 hits=58
+- CHARACTER:老道士 weight=155.6 chapters=5 hits=64
+- CHARACTER:武侯 weight=155.1 chapters=15 hits=94
+- CHARACTER:古神 weight=145.1 chapters=10 hits=84
+- CHARACTER:赵德 weight=136.2 chapters=9 hits=62
+- CHARACTER:丁守瑾 weight=135.5 chapters=4 hits=30
+- CHARACTER:武德殿 weight=135.2 chapters=10 hits=17
+- CHARACTER:张立科 weight=125.3 chapters=4 hits=25
+- CHARACTER:周晚华 weight=123.9 chapters=4 hits=23
+Suggestions: 15
+- chapter 587 第538章我要你助我修行（月初求月票）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.92 separation=0.82 cohesion=0.14 evidenceChars=901
+  * v3 membershipLow=1.00 alienCluster=0.93 alienContinuity=0.30 alienNovelty=0.88 alienEntityCount=8
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.92 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 588 第539章诤臣3.0（八千大章求月票）: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.92 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.83 separation=0.93 cohesion=0.20 evidenceChars=1198
+  * v3 membershipLow=1.00 alienCluster=0.88 alienContinuity=0.73 alienNovelty=0.50 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.83 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 589 第540章 陆昭的底色（八千大章求月票）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.91 action=SUGGEST_DELETE
+  * v3 break=0.96 separation=0.88 cohesion=0.17 evidenceChars=885
+  * v3 membershipLow=1.00 alienCluster=0.73 alienContinuity=0.20 alienNovelty=1.00 alienEntityCount=5
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.96 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 591 第542章对线天侯，试点改革，学院切磋（八千求月票）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.88 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.87 cohesion=0.11 evidenceChars=907
+  * v3 membershipLow=1.00 alienCluster=0.60 alienContinuity=0.80 alienNovelty=1.00 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 592 第543章都是贤臣，没有奸臣（八千求月票）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.78 separation=0.95 cohesion=0.15 evidenceChars=932
+  * v3 membershipLow=1.00 alienCluster=0.56 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.78 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 593 第544章 人类领袖：天侯（万字大章求月票）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.86 separation=0.88 cohesion=0.13 evidenceChars=930
+  * v3 membershipLow=1.00 alienCluster=0.63 alienContinuity=0.86 alienNovelty=1.00 alienEntityCount=4
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.86 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 595 第545章 角龙弓恢复强大级: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.81 separation=0.89 cohesion=0.14 evidenceChars=901
+  * v3 membershipLow=1.00 alienCluster=0.89 alienContinuity=0.22 alienNovelty=0.75 alienEntityCount=8
+  * v3 graphAbsorption=0.00 prototype=0.05 prefixBook=0.81 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 596 第546章 陆昭登场（八千大章）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.89 cohesion=0.15 evidenceChars=904
+  * v3 membershipLow=1.00 alienCluster=0.93 alienContinuity=0.46 alienNovelty=0.90 alienEntityCount=10
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 598 第547章一个世纪后的小陆同志: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.88 action=SUGGEST_DELETE
+  * v3 break=0.77 separation=0.87 cohesion=0.14 evidenceChars=899
+  * v3 membershipLow=1.00 alienCluster=0.61 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.77 prefixAlien=0.00
+  * v3 world=0.94 futureIntegration=0.00 ood=0.05
+- chapter 599 第548章 筑基少阳成功（八千）: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.91 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.75 separation=0.89 cohesion=0.20 evidenceChars=1091
+  * v3 membershipLow=0.98 alienCluster=0.79 alienContinuity=0.29 alienNovelty=0.83 alienEntityCount=6
+  * v3 graphAbsorption=0.03 prototype=0.04 prefixBook=0.77 prefixAlien=0.00
+  * v3 world=0.94 futureIntegration=0.00 ood=0.06
+- chapter 601 第550章 王天侯击碎惊人智慧: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.68 separation=0.88 cohesion=0.11 evidenceChars=935
+  * v3 membershipLow=1.00 alienCluster=0.69 alienContinuity=0.33 alienNovelty=0.80 alienEntityCount=5
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.68 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 603 第552章市场化的两股力量: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.98 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.75 separation=0.91 cohesion=0.12 evidenceChars=1103
+  * v3 membershipLow=1.00 alienCluster=0.98 alienContinuity=0.74 alienNovelty=0.89 alienEntityCount=19
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.75 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 604 第553章关乎特区路线的考核（八千大章）: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=534 confidence=0.83 action=SUGGEST_DELETE
+  * v3 break=0.54 separation=0.85 cohesion=0.25 evidenceChars=637
+  * v3 membershipLow=0.87 alienCluster=0.79 alienContinuity=0.63 alienNovelty=0.60 alienEntityCount=5
+  * v3 graphAbsorption=0.14 prototype=0.04 prefixBook=0.67 prefixAlien=0.38
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 606 第555章联邦的天怎么黑了（九千大章）: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.85 separation=0.89 cohesion=0.13 evidenceChars=915
+  * v3 membershipLow=1.00 alienCluster=0.92 alienContinuity=0.60 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.85 prefixAlien=0.00
+  * v3 world=1.00 futureIntegration=0.00 ood=0.00
+- chapter 607 第556章因果关系: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.70 action=MARK_ONLY
+  * v3 break=0.86 separation=0.86 cohesion=0.16 evidenceChars=931
+  * v3 membershipLow=1.00 alienCluster=0.00 alienContinuity=1.00 alienNovelty=1.00 alienEntityCount=1
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.86 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 ood=0.03
+

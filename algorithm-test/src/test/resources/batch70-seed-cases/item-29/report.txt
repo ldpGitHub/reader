@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=685, ordinals=657, gaps=1, score=2305.8
+First: 第1章 失败的修士
+Last: 呜呼！搞定！
+- 👍 55读书: chapters=685, dup=3, ord=657, gaps=1, score=2305.8
+Fused preview:
+1. 第1章 失败的修士
+2. 第2章 失败的小伙
+3. 第3章 物 理 说 服
+4. 第4章 不善肉搏王机玄【感谢‘无愁小憨’白银萌大力支持！】
+5. 第5章 队长与下城与黑火帮
+6. 第6章 天大地大，道心最大！
+7. 第7章 确认威胁
+8. 第8章 道长，时代变了
+9. 第9章 吃鱼
+10. 第10章 鱼的目光逐渐清澈
+11. 第11章 第四十六层
+12. 第12章 囊 中 羞 涩
+13. 第13章 这不是巧了
+14. 第14章 逞威
+15. 第15章 狙击者！
+16. 第16章 《灭鹰》
+17. 第17章 周衙内【求收藏追读】
+18. 第18章 弹指神通的修行办法
+19. 第19章 调酒师与摄魂符
+20. 第20章 累年苦修，害怕审讯
+
+
+Sample validation issues: 0
+- none
+
+Novel: 混在末日，独自成仙 / 言归正传
+Chapters: 48, chunks: 337
+Core features: 482, support: 0
+Top features:
+- CHARACTER:王机玄 weight=272.1 chapters=45 hits=1538
+- CHARACTER:王道长 weight=235.3 chapters=41 hits=211
+- CHARACTER:罗金仙 weight=201.8 chapters=22 hits=109
+- CHARACTER:终焉之 weight=196.7 chapters=14 hits=119
+- CHARACTER:郑士多 weight=195.3 chapters=20 hits=95
+- CHARACTER:金仙 weight=186.9 chapters=23 hits=265
+- CHARACTER:伊娜文明 weight=179.4 chapters=12 hits=47
+- CHARACTER:艾米娜 weight=173.0 chapters=14 hits=57
+- CHARACTER:周峥德 weight=171.2 chapters=8 hits=77
+- ITEM:终焉之船 weight=168.8 chapters=14 hits=117
+- CHARACTER:沈琼霖 weight=165.1 chapters=8 hits=61
+- CHARACTER:终焉 weight=164.6 chapters=15 hits=133
+Suggestions: 0
+

@@ -1,0 +1,25 @@
+input: chapters=48 title=玄鉴仙族 author=季越人
+chunk: chunks=265 size=800 overlap=150
+fingerprint.seed: seedChunks=133
+fingerprint.build: chunks=133 terms=57377 core=171 support=0 relations=548
+fingerprint.top: CHARACTER:李通崖:9/119|CHARACTER:李玄宣:9/94|CHARACTER:李周巍:6/97|CHARACTER:李玄:15/137|CHARACTER:李清虹:6/74|CHARACTER:李曦明:5/57|CHARACTER:李绛迁:4/75|CHARACTER:李曦:8/149|CHARACTER:李曦治:4/51|CHARACTER:李周:7/135
+refine: round=1 cleanChunks=204
+fingerprint.build: chunks=204 terms=82316 core=264 support=0 relations=1000
+fingerprint.top: CHARACTER:李周巍:15/272|CHARACTER:李曦明:10/118|CHARACTER:李通崖:9/119|CHARACTER:李周:16/310|CHARACTER:李玄宣:9/94|CHARACTER:李绛迁:8/106|CHARACTER:李曦:14/214|CHARACTER:李玄:16/139|CHARACTER:李清虹:6/74|CHARACTER:魏王:10/105
+refine: round=2 cleanChunks=231
+fingerprint.build: chunks=231 terms=90679 core=286 support=0 relations=1000
+fingerprint.top: CHARACTER:李周巍:15/272|CHARACTER:李曦明:10/118|CHARACTER:李通崖:9/119|CHARACTER:李周:16/310|CHARACTER:李绛迁:8/107|CHARACTER:李玄宣:9/94|CHARACTER:李曦:14/214|CHARACTER:李玄:16/139|CHARACTER:李清虹:6/74|CHARACTER:魏王:10/117
+v2.candidate: chapter=949 type=suffix start=3250 confidence=0.63 break=0.46 separation=0.95 cohesion=0.14 membershipLow=0.56 alienCluster=0.77 alienNovelty=0.67 graphAbsorption=0.75 prototype=0.03 world=0.60 future=0.00 aliens=仇敌:2|闻大:2|闻大名:2|李玄锋:1|白雾獠:1|胡乱拼:1
+v2.candidate: chapter=1634 type=suffix start=3900 confidence=0.68 break=0.55 separation=0.96 cohesion=0.08 membershipLow=0.60 alienCluster=0.84 alienNovelty=0.88 graphAbsorption=0.50 prototype=0.05 world=0.81 future=1.00 aliens=古释:3|言语:3|座大山:2|似乎净海:1|席卷净海:1|应身法界:1|方寸之:1|段日子:1
+v2.candidate: chapter=1634 type=suffix start=5200 confidence=0.59 break=0.42 separation=0.96 cohesion=0.16 membershipLow=0.60 alienCluster=0.57 alienNovelty=1.00 graphAbsorption=0.62 prototype=0.06 world=0.84 future=1.00 aliens=言语:3|似乎净海:1|席卷净海:1
+v2.candidate: chapter=1634 type=suffix start=5850 confidence=0.66 break=0.81 separation=0.97 cohesion=0.50 membershipLow=1.00 alienCluster=0.00 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.08 world=0.92 future=0.00 aliens=
+v2.candidate: chapter=1636 type=run start=0 confidence=0.98 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.94 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.98 future=0.00 aliens=叶擎:3|林亦:3|林亦逸:3|叶奶:2|叶奶奶:2|叶擎佑:2|吴主:2|平王:2|沐秋:2|王副:2|王副院:2|顾客:2
+v2.candidate: chapter=1637 type=suffix start=534 confidence=0.69 break=0.33 separation=0.92 cohesion=0.25 membershipLow=0.61 alienCluster=0.63 alienNovelty=1.00 graphAbsorption=0.44 prototype=0.01 world=0.99 future=0.00 aliens=李天:3|李天逸:3|滨州北镇:1
+v2.candidate: chapter=1637 type=suffix start=801 confidence=0.80 break=0.74 separation=0.87 cohesion=0.50 membershipLow=1.00 alienCluster=0.60 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.01 world=0.98 future=0.00 aliens=李天:3|李天逸:3
+v2.candidate: chapter=1639 type=suffix start=534 confidence=0.81 break=0.58 separation=0.88 cohesion=0.27 membershipLow=0.65 alienCluster=0.97 alienNovelty=0.86 graphAbsorption=0.31 prototype=0.02 world=0.91 future=0.00 aliens=叶雪:3|安瑾:2|恶魔战界:2|林羽:2|苏易:2|魔战界:2|世界政府:1|叶雪转:1|吕天明:1|李承乾:1|林羽发:1|林羽觉:1
+v2.candidate: chapter=1639 type=suffix start=801 confidence=0.96 break=0.85 separation=0.87 cohesion=0.50 membershipLow=1.00 alienCluster=1.00 alienNovelty=0.55 graphAbsorption=0.00 prototype=0.02 world=0.95 future=0.00 aliens=叶雪:3|恶魔战界:2|林羽:2|苏易:2|魔战界:2|世界政府:1|叶雪转:1|林羽发:1|林羽觉:1|苏易诡:1|苏易除:1
+v2.candidate: chapter=1640 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.13 membershipLow=1.00 alienCluster=0.95 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.84 future=0.00 aliens=林传:2|林传言:2|赵雨:2|赵雨菲:2|丁苓突:1|县城东门:1|国外公司:1|坦克车队:1|悄悄组队:1|林安县:1|算九幽宫:1|装甲车队:1
+v2.candidate: chapter=1642 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.15 membershipLow=1.00 alienCluster=0.95 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.92 future=0.00 aliens=萧夜:3|刘萌:2|王泽:2|王泽平:2|龙神:2|如今薛国:1|杨乐康:1|杨建雄:1|苏铮忽:1|金丹期:1|龙神殿:1
+v2.candidate: chapter=1643 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.00 world=0.94 future=0.00 aliens=林风:4|全部:2|政务司:2|谢靖:2|陈默:2|字八号院:1|字楼庭院:1|已于铺门:1|归政务司:1|政务司司:1|林风重:1|白街附:1
+v2.report: chapters=48 suggestions=6 coreEntities=243 prototypes=8
+report: suggestions=6

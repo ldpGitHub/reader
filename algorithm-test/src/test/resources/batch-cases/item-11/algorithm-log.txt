@@ -1,0 +1,28 @@
+input: chapters=48 title=苟在初圣魔门当人材 author=鹤守月满池
+chunk: chunks=254 size=800 overlap=150
+fingerprint.seed: seedChunks=89
+fingerprint.build: chunks=89 terms=30435 core=49 support=0 relations=62
+fingerprint.top: CHARACTER:吕阳:21/399|REALM:筑基真人:6/22|CHARACTER:老龙:3/22|CHARACTER:索唤:3/21|CHARACTER:怀疑:7/10|CHARACTER:闻言顿:5/5|LOCATION:虚瞑光海:2/15|SKILL:报世法:2/12|REALM:筑基中期:4/13|SKILL:道神通:4/8
+refine: round=1 cleanChunks=167
+fingerprint.build: chunks=167 terms=52978 core=116 support=0 relations=178
+fingerprint.top: CHARACTER:吕阳:39/738|ORGANIZATION:超脱之门:7/33|ORGANIZATION:紫霄宫:11/28|CHARACTER:禄天命:6/21|CHARACTER:焦贵仁:3/19|REALM:筑基真人:7/35|CHARACTER:阴阳:6/29|CHARACTER:易道尊:6/10|CHARACTER:终究:10/17|ITEM:禄天命书:6/21
+refine: round=2 cleanChunks=205
+fingerprint.build: chunks=205 terms=64149 core=156 support=0 relations=257
+fingerprint.top: CHARACTER:吕阳:39/738|ORGANIZATION:超脱之门:9/39|ORGANIZATION:紫霄宫:13/41|CHARACTER:禄天命:7/29|CHARACTER:焦贵仁:4/39|CHARACTER:阴阳:10/38|CHARACTER:易道尊:7/16|ITEM:禄天命书:7/29|CHARACTER:元神:11/28|CHARACTER:终究:13/23
+v2.candidate: chapter=0 type=run start=0 confidence=0.90 break=0.00 separation=0.50 cohesion=0.16 membershipLow=1.00 alienCluster=0.67 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.02 world=0.92 future=0.00 aliens=李威虎:1|谢谢大:1|马利奥:1|高文卿:1
+v2.candidate: chapter=432 type=suffix start=1300 confidence=0.64 break=0.38 separation=0.92 cohesion=0.19 membershipLow=0.58 alienCluster=0.82 alienNovelty=0.33 graphAbsorption=0.66 prototype=0.04 world=0.95 future=0.00 aliens=白莲:5|白莲教:5|吕阳先:1|堪比府城:1|王安平:1|香火神境:1
+v2.candidate: chapter=432 type=suffix start=1950 confidence=0.65 break=0.81 separation=0.91 cohesion=0.50 membershipLow=1.00 alienCluster=0.00 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.02 world=0.92 future=0.00 aliens=
+v2.candidate: chapter=1557 type=suffix start=3900 confidence=0.68 break=0.93 separation=0.96 cohesion=0.50 membershipLow=1.00 alienCluster=0.00 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.03 world=0.90 future=0.00 aliens=
+v2.candidate: chapter=1558 type=run start=3250 confidence=0.94 break=0.79 separation=0.96 cohesion=0.13 membershipLow=0.96 alienCluster=0.92 alienNovelty=0.91 graphAbsorption=0.05 prototype=0.06 world=0.97 future=0.00 aliens=方案:4|先行化神:1|冥府佛国:1|到化神:1|化神来:1|化神来超:1|张恢弘:1|极乐世界:1|段浮现:1|算击杀司:1|行化神:1
+v2.candidate: chapter=1566 type=suffix start=1950 confidence=0.85 break=0.66 separation=0.95 cohesion=0.08 membershipLow=0.76 alienCluster=0.95 alienNovelty=1.00 graphAbsorption=0.16 prototype=0.03 world=0.80 future=0.67 aliens=气中期:3|炼气中期:3|气初期:2|炼气初:2|炼气初期:2|高扬:2|高扬起:2|高高扬:2|鼻孔朝:2|茫茫光海:1|许威胁:1|道用境界:1
+v2.candidate: chapter=1566 type=suffix start=2600 confidence=0.82 break=0.35 separation=0.96 cohesion=0.11 membershipLow=0.68 alienCluster=0.97 alienNovelty=1.00 graphAbsorption=0.19 prototype=0.03 world=0.82 future=0.67 aliens=气中期:3|炼气中期:3|气初期:2|炼气初:2|炼气初期:2|高扬:2|高扬起:2|高高扬:2|鼻孔朝:2|许威胁:1|道用境界:1
+v2.candidate: chapter=1566 type=suffix start=3250 confidence=0.84 break=0.33 separation=0.94 cohesion=0.15 membershipLow=0.71 alienCluster=0.99 alienNovelty=1.00 graphAbsorption=0.16 prototype=0.03 world=0.55 future=0.67 aliens=气中期:3|炼气中期:3|气初期:2|炼气初:2|炼气初期:2|高扬:2|高扬起:2|高高扬:2|道用境界:1
+v2.candidate: chapter=1566 type=run start=1950 confidence=0.89 break=0.78 separation=0.98 cohesion=0.09 membershipLow=0.84 alienCluster=0.95 alienNovelty=1.00 graphAbsorption=0.09 prototype=0.03 world=0.84 future=0.67 aliens=气中期:3|炼气中期:3|气初期:2|炼气初:2|炼气初期:2|鼻孔朝:2|茫茫光海:1|许威胁:1|道用境界:1|高扬起:1|高高扬:1
+v2.candidate: chapter=1567 type=suffix start=3250 confidence=0.73 break=0.25 separation=0.96 cohesion=0.15 membershipLow=0.61 alienCluster=0.84 alienNovelty=0.60 graphAbsorption=0.33 prototype=0.04 world=0.63 future=0.00 aliens=气中期:2|炼气中期:2|展露炼气:1|炼气后期:1|露炼气:1
+v2.candidate: chapter=1569 type=run start=1300 confidence=0.81 break=0.64 separation=0.99 cohesion=0.11 membershipLow=0.75 alienCluster=0.93 alienNovelty=0.88 graphAbsorption=0.18 prototype=0.03 world=0.83 future=1.00 aliens=全部:2|平静:2|言喻:2|闻言:2|冲击筑基:1|击筑基:1|升仙之门:1|如山崩海:1|尝试筑基:1|情绪如山:1|游走光海:1|炼气大:1
+v2.candidate: chapter=1572 type=run start=267 confidence=0.62 break=0.00 separation=0.50 cohesion=0.02 membershipLow=1.00 alienCluster=0.00 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.01 world=0.78 future=0.00 aliens=
+v2.candidate: chapter=1574 type=suffix start=3250 confidence=0.70 break=0.56 separation=0.94 cohesion=0.12 membershipLow=0.70 alienCluster=0.68 alienNovelty=1.00 graphAbsorption=0.39 prototype=0.04 world=0.88 future=1.00 aliens=傅开创:1|方圆世:1|方圆世界:1|游历光海:1|纹铭刻门:1
+v2.candidate: chapter=1574 type=suffix start=3900 confidence=0.66 break=0.81 separation=0.96 cohesion=0.50 membershipLow=1.00 alienCluster=0.00 alienNovelty=0.00 graphAbsorption=0.00 prototype=0.07 world=0.89 future=0.00 aliens=
+v2.candidate: chapter=1580 type=run start=0 confidence=0.98 break=0.00 separation=0.50 cohesion=0.13 membershipLow=1.00 alienCluster=0.93 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.02 world=0.78 future=0.00 aliens=全新:2|优秀作品:1|玄鉴仙族:1|碧阳仙门:1|筑基修:1|筑基修士:1|高逼格:1
+v2.report: chapters=48 suggestions=3 coreEntities=116 prototypes=8
+report: suggestions=3

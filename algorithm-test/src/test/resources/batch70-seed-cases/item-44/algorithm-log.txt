@@ -1,0 +1,17 @@
+input: chapters=48 title=盖世双谐 author=三天两觉
+chunk: chunks=277 size=800 overlap=150
+fingerprint.seed: seedChunks=154
+fingerprint.build: chunks=154 terms=47167 core=64 support=0 relations=135
+fingerprint.top: CHARACTER:孙亦谐:22/322|CHARACTER:黄东:19/293|CHARACTER:孙哥:18/59|CHARACTER:孙黄:11/43|CHARACTER:双谐:8/39|CHARACTER:黄少侠:4/22|CHARACTER:林元诚:6/15|CHARACTER:老百姓:7/12|CHARACTER:黄哥:9/22|ORGANIZATION:正义门:3/25
+refine: round=1 cleanChunks=206
+fingerprint.build: chunks=206 terms=63368 core=130 support=0 relations=349
+fingerprint.top: CHARACTER:孙亦谐:31/395|CHARACTER:黄东:26/366|ORGANIZATION:混元星际门:11/34|CHARACTER:孙哥:22/73|CHARACTER:孙黄:17/63|CHARACTER:双谐:16/57|ORGANIZATION:真侠堂:5/38|CHARACTER:老子:15/30|CHARACTER:宰千秋:4/25|CHARACTER:姜暮蝉:6/19
+refine: round=2 cleanChunks=247
+fingerprint.build: chunks=247 terms=73337 core=165 support=0 relations=437
+fingerprint.top: CHARACTER:孙亦谐:31/395|CHARACTER:黄东:26/366|ORGANIZATION:混元星际门:11/35|CHARACTER:孙哥:22/73|CHARACTER:曹薇儿:5/60|CHARACTER:武功:22/57|CHARACTER:孙黄:17/63|CHARACTER:双谐:17/58|CHARACTER:司徒傲:4/44|ORGANIZATION:真侠堂:5/39
+v3.candidate: chapter=692 type=run start=0 confidence=0.82 break=0.00 separation=0.50 cohesion=0.11 membershipLow=0.64 alienCluster=0.94 alienContinuity=0.57 alienNovelty=1.00 alienEntityCount=10 graphAbsorption=0.18 prototype=0.12 world=0.99 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=1450 aliens=伊莎贝尔:2|华西佣兵:2|罗马骑兵:2|马骑兵:2|尔家族:1|张家真:1|方纯良:1|朱慈烺:1|贝尔家族:1|高邮卫:1
+v3.candidate: chapter=693 type=suffix start=650 confidence=0.79 break=0.30 separation=0.89 cohesion=0.15 membershipLow=0.60 alienCluster=0.96 alienContinuity=0.40 alienNovelty=1.00 alienEntityCount=8 graphAbsorption=0.39 prototype=0.03 world=0.99 future=0.00 prefixBook=0.70 prefixAlien=0.00 evidenceChars=1210 aliens=宁瑙儿:2|韩昌:2|叶秋伸:1|叶青便:1|曾凝固:1|林锦鸿:1|沈媛轻:1|赵铭相:1
+v3.candidate: chapter=693 type=suffix start=1300 confidence=0.95 break=0.76 separation=0.90 cohesion=0.50 membershipLow=1.00 alienCluster=0.96 alienContinuity=0.25 alienNovelty=0.57 alienEntityCount=7 graphAbsorption=0.00 prototype=0.02 world=0.98 future=0.00 prefixBook=0.76 prefixAlien=0.00 evidenceChars=560 aliens=宁瑙儿:2|叶秋伸:1|叶青便:1|曾凝固:1|林锦鸿:1|沈媛轻:1|赵铭相:1
+v3.candidate: chapter=694 type=run start=267 confidence=0.96 break=0.77 separation=0.93 cohesion=0.14 membershipLow=1.00 alienCluster=0.88 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=7 graphAbsorption=0.00 prototype=0.02 world=0.99 future=0.00 prefixBook=0.77 prefixAlien=0.00 evidenceChars=941 aliens=彭立刚:3|汪雨涵:2|张开大:1|李岩已:1|高凤仪:1|高密度:1|龙战士:1
+v3.report: chapters=48 suggestions=2 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=131 prototypes=8
+report: suggestions=2

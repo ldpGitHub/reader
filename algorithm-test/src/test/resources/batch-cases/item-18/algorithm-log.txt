@@ -1,0 +1,13 @@
+input: chapters=48 title=万相之王 author=天蚕土豆
+chunk: chunks=228 size=800 overlap=150
+fingerprint.seed: seedChunks=111
+fingerprint.build: chunks=111 terms=37902 core=111 support=0 relations=293
+fingerprint.top: CHARACTER:姜青娥:14/144|CHARACTER:李洛:24/720|CHARACTER:封侯:11/70|ORGANIZATION:洛岚府:7/51|CHARACTER:李红柚:3/67|CHARACTER:侯强者:8/22|CHARACTER:李惊蛰:4/30|CHARACTER:龙牙:8/56|CHARACTER:鱼红溪:3/30|ORGANIZATION:圣玄星学府:5/17
+refine: round=1 cleanChunks=217
+fingerprint.build: chunks=217 terms=66261 core=279 support=0 relations=901
+fingerprint.top: CHARACTER:姜青娥:27/266|CHARACTER:李洛:48/1427|CHARACTER:青娥:28/306|CHARACTER:姜天王:17/77|ORGANIZATION:无相圣宗:17/65|CHARACTER:李太玄:14/50|LOCATION:神州世界:14/88|CHARACTER:李惊蛰:8/46|ORGANIZATION:洛岚府:12/63|CHARACTER:平静:26/54
+refine: round=2 cleanChunks=228
+fingerprint.build: chunks=228 terms=68907 core=291 support=0 relations=975
+fingerprint.top: CHARACTER:姜青娥:27/266|CHARACTER:李洛:48/1442|CHARACTER:姜天王:18/93|CHARACTER:青娥:28/306|ORGANIZATION:无相圣宗:18/82|CHARACTER:李太玄:14/50|LOCATION:神州世界:14/93|CHARACTER:李惊蛰:8/46|ORGANIZATION:洛岚府:12/63|CHARACTER:平静:26/57
+v2.report: chapters=48 suggestions=0 coreEntities=199 prototypes=8
+report: suggestions=0

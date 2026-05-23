@@ -1,0 +1,79 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+1540、天外天_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+1540、天外天
+“我将沟通天下九鼎神器之法，留于燧祖，日后可以传于天下万众。”苏午打断了燧皇的话，他目光看向下方那道棺椁，棺椁之中，五色仙虹迸射而出，在此瞬投向天穹之上最后一道逐渐弥合的裂缝——
+苏午的身影，亦汇同柳飞烟化作的五色仙虹，一齐投向天顶最后那道逐渐弥合的裂缝
+订阅本章：20币
+推荐
+真的拴Q，娇软美人被怪物抱着哄末日乐园冠上珠华苟在异界开发超能力洛九针快穿之炮灰她选择种田快穿之我只想种田神王独宠：废材王妃倾天下吃瓜贵妃的自我修养医毒双绝：残王独宠废材妃仙子不想理你退烧网络新聊斋快穿：反派女主满级之后引诱折腰我在生存游戏中无限作死你是我的小甜梨七零年代小确幸白篱梦我在无限剧本杀封神
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

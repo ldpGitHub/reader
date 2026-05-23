@@ -1,0 +1,113 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1529, ordinals=1421, gaps=1, score=5000.4
+First: 第一章 难活，难活！
+Last: 第一千四百二十一章 齐头并进，不祥预感（二合一）
+- 👍 55读书: chapters=1529, dup=24, ord=1421, gaps=1, score=5000.4
+Fused preview:
+1. 第一章 难活，难活！
+2. 第二章 统御水泽！
+3. 第三章 收服猪婆龙
+4. 第四章 安身立命之本
+5. 第五章 赵老爷发来邀约
+6. 第六章 夺船之恨
+7. 第七章 报仇
+8. 第八章 风波平歇，再收手下！
+9. 第九章 强悍的六须鲶鱼
+10. 第十章 宝鱼！
+11. 第十一章 牛角鲳
+12. 第十二章 横财！
+13. 第十三章 怒怼进度条
+14. 第十四章 拜入武馆
+15. 第十五章 皮、肉、骨、血
+16. 第十六章 猿臂蜂腰螳螂腿
+17. 第十七章 再获宝鱼！飞速成长。
+18. 第十八章 痛打落水狗
+19. 第十九章 秋税 上
+20. 第二十章 秋税 下
+
+
+Sample validation issues: 0
+- none
+
+Novel: 从水猴子开始成神 / 甲壳蚁
+Chapters: 48, chunks: 221
+Core features: 206, support: 0
+Top features:
+- CHARACTER:梁渠 weight=212.9 chapters=38 hits=707
+- CHARACTER:张龙象 weight=176.3 chapters=8 hits=89
+- CHARACTER:黄沙 weight=168.9 chapters=15 hits=170
+- CHARACTER:龙娥英 weight=165.5 chapters=12 hits=49
+- CHARACTER:龙君 weight=161.3 chapters=12 hits=157
+- LOCATION:黄沙河 weight=156.5 chapters=13 hits=131
+- CHARACTER:龙象 weight=152.4 chapters=10 hits=112
+- CHARACTER:龙王 weight=152.2 chapters=10 hits=113
+- CHARACTER:全部 weight=143.1 chapters=23 hits=39
+- CHARACTER:老龙 weight=135.1 chapters=9 hits=55
+- CHARACTER:武圣 weight=130.3 chapters=13 hits=36
+- CHARACTER:平阳 weight=130.0 chapters=16 hits=31
+Suggestions: 12
+- chapter 698 唔……: LOCAL_ABNORMAL start=0 confidence=0.97 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.19
+  * v2 membershipLow=1.00 alienCluster=0.90 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.02
+  * v2 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 1508 五月抽奖活动（月初求月票）: LOCAL_ABNORMAL start=0 confidence=0.97 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.20
+  * v2 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.83 futureIntegration=0.00 ood=0.02
+- chapter 1518 第一千四百一十一章 时龙石猴，不孕不育，淮涡君骨（二合一）: SUFFIX_POLLUTION start=534 confidence=0.79 action=SUGGEST_DELETE
+  * v2 break=0.44 separation=0.86 cohesion=0.20
+  * v2 membershipLow=0.71 alienCluster=0.73 alienNovelty=1.00
+  * v2 graphAbsorption=0.21 prototype=0.02
+  * v2 world=0.96 futureIntegration=0.00 ood=0.03
+- chapter 1519 第一千四百一十二章 再贷！再借！再运玄功！（二合一）: LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.13
+  * v2 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.02
+  * v2 world=0.87 futureIntegration=0.00 ood=0.01
+- chapter 1520 第一千四百一十三章 化龙脊骨，三日齐立（二合一）: SUFFIX_POLLUTION start=801 confidence=0.92 action=AUTO_DELETE_ALLOWED
+  * v2 break=0.82 separation=0.92 cohesion=0.50
+  * v2 membershipLow=1.00 alienCluster=0.84 alienNovelty=0.67
+  * v2 graphAbsorption=0.00 prototype=0.03
+  * v2 world=0.88 futureIntegration=0.00 ood=0.02
+- chapter 1521 第一千四百一十四章 精贯朝日，气凌霄汉（二合一）: SUFFIX_POLLUTION start=801 confidence=0.88 action=SUGGEST_DELETE
+  * v2 break=0.51 separation=0.83 cohesion=0.32
+  * v2 membershipLow=0.81 alienCluster=0.98 alienNovelty=0.75
+  * v2 graphAbsorption=0.19 prototype=0.01
+  * v2 world=0.98 futureIntegration=0.00 ood=0.01
+- chapter 1522 第一千四百一十五章 梅开二度，无敌根基（二合一）: LOCAL_ABNORMAL start=267 confidence=1.00 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.24
+  * v2 membershipLow=1.00 alienCluster=0.99 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.97 futureIntegration=0.00 ood=0.02
+- chapter 1523 第一千四百一十六章 同气连枝，权柄难加身（二合一）: SUFFIX_POLLUTION start=1300 confidence=0.97 action=AUTO_DELETE_ALLOWED
+  * v2 break=0.77 separation=0.93 cohesion=0.50
+  * v2 membershipLow=1.00 alienCluster=1.00 alienNovelty=0.67
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 1524 第一千四百一十七章 权柄抗性，下马威还在追（二合一）: SUFFIX_POLLUTION start=1300 confidence=0.98 action=AUTO_DELETE_ALLOWED
+  * v2 break=0.65 separation=0.92 cohesion=0.50
+  * v2 membershipLow=1.00 alienCluster=1.00 alienNovelty=0.82
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.99 futureIntegration=0.00 ood=0.01
+- chapter 1526 第一千四百一十八章 句芒升华，阳光普照（二合一）: SUFFIX_POLLUTION start=534 confidence=0.94 action=AUTO_DELETE_ALLOWED
+  * v2 break=0.72 separation=0.91 cohesion=0.17
+  * v2 membershipLow=1.00 alienCluster=0.90 alienNovelty=0.63
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 1527 第一千四百一十九章 旷世结盟，先铲莲花宗（二合一）: LOCAL_ABNORMAL start=650 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.13
+  * v2 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.02
+  * v2 world=0.96 futureIntegration=0.00 ood=0.01
+- chapter 1529 第一千四百二十一章 齐头并进，不祥预感（二合一）: LOCAL_ABNORMAL start=650 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.10
+  * v2 membershipLow=1.00 alienCluster=0.93 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.96 futureIntegration=0.00 ood=0.02
+

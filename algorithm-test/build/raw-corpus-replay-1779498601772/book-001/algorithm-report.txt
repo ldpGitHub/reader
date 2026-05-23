@@ -1,0 +1,25 @@
+Novel: 我在修仙界万古长青 / 快餐店
+Chapters: 19, chunks: 183
+Core features: 407, support: 0
+Top features:
+- CHARACTER:陆长安 weight=232.4 chapters=19 hits=1320
+- CHARACTER:夏文月 weight=171.5 chapters=6 hits=104
+- CHARACTER:韦东君 weight=149.3 chapters=4 hits=56
+- CHARACTER:陆真君 weight=138.1 chapters=6 hits=27
+- CHARACTER:陆道友 weight=137.4 chapters=8 hits=22
+- CHARACTER:金月真君 weight=136.0 chapters=2 hits=51
+- CHARACTER:高阶修士 weight=135.6 chapters=5 hits=18
+- ORGANIZATION:卫道盟 weight=134.7 chapters=4 hits=59
+- LOCATION:修仙界 weight=133.8 chapters=15 hits=44
+- CHARACTER:陆某 weight=133.1 chapters=12 hits=42
+- ORGANIZATION:傲月宫 weight=133.0 chapters=5 hits=46
+- ORGANIZATION:碧海商盟 weight=132.4 chapters=6 hits=24
+- SKILL:长青功 weight=132.0 chapters=9 hits=35
+- CHARACTER:赵仙子 weight=131.3 chapters=4 hits=28
+- CHARACTER:陆真 weight=130.9 chapters=8 hits=47
+- REALM:元婴中期 weight=130.1 chapters=10 hits=53
+- CHARACTER:金云 weight=130.1 chapters=5 hits=68
+- CHARACTER:谢无忌 weight=126.7 chapters=2 hits=56
+- LOCATION:天星海 weight=126.4 chapters=6 hits=48
+- CHARACTER:夏仙子 weight=126.1 chapters=2 hits=37
+Suggestions: 0

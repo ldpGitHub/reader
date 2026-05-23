@@ -1,0 +1,50 @@
+Novel: 阵问长生 / 观虚
+Chapters: 22, chunks: 146
+Core features: 113, support: 0
+Top features:
+- CHARACTER:墨画 weight=186.6 chapters=19 hits=846
+- CHARACTER:白子曦 weight=149.5 chapters=4 hits=64
+- CHARACTER:白子胜 weight=141.1 chapters=3 hits=81
+- CHARACTER:白子 weight=140.3 chapters=6 hits=146
+- CHARACTER:小师 weight=135.7 chapters=6 hits=89
+- CHARACTER:司徒真 weight=128.8 chapters=2 hits=70
+- CHARACTER:陆乘云 weight=123.0 chapters=2 hits=39
+- CHARACTER:白晓生 weight=119.6 chapters=2 hits=46
+- ORGANIZATION:太虚门 weight=112.9 chapters=5 hits=21
+- LOCATION:乾学州界 weight=110.9 chapters=6 hits=20
+- CHARACTER:萧若寒 weight=106.1 chapters=2 hits=17
+- CHARACTER:老祖 weight=102.6 chapters=5 hits=21
+- CHARACTER:庄先 weight=101.4 chapters=2 hits=38
+- CHARACTER:巫祝 weight=100.7 chapters=4 hits=21
+- CHARACTER:小先 weight=96.0 chapters=2 hits=24
+- CHARACTER:通仙 weight=94.1 chapters=4 hits=17
+- CHARACTER:元神 weight=93.6 chapters=2 hits=20
+- CHARACTER:连忙 weight=93.0 chapters=5 hits=12
+- CHARACTER:曾经 weight=92.8 chapters=6 hits=11
+- CHARACTER:万尸 weight=92.5 chapters=2 hits=24
+Suggestions: 5
+- chapter 1482 第51章_腐烂之眼: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.87 action=SUGGEST_DELETE
+  * v3 break=0.93 separation=0.90 cohesion=0.15 evidenceChars=887
+  * v3 membershipLow=1.00 alienCluster=0.56 alienContinuity=0.33 alienNovelty=1.00 alienEntityCount=3 alienIdentity=0.13
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.93 prefixAlien=0.00
+  * v3 world=0.96 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.03
+- chapter 1490 第59章_监视: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.91 cohesion=0.13 evidenceChars=898
+  * v3 membershipLow=1.00 alienCluster=0.65 alienContinuity=0.25 alienNovelty=1.00 alienEntityCount=4 alienIdentity=0.17
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 1494 第63章_墓头: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=801 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.69 separation=0.86 cohesion=0.50 evidenceChars=365
+  * v3 membershipLow=1.00 alienCluster=0.64 alienContinuity=0.33 alienNovelty=0.67 alienEntityCount=3 alienIdentity=0.13
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.69 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 1496 第65章_炎杀: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.98 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.94 separation=0.91 cohesion=0.11 evidenceChars=1302
+  * v3 membershipLow=1.00 alienCluster=0.98 alienContinuity=0.40 alienNovelty=0.83 alienEntityCount=12 alienIdentity=0.71
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.94 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 1497 第66章_地阵高手？: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=801 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.75 separation=0.86 cohesion=0.37 evidenceChars=410
+  * v3 membershipLow=1.00 alienCluster=0.64 alienContinuity=0.80 alienNovelty=0.67 alienEntityCount=3 alienIdentity=0.31
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.75 prefixAlien=0.00
+  * v3 world=0.88 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.03

@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 笔趣阁22, chapters=1588, ordinals=0, gaps=0, score=3128.0
+First: 1、完美人生模拟器
+Last: 番外1：闾山师公二三事
+- 笔趣阁22: chapters=1588, dup=16, ord=0, gaps=0, score=3128.0
+Fused preview:
+1. 1、完美人生模拟器
+2. 2、你是——影子
+3. 3、罡洞
+4. 4、遗物
+5. 5、黑暗行者
+6. 6、云龙观
+7. 7、帝钟
+8. 8、灯笼
+9. 9、诡手
+10. 10、庙
+11. 11、工作群里的诡异
+12. 12、传染的灯笼
+13. 13、尸陀鬼之手
+14. 14、遇午而退
+15. 15、粗瓷碗
+16. 16、车窗里的蜡烛
+17. 17、抱公鸡的女孩
+18. 18、应急罐头
+19. 19、说话的艺术
+20. 20、一只与众不同的鸡
+
+
+Sample validation issues: 0
+- none
+
+Novel: 我的诡异人生 / 白刃斩春风
+Chapters: 48, chunks: 263
+Core features: 280, support: 0
+Top features:
+- CHARACTER:苏午 weight=218.6 chapters=42 hits=1393
+- CHARACTER:厉诡 weight=181.3 chapters=29 hits=183
+- CHARACTER:张角 weight=152.4 chapters=11 hits=110
+- CHARACTER:元皇 weight=143.2 chapters=14 hits=63
+- CHARACTER:金沙 weight=132.0 chapters=7 hits=55
+- CHARACTER:元根 weight=129.9 chapters=8 hits=53
+- CHARACTER:符箓 weight=128.9 chapters=10 hits=44
+- CHARACTER:终究 weight=128.4 chapters=15 hits=28
+- CHARACTER:黄天 weight=128.1 chapters=7 hits=50
+- CHARACTER:黄巾 weight=127.7 chapters=6 hits=52
+- CHARACTER:苍天 weight=121.3 chapters=9 hits=32
+- CHARACTER:金刚 weight=120.4 chapters=6 hits=37
+Suggestions: 0
+

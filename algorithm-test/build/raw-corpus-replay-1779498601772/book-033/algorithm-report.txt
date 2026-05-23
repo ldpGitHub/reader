@@ -1,0 +1,25 @@
+Novel: 太一道果 / 衔雨
+Chapters: 22, chunks: 107
+Core features: 76, support: 0
+Top features:
+- CHARACTER:姜离 weight=187.3 chapters=20 hits=484
+- CHARACTER:文殊 weight=128.6 chapters=5 hits=83
+- CHARACTER:阿弥陀 weight=125.6 chapters=4 hits=23
+- CHARACTER:容纳 weight=117.6 chapters=8 hits=29
+- SKILL:晋升仪式 weight=115.8 chapters=7 hits=15
+- CHARACTER:姜天子 weight=111.3 chapters=4 hits=13
+- CHARACTER:公孙青玥 weight=110.1 chapters=4 hits=9
+- CHARACTER:青帝道果 weight=110.1 chapters=4 hits=9
+- CHARACTER:元始天尊 weight=103.9 chapters=3 hits=10
+- CHARACTER:金刚 weight=102.3 chapters=5 hits=20
+- ITEM:蚩尤之旗 weight=99.9 chapters=4 hits=17
+- CHARACTER:苍天 weight=99.3 chapters=5 hits=19
+- CHARACTER:姜天 weight=99.0 chapters=5 hits=16
+- CHARACTER:万象 weight=97.4 chapters=6 hits=14
+- CHARACTER:孙悟空 weight=96.9 chapters=2 hits=11
+- CHARACTER:朱晦庵 weight=95.6 chapters=2 hits=11
+- CHARACTER:姜檀 weight=91.8 chapters=4 hits=14
+- CHARACTER:雷霆 weight=91.0 chapters=5 hits=12
+- CHARACTER:元君 weight=90.8 chapters=2 hits=17
+- CHARACTER:元始 weight=88.9 chapters=4 hits=13
+Suggestions: 0

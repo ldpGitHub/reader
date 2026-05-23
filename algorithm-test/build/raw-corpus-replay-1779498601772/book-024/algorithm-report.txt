@@ -1,0 +1,50 @@
+Novel: 异度旅社 / 远瞳
+Chapters: 21, chunks: 100
+Core features: 51, support: 0
+Top features:
+- CHARACTER:艾琳 weight=167.3 chapters=17 hits=136
+- CHARACTER:胡狸 weight=144.7 chapters=14 hits=65
+- CHARACTER:小红帽 weight=139.8 chapters=5 hits=33
+- CHARACTER:元灵真 weight=118.0 chapters=2 hits=25
+- CHARACTER:郑直 weight=114.9 chapters=4 hits=43
+- CHARACTER:伊甸之 weight=113.5 chapters=2 hits=20
+- ORGANIZATION:伊甸之门 weight=110.8 chapters=2 hits=20
+- CHARACTER:元灵 weight=106.8 chapters=3 hits=33
+- CHARACTER:金发 weight=103.9 chapters=7 hits=17
+- CHARACTER:元昊真 weight=101.3 chapters=2 hits=12
+- CHARACTER:元昊 weight=97.3 chapters=3 hits=19
+- LOCATION:现实世界 weight=96.1 chapters=6 hits=10
+- CHARACTER:乐呵呵 weight=87.9 chapters=4 hits=5
+- CHARACTER:高塔 weight=87.2 chapters=3 hits=15
+- CHARACTER:小东西 weight=86.4 chapters=4 hits=5
+- CHARACTER:老板 weight=85.6 chapters=5 hits=9
+- ORGANIZATION:问心阁 weight=82.1 chapters=2 hits=9
+- CHARACTER:元鹤 weight=80.2 chapters=2 hits=11
+- ITEM:几秒钟 weight=76.0 chapters=5 hits=6
+- CHARACTER:老帅比 weight=74.3 chapters=2 hits=5
+Suggestions: 5
+- chapter 272 第272章_“他身边总有事”: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.84 separation=0.94 cohesion=0.09 evidenceChars=2429
+  * v3 membershipLow=0.97 alienCluster=0.70 alienContinuity=0.89 alienNovelty=1.00 alienEntityCount=4 alienIdentity=0.42
+  * v3 graphAbsorption=0.02 prototype=0.10 prefixBook=0.88 prefixAlien=0.00
+  * v3 world=0.88 futureIntegration=0.00 titleAbsorption=0.00 expository=0.60 ood=0.06
+- chapter 769 第769章_眼睛: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.90 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.10 evidenceChars=1450
+  * v3 membershipLow=0.81 alienCluster=0.92 alienContinuity=0.62 alienNovelty=1.00 alienEntityCount=14 alienIdentity=1.00
+  * v3 graphAbsorption=0.10 prototype=0.05 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 titleAbsorption=1.00 expository=0.02 ood=0.01
+- chapter 773 第773章_最深点的……熟悉事物: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.94 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.67 separation=0.92 cohesion=0.14 evidenceChars=1219
+  * v3 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.86 alienNovelty=1.00 alienEntityCount=6 alienIdentity=0.53
+  * v3 graphAbsorption=0.00 prototype=0.06 prefixBook=0.67 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.01
+- chapter 775 第775章_百里晴的故事: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.92 action=SUGGEST_DELETE
+  * v3 break=0.61 separation=0.86 cohesion=0.15 evidenceChars=903
+  * v3 membershipLow=0.92 alienCluster=0.95 alienContinuity=0.67 alienNovelty=0.78 alienEntityCount=9 alienIdentity=0.71
+  * v3 graphAbsorption=0.10 prototype=0.02 prefixBook=0.70 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 titleAbsorption=0.00 expository=0.20 ood=0.01
+- chapter 776 第776章_叩响: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.85 separation=0.85 cohesion=0.12 evidenceChars=933
+  * v3 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7 alienIdentity=0.58
+  * v3 graphAbsorption=0.00 prototype=0.09 prefixBook=0.85 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.02

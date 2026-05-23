@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=942, ordinals=840, gaps=2, score=2995.7
+First: 欢迎收藏
+Last: 完本感言
+- 👍 55读书: chapters=942, dup=27, ord=840, gaps=2, score=2995.7
+Fused preview:
+1. 欢迎收藏
+2. 第1章 李源
+3. 第2章 身体素质6.5级
+4. 第3章 未觉醒的高等灵性
+5. 第4章 枪法、分数
+6. 第5章 我看好你（感谢流浪孤注一掷的白银盟！）
+7. 第6章 武是吞金窟
+8. 第7章 深夜的家（求月票追读）
+9. 第8章 有些事，总有人要去做
+10. 第9章 气血药液
+11. 第10章 《观大日星空经》
+12. 第11章 武道即我（四更求月票）
+13. 第12章 绝招‘岩壑藏龙’
+14. 第13章 许博的考验
+15. 第14章 特等助学金
+16. 第15章 860分的目标
+17. 第16章 独立武道室（三更求月票）
+18. 第17章 受法律保护的赌注
+19. 第18章 星空大学
+20. 第19章 黄金高手
+
+
+Sample validation issues: 1
+- ordinal mismatch: #658 第591章 一群神君！爆发（6K） -> #918 第819章 虚界生命！落幕
+
+Novel: 高武纪元 / 烽仙
+Chapters: 48, chunks: 425
+Core features: 500, support: 469
+Top features:
+- CHARACTER:李源 weight=224.8 chapters=45 hits=3032
+- CHARACTER:金袍神主 weight=196.5 chapters=10 hits=90
+- CHARACTER:文明 weight=181.6 chapters=20 hits=276
+- CHARACTER:景至尊 weight=178.3 chapters=13 hits=77
+- LOCATION:深渊祭海 weight=174.3 chapters=20 hits=113
+- CHARACTER:宰极限强 weight=169.7 chapters=10 hits=38
+- CHARACTER:宰极限 weight=168.7 chapters=12 hits=53
+- ORGANIZATION:永恒神宫 weight=163.0 chapters=13 hits=49
+- CHARACTER:方宇宙 weight=157.9 chapters=9 hits=42
+- WORLD_TERM:宇宙本源 weight=157.3 chapters=11 hits=102
+- CHARACTER:夏明主宰 weight=153.5 chapters=3 hits=48
+- CHARACTER:金袍 weight=151.8 chapters=11 hits=104
+Suggestions: 0
+

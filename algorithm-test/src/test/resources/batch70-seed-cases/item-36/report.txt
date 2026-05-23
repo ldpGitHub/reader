@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=1400, ordinals=0, gaps=0, score=2800.0
+First: 第1页
+Last: 第1400页
+- 52书库.net: chapters=1400, dup=0, ord=0, gaps=0, score=2800.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 北宋穿越指南 / 王梓钧
+Chapters: 48, chunks: 236
+Core features: 220, support: 0
+Top features:
+- CHARACTER:朱棠溪 weight=211.5 chapters=18 hits=189
+- CHARACTER:朱铭 weight=192.7 chapters=27 hits=343
+- CHARACTER:谢衍 weight=190.1 chapters=22 hits=407
+- CHARACTER:杨麟之 weight=161.6 chapters=7 hits=61
+- ORGANIZATION:宋徽宗 weight=157.5 chapters=12 hits=74
+- CHARACTER:平均律 weight=154.9 chapters=8 hits=44
+- CHARACTER:叶太 weight=152.6 chapters=12 hits=96
+- CHARACTER:连忙 weight=151.2 chapters=26 hits=51
+- CHARACTER:青鸾 weight=147.6 chapters=10 hits=90
+- CHARACTER:全部 weight=144.1 chapters=23 hits=41
+- CHARACTER:洛阳 weight=144.0 chapters=22 hits=44
+- ORGANIZATION:完颜宗 weight=138.4 chapters=5 hits=59
+Suggestions: 0
+

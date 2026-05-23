@@ -1,0 +1,14 @@
+input: chapters=48 title=深海余烬 author=远瞳
+chunk: chunks=239 size=800 overlap=150
+fingerprint.seed: seedChunks=120
+fingerprint.build: chunks=120 terms=50968 core=98 support=0 relations=84
+fingerprint.top: CHARACTER:邓肯:16/337|CHARACTER:阿加莎:4/54|CHARACTER:阿狗:6/55|CHARACTER:古董店:5/20|CHARACTER:步行机:3/23|CHARACTER:平静:11/25|ORGANIZATION:大教堂:8/19|LOCATION:现实世界:8/17|CHARACTER:艾伊:6/26|CHARACTER:牧师:3/29
+refine: round=1 cleanChunks=218
+fingerprint.build: chunks=218 terms=82219 core=231 support=0 relations=301
+fingerprint.top: CHARACTER:邓肯:35/624|CHARACTER:阿加莎:9/61|CHARACTER:平静:24/49|CHARACTER:周铭:10/72|CHARACTER:古董店:8/28|CHARACTER:阿狗:11/66|LOCATION:无垠海:19/51|LOCATION:新世界:12/62|ORGANIZATION:大教堂:12/26|CHARACTER:曾经:17/31
+refine: round=2 cleanChunks=235
+fingerprint.build: chunks=235 terms=86995 core=252 support=0 relations=285
+fingerprint.top: CHARACTER:邓肯:35/624|CHARACTER:阿加莎:9/61|CHARACTER:平静:24/49|CHARACTER:周铭:10/91|CHARACTER:古董店:8/28|LOCATION:无垠海:20/52|LOCATION:新世界:13/72|CHARACTER:阿狗:11/66|ORGANIZATION:大教堂:12/26|CHARACTER:熊熊燃烧:8/11
+v3.candidate: chapter=836 type=run start=534 confidence=0.46 break=0.23 separation=0.88 cohesion=0.22 membershipLow=0.67 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0 graphAbsorption=0.27 prototype=0.11 world=0.52 future=0.00 prefixBook=0.55 prefixAlien=0.00 evidenceChars=588 aliens=
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=130 prototypes=8
+report: suggestions=0

@@ -1,0 +1,25 @@
+Novel: 从婴儿开始入道 / 古羲
+Chapters: 21, chunks: 165
+Core features: 174, support: 0
+Top features:
+- CHARACTER:李昊 weight=183.3 chapters=16 hits=1069
+- CHARACTER:古魔 weight=158.9 chapters=10 hits=155
+- LOCATION:原始真界 weight=139.5 chapters=8 hits=49
+- CHARACTER:龙战天 weight=130.4 chapters=3 hits=27
+- SKILL:混沌法 weight=127.2 chapters=5 hits=45
+- CHARACTER:王境圆满 weight=125.8 chapters=4 hits=15
+- REALM:仙王境 weight=122.7 chapters=7 hits=83
+- ITEM:诸天塔 weight=119.3 chapters=5 hits=44
+- ORGANIZATION:混沌古族 weight=117.2 chapters=5 hits=18
+- CHARACTER:万极君 weight=117.1 chapters=2 hits=25
+- REALM:仙君境 weight=117.1 chapters=11 hits=50
+- CHARACTER:苏慕晴 weight=115.5 chapters=2 hits=24
+- CHARACTER:平静 weight=114.1 chapters=9 hits=22
+- ORGANIZATION:大禹族 weight=112.5 chapters=2 hits=34
+- WORLD_TERM:道本源 weight=112.5 chapters=6 hits=38
+- ORGANIZATION:祖龙族 weight=110.8 chapters=4 hits=20
+- CHARACTER:施展 weight=108.9 chapters=6 hits=23
+- CHARACTER:小家伙 weight=106.4 chapters=5 hits=9
+- CHARACTER:元神 weight=105.6 chapters=5 hits=25
+- CHARACTER:林青缨 weight=105.5 chapters=5 hits=10
+Suggestions: 0

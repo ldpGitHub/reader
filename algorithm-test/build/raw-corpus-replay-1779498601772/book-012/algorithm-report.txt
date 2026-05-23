@@ -1,0 +1,40 @@
+Novel: 长生从炼丹宗师开始 / 雨去欲续
+Chapters: 22, chunks: 139
+Core features: 171, support: 0
+Top features:
+- CHARACTER:罗尘 weight=185.0 chapters=18 hits=652
+- CHARACTER:老祖 weight=144.5 chapters=9 hits=84
+- ORGANIZATION:天元道宗 weight=132.9 chapters=6 hits=26
+- CHARACTER:武道神灵 weight=132.1 chapters=2 hits=32
+- CHARACTER:罗天 weight=129.5 chapters=7 hits=50
+- ORGANIZATION:溟渊派 weight=126.9 chapters=7 hits=29
+- ORGANIZATION:罗天宗 weight=124.6 chapters=6 hits=30
+- CHARACTER:曾经 weight=121.9 chapters=11 hits=27
+- CHARACTER:方轻雪 weight=116.7 chapters=2 hits=22
+- CHARACTER:陶绾 weight=115.9 chapters=3 hits=66
+- CHARACTER:司马惠娘 weight=114.4 chapters=2 hits=14
+- CHARACTER:武者 weight=113.6 chapters=3 hits=44
+- CHARACTER:元神 weight=112.0 chapters=6 hits=28
+- CHARACTER:小白 weight=110.5 chapters=3 hits=40
+- SKILL:炼丹术 weight=110.3 chapters=4 hits=23
+- CHARACTER:雷道子 weight=109.8 chapters=2 hits=18
+- CHARACTER:青丹 weight=109.6 chapters=3 hits=36
+- CHARACTER:老夫 weight=106.3 chapters=6 hits=21
+- LOCATION:青丹谷 weight=104.6 chapters=3 hits=33
+- CHARACTER:终究 weight=104.3 chapters=8 hits=15
+Suggestions: 3
+- chapter 1354 第1257章_坦陈身份，未知化神: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.79 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.10 evidenceChars=1180
+  * v3 membershipLow=0.63 alienCluster=0.78 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=6 alienIdentity=0.38
+  * v3 graphAbsorption=0.48 prototype=0.06 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.96 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.04
+- chapter 1358 第1260章_武力展示，天元大尊: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.69 separation=0.89 cohesion=0.12 evidenceChars=929
+  * v3 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.30 alienNovelty=0.88 alienEntityCount=8 alienIdentity=0.46
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.69 prefixAlien=0.00
+  * v3 world=0.87 futureIntegration=0.00 titleAbsorption=0.00 expository=0.03 ood=0.04
+- chapter 1361 第1263章_罗尘战栖霞！: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.58 separation=0.90 cohesion=0.13 evidenceChars=899
+  * v3 membershipLow=1.00 alienCluster=0.62 alienContinuity=0.40 alienNovelty=0.75 alienEntityCount=4 alienIdentity=0.26
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.58 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 titleAbsorption=0.00 expository=0.03 ood=0.03

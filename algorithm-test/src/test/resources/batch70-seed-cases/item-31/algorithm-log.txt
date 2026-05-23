@@ -1,0 +1,18 @@
+input: chapters=48 title=这个武圣血条太厚 author=不会飞的笔
+chunk: chunks=339 size=800 overlap=150
+fingerprint.seed: seedChunks=169
+fingerprint.build: chunks=169 terms=67164 core=185 support=0 relations=574
+fingerprint.top: CHARACTER:武道大师:9/63|CHARACTER:武道大:10/68|CHARACTER:郝毅:11/145|ORGANIZATION:大同府:6/51|CHARACTER:武者:11/59|ORGANIZATION:督查院:6/45|CHARACTER:全部:13/40|ORGANIZATION:大罗宗:5/40|CHARACTER:施展:8/44|CHARACTER:郁龙庆:3/26
+refine: round=1 cleanChunks=251
+fingerprint.build: chunks=251 terms=104110 core=327 support=0 relations=1000
+fingerprint.top: CHARACTER:武道大师:12/67|CHARACTER:武道大:13/72|ORGANIZATION:大蓝朝:20/103|CHARACTER:祝风华:6/101|CHARACTER:秦子恒:6/62|CHARACTER:郝毅:11/145|CHARACTER:宁青曼:8/46|CHARACTER:武祖:11/122|CHARACTER:万血:16/82|CHARACTER:王承泽:7/43
+refine: round=2 cleanChunks=326
+fingerprint.build: chunks=326 terms=129453 core=480 support=0 relations=1000
+fingerprint.top: CHARACTER:宁青曼:12/209|CHARACTER:武道大师:12/67|ORGANIZATION:大蓝朝:21/115|CHARACTER:武道大:13/72|CHARACTER:王承泽:9/103|CHARACTER:武祖:15/294|CHARACTER:祝风华:6/108|CHARACTER:秦子恒:6/81|CHARACTER:郝毅:11/145|CHARACTER:万血:16/82
+v3.skip: chapter=528 state=NON_STORY reason=non-story title=月票抽奖结果
+v3.skip: chapter=787 state=NON_STORY reason=non-story title=完本感言
+v3.skip: chapter=788 state=NON_STORY reason=non-story title=番外+新书
+v3.skip: chapter=789 state=NON_STORY reason=non-story title=《人仙！》月票抽奖
+v3.skip: chapter=790 state=NON_STORY reason=non-story title=《人仙！》月票中奖结果
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=350 prototypes=8
+report: suggestions=0

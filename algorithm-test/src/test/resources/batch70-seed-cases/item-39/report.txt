@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1398, ordinals=1346, gaps=0, score=4682.4
+First: 第一章 你是来逮捕我的吗
+Last: 新书《欺世游戏》已发布
+- 👍 55读书: chapters=1398, dup=16, ord=1346, gaps=0, score=4682.4
+Fused preview:
+1. 第一章 你是来逮捕我的吗
+2. 第二章 误导
+3. 第三章 艾华斯·莫里亚蒂
+4. 第四章 银冕之龙的注视
+5. 第五章 附魔卡：影之刃
+6. 第六章 副本：罪恶枢纽鹈鹕酒吧
+7. 第七章 身怀利器，杀心自起
+8. 第八章 哈伊娜想听秘密
+9. 第九章 是的，我喜欢孩子
+10. 第十章 恶行酒保
+11. 第十一章 他是怎么做到的？
+12. 第十二章 恶德术士维罗妮卡
+13. 第十三章 你听见了，是她让我打的
+14. 第十四章 被唤醒的影魔
+15. 第十五章 超凡戒指：高贵之红
+16. 第十六章 恶魔的诱惑
+17. 第十七章 《牧者密续》
+18. 第十八章 夏洛克·赫尔墨斯
+19. 第十九章 银与锡之殿
+20. 第二十章 马瑟斯主教
+
+
+Sample validation issues: 0
+- none
+
+Novel: 牧者密续 / 不祈十弦
+Chapters: 48, chunks: 260
+Core features: 317, support: 0
+Top features:
+- CHARACTER:艾华斯 weight=267.6 chapters=43 hits=1327
+- CHARACTER:伊莎贝尔 weight=210.3 chapters=13 hits=118
+- ORGANIZATION:环天司 weight=193.7 chapters=17 hits=244
+- CHARACTER:阿瓦隆 weight=179.4 chapters=18 hits=58
+- CHARACTER:艾世平 weight=172.6 chapters=14 hits=56
+- CHARACTER:夏洛克 weight=170.7 chapters=6 hits=93
+- SKILL:晋升仪式 weight=164.0 chapters=19 hits=45
+- CHARACTER:阿莱斯 weight=156.9 chapters=8 hits=48
+- CHARACTER:伊南娜 weight=153.3 chapters=7 hits=45
+- ITEM:衔尾之环 weight=151.5 chapters=16 hits=56
+- CHARACTER:黄昏 weight=145.9 chapters=18 hits=57
+- CHARACTER:唐吉诃德 weight=134.1 chapters=2 hits=34
+Suggestions: 0
+

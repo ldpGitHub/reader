@@ -1,0 +1,23 @@
+analysisChapters=17
+targetChapters=9
+contextChapters=8
+roleCounts=NEAR_CONTEXT:8,TARGET_EXTENDED:1,TARGET_RECENT:2,TARGET_TAIL:6
+targetRange=5..260
+chapters:
+0	NEAR_CONTEXT	第一章：禅功
+5	TARGET_EXTENDED	第六章：铁山靠
+22	NEAR_CONTEXT	第二十三章：摘星换斗
+45	NEAR_CONTEXT	第四十六章：鸡汤
+68	NEAR_CONTEXT	第六十九章：风波
+91	NEAR_CONTEXT	第九十二章：送客
+114	NEAR_CONTEXT	第一百一十四章：大战碧潭！(8.123k)
+137	NEAR_CONTEXT	第一百三十七章：日出东方！(8.048k)
+160	NEAR_CONTEXT	第一百六十章：风雪山神庙(8.227k)
+161	TARGET_TAIL	第一百六十一章：西湖梅庄(8.484k)
+197	TARGET_TAIL	第一百九十四章：故人相逢
+229	TARGET_TAIL	番二十四：点苍之鹰(二十四)
+245	TARGET_TAIL	番三十九：不老传说（十四）
+253	TARGET_TAIL	作者的话
+257	TARGET_TAIL	番四十九：烟水茫茫(二)
+259	TARGET_RECENT	番五十：烟水茫茫(终)
+260	TARGET_RECENT	新书《剑出大唐》已发布

@@ -1,0 +1,25 @@
+Novel: 神话之后 / 鹅是老五
+Chapters: 22, chunks: 109
+Core features: 129, support: 0
+Top features:
+- CHARACTER:莫无忌 weight=198.3 chapters=11 hits=190
+- CHARACTER:丁欢 weight=191.3 chapters=22 hits=896
+- CHARACTER:蓝小布 weight=184.5 chapters=10 hits=106
+- CHARACTER:方浩瀚 weight=150.0 chapters=6 hits=42
+- SKILL:大宇宙术 weight=135.2 chapters=5 hits=37
+- SKILL:传送阵 weight=126.6 chapters=5 hits=50
+- LOCATION:诸神世界 weight=125.7 chapters=9 hits=29
+- CHARACTER:叶玄 weight=122.1 chapters=5 hits=46
+- CHARACTER:蓝星神陆 weight=121.6 chapters=2 hits=20
+- CHARACTER:蓝星 weight=119.5 chapters=5 hits=46
+- LOCATION:大道之河 weight=119.3 chapters=3 hits=70
+- CHARACTER:曲伊 weight=116.0 chapters=4 hits=49
+- CHARACTER:万年 weight=115.9 chapters=8 hits=29
+- CHARACTER:曲北歌 weight=110.9 chapters=2 hits=23
+- CHARACTER:全部 weight=109.9 chapters=9 hits=18
+- ORGANIZATION:天蒙族 weight=105.0 chapters=2 hits=27
+- ITEM:破劫刀 weight=104.9 chapters=7 hits=23
+- LOCATION:大道领域 weight=104.7 chapters=3 hits=24
+- CHARACTER:丁兄 weight=103.7 chapters=6 hits=20
+- LOCATION:瀚元脉河 weight=101.8 chapters=2 hits=33
+Suggestions: 0

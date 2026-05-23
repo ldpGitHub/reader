@@ -1,0 +1,34 @@
+bookNo	title	author	fullChapters	analysisChapters	targetChapters	contextChapters	chunks	suggestions	suggestionIndexes	listMs	sampleMs	readMs	analyzeMs	auditMs	elapsedMs	reportDir
+1	我在修仙界万古长青	快餐店	543	19	10	9	183	0		193	1	4	75276	6	75483	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-001
+2	玄鉴仙族	季越人	1644	22	11	11	124	4	1636,1640,1642,1643	1257	0	7	25751	6	27024	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-002
+3	道爷要飞升	裴屠狗	873	21	10	11	114	2	617,872	565	0	8	25846	2	26424	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-003
+4	从水猴子开始成神	甲壳蚁	1529	22	11	11	127	3	1521,1525,1527	1234	1	8	32002	5	33252	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-004
+5	神话之后	鹅是老五	1356	22	11	11	109	0		852	0	8	19723	4	20592	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-005
+6	仙工开物	蛊真人	1042	22	11	11	119	3	1034,1038,1041	729	0	8	23659	4	24403	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-006
+7	阵问长生	观虚	1497	22	11	11	146	5	1481,1489,1493,1495,1496	1085	0	8	28451	5	29551	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-007
+8	大道之上	宅猪	821	21	10	11	150	1	309	441	0	7	41489	2	41942	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-008
+9	谁让他修仙的！	最白的乌鸦	1452	22	11	11	87	0		1159	0	7	15931	5	17106	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-009
+10	御兽从零分开始	给我加葱	1688	22	11	11	126	1	1687	1288	1	4	21450	2	22747	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-010
+11	苟在初圣魔门当人材	鹤守月满池	1581	22	11	11	109	1	1577	1205	0	5	17787	2	19002	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-011
+12	长生从炼丹宗师开始	雨去欲续	1360	22	11	11	139	3	1353,1357,1360	1038	1	8	33849	6	34905	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-012
+13	高武纪元	烽仙	942	21	10	11	176	1	430	650	1	6	62912	3	63574	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-013
+14	吞噬星空2起源大陆	我吃西红柿	192	16	8	8	80	1	453	70	0	3	13981	2	14060	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-014
+15	夜无疆	辰东	734	21	10	11	161	4	726,730,732,733	430	1	9	43917	7	44367	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-015
+16	叩问仙道	雨打青石	2788	23	12	11	135	3	2784,2786,2787	2479	0	6	31123	3	33615	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-016
+17	苟在武道世界成圣	在水中的纸老虎	738	21	10	11	163	6	706,722,730,734,736,737	439	0	9	50662	7	51120	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-017
+18	苟在两界修仙	文抄公	472	18	9	9	84	6	408,440,456,464,468,470	241	0	7	15073	9	15333	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-018
+19	没钱修什么仙？	熊狼狗	1045	22	11	11	115	4	789,1037,1041,1043	744	0	9	23659	6	24422	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-019
+21	仙人消失之后	风行水云间	2909	23	12	11	73	0		2354	0	3	3326	4	5692	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-021
+22	从赘婿开始建立长生家族	天弦画柱	1127	22	11	11	82	11	103,615,871,1027,1063,1095,1111,1119,1123,1125,1126	859	1	7	6999	10	7880	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-022
+23	旧域怪诞	狐尾的笔	483	18	9	9	68	9	227,383,419,451,467,475,479,481,482	243	0	6	6930	9	7191	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-023
+24	异度旅社	远瞳	776	21	10	11	100	4	768,772,774,775	489	0	8	20743	7	21255	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-024
+27	以神通之名	猪心虾仁	610	19	10	9	83	6	510,546,594,602,608,609	334	1	8	15987	7	16339	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-027
+28	天倾之后	佛前献花	1130	22	11	11	109	0		661	0	4	21776	7	22451	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-028
+29	混在末日，独自成仙	言归正传	685	21	10	11	144	0		416	0	5	37942	4	38370	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-029
+30	从婴儿开始入道	古羲	807	21	10	11	165	0		538	0	6	55915	3	56465	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-030
+31	这个武圣血条太厚	不会飞的笔	791	21	10	11	121	0		483	1	6	23021	5	23518	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-031
+32	剑出衡山	一片苏叶	261	17	9	8	112	0		126	1	8	31623	4	31765	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-032
+33	太一道果	衔雨	1219	22	11	11	107	0		890	1	4	20273	4	21174	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-033
+34	法力无边高大仙	踏雪真人	1246	22	11	11	109	0		883	0	5	29339	4	30234	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-034
+35	山河志异	瑞根	918	21	10	11	104	0		554	0	5	25149	4	25716	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-035
+36	北宋穿越指南	王梓钧	1108	22	11	11	106	5	596,852,1337,1396,1398	651	0	5	20586	8	21254	/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/raw-corpus-replay-1779498601772/book-036

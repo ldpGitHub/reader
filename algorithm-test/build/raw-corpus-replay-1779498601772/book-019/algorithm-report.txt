@@ -1,0 +1,50 @@
+Novel: 没钱修什么仙？ / 熊狼狗
+Chapters: 22, chunks: 115
+Core features: 70, support: 0
+Top features:
+- CHARACTER:张羽 weight=180.3 chapters=16 hits=669
+- CHARACTER:白真真 weight=138.5 chapters=3 hits=64
+- CHARACTER:万法 weight=131.4 chapters=10 hits=43
+- SKILL:仙道技术 weight=128.8 chapters=8 hits=21
+- ORGANIZATION:太真仙族 weight=120.0 chapters=2 hits=34
+- CHARACTER:青木神君 weight=119.8 chapters=2 hits=18
+- CHARACTER:乐沐岚 weight=110.9 chapters=2 hits=21
+- CHARACTER:李雪莲 weight=108.6 chapters=2 hits=20
+- ORGANIZATION:万法宗 weight=107.2 chapters=5 hits=16
+- SKILL:门功法 weight=106.2 chapters=3 hits=23
+- CHARACTER:陆衡 weight=98.9 chapters=3 hits=22
+- SKILL:仙门功法 weight=97.8 chapters=2 hits=16
+- CHARACTER:张翩翩 weight=96.4 chapters=2 hits=12
+- ORGANIZATION:天魔宗 weight=93.2 chapters=3 hits=13
+- CHARACTER:双方 weight=93.0 chapters=5 hits=12
+- REALM:元婴圣体 weight=91.4 chapters=2 hits=28
+- CHARACTER:全神贯注 weight=90.8 chapters=3 hits=5
+- CHARACTER:金融 weight=90.5 chapters=3 hits=16
+- CHARACTER:李识 weight=89.8 chapters=2 hits=18
+- ORGANIZATION:拜入宗 weight=87.7 chapters=2 hits=11
+Suggestions: 5
+- chapter 774 十分钟: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.90 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.07 evidenceChars=1856
+  * v3 membershipLow=0.97 alienCluster=0.72 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=6 alienIdentity=0.50
+  * v3 graphAbsorption=0.03 prototype=0.04 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 titleAbsorption=0.00 expository=0.01 ood=0.03
+- chapter 790 大概20分钟，今天字数多点: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.99 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.64 separation=0.94 cohesion=0.13 evidenceChars=1211
+  * v3 membershipLow=1.00 alienCluster=0.96 alienContinuity=0.36 alienNovelty=1.00 alienEntityCount=11 alienIdentity=0.65
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.64 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 titleAbsorption=0.50 expository=0.02 ood=0.01
+- chapter 1038 第889章_和步道君一起法条培训，各显神通: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.66 separation=0.92 cohesion=0.09 evidenceChars=1566
+  * v3 membershipLow=1.00 alienCluster=0.94 alienContinuity=0.56 alienNovelty=0.77 alienEntityCount=13 alienIdentity=1.00
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.66 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 titleAbsorption=0.00 expository=0.01 ood=0.02
+- chapter 1042 第892章_没有过去之人？超高危级道种: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.75 separation=0.93 cohesion=0.14 evidenceChars=979
+  * v3 membershipLow=1.00 alienCluster=0.86 alienContinuity=0.22 alienNovelty=1.00 alienEntityCount=8 alienIdentity=0.58
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.75 prefixAlien=0.00
+  * v3 world=0.96 futureIntegration=0.00 titleAbsorption=0.00 expository=0.00 ood=0.04
+- chapter 1044 第894章_道种被偷？你是仙帝派来的吧？: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.90 action=SUGGEST_DELETE
+  * v3 break=0.85 separation=0.88 cohesion=0.14 evidenceChars=900
+  * v3 membershipLow=1.00 alienCluster=0.69 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=4 alienIdentity=0.29
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.85 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 titleAbsorption=1.00 expository=0.00 ood=0.01

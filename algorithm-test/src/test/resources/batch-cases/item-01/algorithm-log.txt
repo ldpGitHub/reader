@@ -1,0 +1,14 @@
+input: chapters=48 title=我在修仙界万古长青 author=快餐店
+chunk: chunks=451 size=800 overlap=150
+fingerprint.seed: seedChunks=148
+fingerprint.build: chunks=148 terms=64246 core=296 support=0 relations=1000
+fingerprint.top: CHARACTER:陆长安:21/1109|CHARACTER:赵思瑶:8/96|CHARACTER:陆道友:10/46|CHARACTER:储物袋:8/24|CHARACTER:李二狗:5/31|LOCATION:修仙界:16/46|CHARACTER:黄龙仙:5/26|CHARACTER:金云:12/36|CHARACTER:李二青:3/27|CHARACTER:寿元:10/36
+refine: round=1 cleanChunks=393
+fingerprint.build: chunks=393 terms=184091 core=500 support=557 relations=1000
+fingerprint.top: CHARACTER:陆长安:44/2478|CHARACTER:陆道友:26/84|CHARACTER:陆真君:16/84|ORGANIZATION:碧海商盟:17/77|ORGANIZATION:海商盟:19/119|LOCATION:天星海:22/217|CHARACTER:魏傀师:11/69|CHARACTER:赵思瑶:8/96|ORGANIZATION:星月宫:14/115|CHARACTER:柴老鬼:6/112
+refine: round=2 cleanChunks=447
+fingerprint.build: chunks=447 terms=206913 core=500 support=742 relations=1000
+fingerprint.top: CHARACTER:陆长安:44/2511|CHARACTER:陆道友:26/84|CHARACTER:陆真君:17/91|ORGANIZATION:海商盟:19/134|ORGANIZATION:碧海商盟:17/82|ORGANIZATION:星月宫:17/152|LOCATION:天星海:22/258|CHARACTER:魏傀师:11/71|CHARACTER:柴老鬼:7/113|CHARACTER:赵思瑶:8/96
+v2.candidate: chapter=542 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.15 membershipLow=1.00 alienCluster=0.93 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.86 future=0.00 aliens=沈幼:3|沈幼清:3|洛基:2|姜悦兮:1|宋铭真:1|方表情:1|李宓稍:1|李松之:1|杜子辕:1|韩允钧:1
+v2.report: chapters=48 suggestions=1 coreEntities=993 prototypes=8
+report: suggestions=1

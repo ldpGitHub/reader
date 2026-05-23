@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+1537、仙道无情_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+1537、仙道无情
+嗡！
+寂暗洪荒之中，密密麻麻交织起来的天根齐刷刷震颤了起来——
+大天气韵流淌于每一道天根之上，一张张人脸从横纵交织的天根‘网格’之中拥挤而出。
+无数人脸层层堆积成‘大天’的面容，它将目光投向‘三清’远遁之处，满带沧桑的面容向彼处覆压而去。
+订阅本章：20币
+推荐
+豪门权少蜜爱成瘾穿书后，我被迫成了假系统反穿第一妖女肆意娇宠！被病娇大佬追着亲胖妻空间：物资只有亿点点为什么它永无止境穿成乙游恶女后，睁眼就在修罗场重生之娇宠小王妃天灾第十年跟我去种田魏晋干饭人嗜宠夜王狂妃天灾直播五百块怎么苟我在八零当团宠穿书女配娇养指南小爷看上你了一品贵妻重生八零极品女配朕的爱妃太能卷了七煞女帝红妆祸妃
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

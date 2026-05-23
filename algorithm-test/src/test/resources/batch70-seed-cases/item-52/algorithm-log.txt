@@ -1,0 +1,15 @@
+input: chapters=48 title=赤心巡天 author=情何以甚
+chunk: chunks=512 size=800 overlap=150
+fingerprint.seed: seedChunks=130
+fingerprint.build: chunks=130 terms=51355 core=80 support=0 relations=92
+fingerprint.top: CHARACTER:姜望:20/428|CHARACTER:王夷吾:3/33|CHARACTER:白玉瑕:3/30|ORGANIZATION:狱无门:3/22|CHARACTER:杜如晦:2/15|REALM:太虚幻境:4/31|CHARACTER:曾经:9/12|CHARACTER:青羊:7/15|CHARACTER:白骨:3/24|CHARACTER:武安侯:2/11
+refine: round=1 cleanChunks=174
+fingerprint.build: chunks=174 terms=70831 core=171 support=0 relations=350
+fingerprint.top: CHARACTER:姜望:36/580|CHARACTER:王夷吾:5/48|CHARACTER:曾经:23/43|CHARACTER:钟玄胤:6/22|CHARACTER:白玉瑕:3/30|CHARACTER:姜道主:5/19|CHARACTER:宋婉溪:3/29|CHARACTER:姬符仁:3/22|CHARACTER:吴斋雪:5/17|REALM:太虚幻境:8/39
+refine: round=2 cleanChunks=416
+fingerprint.build: chunks=416 terms=158951 core=500 support=85 relations=1000
+fingerprint.top: CHARACTER:姜望:39/619|CHARACTER:姬伯庸:10/134|CHARACTER:钟玄胤:14/87|CHARACTER:姬凤洲:16/71|CHARACTER:吴斋雪:8/97|CHARACTER:姬符仁:9/85|CHARACTER:宋淮:13/222|CHARACTER:曾经:32/93|CHARACTER:熊稷:13/125|CHARACTER:王夷吾:6/62
+v3.candidate: chapter=707 type=suffix start=1300 confidence=0.61 break=0.23 separation=0.87 cohesion=0.20 membershipLow=0.59 alienCluster=0.93 alienContinuity=0.87 alienNovelty=0.22 alienEntityCount=9 graphAbsorption=1.00 prototype=0.11 world=0.97 future=0.00 prefixBook=0.64 prefixAlien=0.78 evidenceChars=896 aliens=宋横江:6|江水族:4|清江水族:4|枫林城域:2|江水府:2|清江水府:2|江之主:1|高望重:1|高羡亲:1
+v3.candidate: chapter=883 type=run start=650 confidence=0.79 break=0.65 separation=0.93 cohesion=0.12 membershipLow=1.00 alienCluster=0.56 alienContinuity=1.00 alienNovelty=0.00 alienEntityCount=2 graphAbsorption=0.00 prototype=0.04 world=0.79 future=0.00 prefixBook=0.65 prefixAlien=0.00 evidenceChars=1477 aliens=牛状:10|牛状海:10
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=496 prototypes=8
+report: suggestions=0

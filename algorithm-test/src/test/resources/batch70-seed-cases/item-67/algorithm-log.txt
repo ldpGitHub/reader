@@ -1,0 +1,13 @@
+input: chapters=48 title=牧神记 author=宅猪
+chunk: chunks=142 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=32736 core=66 support=0 relations=98
+fingerprint.top: CHARACTER:秦牧:23/317|CHARACTER:古神:8/74|CHARACTER:龙麒麟:6/20|CHARACTER:沈万云:2/27|CHARACTER:齐九嶷:2/22|CHARACTER:小玉京:2/18|CHARACTER:牧连忙:6/8|CHARACTER:石像:3/34|CHARACTER:龙汉:6/18|CHARACTER:元神:6/12
+refine: round=1 cleanChunks=126
+fingerprint.build: chunks=126 terms=51299 core=130 support=0 relations=261
+fingerprint.top: CHARACTER:秦牧:44/646|ORGANIZATION:弥罗宫:17/208|CHARACTER:秦灵筠:10/40|CHARACTER:古神:12/79|CHARACTER:老师:13/58|CHARACTER:龙麒麟:7/28|LOCATION:混沌长河:11/32|CHARACTER:连忙:16/26|CHARACTER:牧连忙:8/11|CHARACTER:牧天尊:5/16
+refine: round=2 cleanChunks=141
+fingerprint.build: chunks=141 terms=55508 core=151 support=0 relations=311
+fingerprint.top: CHARACTER:秦牧:44/659|ORGANIZATION:弥罗宫:20/255|CHARACTER:秦灵筠:12/50|LOCATION:混沌长河:14/53|CHARACTER:老师:15/64|CHARACTER:古神:12/79|CHARACTER:龙麒麟:7/28|CHARACTER:蓝御田:7/21|CHARACTER:连忙:17/28|CHARACTER:终极虚空:4/15
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=116 prototypes=8
+report: suggestions=0

@@ -1,0 +1,80 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第1567章贺骁的确是个人才_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第1567章贺骁的确是个人才
+青阳也挑了挑眉。不愧是白子蕲，当上都云使这么久了，心直口快的毛病还没改掉。今日若是换作都云主使在此，断不会这样问起。
+结果白子蕲继续追问：“这是何时发生的？是哪一位仙人？”
+“六十多年前了罢？”爻王笑道，“先王梦见哪一位仙人，宫中没有记载，那时连我
+订阅本章：15币
+推荐
+开局就被赶出豪门宝妈在修真界富甲一方花娇喜上眉头良人可安僵尸娘子：相公，快献血姑娘她戏多嘴甜快穿之我只想种田一纸千金诱她前方高能夫人被迫觅王侯咸鱼一家的穿书生活问丹朱长安好吾家阿囡你是我的小甜梨修仙请带闺蜜宋影帝的前女友也是我金粉
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

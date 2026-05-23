@@ -1,0 +1,73 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=989, ordinals=934, gaps=0, score=3227.6
+First: 第1章 万灵图录，木之心宠兽培育基地！
+Last: 第934章 创世一族！宇宙纪元！（大结局）
+- 👍 55读书: chapters=989, dup=36, ord=934, gaps=0, score=3227.6
+Fused preview:
+1. 第1章 万灵图录，木之心宠兽培育基地！
+2. 第2章 变异毒属性林狼，真实之眼！
+3. 第3章 林狼图录，魔药：‘木之心’
+4. 第4章 完善的配方！突破种族上限的林狼
+5. 第5章 制作魔药，云天宠兽度假村
+6. 第6章 老沙的悲愤，魔药制作完成！
+7. 第7章 同学群，小青初晋阶！
+8. 第8章 视死如归的老沙！服用魔药！
+9. 第9章 老沙的突破！毒藤绞杀！
+10. 第10章 初次战斗，快速提升计划！
+11. 第11章 租借宠兽？赚钱之道！
+12. 第12章 宠兽代养培育训练业务！
+13. 第13章 毒系变异的培养方法？
+14. 第14章 变异技能：毒木之心！
+15. 第15章 铲屎御兽师，第一位顾客！
+16. 第16章 赌约？恐怖利润的宠兽培养！
+17. 第17章 顶配林狼！林州还有这样的培育师？
+18. 第18章 图录升级！林狼LV2！
+19. 第19章 连接共享！新的培育业务？
+20. 第20章 技能升级，恐怖的连接效果！
+
+
+Sample validation issues: 0
+- none
+
+Novel: 谁教你这么御兽的 / 二次下海
+Chapters: 48, chunks: 317
+Core features: 335, support: 0
+Top features:
+- CHARACTER:苏平 weight=220.9 chapters=43 hits=1533
+- CHARACTER:万灵之 weight=214.0 chapters=26 hits=143
+- CHARACTER:蓝星 weight=184.0 chapters=29 hits=195
+- CHARACTER:万灵 weight=183.7 chapters=30 hits=184
+- CHARACTER:董牧云 weight=183.1 chapters=10 hits=102
+- CHARACTER:小火苗 weight=177.9 chapters=11 hits=73
+- CHARACTER:元素 weight=168.5 chapters=23 hits=123
+- CHARACTER:万木之狼 weight=168.4 chapters=9 hits=38
+- CHARACTER:小家伙 weight=168.2 chapters=13 hits=48
+- CHARACTER:林狼 weight=159.8 chapters=13 hits=132
+- LOCATION:万灵之界 weight=159.1 chapters=16 hits=73
+- CHARACTER:小青 weight=155.6 chapters=15 hits=98
+Suggestions: 4
+- chapter 968 第913章 折纸剑神！朱雀与玄武！: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.90 action=SUGGEST_DELETE
+  * v3 break=0.41 separation=0.90 cohesion=0.11 evidenceChars=1444
+  * v3 membershipLow=0.84 alienCluster=0.93 alienContinuity=0.58 alienNovelty=0.82 alienEntityCount=17
+  * v3 graphAbsorption=0.09 prototype=0.01 prefixBook=0.57 prefixAlien=0.00
+  * v3 world=0.93 futureIntegration=0.00 ood=0.01
+- chapter 969 第914章 水火之争！苏平的作用！: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.93 action=SUGGEST_DELETE
+  * v3 break=0.95 separation=0.89 cohesion=0.22 evidenceChars=667
+  * v3 membershipLow=1.00 alienCluster=0.76 alienContinuity=0.80 alienNovelty=1.00 alienEntityCount=5
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.95 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.02
+- chapter 980 第925章 冥神陨落！一鲸死万物生！: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.92 action=SUGGEST_DELETE
+  * v3 break=0.93 separation=0.94 cohesion=0.06 evidenceChars=1384
+  * v3 membershipLow=1.00 alienCluster=0.73 alienContinuity=0.60 alienNovelty=1.00 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.93 prefixAlien=0.00
+  * v3 world=0.84 futureIntegration=0.00 ood=0.03
+- chapter 987 第932章 牛马雷神？天外来客！: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=801 confidence=0.89 action=SUGGEST_DELETE
+  * v3 break=0.90 separation=0.88 cohesion=0.50 evidenceChars=387
+  * v3 membershipLow=1.00 alienCluster=0.80 alienContinuity=0.57 alienNovelty=0.40 alienEntityCount=5
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.90 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.02
+

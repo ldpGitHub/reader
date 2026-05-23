@@ -1,0 +1,18 @@
+input: chapters=48 title=诡秘之主 author=爱潜水的乌贼
+chunk: chunks=230 size=800 overlap=150
+fingerprint.seed: seedChunks=122
+fingerprint.build: chunks=122 terms=51828 core=123 support=0 relations=88
+fingerprint.top: CHARACTER:阿尔杰:6/74|CHARACTER:安德森:3/55|CHARACTER:阿尔:7/75|CHARACTER:乌特拉夫:3/28|CHARACTER:马车:12/51|CHARACTER:罗塞尔:7/18|CHARACTER:唐泰斯:5/17|CHARACTER:小姐:8/27|LOCATION:现实世界:10/13|CHARACTER:蓝复仇者:2/13
+refine: round=1 cleanChunks=180
+fingerprint.build: chunks=180 terms=69976 core=210 support=0 relations=255
+fingerprint.top: CHARACTER:阿尔杰:10/102|CHARACTER:阿尔:11/111|CHARACTER:乌特拉夫:4/34|CHARACTER:阿蒙:10/93|CHARACTER:马车:17/61|CHARACTER:巴顿:7/130|CHARACTER:罗塞尔:10/22|CHARACTER:安德森:3/55|CHARACTER:小姐:13/41|CHARACTER:唐泰斯:7/19
+refine: round=2 cleanChunks=214
+fingerprint.build: chunks=214 terms=78390 core=247 support=0 relations=289
+fingerprint.top: CHARACTER:阿尔杰:10/102|CHARACTER:阿尔:11/111|CHARACTER:巴顿:8/233|CHARACTER:阿蒙:11/96|CHARACTER:乌特拉夫:4/34|CHARACTER:马车:17/61|CHARACTER:罗塞尔:10/22|CHARACTER:安德森:3/55|CHARACTER:小姐:13/41|CHARACTER:唐泰斯:7/19
+v3.skip: chapter=1453 state=NON_STORY reason=non-story title=双倍期间求月票（章节已更）
+v3.skip: chapter=1460 state=NON_STORY reason=non-story title=完本感言（上）
+v3.skip: chapter=1461 state=NON_STORY reason=non-story title=完本感言（下）
+v3.skip: chapter=1470 state=NON_STORY reason=non-story title=不是诈尸，不是遭了阿蒙
+v3.skip: chapter=1471 state=NON_STORY reason=non-story title=新书已发
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=179 prototypes=8
+report: suggestions=0

@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第1480章两个解决办法_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第1480章两个解决办法
+纵火的人不仅避开所有青宫弟子耳目，还悄悄弄坏好几个阵法，真是了不得。
+她都怀疑是内奸干的，否则怎能神不知鬼不觉？
+但转运仓被烧导致全军缺粮是铁一样的事实，她也无从辩解，只能摸摸鼻子认了。唯今之计，先要解决眼下的麻烦。
+陆无双也明白，白魔吉满心
+订阅本章：10币
+推荐
+大明英华君九龄穿在逃亡前，开挂闷声发大财摘下那朵高岭之花仙骄仙灵图谱九重紫慕南枝（《嘉南传》原著）谜案追凶新婚错爱，负罪前妻我有一个诡王朝道主有点咸为什么它永无止境掌欢穿越星际妻荣夫贵退烧送你一个黎明不负荣光且深情偏心眼墨桑
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

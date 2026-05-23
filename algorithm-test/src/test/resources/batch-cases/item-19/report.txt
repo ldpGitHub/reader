@@ -1,0 +1,63 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best:  笔趣阁网, chapters=1195, ordinals=1177, gaps=0, score=4087.8
+First: 欢迎收藏
+Last: 番外：科尔杜村日常
+-  笔趣阁网: chapters=1195, dup=0, ord=1177, gaps=0, score=4087.8
+Fused preview:
+1. 欢迎收藏
+2. 第一章 外乡人
+3. 第二章 “恶作剧”
+4. 第三章 梦
+5. 第四章 牧羊人
+6. 第五章 牌
+7. 第六章 废墟
+8. 第七章 娜罗卡
+9. 第八章 猫头鹰
+10. 第九章 杂志
+11. 第十章 血
+12. 第十一章 普阿利斯夫人
+13. 第十二章 暗流
+14. 第十三章 尝试
+15. 第十四章 不同的怪物
+16. 第十五章 套话
+17. 第十六章 信
+18. 第十七章 嫌疑人
+19. 第十八章 “直白”
+20. 第十九章 冥想
+
+
+Sample validation issues: 0
+- none
+
+Novel: 宿命之环 / 爱潜水的乌贼
+Chapters: 48, chunks: 251
+Core features: 243, support: 0
+Top features:
+- CHARACTER:宿命之 weight=198.5 chapters=16 hits=122
+- CHARACTER:高维俯 weight=174.1 chapters=13 hits=62
+- ITEM:宿命之环 weight=171.0 chapters=16 hits=122
+- CHARACTER:宿命 weight=168.8 chapters=23 hits=134
+- CHARACTER:高维 weight=146.3 chapters=14 hits=70
+- CHARACTER:苏珊娜 weight=135.4 chapters=3 hits=41
+- CHARACTER:阿蒙 weight=131.5 chapters=8 hits=53
+- LOCATION:暗影世界 weight=127.7 chapters=9 hits=34
+- ORGANIZATION:失序之国 weight=126.7 chapters=7 hits=20
+- CHARACTER:罗塞尔 weight=126.2 chapters=8 hits=15
+- CHARACTER:安东尼 weight=125.7 chapters=6 hits=18
+- ITEM:亚利斯塔 weight=124.0 chapters=11 hits=23
+Suggestions: 2
+- chapter 836 第九十章 最后的勾引: SUFFIX_POLLUTION start=1950 confidence=0.74 action=SUGGEST_DELETE
+  * v2 break=0.45 separation=0.92 cohesion=0.20
+  * v2 membershipLow=0.65 alienCluster=0.82 alienNovelty=0.57
+  * v2 graphAbsorption=0.36 prototype=0.03
+  * v2 world=0.94 futureIntegration=0.00 ood=0.04
+- chapter 1194 完本感言（感谢逐日依然又打赏白银盟）: SUFFIX_POLLUTION start=6500 confidence=0.98 action=AUTO_DELETE_ALLOWED
+  * v2 break=0.77 separation=0.96 cohesion=0.50
+  * v2 membershipLow=1.00 alienCluster=1.00 alienNovelty=0.73
+  * v2 graphAbsorption=0.00 prototype=0.02
+  * v2 world=0.92 futureIntegration=0.00 ood=0.08
+

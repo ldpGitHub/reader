@@ -1,0 +1,25 @@
+Novel: 这个武圣血条太厚 / 不会飞的笔
+Chapters: 21, chunks: 121
+Core features: 67, support: 0
+Top features:
+- CHARACTER:宁青曼 weight=146.4 chapters=5 hits=45
+- ORGANIZATION:大蓝朝 weight=139.2 chapters=12 hits=33
+- CHARACTER:宇文东昊 weight=130.5 chapters=2 hits=41
+- CHARACTER:申屠月 weight=125.4 chapters=2 hits=63
+- CHARACTER:苏雪松 weight=120.1 chapters=2 hits=32
+- CHARACTER:池承宇 weight=118.5 chapters=2 hits=31
+- CHARACTER:王承泽 weight=117.7 chapters=2 hits=32
+- CHARACTER:贺简 weight=113.2 chapters=3 hits=49
+- CHARACTER:武道大师 weight=111.7 chapters=5 hits=8
+- CHARACTER:叶择安 weight=110.2 chapters=2 hits=20
+- CHARACTER:蓝巡特 weight=106.3 chapters=3 hits=13
+- CHARACTER:白焰军 weight=106.1 chapters=3 hits=14
+- ORGANIZATION:正法阁 weight=103.5 chapters=2 hits=26
+- CHARACTER:青霜军 weight=102.9 chapters=3 hits=13
+- ORGANIZATION:大罗宗 weight=102.8 chapters=3 hits=18
+- CHARACTER:武祖 weight=98.1 chapters=3 hits=22
+- CHARACTER:乌日 weight=97.4 chapters=2 hits=30
+- CHARACTER:白彦 weight=95.8 chapters=2 hits=25
+- CHARACTER:甘省 weight=94.7 chapters=3 hits=18
+- CHARACTER:李田雨 weight=93.8 chapters=4 hits=7
+Suggestions: 0

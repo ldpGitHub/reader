@@ -1,0 +1,11 @@
+bookNo=19
+title=没钱修什么仙？
+author=熊狼狗
+kind=BOUNDARY_NEIGHBOR_CHECK
+chapterIndex=1038
+chapterTitle=请假一天
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/019-没钱修什么仙？-1779485284523/chapters/01038-请假一天.txt
+
+梳理剧情请假一天
+《没钱修什么仙？》请假一天
+正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！

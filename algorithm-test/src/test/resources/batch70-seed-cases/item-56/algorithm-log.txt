@@ -1,0 +1,13 @@
+input: chapters=48 title=凡人修仙传 author=忘语
+chunk: chunks=144 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=33676 core=48 support=0 relations=77
+fingerprint.top: CHARACTER:韩立:23/494|CHARACTER:通天灵宝:4/8|CHARACTER:储物袋:5/8|CHARACTER:韩某:8/14|CHARACTER:韩道友:3/9|ORGANIZATION:灵界百族:5/6|CHARACTER:尚未:7/8|CHARACTER:韩兄:4/14|CHARACTER:老夫:3/15|CHARACTER:老实:5/9
+refine: round=1 cleanChunks=124
+fingerprint.build: chunks=124 terms=58234 core=151 support=0 relations=359
+fingerprint.top: CHARACTER:韩立:45/784|CHARACTER:韩道友:16/40|CHARACTER:韩某:16/31|CHARACTER:韩兄:12/42|CHARACTER:老夫:11/43|CHARACTER:南宫婉:4/19|CHARACTER:墨绿:7/31|CHARACTER:通体:10/18|CHARACTER:广灵道果:4/9|ITEM:色小瓶:8/23
+refine: round=2 cleanChunks=137
+fingerprint.build: chunks=137 terms=63896 core=190 support=0 relations=498
+fingerprint.top: CHARACTER:韩立:46/814|CHARACTER:韩道友:16/40|CHARACTER:韩某:17/32|CHARACTER:韩兄:12/42|CHARACTER:老夫:11/43|CHARACTER:南宫婉:6/21|CHARACTER:青虹:12/22|CHARACTER:墨绿:7/31|CHARACTER:通体:10/18|CHARACTER:广灵道果:4/9
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=153 prototypes=8
+report: suggestions=0

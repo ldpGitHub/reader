@@ -1,0 +1,10 @@
+bookNo=27
+title=以神通之名
+author=猪心虾仁
+kind=BOUNDARY_NEIGHBOR_CHECK
+chapterIndex=593
+chapterTitle=求月票，抽奖最后一天
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/027-以神通之名-1779485578769/chapters/00593-求月票，抽奖最后一天.txt
+
+一号到六号每天至少八千，总共五万五千字，平均下来有九千。
+正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！

@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1581, ordinals=1441, gaps=1, score=5189.4
+First: 请假一天，顺便调整更新时间
+Last: 完结感言+新书预告！
+- 👍 55读书: chapters=1581, dup=5, ord=1441, gaps=1, score=5189.4
+Fused preview:
+1. 请假一天，顺便调整更新时间
+2. 今天就三更了
+3. 十二点半更新也来不及，一点半吧。
+4. 今天五更，更新放到下午四点
+5. 这一世写完了，周三休息一天
+6. 更新延后一小时，一点更新。
+7. 第九百八十六章出了点岔子，已修改，刷新一下即可
+8. 今天更新晚半小时，十二点半更新
+9. 更新晚半小时
+10. 阅文活动结束，明天恢复四更
+11. 晚十分钟
+12. 今天更新推到下午两点
+13. 今天更新晚一个小时左右。
+14. 十五号作者家里有事，休息一天
+15. 下午五点更新，五更
+16. 更新放到下午五点，卡文。
+17. 更新预计晚半个小时，十二点半更新。
+18. 今天更新挪到下午五点
+19. 下午五点，五更
+20. 下午五点，四更。
+
+
+Sample validation issues: 0
+- none
+
+Novel: 苟在初圣魔门当人材 / 鹤守月满池
+Chapters: 48, chunks: 254
+Core features: 178, support: 0
+Top features:
+- CHARACTER:吕阳 weight=213.4 chapters=39 hits=734
+- ORGANIZATION:超脱之门 weight=149.9 chapters=9 hits=39
+- ORGANIZATION:紫霄宫 weight=146.2 chapters=13 hits=41
+- CHARACTER:禄天命 weight=142.3 chapters=7 hits=29
+- CHARACTER:焦贵仁 weight=138.8 chapters=4 hits=39
+- CHARACTER:阴阳 weight=126.6 chapters=10 hits=38
+- CHARACTER:元神 weight=125.9 chapters=12 hits=31
+- CHARACTER:易道尊 weight=125.7 chapters=7 hits=16
+- CHARACTER:老龙君 weight=124.8 chapters=4 hits=23
+- ITEM:禄天命书 weight=122.6 chapters=7 hits=29
+- CHARACTER:终究 weight=122.1 chapters=13 hits=23
+- CHARACTER:万物 weight=120.3 chapters=13 hits=21
+Suggestions: 0
+

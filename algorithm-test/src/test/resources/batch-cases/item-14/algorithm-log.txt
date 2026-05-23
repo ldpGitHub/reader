@@ -1,0 +1,13 @@
+input: chapters=47 title=吞噬星空2起源大陆 author=我吃西红柿
+chunk: chunks=235 size=800 overlap=150
+fingerprint.seed: seedChunks=120
+fingerprint.build: chunks=120 terms=48457 core=201 support=0 relations=577
+fingerprint.top: ORGANIZATION:炎风古国:12/42|CHARACTER:罗撒:10/123|CHARACTER:扈阳:10/69|CHARACTER:雷霆:7/76|CHARACTER:王二重:7/21|ORGANIZATION:大古国:9/34|CHARACTER:王一重:6/26|ITEM:星辰塔:12/51|WORLD_TERM:本源大道:8/48|LOCATION:扈阳城:10/55
+refine: round=1 cleanChunks=196
+fingerprint.build: chunks=196 terms=74796 core=373 support=0 relations=923
+fingerprint.top: SKILL:修行者阵:18/90|LOCATION:源世界:25/234|SKILL:天生浑源阵:12/39|CHARACTER:元老哥:11/45|ORGANIZATION:炎风古国:12/42|CHARACTER:罗撒:10/123|CHARACTER:元老:15/75|CHARACTER:高等浑:10/30|CHARACTER:雷霆:11/80|CHARACTER:施展:22/44
+refine: round=2 cleanChunks=234
+fingerprint.build: chunks=234 terms=83967 core=451 support=0 relations=1000
+fingerprint.top: SKILL:修行者阵:19/127|LOCATION:源世界:26/287|SKILL:天生浑源阵:14/69|CHARACTER:元老哥:13/47|ORGANIZATION:炎风古国:12/42|CHARACTER:罗撒:10/123|CHARACTER:元老:17/77|ORGANIZATION:无限大蛇一族:8/30|CHARACTER:施展:23/51|SKILL:冰峰阵:13/53
+v2.report: chapters=47 suggestions=0 coreEntities=244 prototypes=8
+report: suggestions=0

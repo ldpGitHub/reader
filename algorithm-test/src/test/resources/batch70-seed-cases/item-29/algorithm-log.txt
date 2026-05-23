@@ -1,0 +1,15 @@
+input: chapters=48 title=混在末日，独自成仙 author=言归正传
+chunk: chunks=337 size=800 overlap=150
+fingerprint.seed: seedChunks=158
+fingerprint.build: chunks=158 terms=68503 core=148 support=0 relations=316
+fingerprint.top: CHARACTER:王机玄:23/702|CHARACTER:王道长:20/86|CHARACTER:郑士多:10/77|CHARACTER:周峥德:7/76|CHARACTER:高花婷:5/49|CHARACTER:伊娜文明:3/27|CHARACTER:古文明:7/24|CHARACTER:傅坚:11/54|CHARACTER:吴满:8/54|CHARACTER:艾米娜:4/30
+refine: round=1 cleanChunks=305
+fingerprint.build: chunks=305 terms=128253 core=420 support=0 relations=1000
+fingerprint.top: CHARACTER:王机玄:45/1533|CHARACTER:王道长:41/211|CHARACTER:终焉之:14/116|CHARACTER:郑士多:19/94|CHARACTER:罗金仙:19/83|CHARACTER:金仙:21/218|CHARACTER:伊娜文明:11/46|CHARACTER:艾米娜:14/57|CHARACTER:周峥德:8/77|ITEM:终焉之船:14/114
+refine: round=2 cleanChunks=331
+fingerprint.build: chunks=331 terms=137784 core=482 support=0 relations=1000
+fingerprint.top: CHARACTER:王机玄:45/1538|CHARACTER:王道长:41/211|CHARACTER:罗金仙:22/109|CHARACTER:终焉之:14/119|CHARACTER:郑士多:20/95|CHARACTER:金仙:23/265|CHARACTER:伊娜文明:12/47|CHARACTER:艾米娜:14/57|CHARACTER:周峥德:8/77|ITEM:终焉之船:14/117
+v3.skip: chapter=311 state=NON_STORY reason=non-story title=月末闲话单章
+v3.skip: chapter=684 state=NON_STORY reason=non-story title=呜呼！搞定！
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=325 prototypes=8
+report: suggestions=0

@@ -1,0 +1,11 @@
+bookNo=23
+title=旧域怪诞
+author=狐尾的笔
+kind=BOUNDARY_NEIGHBOR_CHECK
+chapterIndex=452
+chapterTitle=抱歉
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/023-旧域怪诞-1779485383416/chapters/00452-抱歉.txt
+
+抱歉，我食言了，各位尽请期待在B站看到我的倒立洗头，明天早上更新
+《旧域怪诞》抱歉
+正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！

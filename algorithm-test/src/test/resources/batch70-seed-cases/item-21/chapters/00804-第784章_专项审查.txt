@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第784章专项审查_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第784章专项审查
+要知道现在鸢国战事吃紧，别说两分单利，就是嵘山宗提出三四分的复利，它也得捏着鼻子来贷款。
+“嵘山宗派我过来，就是审查这些矿山、草场、港湾的经营状况。”说白了，贺灵川和胡沁要负责把关，确认它们值不值当。“除了这七百万两，之前借款的抵押品也要复核。”
+订阅本章：10币
+风行水云间 · 作家说
+上{0}支持我，看最新更新 下载App
+推荐
+真千金她卷疯了修仙界最美不过小时光末日乐园是你赐我的星光冠上珠华我家直播间通古今一指成仙花娇良人可安僵尸娘子：相公，快献血农家小福女诱她上仙我只喜欢你的马甲前方高能夫人被迫觅王侯问丹朱吾家阿囡修仙请带闺蜜你是我的小甜梨金粉
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

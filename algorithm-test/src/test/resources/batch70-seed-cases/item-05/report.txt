@@ -1,0 +1,54 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 1
+- content 52书库.net #1335 第1336页: Failed to allocate a 24 byte allocation with 1756064 free bytes and 1714KB until OOM, target footprint 268435456, growth limit 268435456; giving up on allocation because <1% of heap free after GC.
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=1356, ordinals=0, gaps=0, score=2712.0
+First: 第1页
+Last: 第1356页
+- 52书库.net: chapters=1356, dup=0, ord=0, gaps=0, score=2712.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 神话之后 / 鹅是老五
+Chapters: 47, chunks: 234
+Core features: 291, support: 0
+Top features:
+- CHARACTER:丁欢 weight=222.2 chapters=47 hits=1880
+- CHARACTER:莫无忌 weight=211.2 chapters=18 hits=182
+- CHARACTER:蓝小布 weight=208.2 chapters=17 hits=168
+- CHARACTER:方浩瀚 weight=194.3 chapters=16 hits=106
+- CHARACTER:丁道友 weight=175.2 chapters=17 hits=52
+- CHARACTER:叶玄 weight=150.1 chapters=10 hits=103
+- CHARACTER:全部 weight=150.1 chapters=26 hits=51
+- LOCATION:色大道之河 weight=144.3 chapters=6 hits=57
+- CHARACTER:罗睺 weight=144.1 chapters=7 hits=139
+- LOCATION:金色大道之河 weight=144.1 chapters=6 hits=56
+- CHARACTER:元寂穹 weight=143.2 chapters=8 hits=29
+- SKILL:大宇宙术 weight=141.1 chapters=10 hits=32
+Suggestions: 0
+

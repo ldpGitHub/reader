@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=1601, ordinals=0, gaps=0, score=3202.0
+First: 第1页
+Last: 第1601页
+- 52书库.net: chapters=1601, dup=0, ord=0, gaps=0, score=3202.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 万相之王 / 天蚕土豆
+Chapters: 48, chunks: 239
+Core features: 324, support: 0
+Top features:
+- CHARACTER:姜青娥 weight=233.8 chapters=30 hits=290
+- CHARACTER:李洛 weight=223.3 chapters=48 hits=1498
+- CHARACTER:青娥 weight=194.5 chapters=31 hits=335
+- CHARACTER:姜天王 weight=191.5 chapters=17 hits=93
+- ORGANIZATION:无相圣宗 weight=185.6 chapters=19 hits=87
+- CHARACTER:万恶之源 weight=181.7 chapters=13 hits=48
+- CHARACTER:李太玄 weight=175.1 chapters=19 hits=50
+- ORGANIZATION:圣玄星学府 weight=166.0 chapters=11 hits=42
+- CHARACTER:万相 weight=163.0 chapters=17 hits=123
+- LOCATION:神州世界 weight=161.3 chapters=17 hits=82
+- CHARACTER:曾经 weight=160.3 chapters=28 hits=74
+- CHARACTER:李惊蛰 weight=147.6 chapters=5 hits=43
+Suggestions: 0
+

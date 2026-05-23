@@ -1,0 +1,17 @@
+input: chapters=48 title=道爷要飞升 author=裴屠狗
+chunk: chunks=253 size=800 overlap=150
+fingerprint.seed: seedChunks=135
+fingerprint.build: chunks=135 terms=48177 core=182 support=0 relations=472
+fingerprint.top: CHARACTER:黎渊:24/794|CHARACTER:韩垂钧:6/47|CHARACTER:龙虎:14/85|CHARACTER:龙夕象:5/50|LOCATION:神兵谷:8/48|CHARACTER:石碑:9/34|CHARACTER:雷龙:7/39|ORGANIZATION:镇武堂:5/25|CHARACTER:龙应禅:3/20|CHARACTER:黎道爷:7/10
+refine: round=1 cleanChunks=215
+fingerprint.build: chunks=215 terms=81837 core=364 support=0 relations=925
+fingerprint.top: CHARACTER:黎渊:47/1164|CHARACTER:韩垂钧:6/47|CHARACTER:龙虎:14/85|CHARACTER:龙夕象:5/50|CHARACTER:石碑:14/54|CHARACTER:黎师弟:9/21|CHARACTER:黄大世:8/21|ITEM:玉京大印:9/45|CHARACTER:黎道爷:11/14|CHARACTER:雷龙:11/44
+refine: round=2 cleanChunks=239
+fingerprint.build: chunks=239 terms=89789 core=420 support=0 relations=1000
+fingerprint.top: CHARACTER:黎渊:47/1172|CHARACTER:黄大世:10/40|CHARACTER:韩垂钧:6/47|CHARACTER:龙虎:14/85|CHARACTER:龙夕象:5/50|LOCATION:玄黄大世界:10/40|CHARACTER:石碑:14/54|SKILL:大神通:15/31|CHARACTER:黎师弟:9/21|ITEM:玉京大印:9/48
+v2.candidate: chapter=869 type=suffix start=534 confidence=0.94 break=0.72 separation=0.92 cohesion=0.18 membershipLow=1.00 alienCluster=0.92 alienNovelty=0.56 graphAbsorption=0.00 prototype=0.01 world=0.94 future=0.00 aliens=束缚:2|陆缜:2|马傣:2|高公:2|刘鼎天:1|立于庙堂:1|萧若谣:1|马傣观:1|马车停:1
+v2.candidate: chapter=870 type=run start=267 confidence=0.99 break=0.00 separation=0.50 cohesion=0.15 membershipLow=1.00 alienCluster=0.98 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.87 future=0.00 aliens=护龙一族:2|终极:2|终极大:2|龙一族:2|龙浩:2|夏鸣风:1|开启暗门:1|无极秘境:1|高科技:1
+v2.candidate: chapter=871 type=run start=267 confidence=0.90 break=0.00 separation=0.50 cohesion=0.15 membershipLow=1.00 alienCluster=0.68 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.96 future=0.00 aliens=周天运:1|姜凌玉:1|姜奕盲:1|张大哥:1|武道境界:1
+v2.candidate: chapter=872 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.13 membershipLow=1.00 alienCluster=0.95 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.92 future=0.00 aliens=弓箭:2|柳德:2|满修:2|满修士:2|金币:2|陈寒:2|主盟分盟:1|刘邦大:1|如今主盟:1|张良应:1|方斜阳:1|李凌坐:1
+v2.report: chapters=48 suggestions=4 coreEntities=295 prototypes=8
+report: suggestions=4

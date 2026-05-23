@@ -1,0 +1,16 @@
+input: chapters=48 title=北宋穿越指南 author=王梓钧
+chunk: chunks=236 size=800 overlap=150
+fingerprint.seed: seedChunks=115
+fingerprint.build: chunks=115 terms=62225 core=95 support=0 relations=215
+fingerprint.top: CHARACTER:朱铭:21/335|ORGANIZATION:宋徽宗:12/74|ORGANIZATION:完颜宗:5/62|CHARACTER:全部:16/31|CHARACTER:蔡京:7/35|CHARACTER:金兵:6/31|CHARACTER:李宝:4/37|CHARACTER:郑元仪:4/16|CHARACTER:朱相公:3/16|CHARACTER:连忙:11/15
+refine: round=1 cleanChunks=137
+fingerprint.build: chunks=137 terms=74979 core=141 support=0 relations=369
+fingerprint.top: CHARACTER:朱铭:26/337|ORGANIZATION:宋徽宗:12/74|CHARACTER:朱棠溪:10/42|CHARACTER:谢衍:14/106|CHARACTER:全部:21/37|ORGANIZATION:完颜宗:5/59|CHARACTER:连忙:21/34|CHARACTER:蔡京:7/35|CHARACTER:尚书:7/33|CHARACTER:宋代:11/18
+refine: round=2 cleanChunks=212
+fingerprint.build: chunks=212 terms=105424 core=220 support=0 relations=620
+fingerprint.top: CHARACTER:朱棠溪:18/189|CHARACTER:朱铭:27/343|CHARACTER:谢衍:22/407|CHARACTER:杨麟之:7/61|ORGANIZATION:宋徽宗:12/74|CHARACTER:平均律:8/44|CHARACTER:叶太:12/96|CHARACTER:连忙:26/51|CHARACTER:青鸾:10/90|CHARACTER:全部:23/41
+v3.candidate: chapter=595 type=suffix start=1950 confidence=0.78 break=0.32 separation=0.93 cohesion=0.15 membershipLow=0.63 alienCluster=0.96 alienContinuity=0.91 alienNovelty=0.50 alienEntityCount=8 graphAbsorption=0.20 prototype=0.13 world=0.98 future=0.00 prefixBook=0.68 prefixAlien=0.61 evidenceChars=1061 aliens=李察哥:6|李乾顺:4|无定河:3|李仁:3|银川城:3|党项八部:2|万军民:1|夏交战:1
+v3.candidate: chapter=595 type=run start=1950 confidence=0.78 break=0.32 separation=0.93 cohesion=0.15 membershipLow=0.63 alienCluster=0.96 alienContinuity=0.91 alienNovelty=0.50 alienEntityCount=8 graphAbsorption=0.20 prototype=0.13 world=0.98 future=0.00 prefixBook=0.68 prefixAlien=0.61 evidenceChars=1061 aliens=李察哥:6|李乾顺:4|无定河:3|李仁:3|银川城:3|党项八部:2|万军民:1|夏交战:1
+v3.candidate: chapter=808 type=suffix start=1950 confidence=0.75 break=0.27 separation=0.91 cohesion=0.18 membershipLow=0.61 alienCluster=0.97 alienContinuity=1.00 alienNovelty=0.33 alienEntityCount=12 graphAbsorption=0.20 prototype=0.23 world=0.85 future=0.00 prefixBook=0.66 prefixAlien=0.46 evidenceChars=1084 aliens=石见国:8|大森山:6|江维顺:6|阿比留:6|日本国:4|石见国城:4|见国城:4|封日本:2|封日本国:2|武四年:2|比留一族:2|留一族:2
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=189 prototypes=8
+report: suggestions=0

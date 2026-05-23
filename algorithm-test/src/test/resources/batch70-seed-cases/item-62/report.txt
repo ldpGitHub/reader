@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1073, ordinals=1023, gaps=2, score=3585.9
+First: 第一章 师傅
+Last: 红中传：2
+- 👍 55读书: chapters=1073, dup=3, ord=1023, gaps=2, score=3585.9
+Fused preview:
+1. 第一章 师傅
+2. 第二章 李火旺
+3. 第三章 玉佩
+4. 第四章 黑鼎
+5. 第五章 丹药
+6. 第六章 价值
+7. 第七章 清风观
+8. 第八章 翻篇
+9. 第九章 黑太岁
+10. 第十章 馒头
+11. 第十一章 玄元
+12. 第十二章 丹方
+13. 第十三章 炼丹
+14. 第十四章 帮手
+15. 第十五章 正坤
+16. 第十六章 脑袋
+17. 第十七章 找到了
+18. 第十八章 成仙功法
+19. 第十九章 迷信
+20. 第二十章 丹阳子
+
+
+Sample validation issues: 0
+- none
+
+Novel: 道诡异仙 / 狐尾的笔
+Chapters: 48, chunks: 184
+Core features: 126, support: 0
+Top features:
+- CHARACTER:李火旺 weight=247.7 chapters=30 hits=868
+- CHARACTER:诸葛渊 weight=212.3 chapters=15 hits=326
+- CHARACTER:白灵淼 weight=197.4 chapters=14 hits=135
+- ORGANIZATION:明轮堂 weight=160.6 chapters=9 hits=106
+- CHARACTER:李师 weight=143.0 chapters=15 hits=58
+- CHARACTER:李锦 weight=139.9 chapters=7 hits=95
+- CHARACTER:连忙 weight=138.7 chapters=18 hits=41
+- ITEM:李锦书 weight=135.0 chapters=7 hits=95
+- CHARACTER:小满 weight=135.0 chapters=9 hits=59
+- CHARACTER:高智坚 weight=130.6 chapters=3 hits=39
+- CHARACTER:吕状元 weight=126.6 chapters=5 hits=22
+- CHARACTER:吕家班 weight=121.6 chapters=7 hits=13
+Suggestions: 0
+

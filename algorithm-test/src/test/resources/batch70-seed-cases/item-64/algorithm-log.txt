@@ -1,0 +1,15 @@
+input: chapters=48 title=黎明之剑 author=远瞳
+chunk: chunks=315 size=800 overlap=150
+fingerprint.seed: seedChunks=146
+fingerprint.build: chunks=146 terms=65674 core=138 support=0 relations=180
+fingerprint.top: CHARACTER:高文:22/438|CHARACTER:罗妮卡:4/60|CHARACTER:万物终亡:5/18|CHARACTER:裴迪南:4/27|CHARACTER:阿莫恩:2/36|CHARACTER:安德莎:2/36|CHARACTER:金属:10/30|CHARACTER:温德尔:4/17|CHARACTER:安苏:7/29|CHARACTER:平原:7/22
+refine: round=1 cleanChunks=285
+fingerprint.build: chunks=285 terms=124750 core=410 support=0 relations=845
+fingerprint.top: CHARACTER:高文:40/785|CHARACTER:通讯:22/139|CHARACTER:洛伦:18/120|CHARACTER:全息投:16/38|CHARACTER:平原:24/94|CHARACTER:阿莫恩:6/62|CHARACTER:罗妮卡:5/61|CHARACTER:索林巨树:8/27|CHARACTER:文轻轻:11/19|CHARACTER:卫星:12/55
+refine: round=2 cleanChunks=312
+fingerprint.build: chunks=312 terms=134019 core=461 support=0 relations=978
+fingerprint.top: CHARACTER:高文:40/786|CHARACTER:通讯:22/145|CHARACTER:洛伦:21/131|CHARACTER:全息投:16/38|CHARACTER:平原:24/95|CHARACTER:阿莫恩:6/62|CHARACTER:索林巨树:8/28|CHARACTER:罗妮卡:5/61|CHARACTER:古老:26/52|CHARACTER:文轻轻:11/19
+v3.skip: chapter=1593 state=NON_STORY reason=non-story title=完本感言
+v3.skip: chapter=1597 state=NON_STORY reason=non-story title=新书上线！
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=277 prototypes=8
+report: suggestions=0

@@ -1,0 +1,30 @@
+Novel: 吞噬星空2起源大陆 / 我吃西红柿
+Chapters: 16, chunks: 80
+Core features: 80, support: 0
+Top features:
+- CHARACTER:雷霆 weight=124.9 chapters=8 hits=42
+- CHARACTER:扈阳 weight=124.1 chapters=5 hits=49
+- LOCATION:扈阳城 weight=117.1 chapters=5 hits=40
+- CHARACTER:王二重 weight=114.5 chapters=4 hits=16
+- CHARACTER:高规则 weight=112.9 chapters=5 hits=12
+- LOCATION:源世界 weight=105.1 chapters=6 hits=27
+- ORGANIZATION:炎风古国 weight=104.3 chapters=4 hits=12
+- CHARACTER:小型宇 weight=100.2 chapters=2 hits=13
+- ITEM:星辰塔 weight=99.0 chapters=5 hits=21
+- CHARACTER:施展 weight=98.9 chapters=7 hits=13
+- WORLD_TERM:本源大道 weight=96.9 chapters=4 hits=18
+- REALM:混沌境 weight=94.0 chapters=5 hits=26
+- CHARACTER:全部 weight=93.5 chapters=6 hits=11
+- CHARACTER:居住 weight=93.0 chapters=2 hits=25
+- WORLD_TERM:本源大 weight=92.6 chapters=5 hits=19
+- LOCATION:混沌州 weight=90.3 chapters=3 hits=19
+- CHARACTER:屠戮 weight=89.2 chapters=2 hits=16
+- SKILL:变化法 weight=88.2 chapters=2 hits=13
+- CHARACTER:王一重 weight=87.9 chapters=4 hits=5
+- REALM:王二重境 weight=87.5 chapters=4 hits=15
+Suggestions: 1
+- chapter 454 第454页: POLLUTED_RUN/LOCAL_ABNORMAL start=650 confidence=0.79 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.91 cohesion=0.10 evidenceChars=2344
+  * v3 membershipLow=0.59 alienCluster=0.97 alienContinuity=1.00 alienNovelty=1.00 alienEntityCount=9 alienIdentity=1.00
+  * v3 graphAbsorption=0.26 prototype=0.25 prefixBook=0.38 prefixAlien=0.00
+  * v3 world=0.82 futureIntegration=0.00 titleAbsorption=0.00 expository=0.01 ood=0.00

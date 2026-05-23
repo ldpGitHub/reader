@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第2859章钟胜光的承诺与托付_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第2859章钟胜光的承诺与托付
+在最后关头，他终于还是出现了，没有辜负钟胜光对他的期望。
+贺灵川瞧见他俩人，也是松了口气，急忙问道：“盘龙城战况如何？我听说，天魔攻城形势危急。”
+钟胜光也看见了画面中的红隼，因此知道，贺灵川通过红隼大概了解到新战场的形势。
+“辟厉天带着祂的
+订阅本章：10币
+推荐
+大明英华君九龄穿在逃亡前，开挂闷声发大财摘下那朵高岭之花仙骄仙灵图谱九重紫慕南枝（《嘉南传》原著）新婚错爱，负罪前妻谜案追凶我有一个诡王朝道主有点咸为什么它永无止境掌欢穿越星际妻荣夫贵退烧送你一个黎明不负荣光且深情偏心眼墨桑
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

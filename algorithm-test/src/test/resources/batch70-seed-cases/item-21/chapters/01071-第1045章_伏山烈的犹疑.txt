@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第1045章伏山烈的犹疑_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第1045章伏山烈的犹疑
+每一头巨犀都有普通巨象那么大，鼻前一只圆锥形的金黄大角，足足有四尺多高。
+西芰伪军已经把特制的绳钩甩在吊桥，另一端就套在巨犀的大角上。
+伏山烈吹了记口哨，三头巨犀加快步伐，齐心协力向外猛冲。
+它们一使力，体型好像又大一圈，吊桥也被拉得喀啦作响
+订阅本章：10币
+推荐
+退下，让朕来妻子太忙不是错封爷的小妖精又在缠人了有你的青春是暖暖的夜宴重生之将门毒后男主发疯后香归又逢君大小姐她总是不求上进敢问穿向何方天灾第十年跟我去种田仙子不想理你长歌九阙被夺一切后她封神回归王牌狙击之溺爱狂妻我把全修真界卷哭了破怨师燕辞归摘仙令
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

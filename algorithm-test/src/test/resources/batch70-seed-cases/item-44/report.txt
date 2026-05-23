@@ -1,0 +1,63 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=695, ordinals=659, gaps=0, score=2359.6
+First: 楔子
+Last: 第一百零八章 火起
+- 👍 55读书: chapters=695, dup=1, ord=659, gaps=0, score=2359.6
+Fused preview:
+1. 楔子
+2. 第一章 鱼市巨子
+3. 第二章 专业解说
+4. 第三章 重逢
+5. 第四章 阴谋
+6. 第五章 孙门秘宝
+7. 第六章 反向高铁
+8. 第七章 南鸢村
+9. 第八章 换家破寨
+10. 第九章 杀人诛心
+11. 第十章 都是误会
+12. 第十一章 庐州鬼事（上）
+13. 第十二章 庐州鬼事（下）
+14. 第十三章 名侦探黄东来（上）
+15. 第十四章 名侦探黄东来（下）
+16. 第十五章 混入曾府
+17. 第十六章 装神弄鬼
+18. 第十七章 再度启程
+19. 第十八章 山神庙
+20. 第十九章 铁僧
+
+
+Sample validation issues: 0
+- none
+
+Novel: 盖世双谐 / 三天两觉
+Chapters: 48, chunks: 277
+Core features: 165, support: 0
+Top features:
+- CHARACTER:孙亦谐 weight=243.6 chapters=31 hits=395
+- CHARACTER:黄东 weight=193.9 chapters=26 hits=366
+- ORGANIZATION:混元星际门 weight=162.2 chapters=11 hits=35
+- CHARACTER:孙哥 weight=156.3 chapters=22 hits=73
+- CHARACTER:曹薇儿 weight=154.1 chapters=5 hits=60
+- CHARACTER:武功 weight=149.5 chapters=22 hits=57
+- CHARACTER:孙黄 weight=148.1 chapters=17 hits=63
+- CHARACTER:双谐 weight=145.2 chapters=17 hits=58
+- CHARACTER:司徒傲 weight=142.2 chapters=4 hits=44
+- ORGANIZATION:真侠堂 weight=131.2 chapters=5 hits=39
+- CHARACTER:唐丑 weight=130.0 chapters=5 hits=76
+- CHARACTER:郑东西 weight=130.0 chapters=6 hits=23
+Suggestions: 2
+- chapter 694 第一百零七章 破棺: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=1300 confidence=0.95 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.76 separation=0.90 cohesion=0.50 evidenceChars=560
+  * v3 membershipLow=1.00 alienCluster=0.96 alienContinuity=0.25 alienNovelty=0.57 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.76 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 695 第一百零八章 火起: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.77 separation=0.93 cohesion=0.14 evidenceChars=941
+  * v3 membershipLow=1.00 alienCluster=0.88 alienContinuity=0.50 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.77 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+

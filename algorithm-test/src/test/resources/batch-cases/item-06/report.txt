@@ -1,0 +1,92 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 2
+- content 笔趣阁22 #189 第172章：《云落天涯记》: timeout
+- content 笔趣阁22 #443 今天无更，调整作息: timeout
+
+Catalog candidates: 1
+Best: 笔趣阁22, chapters=1042, ordinals=918, gaps=0, score=3338.2
+First: 出山的三个挑战
+Last: 第589章：让我来称量宁拙
+- 笔趣阁22: chapters=1042, dup=27, ord=918, gaps=0, score=3338.2
+Fused preview:
+1. 出山的三个挑战
+2. 抱歉！对今日上盟未果的书友们的补偿约定！
+3. 签约状态！敬请优先打赏角色卡
+4. 单日百盟！
+5. 番外1：宁拙早智（向书友们致歉！）
+6. 番外2：宁家放榜
+7. 第1章：垂髫客
+8. 第2章：宁拙
+9. 第3章：遗嘱
+10. 第4章：开物
+11. 第5章：此机关甚妙呀
+12. 第6章：我宁拙平平无奇
+13. 一天两百盟！
+14. 第7章：让宁拙回家来
+15. 第8章：我佛心魔印
+16. 两天三百盟！
+17. 第9章：普通人中计
+18. 第10章：火山地洞
+19. 第11章：到底是个少年
+20. 第12章：陷阱
+
+
+Sample validation issues: 3
+- ordinal mismatch: #348 第323章：宁妈遗藏（求月票） -> #379 第25章：寒洲
+- ordinal mismatch: #728 第319章：罗思：公子！ -> #1018 第569章：宁拙，你不要瞎搞
+- ordinal regression: #348 第323章：宁妈遗藏（求月票） -> #379 第25章：寒洲
+
+Novel: 仙工开物 / 蛊真人
+Chapters: 46, chunks: 230
+Core features: 267, support: 0
+Top features:
+- CHARACTER:宁拙 weight=212.3 chapters=37 hits=1181
+- CHARACTER:孙灵瞳 weight=196.9 chapters=12 hits=155
+- CHARACTER:袁大胜 weight=168.7 chapters=8 hits=69
+- ORGANIZATION:熔岩仙宫 weight=160.0 chapters=10 hits=52
+- CHARACTER:朱玄迹 weight=156.3 chapters=6 hits=58
+- CHARACTER:林惊龙 weight=155.0 chapters=6 hits=46
+- CHARACTER:苍铁汉 weight=154.4 chapters=7 hits=44
+- ITEM:南明火炉 weight=150.6 chapters=10 hits=67
+- CHARACTER:白纸仙 weight=137.1 chapters=4 hits=31
+- CHARACTER:金血战 weight=134.4 chapters=3 hits=44
+- LOCATION:流云峰 weight=134.3 chapters=9 hits=62
+- ITEM:苍铁汉甲 weight=133.0 chapters=7 hits=44
+Suggestions: 7
+- chapter 1 出山的三个挑战: LOCAL_ABNORMAL start=0 confidence=0.91 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.14
+  * v2 membershipLow=1.00 alienCluster=0.69 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.91 futureIntegration=0.00 ood=0.00
+- chapter 1035 第583章：交易飞鸟谈流云: LOCAL_ABNORMAL start=650 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.09
+  * v2 membershipLow=1.00 alienCluster=0.94 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.98 futureIntegration=0.00 ood=0.02
+- chapter 1036 第584章：操练飞鸟: LOCAL_ABNORMAL start=267 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.12
+  * v2 membershipLow=1.00 alienCluster=0.94 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.00
+  * v2 world=0.88 futureIntegration=0.00 ood=0.02
+- chapter 1037 第585章：起龙吟: LOCAL_ABNORMAL start=267 confidence=0.95 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.12
+  * v2 membershipLow=1.00 alienCluster=0.84 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.97 futureIntegration=0.00 ood=0.01
+- chapter 1038 第586章：各色贺礼: LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.10
+  * v2 membershipLow=0.95 alienCluster=0.93 alienNovelty=1.00
+  * v2 graphAbsorption=0.04 prototype=0.01
+  * v2 world=0.86 futureIntegration=0.00 ood=0.01
+- chapter 1039 第587章：谁送荆棘，谁赠树种: LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.12
+  * v2 membershipLow=1.00 alienCluster=0.90 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.97 futureIntegration=0.00 ood=0.02
+- chapter 1042 第589章：让我来称量宁拙: LOCAL_ABNORMAL start=267 confidence=0.98 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.14
+  * v2 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.01
+  * v2 world=0.93 futureIntegration=0.00 ood=0.06
+

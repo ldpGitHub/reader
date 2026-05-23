@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第697章二破_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第697章二破
+百战天神降临，原本是专门对付岨炬的，但临时转变目标也没什么不可以。
+地穴蛛母和岨炬都是上古大妖，但墟山是岨炬的主场，这厮又能从地火中汲取力量，是最难对付的一个。如今岨炬重新匍匐，天宫的压力至少减去七成；那蛛妖只能厉害一时，到底没有灵气补充，力量是越打越弱
+订阅本章：15币
+风行水云间 · 作家说
+上{0}支持我，看最新更新 下载App
+推荐
+夜落闻声来听见他的心跳声娇术开局就被赶出豪门肆意轻哄暴君如此多娇陆先生的深情不负宝妈在修真界富甲一方枭宠重生之盛妻凌人表小姐喜上眉头臣于她快穿之我只想种田姑娘她戏多嘴甜一纸千金第一侯灾后第六年，我靠发豆芽攒下农场咸鱼一家的穿书生活长安好宋影帝的前女友也是我
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

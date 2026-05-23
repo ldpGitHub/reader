@@ -1,0 +1,28 @@
+analysisChapters=22
+targetChapters=11
+contextChapters=11
+roleCounts=LONG_ANCHOR:1,MID_CONTEXT:2,NEAR_CONTEXT:8,TARGET_EXTENDED:3,TARGET_RECENT:2,TARGET_TAIL:6
+targetRange=222..1245
+chapters:
+0	LONG_ANCHOR	第一章_风月宝鉴
+222	TARGET_EXTENDED	第二百二十三章_抱大腿
+436	MID_CONTEXT	第四百三十七章_明月照血
+734	TARGET_EXTENDED	第七百三十五章_皆大欢喜
+845	MID_CONTEXT	第八百四十六章_六道强者（为盟主言古月加更~）
+846	NEAR_CONTEXT	第八百四十七章_赌局
+888	NEAR_CONTEXT	第八百八十八章_渡劫
+931	NEAR_CONTEXT	第九百三十章_一时无两
+974	NEAR_CONTEXT	第九百七十章_聪明人
+990	TARGET_EXTENDED	第九百八十六章_九洲传道
+1016	NEAR_CONTEXT	第一千零一十一章_破关
+1059	NEAR_CONTEXT	抱歉，今天更新要晚些~
+1102	NEAR_CONTEXT	第一千零九十四章_散心
+1145	NEAR_CONTEXT	第一千一百三十六章_宏大无尽
+1146	TARGET_TAIL	第一千一百三十七章_剑斩天鹏
+1182	TARGET_TAIL	第一千一百七十二章_天魔指路
+1214	TARGET_TAIL	第一千二百零四章_元王斗神印
+1230	TARGET_TAIL	第一千二百一十九章_万劫起！
+1238	TARGET_TAIL	第一千二百二十六章_有死有生
+1242	TARGET_TAIL	第一千二百三十章_纪元如狱
+1244	TARGET_RECENT	新书《高武偏要修个仙》已经上传，求诸君多支持~
+1245	TARGET_RECENT	新书《高武偏要修个仙》已发，请诸君多多支持~

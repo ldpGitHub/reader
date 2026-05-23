@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+526、熊嘎婆（1/2）_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+526、熊嘎婆（1/2）
+电视里播放着动画片。
+两个孩子坐在电视对面的沙发上，眼睛一眨不眨地看着电视里的动画片，两双脚丫浸在温度刚好的泡脚盆里。
+老妇人看一双孙儿聚精会神看电视的模样，满是疲惫的面孔上浮现一幕慈祥的笑容。
+她开口向孙子、孙女们说道：“玉玉，昊昊，一会儿
+订阅本章：15币
+推荐
+人生模拟器，开局一宫女穿书后，我被迫成了假系统纨绔夫妻互捧日常仙灵图谱他来时荣光万里夜宴谜案追凶天灾：在末世经营小镇搞基建太子重生之娇宠小王妃重生八零：我被糙汉宠翻天嗜宠夜王狂妃重生千金是学霸校园第一修罗女神我在八零当团宠快穿之非常生物见闻录一品贵妻快穿：黑化大佬他又凶又黏人重生八零极品女配疯批女配不好惹
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

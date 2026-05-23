@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=1157, ordinals=0, gaps=0, score=2314.0
+First: 第1页
+Last: 第1157页
+- 52书库.net: chapters=1157, dup=0, ord=0, gaps=0, score=2314.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 赤侠 / 红烧大黑鱼
+Chapters: 48, chunks: 143
+Core features: 150, support: 0
+Top features:
+- CHARACTER:魏昊 weight=214.8 chapters=46 hits=658
+- CHARACTER:魏大象 weight=164.8 chapters=15 hits=42
+- CHARACTER:江太师 weight=148.3 chapters=8 hits=35
+- CHARACTER:汪伏波 weight=147.2 chapters=6 hits=39
+- CHARACTER:袁君平 weight=145.4 chapters=5 hits=44
+- CHARACTER:汪摘星 weight=138.8 chapters=10 hits=21
+- CHARACTER:魏大 weight=136.9 chapters=16 hits=44
+- CHARACTER:巫三太子 weight=132.4 chapters=5 hits=19
+- CHARACTER:曾经 weight=124.2 chapters=15 hits=24
+- CHARACTER:魏赤侠 weight=119.7 chapters=6 hits=14
+- CHARACTER:花草树木 weight=119.6 chapters=7 hits=8
+- CHARACTER:魏某 weight=115.8 chapters=9 hits=26
+Suggestions: 0
+

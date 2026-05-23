@@ -1,0 +1,27 @@
+analysisChapters=21
+targetChapters=10
+contextChapters=11
+roleCounts=LONG_ANCHOR:1,MID_CONTEXT:2,NEAR_CONTEXT:8,TARGET_EXTENDED:2,TARGET_RECENT:2,TARGET_TAIL:6
+targetRange=279..790
+chapters:
+0	LONG_ANCHOR	第一章_志在止戈
+276	MID_CONTEXT	第十二章_世间英才汇于此
+279	TARGET_EXTENDED	第十五章_天骄见我
+390	MID_CONTEXT	第一百二十章_风暴
+391	NEAR_CONTEXT	第一百二十一章_入瓮
+433	NEAR_CONTEXT	第一百六十章_天变
+476	NEAR_CONTEXT	第二十二章_攻山！兵主之威
+519	NEAR_CONTEXT	三月月票抽奖活动
+535	TARGET_EXTENDED	第六十九章_决战之地
+561	NEAR_CONTEXT	月票抽奖最后几小时
+604	NEAR_CONTEXT	第三十九章_世间事，一剑了
+647	NEAR_CONTEXT	第五章_我行之道，在我剑下
+690	NEAR_CONTEXT	第三十九章_得道矣！
+691	TARGET_TAIL	第四十章_九品为盟，北蛮俯首
+727	TARGET_TAIL	第七章_蜉蝣见青天
+759	TARGET_TAIL	第三十三章_诸神黄昏
+775	TARGET_TAIL	第四十六章_怒燃
+783	TARGET_TAIL	第五十四章_登天
+787	TARGET_TAIL	完本感言
+789	TARGET_RECENT	《人仙！》月票抽奖
+790	TARGET_RECENT	《人仙！》月票中奖结果

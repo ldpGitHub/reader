@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1496, ordinals=1359, gaps=0, score=4944.6
+First: 第1章 空屋
+Last: 陈俊南（终）
+- 👍 55读书: chapters=1496, dup=0, ord=1359, gaps=0, score=4944.6
+Fused preview:
+1. 第1章 空屋
+2. 第2章 说谎
+3. 第3章 有技术的人
+4. 第4章 灾难？
+5. 第5章 医生
+6. 第6章 警官
+7. 第7章 赢面
+8. 第8章 摊牌
+9. 第9章 难以接受的真相
+10. 第10章 结束了？
+11. 第11章 继续吧
+12. 第12章 你们的家乡
+13. 第13章 一场雨
+14. 第14章 雨后见
+15. 第15章 一波未平
+16. 第16章 一波又起
+17. 第17章 羊和狗
+18. 第18章 是非题
+19. 第19章 无所不能
+20. 第20章 寻道
+
+
+Sample validation issues: 0
+- none
+
+Novel: 十日终焉 / 杀虫队队员
+Chapters: 48, chunks: 187
+Core features: 113, support: 0
+Top features:
+- CHARACTER:陈俊南 weight=216.3 chapters=23 hits=178
+- CHARACTER:老大姐 weight=213.8 chapters=19 hits=203
+- CHARACTER:郝佳佳 weight=199.1 chapters=15 hits=134
+- CHARACTER:乔家劲 weight=184.5 chapters=9 hits=138
+- CHARACTER:齐夏 weight=167.8 chapters=14 hits=200
+- CHARACTER:李静 weight=162.7 chapters=18 hits=118
+- CHARACTER:王八蛋 weight=156.8 chapters=12 hits=36
+- CHARACTER:叶皓 weight=156.0 chapters=19 hits=87
+- CHARACTER:胡同儿 weight=146.2 chapters=11 hits=25
+- CHARACTER:小爷 weight=142.7 chapters=14 hits=61
+- CHARACTER:楚天秋 weight=137.2 chapters=4 hits=37
+- CHARACTER:胡同 weight=133.0 chapters=13 hits=41
+Suggestions: 0
+

@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=1459, ordinals=0, gaps=0, score=2918.0
+First: 第1页
+Last: 第1459页
+- 52书库.net: chapters=1459, dup=0, ord=0, gaps=0, score=2918.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 择日飞升 / 宅猪
+Chapters: 48, chunks: 237
+Core features: 320, support: 0
+Top features:
+- CHARACTER:许应 weight=221.2 chapters=46 hits=1356
+- CHARACTER:元大天尊 weight=190.9 chapters=9 hits=86
+- CHARACTER:元始 weight=188.5 chapters=24 hits=309
+- LOCATION:混沌海 weight=187.2 chapters=29 hits=327
+- CHARACTER:许道友 weight=183.1 chapters=15 hits=73
+- CHARACTER:元未央 weight=170.6 chapters=9 hits=66
+- CHARACTER:长孙圣 weight=161.2 chapters=5 hits=95
+- REALM:元始道境 weight=154.9 chapters=19 hits=113
+- CHARACTER:元神 weight=152.2 chapters=19 hits=75
+- CHARACTER:通天 weight=144.6 chapters=10 hits=81
+- LOCATION:寂灭道海 weight=140.3 chapters=8 hits=57
+- LOCATION:长孙圣海 weight=138.9 chapters=5 hits=95
+Suggestions: 0
+

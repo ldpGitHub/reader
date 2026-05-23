@@ -1,0 +1,11 @@
+bookNo=6
+title=仙工开物
+author=蛊真人
+kind=BOUNDARY_NEIGHBOR_CHECK
+chapterIndex=1040
+chapterTitle=今天请假
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/006-仙工开物-1779484863805/chapters/01040-今天请假.txt
+
+rt。
+《仙工开物》今天请假
+正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！

@@ -1,0 +1,79 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+910、新成员（2/2）_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+910、新成员（2/2）
+“这些人都亲身经历了‘那幕嘉措法寺大洪水事件’，不需要向他们遮掩厉诡事件的存在。”苏午被诡调局头头脑脑们簇拥在中间，他神色平淡，开声言语着，“他们想要知道，希望了解什么，只要是不涉密的问题，尽可以回答他们。”
+陈旭闻言微愣，迟疑着道：“这样做的话，会不会
+订阅本章：15币
+推荐
+呆萌天才玄灵师这宿主能处，让她当反派她是真当姜汁撞奶糖封爷的小妖精又在缠人了九重紫相亲当天，闪婚了个亿万富翁王妃她又在飙戏了大佬退休之后偏执权臣的娇软白月光踹了作精竹马，我被校草娇宠了辞金枝敢问穿向何方农家小福女穿进无限游戏后满级大佬又装萌新帝君你家医妃又逆天了惊！疯批奸臣被娇软美人亲懵了霸道枭少狂宠妻我靠敬业系统打脸逆袭穿成九零娇宠小福妻强取病娇太子血续命后
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

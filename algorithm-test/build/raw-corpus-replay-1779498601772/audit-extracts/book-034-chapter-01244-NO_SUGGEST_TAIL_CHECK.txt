@@ -1,0 +1,10 @@
+bookNo=34
+title=法力无边高大仙
+author=踏雪真人
+kind=NO_SUGGEST_TAIL_CHECK
+chapterIndex=1244
+chapterTitle=新书《高武偏要修个仙》已经上传，求诸君多支持~
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/034-法力无边高大仙-1779486008522/chapters/01244-新书《高武偏要修个仙》已经上传，求诸君多支持~.txt
+
+《法力无边高大仙》新书《高武偏要修个仙》已经上传，求诸君多支持~
+正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！

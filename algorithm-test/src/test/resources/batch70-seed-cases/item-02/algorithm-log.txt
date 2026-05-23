@@ -1,0 +1,28 @@
+input: chapters=48 title=玄鉴仙族 author=季越人
+chunk: chunks=265 size=800 overlap=150
+fingerprint.seed: seedChunks=133
+fingerprint.build: chunks=133 terms=58151 core=177 support=0 relations=618
+fingerprint.top: CHARACTER:李通崖:9/119|CHARACTER:李玄宣:9/94|CHARACTER:李周巍:6/97|CHARACTER:李玄:15/137|CHARACTER:李清虹:6/74|CHARACTER:李曦明:5/57|CHARACTER:李绛迁:4/75|CHARACTER:李曦:8/149|CHARACTER:李曦治:4/51|CHARACTER:李周:7/135
+refine: round=1 cleanChunks=206
+fingerprint.build: chunks=206 terms=84065 core=275 support=0 relations=1000
+fingerprint.top: CHARACTER:李周巍:15/272|CHARACTER:李曦明:10/118|CHARACTER:李通崖:9/119|CHARACTER:李周:16/310|CHARACTER:李玄宣:9/94|CHARACTER:李绛迁:8/106|CHARACTER:李曦:14/214|CHARACTER:李玄:16/139|CHARACTER:李清虹:6/74|CHARACTER:魏王:10/107
+refine: round=2 cleanChunks=231
+fingerprint.build: chunks=231 terms=92027 core=294 support=0 relations=1000
+fingerprint.top: CHARACTER:李周巍:15/272|CHARACTER:李曦明:10/118|CHARACTER:李通崖:9/119|CHARACTER:李周:16/310|CHARACTER:李绛迁:8/107|CHARACTER:李玄宣:9/94|CHARACTER:李曦:14/214|CHARACTER:李玄:16/139|CHARACTER:李清虹:6/74|CHARACTER:魏王:10/117
+v3.skip: chapter=749 state=NON_STORY reason=non-story title=二月总结与三月求票
+v3.skip: chapter=799 state=NON_STORY reason=non-story title=周边U盘中奖名单
+v3.skip: chapter=1621 state=NON_STORY reason=non-story title=中奖名单
+v3.skip: chapter=1624 state=NON_STORY reason=non-story title=第五册预告
+v3.skip: chapter=1630 state=NON_STORY reason=non-story title=五月中奖名单
+v3.skip: chapter=1633 state=NON_STORY reason=non-story title=休息一日
+v3.candidate: chapter=1634 type=suffix start=3900 confidence=0.46 break=0.55 separation=0.96 cohesion=0.08 membershipLow=0.60 alienCluster=0.00 alienContinuity=1.00 alienNovelty=1.00 alienEntityCount=1 graphAbsorption=0.75 prototype=0.12 world=0.89 future=0.00 prefixBook=0.95 prefixAlien=0.00 evidenceChars=2298 aliens=座大山:2
+v3.candidate: chapter=1636 type=run start=0 confidence=0.98 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.93 alienContinuity=0.65 alienNovelty=1.00 alienEntityCount=13 graphAbsorption=0.00 prototype=0.03 world=0.99 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=1131 aliens=林亦逸:3|叶奶奶:2|叶擎佑:2|吴主:2|沐秋:2|王副院:2|万金币:1|叶修排:1|夏侯惇:1|贺哲已:1|雷坤知:1|顾客信:1
+v3.candidate: chapter=1637 type=suffix start=534 confidence=0.69 break=0.31 separation=0.92 cohesion=0.25 membershipLow=0.68 alienCluster=0.51 alienContinuity=0.75 alienNovelty=1.00 alienEntityCount=2 graphAbsorption=0.33 prototype=0.03 world=0.99 future=0.00 prefixBook=0.63 prefixAlien=0.00 evidenceChars=588 aliens=李天逸:3|萧长风:1
+v3.candidate: chapter=1637 type=suffix start=801 confidence=0.83 break=0.63 separation=0.87 cohesion=0.50 membershipLow=1.00 alienCluster=0.56 alienContinuity=0.75 alienNovelty=0.50 alienEntityCount=2 graphAbsorption=0.00 prototype=0.01 world=0.99 future=0.00 prefixBook=0.63 prefixAlien=0.00 evidenceChars=321 aliens=李天逸:3|萧长风:1
+v3.candidate: chapter=1639 type=suffix start=534 confidence=0.81 break=0.58 separation=0.88 cohesion=0.27 membershipLow=0.65 alienCluster=0.98 alienContinuity=0.55 alienNovelty=0.88 alienEntityCount=8 graphAbsorption=0.31 prototype=0.03 world=0.95 future=0.00 prefixBook=0.94 prefixAlien=0.00 evidenceChars=581 aliens=恶魔战界:2|林羽:2|魔战界:2|世界政府:1|叶雪转:1|李承乾:1|界政府:1|苏易除:1
+v3.candidate: chapter=1640 type=suffix start=534 confidence=0.84 break=0.59 separation=0.89 cohesion=0.18 membershipLow=1.00 alienCluster=0.66 alienContinuity=0.67 alienNovelty=0.25 alienEntityCount=4 graphAbsorption=0.00 prototype=0.02 world=0.89 future=0.00 prefixBook=0.59 prefixAlien=0.00 evidenceChars=584 aliens=林传言:2|赵雨菲:2|丁苓突:1|国外公司:1
+v3.skip: chapter=1641 state=NON_STORY reason=non-story title=明日休息一日
+v3.candidate: chapter=1642 type=run start=267 confidence=0.92 break=0.88 separation=0.91 cohesion=0.15 membershipLow=1.00 alienCluster=0.72 alienContinuity=0.33 alienNovelty=1.00 alienEntityCount=5 graphAbsorption=0.00 prototype=0.02 world=0.95 future=0.00 prefixBook=0.88 prefixAlien=0.00 evidenceChars=878 aliens=王泽平:2|杨建雄:1|苏铮忽:1|金丹期:1|龙神殿:1
+v3.candidate: chapter=1643 type=run start=267 confidence=0.87 break=0.91 separation=0.91 cohesion=0.12 membershipLow=1.00 alienCluster=0.58 alienContinuity=0.40 alienNovelty=1.00 alienEntityCount=4 graphAbsorption=0.00 prototype=0.01 world=0.97 future=0.00 prefixBook=0.91 prefixAlien=0.00 evidenceChars=868 aliens=政务司:2|程攻击:1|蒋北铭:1|高管皱:1
+v3.report: chapters=48 suggestions=6 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=256 prototypes=8
+report: suggestions=6

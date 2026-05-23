@@ -1,0 +1,62 @@
+Imported sources: 6411
+Search matches: 6
+Source failures: 5
+- short catalog 🔰 书海阁: 50 < 80
+- short catalog 🧐书海阁③ #破冰♨️: 50 < 80
+- short catalog 书海阁子: 50 < 80
+- short catalog 🔷 新笔趣阁: 50 < 80
+- detail 红袖添香 : Could not parse query '<js>p=baseUrl.replace(/m\./,'www.')
+java.ajax(p)
+</js>class.intro.0': unexpected token at '<js>p=baseUrl.replace(/m\./,'www.')
+java.ajax(p)
+</js>class.intro.0'
+
+Catalog candidates: 1
+Best: 💰 潇湘书院, chapters=1585, ordinals=0, gaps=0, score=3128.0
+First: 1、完美人生模拟器
+Last: 番外1：闾山师公二三事
+- 💰 潇湘书院: chapters=1585, dup=14, ord=0, gaps=0, score=3128.0
+Fused preview:
+1. 1、完美人生模拟器
+2. 2、你是——影子
+3. 3、罡洞
+4. 4、遗物
+5. 5、黑暗行者
+6. 6、云龙观
+7. 7、帝钟
+8. 8、灯笼
+9. 9、诡手
+10. 10、庙
+11. 11、工作群里的诡异
+12. 12、传染的灯笼
+13. 13、尸陀鬼之手
+14. 14、遇午而退
+15. 15、粗瓷碗
+16. 16、车窗里的蜡烛
+17. 17、抱公鸡的女孩
+18. 18、应急罐头
+19. 19、说话的艺术
+20. 20、一只与众不同的鸡
+
+
+Sample validation issues: 0
+- none
+
+Novel: 我的诡异人生 / 白刃斩春风
+Chapters: 48, chunks: 156
+Core features: 151, support: 0
+Top features:
+- CHARACTER:全文免费 weight=215.2 chapters=48 hits=48
+- CHARACTER:文免费阅 weight=215.2 chapters=48 hits=48
+- CHARACTER:费阅读 weight=197.3 chapters=48 hits=48
+- ORGANIZATION:潇湘书院 weight=192.6 chapters=48 hits=48
+- CHARACTER:苏午 weight=163.4 chapters=26 hits=108
+- CHARACTER:农家小 weight=156.5 chapters=14 hits=28
+- CHARACTER:满级大佬 weight=154.3 chapters=13 hits=17
+- CHARACTER:白刃斩春 weight=125.7 chapters=8 hits=9
+- LOCATION:诡异世界 weight=125.6 chapters=14 hits=19
+- CHARACTER:农家小奶 weight=119.2 chapters=5 hits=10
+- CHARACTER:农家小娘 weight=119.2 chapters=5 hits=10
+- CHARACTER:常无限末 weight=119.2 chapters=5 hits=10
+Suggestions: 0
+

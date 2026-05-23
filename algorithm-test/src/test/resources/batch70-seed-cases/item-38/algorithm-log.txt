@@ -1,0 +1,15 @@
+input: chapters=48 title=旧神之巅 author=育
+chunk: chunks=263 size=800 overlap=150
+fingerprint.seed: seedChunks=131
+fingerprint.build: chunks=131 terms=49503 core=152 support=0 relations=467
+fingerprint.top: CHARACTER:姜如忆:15/225|CHARACTER:陆燃:23/1227|CHARACTER:邓玉湘:10/115|CHARACTER:李柔茵:3/116|CHARACTER:鱼长生:3/43|CHARACTER:白玉石牌:5/16|CHARACTER:孙正方:2/26|CHARACTER:江境大:5/11|CHARACTER:羊信徒:4/12|CHARACTER:高空:6/21
+refine: round=1 cleanChunks=246
+fingerprint.build: chunks=246 terms=90350 core=415 support=0 relations=1000
+fingerprint.top: CHARACTER:姜如忆:27/354|CHARACTER:陆燃:46/1924|CHARACTER:邓玉湘:15/133|CHARACTER:鱼长生:11/106|CHARACTER:李柔茵:7/133|CHARACTER:乔婉君:10/62|ORGANIZATION:玉尊一族:14/36|CHARACTER:乔元夕:5/67|CHARACTER:元夕:10/93|CHARACTER:陆天帝:7/34
+refine: round=2 cleanChunks=261
+fingerprint.build: chunks=261 terms=95117 core=454 support=0 relations=1000
+fingerprint.top: CHARACTER:姜如忆:27/354|CHARACTER:陆燃:46/1926|CHARACTER:邓玉湘:15/133|CHARACTER:鱼长生:11/109|CHARACTER:李柔茵:7/133|CHARACTER:乔婉君:10/64|ORGANIZATION:玉尊一族:15/40|CHARACTER:陆天帝:8/48|CHARACTER:乔元夕:5/67|CHARACTER:皇甫昭:5/57
+v3.skip: chapter=1135 state=NON_STORY reason=non-story title=请假条
+v3.skip: chapter=1150 state=NON_STORY reason=non-story title=完本感言
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=358 prototypes=8
+report: suggestions=0

@@ -1,0 +1,83 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=776, ordinals=776, gaps=0, score=2688.4
+First: 第1章 雨
+Last: 第776章 叩响
+- 👍 55读书: chapters=776, dup=0, ord=776, gaps=0, score=2688.4
+Fused preview:
+1. 第1章 雨
+2. 第2章 无人受害
+3. 第3章 上锁的房间
+4. 第4章 房间里没人
+5. 第5章 画中的艾琳
+6. 第6章 友好交流的第一步
+7. 第7章 艾琳的脱困方案
+8. 第8章 别乱开门
+9. 第9章 一点真相
+10. 第10章 花开二度
+11. 第11章 事不过……三
+12. 第12章 这地方有人！？
+13. 第13章 碰面
+14. 第14章 胡狸
+15. 第15章 困于此地
+16. 第16章 饥饿
+17. 第17章 门
+18. 第18章 调查人员
+19. 第19章 回家
+20. 第20章 艾琳的情报与建议
+
+
+Sample validation issues: 0
+- none
+
+Novel: 异度旅社 / 远瞳
+Chapters: 48, chunks: 235
+Core features: 184, support: 0
+Top features:
+- CHARACTER:小红帽 weight=200.6 chapters=15 hits=137
+- CHARACTER:艾琳 weight=198.3 chapters=35 hits=307
+- CHARACTER:胡狸 weight=176.4 chapters=32 hits=147
+- CHARACTER:洛达西姆 weight=160.6 chapters=9 hits=30
+- CHARACTER:郑直 weight=152.3 chapters=11 hits=111
+- CHARACTER:小东西 weight=143.3 chapters=12 hits=20
+- CHARACTER:平常 weight=134.9 chapters=19 hits=31
+- CHARACTER:元灵真 weight=118.8 chapters=3 hits=22
+- ITEM:几秒钟 weight=118.0 chapters=14 hits=22
+- CHARACTER:常情况 weight=115.2 chapters=8 hits=9
+- LOCATION:现实世界 weight=114.3 chapters=8 hits=18
+- CHARACTER:宋成 weight=114.0 chapters=5 hits=34
+Suggestions: 6
+- chapter 771 第771章 破损点: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.10 evidenceChars=1178
+  * v3 membershipLow=0.97 alienCluster=0.93 alienContinuity=0.30 alienNovelty=1.00 alienEntityCount=17
+  * v3 graphAbsorption=0.03 prototype=0.03 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.03
+- chapter 772 第772章 坍塌之底: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.96 action=SUGGEST_DELETE
+  * v3 break=0.71 separation=0.86 cohesion=0.16 evidenceChars=927
+  * v3 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.14 alienNovelty=0.86 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.71 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.01
+- chapter 773 第773章 最深点的……熟悉事物: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.95 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.69 separation=0.92 cohesion=0.14 evidenceChars=1219
+  * v3 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.86 alienNovelty=1.00 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.69 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.01
+- chapter 774 第774章 弹出: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.54 separation=0.85 cohesion=0.13 evidenceChars=959
+  * v3 membershipLow=1.00 alienCluster=0.94 alienContinuity=0.62 alienNovelty=0.88 alienEntityCount=8
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.54 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.02
+- chapter 775 第775章 百里晴的故事: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.93 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.11 evidenceChars=1170
+  * v3 membershipLow=0.91 alienCluster=0.93 alienContinuity=0.63 alienNovelty=1.00 alienEntityCount=10
+  * v3 graphAbsorption=0.11 prototype=0.03 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.97 futureIntegration=0.00 ood=0.01
+- chapter 776 第776章 叩响: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.94 action=SUGGEST_DELETE
+  * v3 break=0.87 separation=0.85 cohesion=0.12 evidenceChars=933
+  * v3 membershipLow=1.00 alienCluster=0.82 alienContinuity=0.44 alienNovelty=1.00 alienEntityCount=7
+  * v3 graphAbsorption=0.00 prototype=0.03 prefixBook=0.87 prefixAlien=0.00
+  * v3 world=0.91 futureIntegration=0.00 ood=0.02
+

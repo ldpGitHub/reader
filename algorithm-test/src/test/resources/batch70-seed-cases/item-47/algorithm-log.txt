@@ -1,0 +1,13 @@
+input: chapters=48 title=一剑霸天 author=永夜星河
+chunk: chunks=186 size=800 overlap=150
+fingerprint.seed: seedChunks=102
+fingerprint.build: chunks=102 terms=38052 core=81 support=0 relations=81
+fingerprint.top: CHARACTER:苏信:24/597|ORGANIZATION:虚空族:2/55|ORGANIZATION:宇宙国:3/20|ORGANIZATION:伐天盟:2/22|LOCATION:初始界:3/28|ORGANIZATION:天道盟:2/17|CHARACTER:花费:6/13|CHARACTER:步踏天:2/11|ITEM:星河神剑:4/14|ORGANIZATION:直接朝:6/7
+refine: round=1 cleanChunks=162
+fingerprint.build: chunks=162 terms=59183 core=235 support=0 relations=498
+fingerprint.top: CHARACTER:苏信:48/966|ORGANIZATION:莫塔府:12/87|CHARACTER:莫塔:14/119|ORGANIZATION:魅剑副宫:8/54|ORGANIZATION:幽云帝府:9/41|REALM:究极境:20/120|ORGANIZATION:虚天道宫:10/27|ORGANIZATION:虚灭宫:10/28|ITEM:星河神剑:7/28|SKILL:破灭禁:7/26
+refine: round=2 cleanChunks=180
+fingerprint.build: chunks=180 terms=63253 core=262 support=0 relations=658
+fingerprint.top: CHARACTER:苏信:48/995|ORGANIZATION:莫塔府:15/123|CHARACTER:莫塔:16/177|ORGANIZATION:幽云帝府:10/61|ORGANIZATION:魅剑副宫:9/62|ORGANIZATION:虚天道宫:12/55|CHARACTER:施展:22/96|REALM:究极境:22/167|ORGANIZATION:虚灭宫:11/42|ORGANIZATION:幽云府:7/51
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=152 prototypes=8
+report: suggestions=0

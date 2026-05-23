@@ -1,0 +1,14 @@
+input: chapters=48 title=修真四万年 author=卧牛真人
+chunk: chunks=143 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=36450 core=76 support=0 relations=133
+fingerprint.top: CHARACTER:李耀:21/226|CHARACTER:丁铃铛:6/36|ORGANIZATION:黑风舰队:3/18|ORGANIZATION:类帝国:7/11|CHARACTER:龙扬君:3/13|CHARACTER:莫玄教授:4/8|LOCATION:天元界:7/18|CHARACTER:谢安安:2/12|CHARACTER:武英:5/17|CHARACTER:曾经:6/13
+refine: round=1 cleanChunks=128
+fingerprint.build: chunks=128 terms=55427 core=174 support=0 relations=410
+fingerprint.top: CHARACTER:李耀:44/449|CHARACTER:丁铃铛:11/51|CHARACTER:平行宇宙:8/26|CHARACTER:张大牛:8/37|CHARACTER:元宇宙:11/24|CHARACTER:曾经:14/31|CHARACTER:平行:9/45|LOCATION:多元宇宙海:9/20|CHARACTER:万古吞噬:7/9|CHARACTER:熊熊燃烧:7/8
+refine: round=2 cleanChunks=138
+fingerprint.build: chunks=138 terms=58673 core=182 support=0 relations=447
+fingerprint.top: CHARACTER:李耀:44/457|CHARACTER:平行宇宙:9/39|CHARACTER:丁铃铛:11/51|CHARACTER:张大牛:9/42|CHARACTER:元宇宙:11/25|CHARACTER:平行:10/58|CHARACTER:曾经:14/31|LOCATION:多元宇宙海:9/21|CHARACTER:万古吞噬:7/10|CHARACTER:方舟:12/27
+v3.candidate: chapter=5570 type=suffix start=1300 confidence=0.81 break=0.83 separation=0.92 cohesion=0.50 membershipLow=0.88 alienCluster=0.64 alienContinuity=0.80 alienNovelty=0.67 alienEntityCount=3 graphAbsorption=0.11 prototype=0.04 world=0.98 future=0.00 prefixBook=0.94 prefixAlien=0.00 evidenceChars=640 aliens=高级存:2|高维度:2|方根本:1
+v3.report: chapters=48 suggestions=1 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=140 prototypes=8
+report: suggestions=1

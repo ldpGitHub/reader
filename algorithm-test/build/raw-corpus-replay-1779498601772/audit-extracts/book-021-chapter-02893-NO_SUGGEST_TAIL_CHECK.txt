@@ -1,0 +1,88 @@
+bookNo=21
+title=仙人消失之后
+author=风行水云间
+kind=NO_SUGGEST_TAIL_CHECK
+chapterIndex=2893
+chapterTitle=第2838章_让人恐惧的事实
+sourceFile=/storage/emulated/0/Android/data/com.ldp.reader/files/algorithm-test/fetch-batch-1779484863140/021-仙人消失之后-1779485336984/chapters/02893-第2838章_让人恐惧的事实.txt
+
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+第2838章让人恐惧的事实_仙人消失之后全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+仙人消失之后
+第2838章让人恐惧的事实
+仝明真君也是暗暗心惊，他都将重力领域开到最强，这大石头人还没被压趴在地，扛压能力当真惊人。地母虽然将身形缩减到与人等高，但体重就摆在那里。在他的重力领域内，每挪一寸都需要无比强大的力量！
+更不用说纵跃对战了。
+何况仝明真君也牢记一点：眼前的石头人，
+订阅本章：10币
+推荐
+他的倾城意大明英华君九龄我在诡异世界继承神位后楚后暴君如此多娇九重紫谜案追凶大帝姬穿成继母后，我改造全家种田忙为什么它永无止境天才庶女：王爷，我不嫁首辅娇娘骑士归来昭仙辞孽婚门当户对小爷看上你了天命为凰逢春金粉
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

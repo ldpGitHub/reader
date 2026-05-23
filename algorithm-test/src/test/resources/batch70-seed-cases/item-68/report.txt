@@ -1,0 +1,58 @@
+Imported sources: 6411
+Search matches: 2
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1821, ordinals=1805, gaps=47, score=6170.0
+First: 第一章 星空中的青铜巨棺
+Last: 我的新书《圣墟》已上传
+- 👍 55读书: chapters=1821, dup=0, ord=1805, gaps=47, score=6170.0
+Fused preview:
+1. 第一章 星空中的青铜巨棺
+2. 第二章 素问
+3. 第三章 今昔
+4. 第四章 荒古铜刻
+5. 第五章 李小曼
+6. 第六章 封禅之地
+7. 第七章 五色祭坛
+8. 第八章 星空古路
+9. 第九章 铜棺内第三十人
+10. 第十章 苍茫大地
+11. 第十一章 光源
+12. 第十二章 荧惑
+13. 第十三章 天宫遗址
+14. 第十四章 大雷音寺
+15. 第十五章 菩提
+16. 第十六章 如神祗临尘
+17. 第十七章 生死
+18. 第十八章 对立
+19. 第十九章 从容
+20. 第二十章 鳄祖
+
+
+Sample validation issues: 0
+- none
+
+Novel: 遮天 / 辰东
+Chapters: 48, chunks: 270
+Core features: 350, support: 0
+Top features:
+- CHARACTER:叶凡 weight=219.9 chapters=43 hits=1310
+- CHARACTER:万物母气 weight=172.2 chapters=12 hits=35
+- CHARACTER:小松 weight=160.5 chapters=13 hits=131
+- CHARACTER:安妙依 weight=153.8 chapters=5 hits=59
+- CHARACTER:全部 weight=151.0 chapters=22 hits=59
+- CHARACTER:古之大帝 weight=150.5 chapters=8 hits=23
+- CHARACTER:万古 weight=148.1 chapters=18 hits=60
+- CHARACTER:万物 weight=146.0 chapters=19 hits=53
+- CHARACTER:段德 weight=142.0 chapters=11 hits=66
+- CHARACTER:小囡囡 weight=139.4 chapters=9 hits=22
+- CHARACTER:李黑水 weight=139.4 chapters=9 hits=22
+- CHARACTER:曾经 weight=136.7 chapters=17 hits=38
+Suggestions: 1
+- chapter 1821 我的新书《圣墟》已上传: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.97 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.07 evidenceChars=1754
+  * v3 membershipLow=1.00 alienCluster=0.91 alienContinuity=0.41 alienNovelty=1.00 alienEntityCount=16
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+

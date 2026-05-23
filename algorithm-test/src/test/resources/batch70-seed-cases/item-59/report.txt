@@ -1,0 +1,58 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=984, ordinals=0, gaps=0, score=1968.0
+First: 第1页
+Last: 第984页
+- 52书库.net: chapters=984, dup=0, ord=0, gaps=0, score=1968.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 长夜余火 / 爱潜水的乌贼
+Chapters: 48, chunks: 238
+Core features: 272, support: 0
+Top features:
+- CHARACTER:蒋白棉 weight=258.9 chapters=41 hits=589
+- CHARACTER:龙悦红 weight=243.7 chapters=31 hits=413
+- CHARACTER:白晨 weight=190.2 chapters=30 hits=236
+- CHARACTER:古生物 weight=183.0 chapters=20 hits=61
+- CHARACTER:杜衡 weight=167.0 chapters=15 hits=167
+- CHARACTER:老板 weight=155.7 chapters=21 hits=81
+- LOCATION:新世界 weight=155.5 chapters=19 hits=104
+- CHARACTER:广播 weight=151.3 chapters=15 hits=83
+- ORGANIZATION:研究院 weight=151.2 chapters=14 hits=50
+- LOCATION:旧世界 weight=144.4 chapters=21 hits=58
+- CHARACTER:韩望获 weight=139.5 chapters=5 hits=35
+- CHARACTER:江筱月 weight=138.1 chapters=6 hits=30
+Suggestions: 1
+- chapter 961 第961页: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=1300 confidence=0.97 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.90 separation=0.92 cohesion=0.10 evidenceChars=1777
+  * v3 membershipLow=1.00 alienCluster=0.95 alienContinuity=0.20 alienNovelty=0.89 alienEntityCount=9
+  * v3 graphAbsorption=0.00 prototype=0.04 prefixBook=0.90 prefixAlien=0.10
+  * v3 world=0.98 futureIntegration=0.00 ood=0.02
+

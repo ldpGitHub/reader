@@ -1,0 +1,80 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+1536、荒芜_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+1536、荒芜
+迎着三清的提问，苏午却道：“今‘鬼师张修’、‘师君张鲁’想来也是你三清的化现。
+你倾盖张修、张鲁、张盛原本的因果，是有何图谋？
+张修牵连故始人教之中‘原始巫教’的因果，张鲁掌天师尊位，与大天有所牵扯，至于张盛，原本根从‘天师识’，隐隐然与想尔有所关
+订阅本章：20币
+推荐
+皇恩荡漾天歌，九醉帝姬[快穿]和气运之子比金手指呆萌天才玄灵师惊爆，太子妃把太子复活了我在全球游戏植树种田始乱终弃了偏执大佬之后相亲闪婚，禁欲老公竟是豪门继承人星际穿越：位面女王专治不服非正式探险笔记大小姐她总是不求上进八零女翻译官被糙汉醋王宠翻了穿进无限游戏后满级大佬又装萌新上仙我只喜欢你的马甲劲爷说他没动心空间囤货：在危机世界艰难求生我靠敬业系统打脸逆袭卿本黑萌之妖妃来袭假千金才是真大佬燕辞归
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

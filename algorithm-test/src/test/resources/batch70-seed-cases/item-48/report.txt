@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1411, ordinals=1352, gaps=2, score=4683.5
+First: 第一章 活着
+Last: 番外二 花开故人来
+- 👍 55读书: chapters=1411, dup=16, ord=1352, gaps=2, score=4683.5
+Fused preview:
+1. 第一章 活着
+2. 第二章 异质
+3. 第三章 祝……安息
+4. 第四章 不速之客
+5. 第五章 拾荒者营地
+6. 第六章 小孩
+7. 第七章 请你吃
+8. 第八章 三副碗筷
+9. 第九章 威胁的后果
+10. 第十章 新衣服
+11. 第十一章 集结
+12. 第十二章 禁区的禁忌
+13. 第十三章 邪影
+14. 第十四章 危机四伏 （第一更，5000字）
+15. 第十五章 血色黄昏 (第二更，3800字)
+16. 第十六章 君问归期未有期 （第三更，5600字）
+17. 第十七章 你，到底是什么
+18. 第十八章 柏大师
+19. 第十九章 人间烟火
+20. 第二十章 家？
+
+
+Sample validation issues: 0
+- none
+
+Novel: 光阴之外 / 耳根
+Chapters: 48, chunks: 263
+Core features: 263, support: 0
+Top features:
+- CHARACTER:许青 weight=217.6 chapters=41 hits=1664
+- CHARACTER:青太子 weight=184.0 chapters=12 hits=89
+- ORGANIZATION:紫青上国 weight=180.8 chapters=14 hits=87
+- CHARACTER:苍穹 weight=175.5 chapters=34 hits=123
+- CHARACTER:全部 weight=165.9 chapters=31 hits=85
+- CHARACTER:古大陆 weight=155.3 chapters=13 hits=31
+- CHARACTER:平静 weight=155.3 chapters=25 hits=62
+- CHARACTER:孔祥龙 weight=150.3 chapters=4 hits=58
+- CHARACTER:青沉默 weight=146.0 chapters=12 hits=22
+- CHARACTER:曾经 weight=142.6 chapters=21 hits=41
+- LOCATION:吞天大域 weight=140.0 chapters=11 hits=47
+- LOCATION:封海郡 weight=139.0 chapters=10 hits=73
+Suggestions: 0
+

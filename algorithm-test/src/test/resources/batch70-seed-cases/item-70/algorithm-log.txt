@@ -1,0 +1,16 @@
+input: chapters=48 title=斗破苍穹 author=天蚕土豆
+chunk: chunks=144 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=28518 core=57 support=0 relations=67
+fingerprint.top: CHARACTER:萧炎:23/422|ORGANIZATION:云岚宗:4/33|ORGANIZATION:加玛帝国:6/17|CHARACTER:小家伙:7/12|CHARACTER:杜莎女王:3/13|CHARACTER:萧厉:4/33|CHARACTER:小医仙:3/13|CHARACTER:林焱:3/20|CHARACTER:全部:6/10|LOCATION:黑角域:5/13
+refine: round=1 cleanChunks=122
+fingerprint.build: chunks=122 terms=42197 core=106 support=0 relations=158
+fingerprint.top: CHARACTER:萧炎:44/708|CHARACTER:古元:15/67|ORGANIZATION:加玛帝国:9/27|CHARACTER:古帝:12/56|CHARACTER:广场:10/44|ORGANIZATION:云岚宗:4/33|CHARACTER:小家伙:7/12|CHARACTER:杜莎女王:3/13|ORGANIZATION:天府联盟:5/13|CHARACTER:萧厉:4/33
+refine: round=2 cleanChunks=137
+fingerprint.build: chunks=137 terms=45757 core=124 support=0 relations=175
+fingerprint.top: CHARACTER:萧炎:44/709|CHARACTER:古元:18/114|CHARACTER:古帝:13/67|ORGANIZATION:加玛帝国:9/27|CHARACTER:广场:11/46|ORGANIZATION:天府联盟:6/20|ORGANIZATION:云岚宗:4/33|CHARACTER:小家伙:7/12|CHARACTER:萧厉:5/34|CHARACTER:杜莎女王:3/13
+v3.candidate: chapter=1693 type=run start=0 confidence=0.91 break=0.00 separation=0.50 cohesion=0.12 membershipLow=0.96 alienCluster=0.79 alienContinuity=0.80 alienNovelty=1.00 alienEntityCount=5 graphAbsorption=0.04 prototype=0.07 world=0.96 future=0.00 prefixBook=0.00 prefixAlien=0.00 evidenceChars=1884 aliens=黄衣男:4|小白狐:2|通灵白狐:2|毛发正:1|白狐交:1
+v3.candidate: chapter=2766 type=suffix start=650 confidence=0.57 break=0.81 separation=0.93 cohesion=0.17 membershipLow=0.83 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0 graphAbsorption=0.15 prototype=0.22 world=0.35 future=0.00 prefixBook=0.98 prefixAlien=0.00 evidenceChars=1151 aliens=
+v3.candidate: chapter=2766 type=run start=650 confidence=0.57 break=0.81 separation=0.93 cohesion=0.17 membershipLow=0.83 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0 graphAbsorption=0.15 prototype=0.22 world=0.35 future=0.00 prefixBook=0.98 prefixAlien=0.00 evidenceChars=1151 aliens=
+v3.report: chapters=48 suggestions=1 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=86 prototypes=8
+report: suggestions=1

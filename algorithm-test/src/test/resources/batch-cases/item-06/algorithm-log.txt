@@ -1,0 +1,20 @@
+input: chapters=46 title=仙工开物 author=蛊真人
+chunk: chunks=230 size=800 overlap=150
+fingerprint.seed: seedChunks=116
+fingerprint.build: chunks=116 terms=48241 core=123 support=0 relations=393
+fingerprint.top: CHARACTER:孙灵瞳:10/134|CHARACTER:宁拙:17/545|CHARACTER:袁大胜:8/69|ORGANIZATION:熔岩仙宫:10/52|CHARACTER:朱玄迹:6/58|CHARACTER:金血战:3/44|CHARACTER:白纸仙:3/30|CHARACTER:林珊珊:3/27|LOCATION:火柿仙城:9/27|CHARACTER:花咕子:2/45
+refine: round=1 cleanChunks=192
+fingerprint.build: chunks=192 terms=79831 core=254 support=0 relations=966
+fingerprint.top: CHARACTER:宁拙:37/1165|CHARACTER:孙灵瞳:12/155|CHARACTER:袁大胜:8/69|ORGANIZATION:熔岩仙宫:10/52|CHARACTER:朱玄迹:6/58|CHARACTER:苍铁汉:7/44|CHARACTER:林惊龙:6/42|ITEM:南明火炉:10/64|CHARACTER:白纸仙:4/31|CHARACTER:金血战:3/44
+refine: round=2 cleanChunks=198
+fingerprint.build: chunks=198 terms=82414 core=267 support=0 relations=998
+fingerprint.top: CHARACTER:宁拙:37/1181|CHARACTER:孙灵瞳:12/155|CHARACTER:袁大胜:8/69|ORGANIZATION:熔岩仙宫:10/52|CHARACTER:朱玄迹:6/58|CHARACTER:林惊龙:6/46|CHARACTER:苍铁汉:7/44|ITEM:南明火炉:10/67|CHARACTER:白纸仙:4/31|CHARACTER:金血战:3/44
+v2.candidate: chapter=0 type=run start=0 confidence=0.91 break=0.00 separation=0.50 cohesion=0.14 membershipLow=1.00 alienCluster=0.69 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.91 future=0.00 aliens=习惯:2|方式:2|符合:2|符合大:2
+v2.candidate: chapter=1034 type=run start=650 confidence=0.98 break=0.00 separation=0.50 cohesion=0.09 membershipLow=1.00 alienCluster=0.94 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.98 future=0.00 aliens=刘维:2|容易:2|曹操:2|李晴:2|李晴瑶:2|苏阳:2|赵单:2|赵单羽:2|龚智:2|龚智远:2|击突破境:1|刘维悄:1
+v2.candidate: chapter=1035 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.94 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.00 world=0.88 future=0.00 aliens=秋水:3|秋水寒:3|东篱两国:1|己老婆品:1|张开吞:1|方休息:1|李知尘:1|龙帝神:1|龙帝神宫:1
+v2.candidate: chapter=1036 type=run start=267 confidence=0.95 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.84 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.97 future=0.00 aliens=姜蕾:2|楚烨:2|温瑶:2|满之:2|王辰:2|许多地阶:1
+v2.candidate: chapter=1037 type=run start=267 confidence=0.96 break=0.00 separation=0.50 cohesion=0.10 membershipLow=0.95 alienCluster=0.93 alienNovelty=1.00 graphAbsorption=0.04 prototype=0.01 world=0.86 future=0.00 aliens=圣巅峰:2|武圣:2|武圣巅:2|武圣巅峰:2|反观彭国:1|圣巅峰门:1|方七星:1|林慧儿:1|沈木棉:1|程莉莉:1|罗横空:1|赵明哲:1
+v2.candidate: chapter=1038 type=run start=267 confidence=0.97 break=0.00 separation=0.50 cohesion=0.12 membershipLow=1.00 alienCluster=0.90 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.97 future=0.00 aliens=严先:2|亚半岛:2|利亚半岛:2|安全:2|白晖:2|艾格:2|诛邪盟:2|陈君:2|陈君毅:2|陈大:2|陈大妹:2|雷利:2
+v2.candidate: chapter=1041 type=run start=267 confidence=0.98 break=0.00 separation=0.50 cohesion=0.14 membershipLow=1.00 alienCluster=0.92 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.01 world=0.93 future=0.00 aliens=唐瓷:2|戚淮:2|戚淮州:2|行世界:2|许久:2|唐总办:1|夏瑾轩:1|担心淮州:1|秦暖菲:1|秦淮如:1|许久未:1|金甲煞:1
+v2.report: chapters=46 suggestions=7 coreEntities=219 prototypes=8
+report: suggestions=7

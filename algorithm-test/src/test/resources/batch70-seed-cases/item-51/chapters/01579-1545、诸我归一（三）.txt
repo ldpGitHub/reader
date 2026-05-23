@@ -1,0 +1,82 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+1545、诸我归一（三）_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+1545、诸我归一（三）
+苏午神色忽恍。
+而那道站在窗边，观察着窗外雨线的模糊身影，在此时逐渐变得清晰，它对照着苏午的模样，像一团沸腾的水液般变化着，最终将自己变作了与苏午别无二致的模样。
+它身上有着苏午‘诸我之一’的因果。
+但是它不是苏午。
+元皇、大天，以及那
+订阅本章：20币
+推荐
+天歌，九醉帝姬皇恩荡漾[快穿]和气运之子比金手指呆萌天才玄灵师惊爆，太子妃把太子复活了我在全球游戏植树种田始乱终弃了偏执大佬之后星际穿越：位面女王专治不服相亲闪婚，禁欲老公竟是豪门继承人非正式探险笔记大小姐她总是不求上进八零女翻译官被糙汉醋王宠翻了上仙我只喜欢你的马甲劲爷说他没动心天才驭兽九小姐空间囤货：在危机世界艰难求生假千金才是真大佬燕辞归我靠敬业系统打脸逆袭卿本黑萌之妖妃来袭
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

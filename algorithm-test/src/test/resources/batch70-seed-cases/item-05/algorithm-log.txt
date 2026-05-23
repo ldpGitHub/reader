@@ -1,0 +1,13 @@
+input: chapters=47 title=神话之后 author=鹅是老五
+chunk: chunks=234 size=800 overlap=150
+fingerprint.seed: seedChunks=120
+fingerprint.build: chunks=120 terms=40538 core=115 support=0 relations=195
+fingerprint.top: CHARACTER:丁欢:24/1033|CHARACTER:蓝星:7/89|SKILL:大宇宙术:9/29|CHARACTER:全部:16/37|ORGANIZATION:蓝星宗:5/45|ORGANIZATION:基因联盟:5/29|CHARACTER:雷劫弧:2/44|CHARACTER:雷劫:4/79|CHARACTER:曲伊:5/48|CHARACTER:耿千行:2/32
+refine: round=1 cleanChunks=225
+fingerprint.build: chunks=225 terms=67718 core=286 support=0 relations=549
+fingerprint.top: CHARACTER:丁欢:47/1878|CHARACTER:莫无忌:18/154|CHARACTER:蓝小布:17/139|CHARACTER:方浩瀚:16/100|CHARACTER:丁道友:17/52|CHARACTER:全部:25/50|CHARACTER:叶玄:10/85|CHARACTER:罗睺:7/139|CHARACTER:元寂穹:8/29|LOCATION:大道之河:6/96
+refine: round=2 cleanChunks=232
+fingerprint.build: chunks=232 terms=69114 core=291 support=0 relations=550
+fingerprint.top: CHARACTER:丁欢:47/1880|CHARACTER:莫无忌:18/182|CHARACTER:蓝小布:17/168|CHARACTER:方浩瀚:16/106|CHARACTER:丁道友:17/52|CHARACTER:叶玄:10/103|CHARACTER:全部:26/51|LOCATION:色大道之河:6/57|CHARACTER:罗睺:7/139|LOCATION:金色大道之河:6/56
+v3.report: chapters=47 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=160 prototypes=8
+report: suggestions=0

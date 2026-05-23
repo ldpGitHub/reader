@@ -1,0 +1,81 @@
+(function() {
+function getQueryVariable(variable) {
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i -1 && (getQueryVariable('s_wd') || getQueryVariable('tag'))) {
+redirect = '/search/' + window.location.search
+}
+var url = ''
+if (redirect !== null) {
+if (url.indexOf('?') > -1) {
+url += "&source=pc_jump"
+} else {
+url += "?source=pc_jump"
+}
+} else {
+if (location.search) {
+if (getQueryVariable('source')) {
+var newSearch = changeQueryVariable(location.search, 'source', 'pc_jump')
+url += newSearch
+} else {
+url += (location.search + "&source=pc_jump")
+}
+} else {
+url += "?source=pc_jump"
+}
+return url
+}
+(function() {
+var name = "seo-jump-referrer";
+try {
+var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+var seoReferer = document.cookie.match(reg);
+if (seoReferer && seoReferer[2]) {
+Object.defineProperty(document, "referrer", {
+value: decodeURIComponent(seoReferer[2])
+});
+}
+} catch (error) {
+console.log(error);
+}
+if (window.outerWidth
+1535、天师道张盛_我的诡异人生全文免费阅读 – 潇湘书院
+yep('set', {
+appid: 10111,
+})
+登录
+首页
+我的诡异人生
+1535、天师道张盛
+野树枝杈嶙峋，被天上明晃晃的太阳照耀着，在黄土地上投下稀疏的阴影。
+苏午与柳飞烟站在树下，远望河畔取食的黄巾流民。
+两人皆未有言语，只有风声环绕在二人的耳畔。
+良久以后，通天河畔嘈杂的人声渐少了些，柳飞烟收回目光，低头看着自己的影子与苏午的身
+订阅本章：20币
+推荐
+姜汁撞奶糖这宿主能处，让她当反派她是真当封爷的小妖精又在缠人了九重紫和离后，战王哭唧唧求我复婚相亲当天，闪婚了个亿万富翁王妃她又在飙戏了大佬退休之后偏执权臣的娇软白月光辞金枝踹了作精竹马，我被校草娇宠了规则怪谈：我和同桌一起快穿敢问穿向何方农家小福女帝君你家医妃又逆天了惊！疯批奸臣被娇软美人亲懵了霸道枭少狂宠妻天才驭兽九小姐穿成九零娇宠小福妻强取病娇太子血续命后
+举报指南
+目录
+书详情
+夜间
+设置
+手机
+//百度统计
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script");
+hm.src =
+hm.async = 1;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+function ajaxLog(pramas){
+var xhr = new XMLHttpRequest();
+xhr.open("POST", '/api/user/guest/log', true);
+xhr.setRequestHeader('Content-type', 'application/json');
+xhr.setRequestHeader("platform","oldpc");
+xhr.send(JSON.stringify(pramas))
+}
+function getCookie (name){
+var cookieList = document.cookie.split(";")
+for(let i=0;i

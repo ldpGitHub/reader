@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 52书库.net, chapters=837, ordinals=0, gaps=0, score=1674.0
+First: 第1页
+Last: 第837页
+- 52书库.net: chapters=837, dup=0, ord=0, gaps=0, score=1674.0
+Fused preview:
+1. 第1页
+2. 第2页
+3. 第3页
+4. 第4页
+5. 第5页
+6. 第6页
+7. 第7页
+8. 第8页
+9. 第9页
+10. 第10页
+11. 第11页
+12. 第12页
+13. 第13页
+14. 第14页
+15. 第15页
+16. 第16页
+17. 第17页
+18. 第18页
+19. 第19页
+20. 第20页
+
+
+Sample validation issues: 0
+- none
+
+Novel: 深海余烬 / 远瞳
+Chapters: 48, chunks: 239
+Core features: 252, support: 0
+Top features:
+- CHARACTER:邓肯 weight=208.8 chapters=35 hits=624
+- CHARACTER:阿加莎 weight=166.0 chapters=9 hits=61
+- CHARACTER:平静 weight=148.1 chapters=24 hits=49
+- CHARACTER:周铭 weight=147.8 chapters=10 hits=91
+- CHARACTER:古董店 weight=141.9 chapters=8 hits=28
+- LOCATION:无垠海 weight=141.3 chapters=20 hits=52
+- LOCATION:新世界 weight=141.1 chapters=13 hits=72
+- CHARACTER:阿狗 weight=140.2 chapters=11 hits=66
+- ORGANIZATION:大教堂 weight=133.3 chapters=12 hits=26
+- CHARACTER:熊熊燃烧 weight=131.2 chapters=8 hits=11
+- CHARACTER:步行机 weight=130.6 chapters=5 hits=25
+- CHARACTER:白橡木号 weight=130.5 chapters=6 hits=15
+Suggestions: 0
+

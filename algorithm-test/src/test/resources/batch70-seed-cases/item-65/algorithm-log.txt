@@ -1,0 +1,15 @@
+input: chapters=48 title=异常生物见闻录 author=远瞳
+chunk: chunks=191 size=800 overlap=150
+fingerprint.seed: seedChunks=96
+fingerprint.build: chunks=96 terms=46226 core=58 support=0 relations=62
+fingerprint.top: CHARACTER:郝仁:24/436|CHARACTER:伊扎克斯:9/41|CHARACTER:南宫五月:6/17|CHARACTER:全息投:7/13|CHARACTER:林匹斯:2/18|ORGANIZATION:世界之门:3/19|CHARACTER:伊丽莎白:4/8|CHARACTER:方舟:2/32|CHARACTER:通讯:6/12|CHARACTER:通讯器:4/7
+refine: round=1 cleanChunks=165
+fingerprint.build: chunks=165 terms=74871 core=173 support=0 relations=220
+fingerprint.top: CHARACTER:郝仁:44/634|CHARACTER:伊扎克斯:11/50|CHARACTER:全息投:12/23|CHARACTER:南宫五月:7/18|CHARACTER:古多拉希:7/17|CHARACTER:尤古多拉:7/17|CHARACTER:苍白:8/32|CHARACTER:伊丽莎白:5/10|CHARACTER:方舟:6/39|CHARACTER:黄金圆盘:6/9
+refine: round=2 cleanChunks=181
+fingerprint.build: chunks=181 terms=80900 core=197 support=0 relations=262
+fingerprint.top: CHARACTER:郝仁:44/635|CHARACTER:伊扎克斯:11/50|CHARACTER:全息投:12/23|CHARACTER:南宫五月:7/18|CHARACTER:古多拉希:7/17|CHARACTER:尤古多拉:7/17|ORGANIZATION:辉耀教派:7/23|CHARACTER:苍白:9/34|CHARACTER:罗妮卡:4/22|CHARACTER:方舟:6/40
+v3.candidate: chapter=2112 type=suffix start=1300 confidence=0.40 break=0.54 separation=0.92 cohesion=0.15 membershipLow=0.66 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0 graphAbsorption=1.00 prototype=0.05 world=0.95 future=0.00 prefixBook=0.88 prefixAlien=0.00 evidenceChars=1153 aliens=
+v3.skip: chapter=2131 state=NON_STORY reason=non-story title=第2132页
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=115 prototypes=8
+report: suggestions=0

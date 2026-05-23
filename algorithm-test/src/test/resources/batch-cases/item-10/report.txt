@@ -1,0 +1,60 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1688, ordinals=1548, gaps=1, score=5235.2
+First: 第1章 不怪她
+Last: 第541章 初见检引梭梭（二合一）
+- 👍 55读书: chapters=1688, dup=111, ord=1548, gaps=1, score=5235.2
+Fused preview:
+1. 第1章 不怪她
+2. 第2章 揍一顿
+3. 第3章 换房子
+4. 第4章 请假了
+5. 第5章 御兽典
+6. 第6章 火牙狗
+7. 第7章 漠尾狐
+8. 第8章 火之牙
+9. 第9章 红糐果
+10. 第10章 看电视
+11. 第11章 圣水中学
+12. 第12章 都知道了
+13. 第13章 有人找你
+14. 第14章 我要请假
+15. 第15章 但求一败
+16. 第16章 是直觉
+17. 第17章 你不知道吗？
+18. 第18章 熟练度
+19. 第19章 幽灵系
+20. 第20章 车门开了
+
+
+Sample validation issues: 3
+- ordinal mismatch: #1077 第982章 八强（二合一） -> #1128 第21章 渡灵喵
+- ordinal mismatch: #1180 第68章 少了些什么 -> #1664 第519章 第十席和第七席
+- ordinal regression: #1077 第982章 八强（二合一） -> #1128 第21章 渡灵喵
+
+Novel: 御兽从零分开始 / 给我加葱
+Chapters: 48, chunks: 246
+Core features: 260, support: 0
+Top features:
+- CHARACTER:乔桑 weight=220.3 chapters=44 hits=1269
+- CHARACTER:夏拉拉 weight=216.3 chapters=21 hits=185
+- CHARACTER:夏宝 weight=169.9 chapters=18 hits=151
+- ORGANIZATION:御兽联盟 weight=160.3 chapters=13 hits=43
+- CHARACTER:施展 weight=156.2 chapters=20 hits=86
+- ORGANIZATION:御兽学院 weight=143.8 chapters=10 hits=28
+- CHARACTER:桑闻言 weight=141.4 chapters=13 hits=17
+- ITEM:检引梭梭 weight=141.3 chapters=6 hits=80
+- ORGANIZATION:国御兽学院 weight=140.4 chapters=9 hits=19
+- ORGANIZATION:帝国御兽学院 weight=140.4 chapters=9 hits=19
+- CHARACTER:高阶技 weight=138.4 chapters=8 hits=26
+- ORGANIZATION:突破种族 weight=138.3 chapters=9 hits=25
+Suggestions: 1
+- chapter 1688 第541章 初见检引梭梭（二合一）: LOCAL_ABNORMAL start=267 confidence=0.97 action=SUGGEST_DELETE
+  * v2 break=0.00 separation=0.50 cohesion=0.10
+  * v2 membershipLow=1.00 alienCluster=0.90 alienNovelty=1.00
+  * v2 graphAbsorption=0.00 prototype=0.02
+  * v2 world=0.88 futureIntegration=0.00 ood=0.12
+

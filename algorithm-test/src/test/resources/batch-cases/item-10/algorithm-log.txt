@@ -1,0 +1,14 @@
+input: chapters=48 title=御兽从零分开始 author=给我加葱
+chunk: chunks=246 size=800 overlap=150
+fingerprint.seed: seedChunks=98
+fingerprint.build: chunks=98 terms=34578 core=57 support=0 relations=57
+fingerprint.top: CHARACTER:乔桑:21/512|CHARACTER:施展:11/65|CHARACTER:高阶技:7/25|CHARACTER:徐艺璇:3/20|ORGANIZATION:御兽学院:3/17|CHARACTER:高级宠:4/15|CHARACTER:高级:5/26|CHARACTER:贺大涛:2/15|SKILL:维模式:2/19|CHARACTER:桑默默:5/6
+refine: round=1 cleanChunks=232
+fingerprint.build: chunks=232 terms=69267 core=252 support=0 relations=322
+fingerprint.top: CHARACTER:乔桑:44/1269|CHARACTER:夏拉拉:21/185|CHARACTER:夏宝:18/151|ORGANIZATION:御兽联盟:13/43|CHARACTER:施展:20/86|ORGANIZATION:御兽学院:10/28|CHARACTER:桑闻言:13/17|ITEM:检引梭梭:6/80|ORGANIZATION:国御兽学院:9/19|ORGANIZATION:帝国御兽学院:9/19
+refine: round=2 cleanChunks=237
+fingerprint.build: chunks=237 terms=69885 core=260 support=0 relations=343
+fingerprint.top: CHARACTER:乔桑:44/1269|CHARACTER:夏拉拉:21/185|CHARACTER:夏宝:18/151|ORGANIZATION:御兽联盟:13/43|CHARACTER:施展:20/86|ORGANIZATION:御兽学院:10/28|CHARACTER:桑闻言:13/17|ITEM:检引梭梭:6/80|ORGANIZATION:国御兽学院:9/19|ORGANIZATION:帝国御兽学院:9/19
+v2.candidate: chapter=1687 type=run start=267 confidence=0.97 break=0.00 separation=0.50 cohesion=0.10 membershipLow=1.00 alienCluster=0.90 alienNovelty=1.00 graphAbsorption=0.00 prototype=0.02 world=0.88 future=0.00 aliens=元素:2|元素之:2|秦烨:2|莫名:2|蒙尼:2|定要多派:1|投手成宫:1|苏雨蝶:1|谢尔盖:1|陈雨晴:1|高望重:1
+v2.report: chapters=48 suggestions=1 coreEntities=119 prototypes=8
+report: suggestions=1

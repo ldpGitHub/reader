@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=1473, ordinals=1416, gaps=0, score=4903.4
+First: 第一章 绯红
+Last: 12月1日《诡秘之主》新番外发布
+- 👍 55读书: chapters=1473, dup=25, ord=1416, gaps=0, score=4903.4
+Fused preview:
+1. 第一章 绯红
+2. 第二章 情况
+3. 第三章 梅丽莎（第一更求推荐票）
+4. 第四章 占卜（第二更求推荐票）
+5. 第五章 仪式（第三更求推荐票）
+6. 第六章 非凡者
+7. 第七章 代号
+8. 第八章 新的时代
+9. 第九章 笔记
+10. 第十章 常态
+11. 第十一章 真正的厨艺
+12. 第十二章 再次上门
+13. 第十三章 值夜者
+14. 第十四章 通灵者
+15. 第十五章 邀请
+16. 第十六章 狗拿耗子
+17. 第十七章 特殊行动部
+18. 第十八章 起源和原因（第一更求推荐票）
+19. 第十九章 封印物（第二更求推荐票）
+20. 第二十章 健忘的邓恩（第三更求推荐票）
+
+
+Sample validation issues: 0
+- none
+
+Novel: 诡秘之主 / 爱潜水的乌贼
+Chapters: 48, chunks: 230
+Core features: 247, support: 0
+Top features:
+- CHARACTER:阿尔杰 weight=182.5 chapters=10 hits=102
+- CHARACTER:阿尔 weight=153.1 chapters=11 hits=111
+- CHARACTER:巴顿 weight=150.8 chapters=8 hits=233
+- CHARACTER:阿蒙 weight=150.3 chapters=11 hits=96
+- CHARACTER:乌特拉夫 weight=148.1 chapters=4 hits=34
+- CHARACTER:马车 weight=145.8 chapters=17 hits=61
+- CHARACTER:罗塞尔 weight=140.3 chapters=10 hits=22
+- CHARACTER:安德森 weight=139.9 chapters=3 hits=55
+- CHARACTER:小姐 weight=133.9 chapters=13 hits=41
+- CHARACTER:唐泰斯 weight=130.6 chapters=7 hits=19
+- CHARACTER:古物搜集 weight=126.5 chapters=5 hits=13
+- CHARACTER:蓝复仇者 weight=126.3 chapters=3 hits=18
+Suggestions: 0
+

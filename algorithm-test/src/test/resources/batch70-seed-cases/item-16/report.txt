@@ -1,0 +1,73 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=2788, ordinals=2694, gaps=3, score=9294.1
+First: 第一章 又一世少年
+Last: 第二千六百九十五章 误导
+- 👍 55读书: chapters=2788, dup=22, ord=2694, gaps=3, score=9294.1
+Fused preview:
+1. 第一章 又一世少年
+2. 第二章 飞剑
+3. 第三章 大江行船
+4. 第四章 三巫城
+5. 第五章 仙师难寻
+6. 第六章 活神仙
+7. 第七章 寂心道人
+8. 第八章 落脚青羊观
+9. 第九章 幽冥经
+10. 第十章 套话和骗术
+11. 第十一章 茶楼
+12. 第十二章 采药
+13. 第十三章 清静经
+14. 第十四章 炁
+15. 第十五章 药浴
+16. 第十六章 哑巴纤夫
+17. 第十七章 半年
+18. 第十八章 恶鬼和玉佛
+19. 第十九章 魂丹
+20. 第二十章 后事
+
+
+Sample validation issues: 0
+- none
+
+Novel: 叩问仙道 / 雨打青石
+Chapters: 48, chunks: 230
+Core features: 272, support: 0
+Top features:
+- CHARACTER:罗络魔君 weight=243.1 chapters=17 hits=382
+- CHARACTER:秦桑 weight=219.9 chapters=45 hits=1332
+- SKILL:帝虹魔禁 weight=195.9 chapters=14 hits=193
+- CHARACTER:元载天 weight=190.9 chapters=10 hits=131
+- CHARACTER:雷兽战卫 weight=179.8 chapters=9 hits=54
+- ORGANIZATION:极魔宫 weight=170.1 chapters=13 hits=97
+- CHARACTER:桑阳神 weight=153.6 chapters=6 hits=49
+- CHARACTER:施展 weight=126.2 chapters=12 hits=30
+- LOCATION:北方魔域 weight=125.0 chapters=10 hits=24
+- CHARACTER:元神养 weight=123.0 chapters=5 hits=19
+- CHARACTER:元神 weight=121.7 chapters=9 hits=34
+- CHARACTER:曾经 weight=118.8 chapters=12 hits=22
+Suggestions: 4
+- chapter 2782 第二千六百八十九章 凋零: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.86 action=SUGGEST_DELETE
+  * v3 break=0.66 separation=0.90 cohesion=0.15 evidenceChars=1064
+  * v3 membershipLow=0.78 alienCluster=0.93 alienContinuity=0.44 alienNovelty=0.92 alienEntityCount=12
+  * v3 graphAbsorption=0.19 prototype=0.03 prefixBook=0.89 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 ood=0.01
+- chapter 2785 第二千六百九十二章 诱魔: POLLUTED_RUN/LOCAL_ABNORMAL start=267 confidence=0.82 action=SUGGEST_DELETE
+  * v3 break=0.91 separation=0.92 cohesion=0.15 evidenceChars=910
+  * v3 membershipLow=1.00 alienCluster=0.57 alienContinuity=0.50 alienNovelty=0.33 alienEntityCount=3
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.91 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 ood=0.00
+- chapter 2786 第二千六百九十三章 阴阳离合篇: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.94 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.87 separation=0.93 cohesion=0.15 evidenceChars=1081
+  * v3 membershipLow=1.00 alienCluster=0.85 alienContinuity=0.29 alienNovelty=0.83 alienEntityCount=6
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.87 prefixAlien=0.00
+  * v3 world=0.95 futureIntegration=0.00 ood=0.00
+- chapter 2788 第二千六百九十五章 误导: POLLUTED_SUFFIX/SUFFIX_POLLUTION start=650 confidence=0.98 action=AUTO_DELETE_ALLOWED
+  * v3 break=0.79 separation=0.92 cohesion=0.08 evidenceChars=1178
+  * v3 membershipLow=1.00 alienCluster=0.95 alienContinuity=0.53 alienNovelty=0.92 alienEntityCount=12
+  * v3 graphAbsorption=0.00 prototype=0.01 prefixBook=0.79 prefixAlien=0.00
+  * v3 world=0.99 futureIntegration=0.00 ood=0.01
+

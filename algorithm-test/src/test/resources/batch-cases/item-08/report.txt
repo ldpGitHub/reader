@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 1
+Source failures: 0
+
+Catalog candidates: 1
+Best: 笔趣阁22, chapters=821, ordinals=784, gaps=1, score=2749.6
+First: 第一章 全员恶人
+Last: 第七百八十四章 至尊之争
+- 笔趣阁22: chapters=821, dup=5, ord=784, gaps=1, score=2749.6
+Fused preview:
+1. 第一章 全员恶人
+2. 第二章 诚实厚道
+3. 第三章 鬼神领域
+4. 第四章 三光正气
+5. 第五章 青色鬼爪
+6. 第六章 以身为祭（端午安康）
+7. 第七章 乡野神权，不及王法
+8. 第八章 新娘
+9. 第九章 仇人见面，杀心顿起
+10. 第十章 杀主
+11. 第十一章 苦主
+12. 第十二章 追凶
+13. 第十三章 君子不伤善人
+14. 第十四章 救救孩子
+15. 第十五章 邪
+16. 第十六章 真神注视
+17. 第十七章 不要尿床
+18. 第十八章 你还活着！
+19. 第十九章 符怪
+20. 第二十章 狭路相逢勇者胜！（大章！）
+
+
+Sample validation issues: 0
+- none
+
+Novel: 大道之上 / 宅猪
+Chapters: 48, chunks: 358
+Core features: 498, support: 0
+Top features:
+- CHARACTER:陈实 weight=223.6 chapters=46 hits=1671
+- CHARACTER:陈夫子 weight=203.6 chapters=17 hits=130
+- CHARACTER:罗金仙 weight=201.9 chapters=21 hits=112
+- CHARACTER:寿帝君 weight=199.7 chapters=11 hits=183
+- CHARACTER:宁真子 weight=193.0 chapters=9 hits=198
+- CHARACTER:元符 weight=183.8 chapters=21 hits=269
+- CHARACTER:牛新洲 weight=175.8 chapters=17 hits=55
+- CHARACTER:李天青 weight=175.0 chapters=8 hits=93
+- LOCATION:黑暗海 weight=174.5 chapters=21 hits=228
+- CHARACTER:陈真王 weight=171.4 chapters=13 hits=53
+- CHARACTER:钟无妄 weight=169.9 chapters=8 hits=76
+- CHARACTER:连忙 weight=167.2 chapters=31 hits=91
+Suggestions: 0
+

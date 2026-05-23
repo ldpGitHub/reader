@@ -1,0 +1,14 @@
+input: chapters=48 title=赤侠 author=红烧大黑鱼
+chunk: chunks=143 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=27372 core=57 support=0 relations=106
+fingerprint.top: CHARACTER:魏昊:22/341|CHARACTER:魏大象:11/33|CHARACTER:汪伏波:4/36|CHARACTER:汪摘星:9/20|CHARACTER:魏大:12/35|CHARACTER:陈孟男:3/16|CHARACTER:魏相公:4/11|CHARACTER:巫三太子:2/11|ORGANIZATION:大夏朝:4/10|ORGANIZATION:北阳府:6/7
+refine: round=1 cleanChunks=135
+fingerprint.build: chunks=135 terms=47856 core=137 support=0 relations=268
+fingerprint.top: CHARACTER:魏昊:46/655|CHARACTER:魏大象:15/42|CHARACTER:江太师:8/35|CHARACTER:汪伏波:6/39|CHARACTER:袁君平:5/44|CHARACTER:汪摘星:10/21|CHARACTER:魏大:16/44|CHARACTER:巫三太子:5/19|CHARACTER:曾经:14/21|CHARACTER:花草树木:7/8
+refine: round=2 cleanChunks=142
+fingerprint.build: chunks=142 terms=49621 core=150 support=0 relations=288
+fingerprint.top: CHARACTER:魏昊:46/658|CHARACTER:魏大象:15/42|CHARACTER:江太师:8/35|CHARACTER:汪伏波:6/39|CHARACTER:袁君平:5/44|CHARACTER:汪摘星:10/21|CHARACTER:魏大:16/44|CHARACTER:巫三太子:5/19|CHARACTER:曾经:15/24|CHARACTER:魏赤侠:6/14
+v3.candidate: chapter=1154 type=suffix start=1300 confidence=0.60 break=0.79 separation=0.92 cohesion=0.50 membershipLow=0.85 alienCluster=0.00 alienContinuity=0.00 alienNovelty=0.00 alienEntityCount=0 graphAbsorption=0.18 prototype=0.08 world=0.98 future=0.00 prefixBook=0.94 prefixAlien=0.00 evidenceChars=460 aliens=
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=128 prototypes=8
+report: suggestions=0

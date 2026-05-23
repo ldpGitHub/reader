@@ -1,0 +1,13 @@
+input: chapters=48 title=凡人修仙之仙界篇 author=忘语
+chunk: chunks=143 size=800 overlap=150
+fingerprint.seed: seedChunks=72
+fingerprint.build: chunks=72 terms=37096 core=87 support=0 relations=124
+fingerprint.top: CHARACTER:韩立:23/346|CHARACTER:言宝轮:6/19|CHARACTER:厉道友:3/12|CHARACTER:青竹蜂云:3/8|CHARACTER:古云大陆:4/5|CHARACTER:通体:7/10|CHARACTER:施展灵:3/8|CHARACTER:符箓:5/12|CHARACTER:韩道友:3/6|CHARACTER:闻此话:3/6
+refine: round=1 cleanChunks=139
+fingerprint.build: chunks=139 terms=66865 core=232 support=0 relations=666
+fingerprint.top: CHARACTER:韩立:47/709|SKILL:时间法:17/71|CHARACTER:韩道友:10/27|CHARACTER:南宫婉:8/32|WORLD_TERM:轮回殿:17/84|ITEM:掌天瓶:16/71|CHARACTER:言宝轮:9/24|CHARACTER:小瓶:11/61|CHARACTER:青竹蜂云:7/13|CHARACTER:墨绿:10/34
+refine: round=2 cleanChunks=143
+fingerprint.build: chunks=143 terms=68553 core=239 support=0 relations=729
+fingerprint.top: CHARACTER:韩立:47/710|SKILL:时间法:17/71|CHARACTER:南宫婉:8/37|CHARACTER:韩道友:10/27|WORLD_TERM:轮回殿:17/84|ITEM:掌天瓶:16/71|CHARACTER:言宝轮:9/24|CHARACTER:小瓶:11/61|CHARACTER:青竹蜂云:7/13|CHARACTER:墨绿:10/34
+v3.report: chapters=48 suggestions=0 state=NORMAL|NON_STORY|POLLUTED_SUFFIX|POLLUTED_RUN|UNCERTAIN coreEntities=172 prototypes=8
+report: suggestions=0

@@ -1,0 +1,29 @@
+analysisChapters=23
+targetChapters=12
+contextChapters=11
+roleCounts=LONG_ANCHOR:1,MID_CONTEXT:2,NEAR_CONTEXT:8,TARGET_EXTENDED:4,TARGET_RECENT:2,TARGET_TAIL:6
+targetRange=740..2787
+chapters:
+0	LONG_ANCHOR	第一章_又一世少年
+740	TARGET_EXTENDED	第七百三十九章_功法之别
+975	MID_CONTEXT	第九百六十九章_破禁
+1764	TARGET_EXTENDED	第一千七百三十三章_化神遗藏
+2276	TARGET_EXTENDED	第二千二百一十五章_神山石台
+2387	MID_CONTEXT	第二千三百一十章_伪月
+2388	NEAR_CONTEXT	第二千三百一十一章_太阴神剑
+2430	NEAR_CONTEXT	第二千三百五十一章_水潭
+2473	NEAR_CONTEXT	第二千三百九十三章_五仙
+2516	NEAR_CONTEXT	第二千四百三十四章_降临
+2532	TARGET_EXTENDED	第二千四百五十章_十太子
+2558	NEAR_CONTEXT	第二千四百七十四章_灭国
+2601	NEAR_CONTEXT	第二千五百一十六章_三足鼎立
+2644	NEAR_CONTEXT	第二千五百五十八章_行法
+2687	NEAR_CONTEXT	第二千五百九十九章_揭星盘
+2688	TARGET_TAIL	第二千六百章_黄庭道
+2724	TARGET_TAIL	第二千六百三十五章_再相逢
+2756	TARGET_TAIL	第二千六百六十六章_回归
+2772	TARGET_TAIL	大家今晚不要等了，明天补
+2780	TARGET_TAIL	第二千六百八十八章_虫魔噬界
+2784	TARGET_TAIL	第二千六百九十二章_诱魔
+2786	TARGET_RECENT	第二千六百九十四章_助我修行！
+2787	TARGET_RECENT	第二千六百九十五章_误导

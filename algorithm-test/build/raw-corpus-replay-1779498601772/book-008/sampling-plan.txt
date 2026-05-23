@@ -1,0 +1,27 @@
+analysisChapters=21
+targetChapters=10
+contextChapters=11
+roleCounts=LONG_ANCHOR:1,MID_CONTEXT:2,NEAR_CONTEXT:8,TARGET_EXTENDED:2,TARGET_RECENT:2,TARGET_TAIL:6
+targetRange=309..820
+chapters:
+0	LONG_ANCHOR	第一章_全员恶人
+287	MID_CONTEXT	第二百七十八章_魔，禅
+309	TARGET_EXTENDED	百盟达成，感谢大家支持！
+420	MID_CONTEXT	第三百九十九章_小椴与仙子
+421	NEAR_CONTEXT	第四百章_我的本事大了
+463	NEAR_CONTEXT	第四百三十九章_护法
+506	NEAR_CONTEXT	第四百八十一章_罪魁祸首
+549	NEAR_CONTEXT	第五百二十三章_焚世仙火
+565	TARGET_EXTENDED	第五百三十八章_大荒明道集
+591	NEAR_CONTEXT	第五百六十二章_再别天道桥
+634	NEAR_CONTEXT	第六百零四章_道墟的住客
+677	NEAR_CONTEXT	第六百四十七章_天道法宝尽毁
+720	NEAR_CONTEXT	第六百八十六章_真王补天
+721	TARGET_TAIL	第六百八十七章_再造西牛新洲
+757	TARGET_TAIL	第七百二十二章_暗算潜龙
+789	TARGET_TAIL	第七百五十四章_一力破万法
+805	TARGET_TAIL	第七百六十九章_群贤逼宫
+813	TARGET_TAIL	第七百七十七章_青岩之宝
+817	TARGET_TAIL	第七百八十一章_诛魔
+819	TARGET_RECENT	第七百八十三章_黑暗劫
+820	TARGET_RECENT	第七百八十四章_至尊之争

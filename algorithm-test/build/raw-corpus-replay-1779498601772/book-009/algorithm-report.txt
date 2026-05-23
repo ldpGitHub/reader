@@ -1,0 +1,25 @@
+Novel: 谁让他修仙的！ / 最白的乌鸦
+Chapters: 22, chunks: 87
+Core features: 84, support: 0
+Top features:
+- CHARACTER:陆阳 weight=187.7 chapters=21 hits=517
+- CHARACTER:孟景 weight=152.5 chapters=11 hits=111
+- ORGANIZATION:问道宗 weight=150.6 chapters=8 hits=66
+- ITEM:孟景舟 weight=147.1 chapters=11 hits=111
+- CHARACTER:古四仙 weight=131.2 chapters=5 hits=27
+- CHARACTER:李浩 weight=123.9 chapters=4 hits=84
+- CHARACTER:小师弟 weight=116.8 chapters=5 hits=15
+- LOCATION:修仙界 weight=115.3 chapters=8 hits=34
+- CHARACTER:小阳子 weight=114.2 chapters=3 hits=17
+- CHARACTER:老孟 weight=107.0 chapters=6 hits=23
+- CHARACTER:姜涟漪 weight=105.5 chapters=5 hits=10
+- CHARACTER:闻言 weight=100.7 chapters=7 hits=14
+- CHARACTER:赵破 weight=99.1 chapters=2 hits=34
+- CHARACTER:元神 weight=97.9 chapters=2 hits=39
+- CHARACTER:阴阳 weight=97.7 chapters=7 hits=13
+- REALM:渡劫期 weight=97.2 chapters=10 hits=19
+- CHARACTER:文明 weight=95.2 chapters=4 hits=18
+- CHARACTER:金采薇 weight=87.9 chapters=4 hits=5
+- ORGANIZATION:火王朝 weight=86.7 chapters=3 hits=9
+- LOCATION:天门峰 weight=85.6 chapters=5 hits=11
+Suggestions: 0

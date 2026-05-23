@@ -1,0 +1,30 @@
+Novel: 大道之上 / 宅猪
+Chapters: 21, chunks: 150
+Core features: 171, support: 0
+Top features:
+- CHARACTER:陈实 weight=190.1 chapters=20 hits=776
+- CHARACTER:牛新洲 weight=164.7 chapters=12 hits=48
+- CHARACTER:罗金仙 weight=163.2 chapters=8 hits=53
+- CHARACTER:万寿帝君 weight=158.2 chapters=3 hits=87
+- CHARACTER:宁真子 weight=157.0 chapters=4 hits=113
+- CHARACTER:华夏神洲 weight=154.7 chapters=9 hits=27
+- CHARACTER:钟无妄 weight=153.3 chapters=5 hits=59
+- CHARACTER:小仙子 weight=151.7 chapters=4 hits=63
+- CHARACTER:陈真王 weight=143.1 chapters=7 hits=29
+- CHARACTER:元虫 weight=141.6 chapters=7 hits=99
+- CHARACTER:元神 weight=140.6 chapters=13 hits=60
+- LOCATION:黑暗海 weight=139.4 chapters=10 hits=77
+- CHARACTER:小仙 weight=133.0 chapters=6 hits=68
+- CHARACTER:陈棠 weight=131.8 chapters=5 hits=87
+- CHARACTER:陈寅 weight=128.6 chapters=7 hits=51
+- CHARACTER:巫祭道纹 weight=128.0 chapters=3 hits=21
+- CHARACTER:青园 weight=127.6 chapters=5 hits=59
+- CHARACTER:陈夫子 weight=125.4 chapters=3 hits=24
+- CHARACTER:华夏 weight=120.4 chapters=10 hits=31
+- ORGANIZATION:香缇罗族 weight=119.6 chapters=2 hits=33
+Suggestions: 1
+- chapter 310 百盟达成，感谢大家支持！: POLLUTED_RUN/LOCAL_ABNORMAL start=0 confidence=0.98 action=SUGGEST_DELETE
+  * v3 break=0.00 separation=0.50 cohesion=0.15 evidenceChars=667
+  * v3 membershipLow=1.00 alienCluster=0.92 alienContinuity=0.67 alienNovelty=1.00 alienEntityCount=10 alienIdentity=0.88
+  * v3 graphAbsorption=0.00 prototype=0.02 prefixBook=0.00 prefixAlien=0.00
+  * v3 world=0.98 futureIntegration=0.00 titleAbsorption=1.00 expository=0.17 ood=0.02

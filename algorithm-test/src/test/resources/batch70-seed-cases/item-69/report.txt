@@ -1,0 +1,53 @@
+Imported sources: 6411
+Search matches: 2
+Source failures: 0
+
+Catalog candidates: 1
+Best: 👍 55读书, chapters=2083, ordinals=2010, gaps=17, score=6967.8
+First: 序章 大荒
+Last: 《夜无疆》已肥，可以看了
+- 👍 55读书: chapters=2083, dup=5, ord=2010, gaps=17, score=6967.8
+Fused preview:
+1. 序章 大荒
+2. 第一章 朝气蓬勃
+3. 第二章 骨文
+4. 第三章 祭灵
+5. 第四章 药浴
+6. 第五章 举鼎
+7. 第六章 准备
+8. 第七章 梧木巢
+9. 第八章 青鳞鹰
+10. 第九章 凶威
+11. 第十章 祖器
+12. 第十一章 返祖
+13. 第十二章 秘骨宝书
+14. 第十三章 怒
+15. 第十四章 蛮横
+16. 第十五章 小不点显威
+17. 第十六章 服软
+18. 第十七章 宝术
+19. 第十八章 山林暴动
+20. 第十九章 争夺
+
+
+Sample validation issues: 0
+- none
+
+Novel: 完美世界 / 辰东
+Chapters: 48, chunks: 260
+Core features: 254, support: 0
+Top features:
+- CHARACTER:石昊 weight=214.8 chapters=38 hits=1203
+- CHARACTER:符文 weight=159.7 chapters=23 hits=87
+- CHARACTER:终极古 weight=154.9 chapters=8 hits=41
+- CHARACTER:苍帝 weight=152.0 chapters=13 hits=84
+- ORGANIZATION:天神书院 weight=149.5 chapters=5 hits=51
+- CHARACTER:元神 weight=145.3 chapters=13 hits=71
+- CHARACTER:曾经 weight=143.2 chapters=22 hits=42
+- CHARACTER:冷漠 weight=142.2 chapters=19 hits=43
+- CHARACTER:终极 weight=135.9 chapters=10 hits=52
+- CHARACTER:罗剑胎 weight=135.6 chapters=4 hits=29
+- LOCATION:岁月长河 weight=133.4 chapters=8 hits=40
+- CHARACTER:石毅 weight=130.2 chapters=7 hits=52
+Suggestions: 0
+
