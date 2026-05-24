@@ -204,6 +204,67 @@ class V5SourceChapterValidatorTest {
     }
 
     @Test
+    fun termStatsDiskCacheKeepsValidatorOutputEquivalentAndEmitsDiagnostics() {
+        val chapters = normalBookChapters() + ChapterInput(
+            index = 8,
+            title = "后段混入",
+            content = normalParagraph(repeat = 120) + alienParagraph(repeat = 70)
+        )
+        val config = AlgorithmConfig(
+            chunkSize = 800,
+            chunkOverlap = 120,
+            minFeatureFrequency = 3,
+            minFeatureChapterCount = 2,
+            refineRounds = 1,
+            minSuffixChunks = 1
+        )
+        val baseline = V5SourceChapterValidator {
+            NovelPollutionAnalyzer(config)
+        }.validate(
+            V5SourceRunRequest(
+                title = "测试书",
+                author = "作者",
+                sourceKey = "source-a",
+                chapters = chapters
+            )
+        )
+        val cacheDir = File("build/tmp/v5-term-stats-cache-equivalence-${System.nanoTime()}")
+        val diagnostics = ArrayList<String>()
+        val cached = V5SourceChapterValidator {
+            NovelPollutionAnalyzer(
+                config.copy(
+                    termStatsActiveCacheEntries = 1,
+                    termStatsMemoryCacheEntries = 1,
+                    termStatsDiskCacheDirectory = cacheDir
+                )
+            )
+        }.validate(
+            V5SourceRunRequest(
+                title = "测试书",
+                author = "作者",
+                sourceKey = "source-a",
+                chapters = chapters,
+                diagnosticSink = V5DiagnosticSink(diagnostics::add)
+            )
+        )
+
+        assertEquals(
+            baseline.marks.map { mark -> mark.chapterIndex to mark.state },
+            cached.marks.map { mark -> mark.chapterIndex to mark.state }
+        )
+        assertEquals(
+            baseline.report.suggestions.map { suggestion -> suggestion.chapterIndex to suggestion.stateType },
+            cached.report.suggestions.map { suggestion -> suggestion.chapterIndex to suggestion.stateType }
+        )
+        assertTrue(cacheDir.walkTopDown().any { file -> file.isFile && file.extension == "bin" })
+        assertTrue(
+            diagnostics.any { line ->
+                line.contains("term_stats_cache") && Regex("""diskHits=([1-9]\d*)""").containsMatchIn(line)
+            }
+        )
+    }
+
+    @Test
     fun returnsOnlyMarkableChapterMarksWhenProvided() {
         val validator = V5SourceChapterValidator()
 

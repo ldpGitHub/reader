@@ -1,5 +1,12 @@
 package com.ldp.reader.algorithmtest.core
 
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.DataInputStream
+import java.io.DataOutputStream
+import java.io.File
+import java.security.MessageDigest
+import java.util.IdentityHashMap
 import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.min
@@ -10,9 +17,11 @@ class NovelPollutionAnalyzer(
 ) {
     private val traceLines = ArrayList<String>()
     private val qualityGate = ChapterQualityGate()
-    private val chunkStatsCache = LinkedHashMap<TextChunk, Map<String, MutableTermStats>>()
+    private val termStatsCache = TermStatsCache(config)
     private val segmentAlienCache = LinkedHashMap<SegmentCacheKey, Map<String, SegmentEntity>>()
-    private var cacheableChunks: Set<TextChunk> = emptySet()
+    private val chunkStatsKeyCache = IdentityHashMap<TextChunk, TermStatsCacheKey>()
+    private var progressSink: ((String) -> Unit)? = null
+    private var lastProgressStage: String = "not_started"
 
     fun analyze(
         title: String,
@@ -22,9 +31,13 @@ class NovelPollutionAnalyzer(
         progress: ((String) -> Unit)? = null
     ): CleanReport {
         traceLines.clear()
-        chunkStatsCache.clear()
+        termStatsCache.clearMemory()
+        termStatsCache.resetCounters()
         segmentAlienCache.clear()
-        cacheableChunks = emptySet()
+        chunkStatsKeyCache.clear()
+        progressSink = progress
+        lastProgressStage = "input_start"
+        try {
         progress?.invoke("input_start chapters=${chapters.size}")
         val sortedChapters = chapters
             .sortedBy { chapter -> chapter.index }
@@ -95,35 +108,45 @@ class NovelPollutionAnalyzer(
 
         progress?.invoke("split_start")
         val chunks = splitNovelIntoChunks(cleanedChapters)
-        cacheableChunks = chunks.toSet()
+        registerCacheableChunks(chunks)
         log("chunk", "chunks=${chunks.size} size=${config.chunkSize} overlap=${config.chunkOverlap}")
         progress?.invoke("split_done chunks=${chunks.size}")
+        progressStage("memory_checkpoint", "at" to "split_done")
 
         progress?.invoke("fingerprint_initial_start")
         var fingerprint = buildInitialFingerprint(title, author, chunks, seedChapterIndexes)
         progress?.invoke("fingerprint_initial_done core=${fingerprint.coreFeatures.size} support=${fingerprint.supportFeatures.size}")
         repeat(config.refineRounds.coerceAtLeast(0)) { round ->
             progress?.invoke("refine_score_start round=${round + 1}")
-            val scored = chunks.map { chunk -> scoreChunk(chunk, fingerprint) }
-            progress?.invoke("refine_score_done round=${round + 1} scored=${scored.size}")
-            val cleanChunks = scored
-                .filter { score -> score.belongScore >= config.cleanChunkThreshold }
-                .map { score -> score.chunk }
-                .ifEmpty { seedChunks(chunks, seedChapterIndexes) }
+            val cleanChunkCandidates = ArrayList<TextChunk>()
+            var scoredCount = 0
+            chunks.forEach { chunk ->
+                val score = scoreChunk(chunk, fingerprint)
+                scoredCount += 1
+                if (score.belongScore >= config.cleanChunkThreshold) {
+                    cleanChunkCandidates.add(score.chunk)
+                }
+            }
+            progress?.invoke("refine_score_done round=${round + 1} scored=$scoredCount")
+            progressStage(
+                "memory_checkpoint",
+                "at" to "refine_score_done",
+                "round" to round + 1,
+                "cleanCandidates" to cleanChunkCandidates.size
+            )
+            val cleanChunks = cleanChunkCandidates.ifEmpty { seedChunks(chunks, seedChapterIndexes) }
             log("refine", "round=${round + 1} cleanChunks=${cleanChunks.size}")
             progress?.invoke("refine_fingerprint_start round=${round + 1} cleanChunks=${cleanChunks.size}")
             fingerprint = buildFingerprint(title, author, cleanChunks)
             progress?.invoke("refine_fingerprint_done round=${round + 1} core=${fingerprint.coreFeatures.size} support=${fingerprint.supportFeatures.size}")
         }
 
-        progress?.invoke("final_score_start chunks=${chunks.size}")
-        val scoredChunks = chunks.map { chunk -> scoreChunk(chunk, fingerprint) }
-        progress?.invoke("final_score_done chunks=${scoredChunks.size}")
-        progress?.invoke("detect_start")
-        val rawSuggestions = detectPollutedChapters(scoredChunks, fingerprint, progress)
+        val finalDetection = scoreAndDetectFinal(chunks, fingerprint, progress)
+        val rawSuggestions = finalDetection.suggestions
         val suggestions = confirmActionLevels(rawSuggestions, qualityResults)
         progress?.invoke("detect_done suggestions=${suggestions.size}")
         log("report", "suggestions=${suggestions.size}")
+        progressStage("term_stats_cache", *termStatsCache.diagnosticFields())
 
         return CleanReport(
             title = title,
@@ -131,11 +154,22 @@ class NovelPollutionAnalyzer(
             chapterCount = cleanedChapters.size,
             chunkCount = chunks.size,
             fingerprint = fingerprint,
-            chunkScores = scoredChunks,
+            chunkScores = finalDetection.reportChunkScores,
             suggestions = suggestions,
             qualityResults = qualityResults,
             logs = traceLines.toList()
         )
+        } catch (error: OutOfMemoryError) {
+            progressStage("oom", "last" to lastProgressStage)
+            throw error
+        } finally {
+            progressStage("cleanup", *termStatsCache.diagnosticFields())
+            progressSink = null
+            lastProgressStage = "finished"
+            chunkStatsKeyCache.clear()
+            termStatsCache.clearMemory()
+            segmentAlienCache.clear()
+        }
     }
 
     private fun emptyFingerprint(title: String, author: String): NovelFingerprint {
@@ -258,11 +292,29 @@ class NovelPollutionAnalyzer(
             .ifEmpty { chunks.take(max(1, chunks.size * 7 / 10)) }
     }
 
+    private fun scoreAndDetectFinal(
+        chunks: List<TextChunk>,
+        fingerprint: NovelFingerprint,
+        progress: ((String) -> Unit)?
+    ): FinalDetectionResult {
+        progress?.invoke("final_score_start chunks=${chunks.size}")
+        val scoredChunks = chunks.map { chunk -> scoreChunk(chunk, fingerprint) }
+        progress?.invoke("final_score_done chunks=${scoredChunks.size}")
+        progressStage("memory_checkpoint", "at" to "final_score_done", "scored" to scoredChunks.size)
+        progress?.invoke("detect_start")
+        val suggestions = detectPollutedChapters(scoredChunks, fingerprint, progress)
+        return FinalDetectionResult(
+            suggestions = suggestions,
+            reportChunkScores = scoredChunks
+        )
+    }
+
     private fun buildFingerprint(
         title: String,
         author: String,
         chunks: List<TextChunk>
     ): NovelFingerprint {
+        progressStage("fingerprint_build_start", "chunks" to chunks.size)
         val stats = collectFingerprintTermStats(chunks)
         val scored = suppressContainedFeatures(stats.values
             .asSequence()
@@ -281,6 +333,14 @@ class NovelPollutionAnalyzer(
         log(
             "fingerprint.build",
             "chunks=${chunks.size} terms=${stats.size} core=${core.size} support=${support.size} relations=${relationEdges.size}"
+        )
+        progressStage(
+            "fingerprint_build_done",
+            "chunks" to chunks.size,
+            "terms" to stats.size,
+            "core" to core.size,
+            "support" to support.size,
+            "relations" to relationEdges.size
         )
         log(
             "fingerprint.top",
@@ -1921,6 +1981,12 @@ class NovelPollutionAnalyzer(
         return chunks
     }
 
+    private fun registerCacheableChunks(chunks: List<TextChunk>) {
+        chunkStatsKeyCache.clear()
+        chunks.forEach { chunk -> chunkStatsKeyCache[chunk] = termStatsCacheKey(chunk) }
+        progressStage("term_stats_cache_registered", "chunks" to chunks.size)
+    }
+
     private fun collectTermStats(chunks: List<TextChunk>): Map<String, MutableTermStats> {
         if (chunks.size == 1) return cachedTermStats(chunks.first())
         val stats = LinkedHashMap<String, MutableTermStats>()
@@ -1936,6 +2002,7 @@ class NovelPollutionAnalyzer(
     private fun collectFingerprintTermStats(chunks: List<TextChunk>): Map<String, MutableTermStats> {
         if (chunks.size <= 1) return collectTermStats(chunks)
 
+        progressStage("fingerprint_terms_light_start", "chunks" to chunks.size)
         val lightStats = LinkedHashMap<String, LightTermStats>()
         chunks.forEach { chunk ->
             cachedTermStats(chunk).values.forEach { source ->
@@ -1943,6 +2010,7 @@ class NovelPollutionAnalyzer(
                 stat.recordHits(chunk.chapterIndex, source.totalHitCount)
             }
         }
+        progressStage("fingerprint_terms_light_done", "chunks" to chunks.size, "lightTerms" to lightStats.size)
 
         val keepTerms = lightStats
             .asSequence()
@@ -1954,6 +2022,7 @@ class NovelPollutionAnalyzer(
             .toHashSet()
         if (keepTerms.isEmpty()) return emptyMap()
 
+        progressStage("fingerprint_terms_full_start", "chunks" to chunks.size, "keepTerms" to keepTerms.size)
         val stats = LinkedHashMap<String, MutableTermStats>()
         chunks.forEach { chunk ->
             for (source in cachedTermStats(chunk).values) {
@@ -1962,12 +2031,13 @@ class NovelPollutionAnalyzer(
                 stat.mergeFrom(chunk.chapterIndex, source)
             }
         }
+        progressStage("fingerprint_terms_full_done", "chunks" to chunks.size, "terms" to stats.size)
         return stats
     }
 
     private fun cachedTermStats(chunk: TextChunk): Map<String, MutableTermStats> {
-        if (chunk !in cacheableChunks) return computeTermStats(chunk)
-        return chunkStatsCache.getOrPut(chunk) { computeTermStats(chunk) }
+        val key = chunkStatsKeyCache[chunk] ?: return computeTermStats(chunk)
+        return termStatsCache.getOrPut(key) { computeTermStats(chunk) }
     }
 
     private fun computeTermStats(chunk: TextChunk): Map<String, MutableTermStats> {
@@ -1977,6 +2047,50 @@ class NovelPollutionAnalyzer(
             stat.record(chunk, occurrence)
         }
         return stats
+    }
+
+    private fun termStatsCacheKey(chunk: TextChunk): TermStatsCacheKey {
+        return TermStatsCacheKey(
+            version = TERM_STATS_CACHE_VERSION,
+            chunkSize = config.chunkSize,
+            chunkOverlap = config.chunkOverlap,
+            chapterIndex = chunk.chapterIndex,
+            chunkIndex = chunk.chunkIndex,
+            startOffset = chunk.startOffset,
+            endOffset = chunk.endOffset,
+            chapterLength = chunk.chapterLength,
+            textLength = chunk.text.length,
+            textHash = sha256(chunk.text)
+        )
+    }
+
+    private fun progressStage(stage: String, vararg fields: Pair<String, Any?>) {
+        lastProgressStage = stage
+        val parts = ArrayList<Pair<String, Any?>>()
+        fields.forEach { parts.add(it) }
+        heapDiagnosticFields().forEach { parts.add(it) }
+        val line = buildString {
+            append(stage)
+            parts.forEach { (name, value) -> append(" $name=$value") }
+        }
+        progressSink?.invoke(line)
+        log("progress.$stage", line)
+    }
+
+    private fun heapDiagnosticFields(): List<Pair<String, Any?>> {
+        val runtime = Runtime.getRuntime()
+        val usedMb = (runtime.totalMemory() - runtime.freeMemory()) / BYTES_PER_MIB
+        val totalMb = runtime.totalMemory() / BYTES_PER_MIB
+        val maxMb = runtime.maxMemory() / BYTES_PER_MIB
+        return listOf(
+            "heapUsedMb" to usedMb,
+            "heapTotalMb" to totalMb,
+            "heapMaxMb" to maxMb
+        )
+    }
+
+    private fun sha256(value: String): String {
+        return sha256Static(value)
     }
 
     private fun candidateOccurrences(text: String): Sequence<TermOccurrence> = sequence {
@@ -2552,6 +2666,39 @@ class NovelPollutionAnalyzer(
         val strongTyped: Boolean
     )
 
+    private data class FinalDetectionResult(
+        val suggestions: List<CleanSuggestion>,
+        val reportChunkScores: List<ChunkScore>
+    )
+
+    private data class TermStatsCacheKey(
+        val version: Int,
+        val chunkSize: Int,
+        val chunkOverlap: Int,
+        val chapterIndex: Int,
+        val chunkIndex: Int,
+        val startOffset: Int,
+        val endOffset: Int,
+        val chapterLength: Int,
+        val textLength: Int,
+        val textHash: String
+    ) {
+        fun stableText(): String {
+            return listOf(
+                version,
+                chunkSize,
+                chunkOverlap,
+                chapterIndex,
+                chunkIndex,
+                startOffset,
+                endOffset,
+                chapterLength,
+                textLength,
+                textHash
+            ).joinToString("|")
+        }
+    }
+
     private data class StructuralDecision(
         val type: PollutionType,
         val scores: List<ChunkScore>,
@@ -2599,9 +2746,9 @@ class NovelPollutionAnalyzer(
         var chunkHitCount: Int = 0,
         var runStartHitCount: Int = 0,
         var standaloneHitCount: Int = 0,
-        private var lastChapterIndex: Int = Int.MIN_VALUE,
-        private var lastChunkChapterIndex: Int = Int.MIN_VALUE,
-        private var lastChunkIndex: Int = Int.MIN_VALUE,
+        var lastChapterIndex: Int = Int.MIN_VALUE,
+        var lastChunkChapterIndex: Int = Int.MIN_VALUE,
+        var lastChunkIndex: Int = Int.MIN_VALUE,
         val leftBoundaries: MutableSet<Char> = LinkedHashSet(),
         val rightBoundaries: MutableSet<Char> = LinkedHashSet()
     ) {
@@ -2677,7 +2824,236 @@ class NovelPollutionAnalyzer(
         }
     }
 
+    private class TermStatsCache(
+        private val config: AlgorithmConfig
+    ) {
+        private val activeMaxEntries = config.termStatsActiveCacheEntries.coerceAtLeast(0)
+        private val memoryMaxEntries = config.termStatsMemoryCacheEntries.coerceAtLeast(0)
+        private val activeCache = LinkedHashMap<TermStatsCacheKey, Map<String, MutableTermStats>>(16, 0.75f, true)
+        private val memoryCache = object :
+            LinkedHashMap<TermStatsCacheKey, Map<String, MutableTermStats>>(64, 0.75f, true) {
+            override fun removeEldestEntry(
+                eldest: MutableMap.MutableEntry<TermStatsCacheKey, Map<String, MutableTermStats>>?
+            ): Boolean {
+                return size > memoryMaxEntries
+            }
+        }
+        private var activeHits = 0
+        private var memoryHits = 0
+        private var diskHits = 0
+        private var misses = 0
+        private var diskWrites = 0
+        private var diskWriteFailures = 0
+        private var diskReadFailures = 0
+        private var pruneCounter = 0
+
+        fun resetCounters() {
+            activeHits = 0
+            memoryHits = 0
+            diskHits = 0
+            misses = 0
+            diskWrites = 0
+            diskWriteFailures = 0
+            diskReadFailures = 0
+            pruneCounter = 0
+        }
+
+        fun clearMemory() {
+            activeCache.clear()
+            memoryCache.clear()
+        }
+
+        fun getOrPut(
+            key: TermStatsCacheKey,
+            compute: () -> Map<String, MutableTermStats>
+        ): Map<String, MutableTermStats> {
+            activeCache[key]?.let { cached ->
+                activeHits += 1
+                return cached
+            }
+            memoryCache.remove(key)?.let { cached ->
+                memoryHits += 1
+                putActive(key, cached)
+                return cached
+            }
+            readFromDisk(key)?.let { cached ->
+                diskHits += 1
+                putActive(key, cached)
+                return cached
+            }
+
+            misses += 1
+            val computed = compute()
+            writeToDisk(key, computed)
+            putActive(key, computed)
+            return computed
+        }
+
+        fun diagnosticFields(): Array<Pair<String, Any?>> {
+            return arrayOf(
+                "activeEntries" to activeCache.size,
+                "memoryEntries" to memoryCache.size,
+                "activeHits" to activeHits,
+                "memoryHits" to memoryHits,
+                "diskHits" to diskHits,
+                "misses" to misses,
+                "diskWrites" to diskWrites,
+                "diskWriteFailures" to diskWriteFailures,
+                "diskReadFailures" to diskReadFailures
+            )
+        }
+
+        private fun putActive(key: TermStatsCacheKey, stats: Map<String, MutableTermStats>) {
+            if (activeMaxEntries <= 0) {
+                putMemory(key, stats)
+                return
+            }
+            activeCache[key] = stats
+            while (activeCache.size > activeMaxEntries) {
+                val eldestKey = activeCache.keys.firstOrNull() ?: return
+                val eldestValue = activeCache.remove(eldestKey) ?: return
+                putMemory(eldestKey, eldestValue)
+            }
+        }
+
+        private fun putMemory(key: TermStatsCacheKey, stats: Map<String, MutableTermStats>) {
+            if (memoryMaxEntries <= 0) return
+            memoryCache[key] = stats
+        }
+
+        private fun readFromDisk(key: TermStatsCacheKey): Map<String, MutableTermStats>? {
+            val root = config.termStatsDiskCacheDirectory ?: return null
+            val file = cacheFile(root, key)
+            if (!file.isFile) return null
+            return runCatching {
+                DataInputStream(BufferedInputStream(file.inputStream())).use { input ->
+                    if (input.readInt() != TERM_STATS_DISK_MAGIC) return@runCatching null
+                    if (input.readInt() != TERM_STATS_CACHE_VERSION) return@runCatching null
+                    val count = input.readInt()
+                    if (count < 0 || count > TERM_STATS_DISK_MAX_TERMS_PER_CHUNK) return@runCatching null
+                    val stats = LinkedHashMap<String, MutableTermStats>(count.coerceAtLeast(16))
+                    repeat(count) {
+                        val stat = MutableTermStats(
+                            text = input.readUTF(),
+                            totalHitCount = input.readInt(),
+                            chapterHitCount = input.readInt(),
+                            chunkHitCount = input.readInt(),
+                            runStartHitCount = input.readInt(),
+                            standaloneHitCount = input.readInt(),
+                            lastChapterIndex = input.readInt(),
+                            lastChunkChapterIndex = input.readInt(),
+                            lastChunkIndex = input.readInt(),
+                            leftBoundaries = readCharSet(input),
+                            rightBoundaries = readCharSet(input)
+                        )
+                        stats[stat.text] = stat
+                    }
+                    file.setLastModified(System.currentTimeMillis())
+                    stats
+                }
+            }.getOrElse {
+                diskReadFailures += 1
+                null
+            }
+        }
+
+        private fun writeToDisk(key: TermStatsCacheKey, stats: Map<String, MutableTermStats>) {
+            val root = config.termStatsDiskCacheDirectory ?: return
+            runCatching {
+                val file = cacheFile(root, key)
+                file.parentFile?.mkdirs()
+                val tmp = File(file.parentFile, "${file.name}.${System.nanoTime()}.tmp")
+                DataOutputStream(BufferedOutputStream(tmp.outputStream())).use { output ->
+                    output.writeInt(TERM_STATS_DISK_MAGIC)
+                    output.writeInt(TERM_STATS_CACHE_VERSION)
+                    output.writeInt(stats.size)
+                    stats.values.forEach { stat ->
+                        output.writeUTF(stat.text)
+                        output.writeInt(stat.totalHitCount)
+                        output.writeInt(stat.chapterHitCount)
+                        output.writeInt(stat.chunkHitCount)
+                        output.writeInt(stat.runStartHitCount)
+                        output.writeInt(stat.standaloneHitCount)
+                        output.writeInt(stat.lastChapterIndex)
+                        output.writeInt(stat.lastChunkChapterIndex)
+                        output.writeInt(stat.lastChunkIndex)
+                        writeCharSet(output, stat.leftBoundaries)
+                        writeCharSet(output, stat.rightBoundaries)
+                    }
+                }
+                if (file.exists()) file.delete()
+                if (!tmp.renameTo(file)) {
+                    tmp.delete()
+                    diskWriteFailures += 1
+                    return
+                }
+                diskWrites += 1
+                maybePruneDisk(root)
+            }.onFailure {
+                diskWriteFailures += 1
+            }
+        }
+
+        private fun cacheFile(root: File, key: TermStatsCacheKey): File {
+            val fileName = sha256Static(key.stableText()) + ".bin"
+            return File(File(root, fileName.take(2)), fileName)
+        }
+
+        private fun maybePruneDisk(root: File) {
+            pruneCounter += 1
+            if (pruneCounter % TERM_STATS_DISK_PRUNE_INTERVAL != 0) return
+            val files = root.walkTopDown()
+                .filter { file -> file.isFile && file.extension == "bin" }
+                .map { file -> DiskEntry(file, file.length(), file.lastModified()) }
+                .toList()
+            var totalBytes = files.sumOf { entry -> entry.bytes }
+            var totalEntries = files.size
+            files.sortedWith(compareBy<DiskEntry> { entry -> entry.lastModified }.thenBy { entry -> entry.file.name })
+                .forEach { entry ->
+                    if (totalEntries <= config.termStatsDiskCacheMaxEntries &&
+                        totalBytes <= config.termStatsDiskCacheMaxBytes
+                    ) {
+                        return
+                    }
+                    if (entry.file.delete()) {
+                        totalEntries -= 1
+                        totalBytes -= entry.bytes
+                    }
+                }
+        }
+
+        private fun readCharSet(input: DataInputStream): MutableSet<Char> {
+            val size = input.readInt().coerceIn(0, TERM_STATS_BOUNDARY_CACHE_LIMIT)
+            val chars = LinkedHashSet<Char>(size)
+            repeat(size) { chars.add(input.readChar()) }
+            return chars
+        }
+
+        private fun writeCharSet(output: DataOutputStream, chars: Set<Char>) {
+            output.writeInt(chars.size.coerceAtMost(TERM_STATS_BOUNDARY_CACHE_LIMIT))
+            chars.take(TERM_STATS_BOUNDARY_CACHE_LIMIT).forEach { char -> output.writeChar(char.code) }
+        }
+
+        private data class DiskEntry(
+            val file: File,
+            val bytes: Long,
+            val lastModified: Long
+        )
+    }
+
     private companion object {
+        private const val BYTES_PER_MIB = 1024L * 1024L
+        private const val TERM_STATS_CACHE_VERSION = 1
+        private const val TERM_STATS_DISK_MAGIC = 0x56355453
+        private const val TERM_STATS_DISK_MAX_TERMS_PER_CHUNK = 500_000
+        private const val TERM_STATS_DISK_PRUNE_INTERVAL = 64
+        private const val TERM_STATS_BOUNDARY_CACHE_LIMIT = 12
+
+        private fun sha256Static(value: String): String {
+            val digest = MessageDigest.getInstance("SHA-256").digest(value.toByteArray(Charsets.UTF_8))
+            return digest.joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+        }
+
         private val stopInsideChars = setOf(
             '的', '了', '着', '过', '是', '在', '有', '和', '与', '及', '或', '也', '都', '就', '还', '又',
             '很', '更', '最', '这', '那', '哪', '个', '些', '么', '吗', '呢', '啊', '吧', '把', '被', '从',

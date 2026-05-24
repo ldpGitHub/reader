@@ -1,7 +1,9 @@
 package com.ldp.reader.algorithmtest.core
 
 import com.ldp.reader.algorithmtest.source.BatchNovelTargets
+import com.ldp.reader.sourceengine.content.v5.AlgorithmConfig as V5AlgorithmConfig
 import com.ldp.reader.sourceengine.content.v5.ChapterInput as V5ChapterInput
+import com.ldp.reader.sourceengine.content.v5.NovelPollutionAnalyzer as V5NovelPollutionAnalyzer
 import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
 import com.ldp.reader.sourceengine.content.v5.V5ChapterValidationPlanner
 import com.ldp.reader.sourceengine.content.v5.V5DiagnosticSink
@@ -39,6 +41,14 @@ class RawCorpusTargetReplayTest {
         val expectedSuggestIndexes = parseExpectedSuggestIndexes(
             System.getProperty("rawCorpusExpectedSuggestIndexes").orEmpty()
         )
+        val termStatsCacheDir = File(outputRoot, "source_engine_v5_term_stats").apply { mkdirs() }
+        val validator = V5SourceChapterValidator(
+            analyzerFactory = {
+                V5NovelPollutionAnalyzer(
+                    V5AlgorithmConfig(termStatsDiskCacheDirectory = termStatsCacheDir)
+                )
+            }
+        )
 
         val failures = ArrayList<String>()
         val summary = File(outputRoot, "summary.tsv")
@@ -59,7 +69,7 @@ class RawCorpusTargetReplayTest {
                 )
             }
             val chapters = selection.analysis.map { file -> file.readChapter() }
-            val result = V5SourceChapterValidator().validate(
+            val result = validator.validate(
                 V5SourceRunRequest(
                     title = item.title,
                     author = item.author,

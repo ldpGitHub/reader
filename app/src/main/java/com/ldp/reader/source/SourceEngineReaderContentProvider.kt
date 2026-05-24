@@ -13,7 +13,9 @@ import com.ldp.reader.sourceengine.content.BookContentFingerprint
 import com.ldp.reader.sourceengine.content.BookContentFingerprinter
 import com.ldp.reader.sourceengine.content.BookContentFingerprintProfile
 import com.ldp.reader.sourceengine.legado.LegadoSourceEngine
+import com.ldp.reader.sourceengine.content.v5.AlgorithmConfig
 import com.ldp.reader.sourceengine.content.v5.ChapterInput
+import com.ldp.reader.sourceengine.content.v5.NovelPollutionAnalyzer
 import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkResult
 import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
 import com.ldp.reader.sourceengine.content.v5.V5ChapterValidationPlanner
@@ -35,6 +37,7 @@ import com.ldp.reader.sourceengine.search.RankedSearchBook
 import com.ldp.reader.sourceengine.search.SearchCandidate
 import com.ldp.reader.utils.BookCoverUrl
 import com.ldp.reader.utils.BookManager
+import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.MD5Utils
 import com.ldp.reader.widget.page.TxtChapter
 import kotlinx.coroutines.awaitAll
@@ -95,7 +98,15 @@ class SourceEngineReaderContentProvider internal constructor(
     private val bookContentWaterfallCache = Collections.synchronizedMap(mutableMapOf<String, BookContentWaterfall>())
     private val catalogTailTrimLocks = Collections.synchronizedMap(mutableMapOf<String, Mutex>())
     private val v5ValidationPlanner = V5ChapterValidationPlanner()
-    private val v5SourceValidator = V5SourceChapterValidator()
+    private val v5SourceValidator = V5SourceChapterValidator(
+        analyzerFactory = {
+            NovelPollutionAnalyzer(
+                AlgorithmConfig(
+                    termStatsDiskCacheDirectory = File(Constant.BOOK_CACHE_PATH, V5_TERM_STATS_CACHE_DIR_NAME)
+                )
+            )
+        }
+    )
     private val v5MarkCache = SourceEngineV5MarkCache()
     private val v5BackgroundScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val v5ValidationSemaphore = Semaphore(V5_VALIDATION_MAX_CONCURRENT_EPOCHS)
@@ -2934,7 +2945,8 @@ class SourceEngineReaderContentProvider internal constructor(
                             AiBridgeTrace.fields(
                                 "reason" to error.javaClass.simpleName,
                                 "trigger" to reason,
-                                "source" to sourceLabel(resolved.book)
+                                "source" to sourceLabel(resolved.book),
+                                *runtimeHeapTraceFields()
                             )
                         )
                         return@launch
@@ -3021,6 +3033,19 @@ class SourceEngineReaderContentProvider internal constructor(
             )
         }
         rawContentByChapterIndex.clear()
+        AiBridgeTrace.event(
+            "source_catalog_v5_validate_input_ready",
+            resolved.detail.name,
+            AiBridgeTrace.fields(
+                "trigger" to reason,
+                "source" to sourceKey,
+                "analysis" to inputs.size,
+                "targets" to plan.targetIndexes.size,
+                "memory" to plan.usableContext,
+                "chars" to inputs.sumOf { input -> input.content.length },
+                *runtimeHeapTraceFields()
+            )
+        )
         val result = v5SourceValidator.validate(
             V5SourceRunRequest(
                 title = resolved.detail.name,
@@ -3292,6 +3317,18 @@ class SourceEngineReaderContentProvider internal constructor(
             "source_catalog_v5_diagnostic",
             resolved.detail.name,
             "source_${sourceLabel(resolved.book).debugToken()}_${line.debugToken()}"
+        )
+    }
+
+    private fun runtimeHeapTraceFields(): Array<Pair<String, Any?>> {
+        val runtime = Runtime.getRuntime()
+        val usedMb = (runtime.totalMemory() - runtime.freeMemory()) / BYTES_PER_MIB
+        val totalMb = runtime.totalMemory() / BYTES_PER_MIB
+        val maxMb = runtime.maxMemory() / BYTES_PER_MIB
+        return arrayOf(
+            "heapUsedMb" to usedMb,
+            "heapTotalMb" to totalMb,
+            "heapMaxMb" to maxMb
         )
     }
 
@@ -5370,6 +5407,7 @@ class SourceEngineReaderContentProvider internal constructor(
         private const val MAX_DETAIL_FALLBACK_TAIL_RANK_CONCURRENT_PROBES = 8
         private const val MAX_DETAIL_FALLBACK_EARLY_TAIL_RANK_CANDIDATES = 3
         private const val MAX_CONTENT_FALLBACK_CONCURRENT_PROBES = 5
+        private const val BYTES_PER_MIB = 1024L * 1024L
         private const val FIRST_DISPLAY_TRUSTED_SOURCE_COUNT = 2
         private const val FIRST_DISPLAY_TIER_FILL_TIMEOUT_MS = 30_000L
         private const val BOOK_CONTENT_TIER_TARGET_SIZE = 5
@@ -5385,6 +5423,7 @@ class SourceEngineReaderContentProvider internal constructor(
         private const val V5_VALIDATION_MAX_CONCURRENT_EPOCHS = 1
         private const val V5_VALIDATION_CONTENT_TIMEOUT_MS = 15_000L
         private const val V5_VALIDATION_TOTAL_TIMEOUT_MS = 1_800_000L
+        private const val V5_TERM_STATS_CACHE_DIR_NAME = "source_engine_v5_term_stats"
         private const val V5_SECONDARY_SOURCE_CANDIDATE_LIMIT = 2
         private const val V5_SECONDARY_SIMILARITY_RADIUS = 2
         private const val CONTENT_LOAD_REPEATED_FAILURE_THRESHOLD = 2

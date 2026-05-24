@@ -1,5 +1,7 @@
 package com.ldp.reader.sourceengine.content.v5
 
+import java.io.File
+
 enum class FeatureType {
     CHARACTER,
     ORGANIZATION,
@@ -35,7 +37,12 @@ data class AlgorithmConfig(
     val relationWeight: Double = 1.4,
     val alienWeight: Double = 1.7,
     val alienRelationWeight: Double = 1.1,
-    val smooth: Double = 24.0
+    val smooth: Double = 24.0,
+    val termStatsActiveCacheEntries: Int = 8,
+    val termStatsMemoryCacheEntries: Int = 64,
+    val termStatsDiskCacheDirectory: File? = null,
+    val termStatsDiskCacheMaxBytes: Long = 96L * 1024L * 1024L,
+    val termStatsDiskCacheMaxEntries: Int = 4_096
 )
 
 data class ChapterInput(

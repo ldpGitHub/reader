@@ -1,5 +1,7 @@
 package com.ldp.reader.algorithmtest.core
 
+import java.io.File
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -161,6 +163,48 @@ class NovelPollutionAnalyzerGuardTest {
             suggestion != null
         )
         assertTrue("expected suffix offset after first third", suggestion!!.startOffset >= chapters.last().content.length / 3)
+    }
+
+    @Test
+    fun termStatsDiskCacheKeepsAnalyzerOutputEquivalent() {
+        val chapters = normalBookChapters() + ChapterInput(
+            index = 8,
+            title = "后段混入",
+            content = normalParagraph(repeat = 120) + alienParagraph(repeat = 70)
+        )
+        val config = AlgorithmConfig(
+            chunkSize = 800,
+            chunkOverlap = 120,
+            minFeatureFrequency = 3,
+            minFeatureChapterCount = 2,
+            refineRounds = 1,
+            minSuffixChunks = 1
+        )
+        val baseline = NovelPollutionAnalyzer(config).analyze("测试书", "作者", chapters)
+        val cacheDir = File("build/tmp/algorithm-test-v5-term-stats-${System.nanoTime()}")
+        val progress = ArrayList<String>()
+        val cached = NovelPollutionAnalyzer(
+            config.copy(
+                termStatsActiveCacheEntries = 1,
+                termStatsMemoryCacheEntries = 1,
+                termStatsDiskCacheDirectory = cacheDir
+            )
+        ).analyze("测试书", "作者", chapters, progress = progress::add)
+
+        assertEquals(
+            baseline.suggestions.map { suggestion -> suggestion.chapterIndex to suggestion.stateType },
+            cached.suggestions.map { suggestion -> suggestion.chapterIndex to suggestion.stateType }
+        )
+        assertEquals(
+            baseline.fingerprint.coreFeatures.map { feature -> feature.text to feature.weight },
+            cached.fingerprint.coreFeatures.map { feature -> feature.text to feature.weight }
+        )
+        assertTrue(cacheDir.walkTopDown().any { file -> file.isFile && file.extension == "bin" })
+        assertTrue(
+            progress.any { line ->
+                line.startsWith("term_stats_cache") && Regex("""diskHits=([1-9]\d*)""").containsMatchIn(line)
+            }
+        )
     }
 
     private fun analyzerForTests(): NovelPollutionAnalyzer {

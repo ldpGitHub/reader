@@ -932,7 +932,7 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
     private fun drawFooterChapterTitle(canvas: Canvas, title: String, x: Float, y: Float, rightLimit: Float) {
         val chapter = mChapterList.getOrNull(mCurChapterPos) ?: return
         val showBadge = showWrongChapters && chapter.hasHiddenSourceIntegrityMark()
-        val badgeGap = if (showBadge) ScreenUtils.dpToPx(6).toFloat() else 0f
+        val badgeGap = if (showBadge) ScreenUtils.dpToPx(FOOTER_BADGE_GAP_DP).toFloat() else 0f
         val badgeWidth = if (showBadge) footerIntegrityBadgeWidth() else 0f
         val displayTitle = fitFooterTitle(title, rightLimit - x - badgeGap - badgeWidth)
         canvas.drawText(displayTitle, x, y, mTipPaint)
@@ -972,7 +972,8 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         val oldFakeBold = mTipPaint.isFakeBoldText
         mTipPaint.textSize = oldTextSize * FOOTER_BADGE_TEXT_SCALE
         mTipPaint.isFakeBoldText = true
-        val width = mTipPaint.measureText(FOOTER_BADGE_TEXT) + ScreenUtils.dpToPx(6).toFloat() * 2
+        val horizontalPadding = ScreenUtils.dpToPx(FOOTER_BADGE_HORIZONTAL_PADDING_DP).toFloat()
+        val width = mTipPaint.measureText(FOOTER_BADGE_TEXT) + horizontalPadding * 2
         mTipPaint.textSize = oldTextSize
         mTipPaint.isFakeBoldText = oldFakeBold
         return width
@@ -989,11 +990,11 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         mTipPaint.textSize = oldTextSize * FOOTER_BADGE_TEXT_SCALE
         mTipPaint.isFakeBoldText = true
         val badgeMetrics = mTipPaint.fontMetrics
-        val horizontalPadding = ScreenUtils.dpToPx(6).toFloat()
-        val verticalPadding = ScreenUtils.dpToPx(2).toFloat()
+        val horizontalPadding = ScreenUtils.dpToPx(FOOTER_BADGE_HORIZONTAL_PADDING_DP).toFloat()
+        val verticalPadding = ScreenUtils.dpToPx(FOOTER_BADGE_VERTICAL_PADDING_DP).toFloat()
         val badgeWidth = mTipPaint.measureText(FOOTER_BADGE_TEXT) + horizontalPadding * 2
         val badgeHeight = max(
-            ScreenUtils.dpToPx(18).toFloat(),
+            ScreenUtils.dpToPx(FOOTER_BADGE_MIN_HEIGHT_DP).toFloat(),
             badgeMetrics.descent - badgeMetrics.ascent + verticalPadding * 2
         )
         val centerY = y + (normalMetrics.ascent + normalMetrics.descent) / 2
@@ -1001,7 +1002,7 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
 
         mBgPaint.style = Paint.Style.FILL
         mBgPaint.color = ContextCompat.getColor(mContext, R.color.chapter_mark_wrong_bg)
-        val cornerRadius = ScreenUtils.dpToPx(9).toFloat()
+        val cornerRadius = badgeHeight / 2
         canvas.drawRoundRect(badgeRect, cornerRadius, cornerRadius, mBgPaint)
 
         mTipPaint.color = ContextCompat.getColor(mContext, R.color.chapter_mark_wrong_text)
@@ -1669,7 +1670,11 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         private const val EXTRA_TITLE_SIZE = 4
         private const val FOOTER_TITLE_ELLIPSIS = "…"
         private const val FOOTER_BADGE_TEXT = "错章"
-        private const val FOOTER_BADGE_TEXT_SCALE = 0.72f
+        private const val FOOTER_BADGE_TEXT_SCALE = 0.62f
+        private const val FOOTER_BADGE_GAP_DP = 2
+        private const val FOOTER_BADGE_HORIZONTAL_PADDING_DP = 3
+        private const val FOOTER_BADGE_VERTICAL_PADDING_DP = 1
+        private const val FOOTER_BADGE_MIN_HEIGHT_DP = 12
 
         @JvmStatic
         fun calculateProgressTenths(
