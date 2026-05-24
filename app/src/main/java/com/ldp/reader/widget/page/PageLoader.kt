@@ -11,11 +11,13 @@ import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.ldp.reader.R
 import com.ldp.reader.model.bean.BookRecordBean
 import com.ldp.reader.model.bean.CollBookBean
 import com.ldp.reader.model.local.BookRepository
 import com.ldp.reader.model.local.ReadSettingManager
 import com.ldp.reader.source.AiBridgeTrace
+import com.ldp.reader.source.hasHiddenSourceIntegrityMark
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.IOUtils
 import com.ldp.reader.utils.ScreenUtils
@@ -112,6 +114,7 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
 
     // 当前是否是夜间模式
     private var isNightMode = false
+    private var showWrongChapters = true
 
     // 书籍绘制区域的宽高
     private var mVisibleWidth = 0
@@ -186,6 +189,21 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
 
     val marginHeight: Int
         get() = mMarginTop
+
+    fun setShowWrongChapters(showWrongChapters: Boolean) {
+        if (this.showWrongChapters == showWrongChapters) {
+            return
+        }
+        this.showWrongChapters = showWrongChapters
+        refreshSourceIntegrityMarks()
+    }
+
+    fun refreshSourceIntegrityMarks() {
+        val pageView = mPageView ?: return
+        if (pageView.isPrepare() && !pageView.isRunning()) {
+            pageView.drawCurPage(false)
+        }
+    }
 
     init {
         Log.d(TAG, "+PageLoader")
@@ -843,11 +861,12 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
                     Log.d("+绘制标题", "" + mCurPage!!.title + "" + mTipPaint)
 
                     val percentTextWidth = mTipPaint.measureText(percent)
-                    canvas.drawText(
+                    drawFooterChapterTitle(
+                        canvas,
                         mCurPage!!.title!!,
                         mMarginWidth + percentTextWidth + mMarginWidth,
                         y,
-                        mTipPaint
+                        footerTitleRightLimit()
                     )
                 }
             }
@@ -908,6 +927,92 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         val time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME)
         val x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4)
         canvas.drawText(time, x, y, mTipPaint)
+    }
+
+    private fun drawFooterChapterTitle(canvas: Canvas, title: String, x: Float, y: Float, rightLimit: Float) {
+        val chapter = mChapterList.getOrNull(mCurChapterPos) ?: return
+        val showBadge = showWrongChapters && chapter.hasHiddenSourceIntegrityMark()
+        val badgeGap = if (showBadge) ScreenUtils.dpToPx(6).toFloat() else 0f
+        val badgeWidth = if (showBadge) footerIntegrityBadgeWidth() else 0f
+        val displayTitle = fitFooterTitle(title, rightLimit - x - badgeGap - badgeWidth)
+        canvas.drawText(displayTitle, x, y, mTipPaint)
+        if (!showBadge) {
+            return
+        }
+        drawFooterIntegrityBadge(canvas, x + mTipPaint.measureText(displayTitle) + badgeGap, y)
+    }
+
+    private fun footerTitleRightLimit(): Float {
+        val visibleRight = mDisplayWidth - mMarginWidth
+        val outFrameWidth = mTipPaint.measureText("xxx")
+        val polarWidth = ScreenUtils.dpToPx(2)
+        val outFrameLeft = visibleRight - polarWidth - outFrameWidth
+        val time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME)
+        return outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(12)
+    }
+
+    private fun fitFooterTitle(title: String, maxWidth: Float): String {
+        if (maxWidth <= 0f) {
+            return ""
+        }
+        if (mTipPaint.measureText(title) <= maxWidth) {
+            return title
+        }
+        val ellipsisWidth = mTipPaint.measureText(FOOTER_TITLE_ELLIPSIS)
+        val textWidth = maxWidth - ellipsisWidth
+        if (textWidth <= 0f) {
+            return FOOTER_TITLE_ELLIPSIS
+        }
+        val count = mTipPaint.breakText(title, true, textWidth, null)
+        return title.substring(0, count) + FOOTER_TITLE_ELLIPSIS
+    }
+
+    private fun footerIntegrityBadgeWidth(): Float {
+        val oldTextSize = mTipPaint.textSize
+        val oldFakeBold = mTipPaint.isFakeBoldText
+        mTipPaint.textSize = oldTextSize * FOOTER_BADGE_TEXT_SCALE
+        mTipPaint.isFakeBoldText = true
+        val width = mTipPaint.measureText(FOOTER_BADGE_TEXT) + ScreenUtils.dpToPx(6).toFloat() * 2
+        mTipPaint.textSize = oldTextSize
+        mTipPaint.isFakeBoldText = oldFakeBold
+        return width
+    }
+
+    private fun drawFooterIntegrityBadge(canvas: Canvas, x: Float, y: Float) {
+        val oldTextColor = mTipPaint.color
+        val oldTextSize = mTipPaint.textSize
+        val oldFakeBold = mTipPaint.isFakeBoldText
+        val oldBgColor = mBgPaint.color
+        val oldBgStyle = mBgPaint.style
+
+        val normalMetrics = mTipPaint.fontMetrics
+        mTipPaint.textSize = oldTextSize * FOOTER_BADGE_TEXT_SCALE
+        mTipPaint.isFakeBoldText = true
+        val badgeMetrics = mTipPaint.fontMetrics
+        val horizontalPadding = ScreenUtils.dpToPx(6).toFloat()
+        val verticalPadding = ScreenUtils.dpToPx(2).toFloat()
+        val badgeWidth = mTipPaint.measureText(FOOTER_BADGE_TEXT) + horizontalPadding * 2
+        val badgeHeight = max(
+            ScreenUtils.dpToPx(18).toFloat(),
+            badgeMetrics.descent - badgeMetrics.ascent + verticalPadding * 2
+        )
+        val centerY = y + (normalMetrics.ascent + normalMetrics.descent) / 2
+        val badgeRect = RectF(x, centerY - badgeHeight / 2, x + badgeWidth, centerY + badgeHeight / 2)
+
+        mBgPaint.style = Paint.Style.FILL
+        mBgPaint.color = ContextCompat.getColor(mContext, R.color.chapter_mark_wrong_bg)
+        val cornerRadius = ScreenUtils.dpToPx(9).toFloat()
+        canvas.drawRoundRect(badgeRect, cornerRadius, cornerRadius, mBgPaint)
+
+        mTipPaint.color = ContextCompat.getColor(mContext, R.color.chapter_mark_wrong_text)
+        val badgeBaseline = badgeRect.centerY() - (badgeMetrics.ascent + badgeMetrics.descent) / 2
+        canvas.drawText(FOOTER_BADGE_TEXT, x + horizontalPadding, badgeBaseline, mTipPaint)
+
+        mTipPaint.color = oldTextColor
+        mTipPaint.textSize = oldTextSize
+        mTipPaint.isFakeBoldText = oldFakeBold
+        mBgPaint.color = oldBgColor
+        mBgPaint.style = oldBgStyle
     }
 
     private fun drawContent(bitmap: Bitmap?) {
@@ -1562,6 +1667,9 @@ abstract class PageLoader(pageView: PageView, collBook: CollBookBean) {
         private const val DEFAULT_MARGIN_WIDTH = 15
         private const val DEFAULT_TIP_SIZE = 12
         private const val EXTRA_TITLE_SIZE = 4
+        private const val FOOTER_TITLE_ELLIPSIS = "…"
+        private const val FOOTER_BADGE_TEXT = "错章"
+        private const val FOOTER_BADGE_TEXT_SCALE = 0.72f
 
         @JvmStatic
         fun calculateProgressTenths(

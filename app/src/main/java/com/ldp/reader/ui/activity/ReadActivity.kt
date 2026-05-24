@@ -51,6 +51,7 @@ import com.ldp.reader.utils.BrightnessUtils
 import com.ldp.reader.utils.Constant
 import com.ldp.reader.utils.LogUtils
 import com.ldp.reader.utils.ScreenUtils
+import com.ldp.reader.utils.SharedPreUtils
 import com.ldp.reader.utils.StringUtils
 import com.ldp.reader.utils.ReadingStatsUtils
 import com.ldp.reader.widget.page.PageLoader
@@ -151,6 +152,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
     private var isFullScreen = false
     private var isRegistered = false
     private var mBookId: String? = null
+    private var showWrongChaptersPrefKey: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -165,6 +167,10 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             return
         }
         mBookId = mCollBook!!._id
+        showWrongChaptersPrefKey = mBookId?.let { bookId -> SHOW_WRONG_CHAPTERS_KEY_PREFIX + bookId }
+        showWrongChapters = showWrongChaptersPrefKey?.let { key ->
+            SharedPreUtils.getInstance().getBoolean(key, true)
+        } ?: true
         readActivityStartedAtMs = System.currentTimeMillis()
         AiBridgeTrace.event(
             "source_read_activity_started",
@@ -212,6 +218,8 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         //获取页面加载器
         Log.d(TAG, "+initWidget")
         mPageLoader = binding!!.readPvPage.getPageLoader(mCollBook!!)
+        mPageLoader!!.setShowWrongChapters(showWrongChapters)
+        binding!!.readCbShowWrongChapters.isChecked = showWrongChapters
         AiBridgeTrace.event(
             "source_read_page_loader_created",
             mCollBook?.title.orEmpty(),
@@ -283,6 +291,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
             }
             persistSourceIntegrityMarksFromTxtChapters(chapters, "v5-update")
             refreshCategoryAdapter(chapters)
+            loader.refreshSourceIntegrityMarks()
             AiBridgeTrace.state(
                 "source_read_catalog_marks_applied",
                 mCollBook?.title.orEmpty(),
@@ -436,6 +445,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                     val matched = SourceEngineCatalogMarkRegistry.countMatching(chapters)
                     if (changed > 0) {
                         persistSourceIntegrityMarksFromTxtChapters(chapters, "category-finish")
+                    }
+                    if (changed > 0 || matched > 0) {
+                        mPageLoader!!.refreshSourceIntegrityMarks()
                     }
                     refreshCategoryAdapter(chapters)
                     if (changed > 0 || matched > 0) {
@@ -736,6 +748,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         )
         mPageLoader!!.collBook.bookChapters = bookChapters
         mPageLoader!!.refreshChapterList()
+        if (finalHidden > 0) {
+            mPageLoader!!.refreshSourceIntegrityMarks()
+        }
         AiBridgeTrace.state(
             "source_read_catalog_applied",
             mCollBook?.title.orEmpty(),
@@ -832,12 +847,19 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
 
     private fun applyShowWrongChapterToggle(isChecked: Boolean) {
         showWrongChapters = isChecked
+        showWrongChaptersPrefKey?.let { key ->
+            SharedPreUtils.getInstance().putBoolean(key, isChecked)
+        }
+        mPageLoader?.setShowWrongChapters(isChecked)
         refreshCategoryAdapter(mPageLoader?.chapterCategory.orEmpty())
         binding!!.readIvCategory.setSelection(adapterPositionForFullChapter(mPageLoader?.chapterPos ?: 0))
         AiBridgeTrace.event(
             "source_catalog_wrong_toggle_changed",
             mCollBook?.title.orEmpty(),
-            AiBridgeTrace.fields("showWrong" to isChecked)
+            AiBridgeTrace.fields(
+                "showWrong" to isChecked,
+                "persisted" to (showWrongChaptersPrefKey != null)
+            )
         )
     }
 
@@ -1040,6 +1062,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         const val REQUEST_MORE_SETTING = 1
         const val EXTRA_COLL_BOOK = "extra_coll_book"
         const val EXTRA_IS_COLLECTED = "extra_is_collected"
+        private const val SHOW_WRONG_CHAPTERS_KEY_PREFIX = "read_show_wrong_chapters_book_"
         private const val WHAT_CATEGORY = 1
         private const val WHAT_CHAPTER = 2
         fun startActivity(context: Context, collBook: CollBookBean?, isCollected: Boolean) {
