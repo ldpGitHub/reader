@@ -40,6 +40,7 @@ import com.ldp.reader.model.local.ReadSettingManager
 import com.ldp.reader.source.AiBridgeTrace
 import com.ldp.reader.source.SourceEngineCatalogMarkRegistry
 import com.ldp.reader.source.SourceEngineBookRoute
+import com.ldp.reader.source.SourceEnginePersistedCatalogMarks
 import com.ldp.reader.source.hasHiddenSourceIntegrityMark
 import com.ldp.reader.ui.activity.BookDetailActivity.Companion.startActivity
 import com.ldp.reader.ui.activity.MainActivity
@@ -78,6 +79,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
     private var mCategoryAdapter: CategoryAdapter? = null
     private var mCollBook: CollBookBean? = null
     private var isDisplayCatalogReady = false
+    private var persistedBookChaptersSnapshot: List<BookChapterBean> = emptyList()
     private var readingSessionStartMs = 0L
     private var readActivityStartedAtMs = 0L
     private lateinit var viewModel: ReadViewModel
@@ -279,6 +281,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 )
                 return@observe
             }
+            persistSourceIntegrityMarksFromTxtChapters(chapters, "v5-update")
             refreshCategoryAdapter(chapters)
             AiBridgeTrace.state(
                 "source_read_catalog_marks_applied",
@@ -431,6 +434,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 override fun onCategoryFinish(chapters: List<TxtChapter>) {
                     val changed = SourceEngineCatalogMarkRegistry.applyTo(chapters)
                     val matched = SourceEngineCatalogMarkRegistry.countMatching(chapters)
+                    if (changed > 0) {
+                        persistSourceIntegrityMarksFromTxtChapters(chapters, "category-finish")
+                    }
                     refreshCategoryAdapter(chapters)
                     if (changed > 0 || matched > 0) {
                         AiBridgeTrace.event(
@@ -649,11 +655,14 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         // 如果是已经收藏的，那么就从数据库中获取目录
         if (isCollected) {
             val bookChapterBeen = BookRepository.getInstance().getBookChapters(mBookId)
+            persistedBookChaptersSnapshot = bookChapterBeen
             AiBridgeTrace.event(
                 "source_read_cached_catalog_loaded",
                 mCollBook?.title.orEmpty(),
                 AiBridgeTrace.fields(
                     "chapters" to bookChapterBeen.size,
+                    "persistedMarks" to SourceEnginePersistedCatalogMarks.countMarked(bookChapterBeen),
+                    "persistedHidden" to SourceEnginePersistedCatalogMarks.countHidden(bookChapterBeen),
                     "last" to bookChapterBeen.lastOrNull()?.title.orEmpty(),
                     "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
                 )
@@ -680,8 +689,32 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
         isBiqugeLoaded: Boolean
     ) {
         val startedAt = System.currentTimeMillis()
+        val persistedChapters = if (isCollected) {
+            persistedBookChaptersSnapshot.ifEmpty {
+                mPageLoader?.collBook?.getBookChapters().orEmpty()
+            }
+        } else {
+            emptyList()
+        }
+        val persistedMerge = SourceEnginePersistedCatalogMarks.mergeInto(bookChapters, persistedChapters)
+        AiBridgeTrace.event(
+            "source_read_catalog_persisted_marks_restore",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "incomingMarks" to persistedMerge.incomingMarkedBefore,
+                "storedMarks" to persistedMerge.persistedMarked,
+                "storedHidden" to persistedMerge.persistedHidden,
+                "restored" to persistedMerge.restored,
+                "exactRestored" to persistedMerge.exactRestored,
+                "identityRestored" to persistedMerge.identityRestored,
+                "chapters" to bookChapters.size,
+                "storedChapters" to persistedChapters.size
+            )
+        )
         val markChanged = SourceEngineCatalogMarkRegistry.applyToBookChapters(bookChapters)
         val markMatched = SourceEngineCatalogMarkRegistry.countMatchingBookChapters(bookChapters)
+        val finalMarked = SourceEnginePersistedCatalogMarks.countMarked(bookChapters)
+        val finalHidden = SourceEnginePersistedCatalogMarks.countHidden(bookChapters)
         isDisplayCatalogReady = isBiqugeLoaded
         AiBridgeTrace.event(
             "source_read_catalog_apply_started",
@@ -695,6 +728,9 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 "last" to bookChapters.lastOrNull()?.title.orEmpty(),
                 "markChanged" to markChanged,
                 "markMatched" to markMatched,
+                "persistedRestored" to persistedMerge.restored,
+                "marked" to finalMarked,
+                "hidden" to finalHidden,
                 "elapsedMs" to (startedAt - readActivityStartedAtMs)
             )
         )
@@ -709,16 +745,75 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 "current" to mPageLoader!!.currentChapterTitle.orEmpty(),
                 "pageStatus" to mPageLoader!!.pageStatus,
                 "bootstrap" to !isBiqugeLoaded,
+                "marked" to finalMarked,
+                "hidden" to finalHidden,
                 "applyMs" to (System.currentTimeMillis() - startedAt),
                 "elapsedMs" to (System.currentTimeMillis() - readActivityStartedAtMs)
             )
         )
 
         // 如果是目录更新的情况，那么就需要存储更新数据
-        if (isBiqugeLoaded && mCollBook!!.isUpdate() && isCollected) {
+        if (isBiqugeLoaded && isCollected && (mCollBook!!.isUpdate() || markChanged > 0 || persistedMerge.restored > 0)) {
             BookRepository.getInstance()
                 .saveBookChaptersWithAsync(bookChapters)
+            persistedBookChaptersSnapshot = bookChapters
         }
+    }
+
+    private fun persistSourceIntegrityMarksFromTxtChapters(chapters: List<TxtChapter>, reason: String) {
+        if (!isCollected) return
+        val bookChapters = mPageLoader?.collBook?.getBookChapters()
+            ?: mCollBook?.getBookChapters()
+            ?: return
+        if (bookChapters.isEmpty()) return
+        val chaptersByLink = chapters
+            .filter { chapter -> !chapter.link.isNullOrBlank() }
+            .associateBy { chapter -> chapter.link }
+        var changed = 0
+        bookChapters.forEachIndexed { index, bean ->
+            val txtChapter = chaptersByLink[bean.link]
+                ?: chapters.firstOrNull { chapter ->
+                    (chapter.catalogIndex.takeIf { catalogIndex -> catalogIndex >= 0 } ?: index) == bean.start.toInt()
+                }
+                ?: return@forEachIndexed
+            if (bean.sourceIntegrityState != txtChapter.sourceIntegrityState ||
+                bean.sourceIntegrityConfidence != txtChapter.sourceIntegrityConfidence ||
+                bean.sourceIntegrityReason != txtChapter.sourceIntegrityReason
+            ) {
+                bean.sourceIntegrityState = txtChapter.sourceIntegrityState
+                bean.sourceIntegrityConfidence = txtChapter.sourceIntegrityConfidence
+                bean.sourceIntegrityReason = txtChapter.sourceIntegrityReason
+                changed += 1
+            }
+        }
+        val markedAfter = SourceEnginePersistedCatalogMarks.countMarked(bookChapters)
+        val hiddenAfter = SourceEnginePersistedCatalogMarks.countHidden(bookChapters)
+        if (changed <= 0) {
+            AiBridgeTrace.event(
+                "source_read_catalog_marks_persist_skipped",
+                mCollBook?.title.orEmpty(),
+                AiBridgeTrace.fields(
+                    "reason" to reason,
+                    "changed" to changed,
+                    "marked" to markedAfter,
+                    "hidden" to hiddenAfter,
+                    "chapters" to bookChapters.size
+                )
+            )
+            return
+        }
+        BookRepository.getInstance().saveBookChaptersWithAsync(bookChapters)
+        AiBridgeTrace.event(
+            "source_read_catalog_marks_persisted",
+            mCollBook?.title.orEmpty(),
+            AiBridgeTrace.fields(
+                "reason" to reason,
+                "changed" to changed,
+                "marked" to markedAfter,
+                "hidden" to hiddenAfter,
+                "chapters" to bookChapters.size
+            )
+        )
     }
 
     private fun refreshCategoryAdapter(chapters: List<TxtChapter>) {

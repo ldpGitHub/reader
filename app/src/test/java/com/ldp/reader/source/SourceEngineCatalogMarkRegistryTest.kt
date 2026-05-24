@@ -7,6 +7,7 @@ import com.ldp.reader.sourceengine.legado.LegadoRuleSet
 import com.ldp.reader.sourceengine.model.BookSource
 import com.ldp.reader.sourceengine.model.SourceBook
 import com.ldp.reader.sourceengine.model.SourceChapter
+import com.ldp.reader.widget.page.TxtChapter
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -103,6 +104,88 @@ class SourceEngineCatalogMarkRegistryTest {
         assertEquals(0, SourceEngineCatalogMarkRegistry.countMatchingBookChapters(listOf(bean)))
     }
 
+    @Test
+    fun preservesExistingBookChapterMarkWhenRegistryHasNoMatchingMark() {
+        val source = source("https://empty-registry.example")
+        val book = book(source, "https://empty-registry.example/book/1")
+        val bean = chapterBean(chapter(book, 5)).apply {
+            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityConfidence = 0.8
+            sourceIntegrityReason = "cached"
+        }
+
+        assertEquals(0, SourceEngineCatalogMarkRegistry.applyToBookChapters(listOf(bean)))
+        assertEquals(V5ChapterMarkState.WRONG.name, bean.sourceIntegrityState)
+        assertEquals(0.8, bean.sourceIntegrityConfidence, 0.0)
+        assertEquals("cached", bean.sourceIntegrityReason)
+    }
+
+    @Test
+    fun preservesExistingTxtChapterMarkWhenRegistryHasNoMatchingMark() {
+        val source = source("https://empty-txt-registry.example")
+        val book = book(source, "https://empty-txt-registry.example/book/1")
+        val txtChapter = txtChapter(chapter(book, 6)).apply {
+            sourceIntegrityState = V5ChapterMarkState.BAD_EXTRACTION.name
+            sourceIntegrityConfidence = 0.7
+            sourceIntegrityReason = "cached"
+        }
+
+        assertEquals(0, SourceEngineCatalogMarkRegistry.applyTo(listOf(txtChapter)))
+        assertEquals(V5ChapterMarkState.BAD_EXTRACTION.name, txtChapter.sourceIntegrityState)
+        assertEquals(0.7, txtChapter.sourceIntegrityConfidence, 0.0)
+        assertEquals("cached", txtChapter.sourceIntegrityReason)
+    }
+
+    @Test
+    fun clearsExistingMarkWhenSameSourceBookV5RunOmitsChapter() {
+        val source = source("https://clear-stale.example")
+        val book = book(source, "https://clear-stale.example/book/1")
+        val bean = chapterBean(chapter(book, 8)).apply {
+            sourceIntegrityState = V5ChapterMarkState.NON_STORY.name
+            sourceIntegrityConfidence = 0.8
+            sourceIntegrityReason = "old"
+        }
+
+        SourceEngineCatalogMarkRegistry.record(
+            SourceEngineCatalogMarkRegistry.sourceBookKey(source.sourceUrl, book.bookUrl),
+            "clear",
+            source.sourceUrl,
+            book.name,
+            book.author,
+            listOf(mark(9, V5ChapterMarkState.WRONG))
+        )
+
+        assertEquals(1, SourceEngineCatalogMarkRegistry.applyToBookChapters(listOf(bean)))
+        assertEquals(null, bean.sourceIntegrityState)
+        assertEquals(0.0, bean.sourceIntegrityConfidence, 0.0)
+        assertEquals(null, bean.sourceIntegrityReason)
+    }
+
+    @Test
+    fun replacesExistingBadMarkWhenV5ReturnsNormalForSameChapter() {
+        val source = source("https://normal.example")
+        val book = book(source, "https://normal.example/book/1")
+        val bean = chapterBean(chapter(book, 8)).apply {
+            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityConfidence = 0.8
+            sourceIntegrityReason = "cached"
+        }
+
+        SourceEngineCatalogMarkRegistry.record(
+            SourceEngineCatalogMarkRegistry.sourceBookKey(source.sourceUrl, book.bookUrl),
+            "normal",
+            source.sourceUrl,
+            book.name,
+            book.author,
+            listOf(mark(8, V5ChapterMarkState.NORMAL))
+        )
+
+        assertEquals(1, SourceEngineCatalogMarkRegistry.applyToBookChapters(listOf(bean)))
+        assertEquals(V5ChapterMarkState.NORMAL.name, bean.sourceIntegrityState)
+        assertEquals(0.9, bean.sourceIntegrityConfidence, 0.0)
+        assertEquals("test", bean.sourceIntegrityReason)
+    }
+
     private fun source(url: String): BookSource {
         val emptyRules = LegadoRuleSet("empty", emptyMap())
         return BookSource(
@@ -149,6 +232,14 @@ class SourceEngineCatalogMarkRegistryTest {
             link = SourceEngineBookRoute.chapterId(chapter)
             title = chapter.name
             start = chapter.index.toLong()
+        }
+    }
+
+    private fun txtChapter(chapter: SourceChapter): TxtChapter {
+        return TxtChapter().apply {
+            link = SourceEngineBookRoute.chapterId(chapter)
+            title = chapter.name
+            catalogIndex = chapter.index
         }
     }
 

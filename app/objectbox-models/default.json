@@ -36,7 +36,7 @@
     },
     {
       "id": "2:6444255952669030699",
-      "lastPropertyId": "10:5599133930890085868",
+      "lastPropertyId": "13:7321325298230922666",
       "name": "ObjectBoxBookChapterEntity",
       "properties": [
         {
@@ -93,6 +93,21 @@
           "id": "10:5599133930890085868",
           "name": "end",
           "type": 6
+        },
+        {
+          "id": "11:4301781320061498792",
+          "name": "sourceIntegrityState",
+          "type": 9
+        },
+        {
+          "id": "12:4797060658865783616",
+          "name": "sourceIntegrityConfidence",
+          "type": 8
+        },
+        {
+          "id": "13:7321325298230922666",
+          "name": "sourceIntegrityReason",
+          "type": 9
         }
       ],
       "relations": []

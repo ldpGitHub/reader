@@ -84,7 +84,7 @@ internal class SourceEngineV5MarkCache(
 
     private companion object {
         private const val CACHE_DIR_NAME = "source_engine_v5_marks"
-        private const val SCHEMA_VERSION = 3
+        private const val SCHEMA_VERSION = 5
         private val gson = Gson()
     }
 }

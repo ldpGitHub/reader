@@ -59,9 +59,14 @@ object SourceEngineCatalogMarkRegistry {
     fun applyTo(chapters: List<TxtChapter>): Int {
         var changed = 0
         chapters.forEach { chapter ->
-            val mark = markForChapterLink(chapter.link)
-            if (chapter.applyIntegrityMark(mark)) {
-                changed += 1
+            when (val resolution = markResolutionForChapterLink(chapter.link)) {
+                is MarkResolution.Found -> {
+                    if (chapter.applyIntegrityMark(resolution.mark)) changed += 1
+                }
+                MarkResolution.Clear -> {
+                    if (chapter.applyIntegrityMark(null)) changed += 1
+                }
+                MarkResolution.NoRegistry -> Unit
             }
         }
         return changed
@@ -71,9 +76,14 @@ object SourceEngineCatalogMarkRegistry {
     fun applyToBookChapters(chapters: List<BookChapterBean>): Int {
         var changed = 0
         chapters.forEach { chapter ->
-            val mark = markForChapterLink(chapter.link)
-            if (chapter.applyIntegrityMark(mark)) {
-                changed += 1
+            when (val resolution = markResolutionForChapterLink(chapter.link)) {
+                is MarkResolution.Found -> {
+                    if (chapter.applyIntegrityMark(resolution.mark)) changed += 1
+                }
+                MarkResolution.Clear -> {
+                    if (chapter.applyIntegrityMark(null)) changed += 1
+                }
+                MarkResolution.NoRegistry -> Unit
             }
         }
         return changed
@@ -81,12 +91,12 @@ object SourceEngineCatalogMarkRegistry {
 
     @Synchronized
     fun countMatching(chapters: List<TxtChapter>): Int {
-        return chapters.count { chapter -> markForChapterLink(chapter.link) != null }
+        return chapters.count { chapter -> markResolutionForChapterLink(chapter.link) is MarkResolution.Found }
     }
 
     @Synchronized
     fun countMatchingBookChapters(chapters: List<BookChapterBean>): Int {
-        return chapters.count { chapter -> markForChapterLink(chapter.link) != null }
+        return chapters.count { chapter -> markResolutionForChapterLink(chapter.link) is MarkResolution.Found }
     }
 
     @Synchronized
@@ -100,16 +110,25 @@ object SourceEngineCatalogMarkRegistry {
         return sourceUrl + "\n" + bookUrl
     }
 
-    private fun markForChapterLink(link: String?): V5ChapterMarkResult? {
-        if (!SourceEngineBookRoute.isChapterId(link)) return null
+    private fun markResolutionForChapterLink(link: String?): MarkResolution {
+        if (!SourceEngineBookRoute.isChapterId(link)) return MarkResolution.NoRegistry
         val payload = runCatching { SourceEngineBookRoute.decodeChapterId(requireNotNull(link)) }.getOrNull()
-            ?: return null
+            ?: return MarkResolution.NoRegistry
         val sourceBookKey = sourceBookKey(payload.sourceUrl, payload.bookUrl)
-        return marksBySourceBook[sourceBookKey]?.get(payload.index)
-            ?: sourceBookIdentityKey(payload.sourceUrl, payload.bookName, payload.author)
-                ?.let { key -> marksBySourceBookIdentity[key]?.get(payload.index) }
-            ?: bookIdentityKey(payload.bookName, payload.author)
-                ?.let { key -> marksByBookIdentityTitle[key]?.get(normalizedChapterTitle(payload.chapterName)) }
+        marksBySourceBook[sourceBookKey]?.let { marks ->
+            return marks[payload.index]?.let { mark -> MarkResolution.Found(mark) } ?: MarkResolution.Clear
+        }
+        sourceBookIdentityKey(payload.sourceUrl, payload.bookName, payload.author)?.let { key ->
+            marksBySourceBookIdentity[key]?.let { marks ->
+                return marks[payload.index]?.let { mark -> MarkResolution.Found(mark) } ?: MarkResolution.Clear
+            }
+        }
+        bookIdentityKey(payload.bookName, payload.author)?.let { key ->
+            marksByBookIdentityTitle[key]?.get(normalizedChapterTitle(payload.chapterName))?.let { mark ->
+                return MarkResolution.Found(mark)
+            }
+        }
+        return MarkResolution.NoRegistry
     }
 
     private fun sourceBookIdentityKey(sourceUrl: String?, bookName: String?, author: String?): String? {
@@ -137,6 +156,12 @@ object SourceEngineCatalogMarkRegistry {
 
     private fun normalizedChapterTitle(value: String?): String {
         return normalizedIdentityPart(value)
+    }
+
+    private sealed class MarkResolution {
+        data class Found(val mark: V5ChapterMarkResult) : MarkResolution()
+        object Clear : MarkResolution()
+        object NoRegistry : MarkResolution()
     }
 
     private fun TxtChapter.applyIntegrityMark(mark: V5ChapterMarkResult?): Boolean {

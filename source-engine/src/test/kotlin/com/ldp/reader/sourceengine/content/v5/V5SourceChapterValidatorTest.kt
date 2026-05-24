@@ -95,6 +95,95 @@ class V5SourceChapterValidatorTest {
     }
 
     @Test
+    fun detectsEarlyPollutedSuffixAfterShortValidOpening() {
+        val validator = V5SourceChapterValidator()
+        val chapters = normalBookChapters() + ChapterInput(
+            index = 8,
+            title = "第九章 取剑",
+            content = "陈迹走到老耳朵身边，看着甲板外的大海，低声问起青云宗的旧事。" +
+                "\n" +
+                alienParagraph(repeat = 50)
+        )
+
+        val result = validator.validate(
+            V5SourceRunRequest(
+                title = "测试书",
+                author = "作者",
+                sourceKey = "source-a",
+                chapters = chapters
+            )
+        )
+
+        val mark = result.marks.first { it.chapterIndex == 8 }
+        assertEquals(debugSummary(result, mark), V5ChapterMarkState.WRONG, mark.state)
+        assertTrue(
+            debugSummary(result, mark),
+            mark.suggestionState == NovelStateOutputType.POLLUTED_SUFFIX ||
+                mark.suggestionState == NovelStateOutputType.POLLUTED_RUN
+        )
+    }
+
+    @Test
+    fun keepsNormalEarlySceneTransitionClean() {
+        val validator = V5SourceChapterValidator()
+        val chapters = normalBookChapters() + ChapterInput(
+            index = 8,
+            title = "第九章 入谷",
+            content = "陈迹离开甲板后，望见远处山门，心中想起老耳朵先前说过的话。" +
+                "\n" +
+                normalParagraph(repeat = 50)
+        )
+
+        val result = validator.validate(
+            V5SourceRunRequest(
+                title = "测试书",
+                author = "作者",
+                sourceKey = "source-a",
+                chapters = chapters
+            )
+        )
+
+        val mark = result.marks.first { it.chapterIndex == 8 }
+        assertEquals(debugSummary(result, mark), V5ChapterMarkState.NORMAL, mark.state)
+    }
+
+    @Test
+    fun keepsEarlyNewArcCleanWhenFutureChaptersContinueIt() {
+        val validator = V5SourceChapterValidator()
+        val chapters = normalBookChapters() + listOf(
+            ChapterInput(
+                index = 8,
+                title = "第九章 白塔",
+                content = "陈迹离开甲板后，听老耳朵提起白塔城的旧案。" +
+                    "\n" +
+                    newArcParagraph(repeat = 50)
+            ),
+            ChapterInput(
+                index = 9,
+                title = "第十章 星火令",
+                content = newArcParagraph(repeat = 70)
+            ),
+            ChapterInput(
+                index = 10,
+                title = "第十一章 林岚",
+                content = newArcParagraph(repeat = 70)
+            )
+        )
+
+        val result = validator.validate(
+            V5SourceRunRequest(
+                title = "测试书",
+                author = "作者",
+                sourceKey = "source-a",
+                chapters = chapters
+            )
+        )
+
+        val mark = result.marks.first { it.chapterIndex == 8 }
+        assertEquals(debugSummary(result, mark), V5ChapterMarkState.NORMAL, mark.state)
+    }
+
+    @Test
     fun emitsRunAndMarkDiagnosticsToSink() {
         val diagnostics = ArrayList<String>()
         val validator = V5SourceChapterValidator()
@@ -251,6 +340,15 @@ class V5SourceChapterValidatorTest {
         }
     }
 
+    private fun newArcParagraph(repeat: Int): String {
+        return buildString {
+            repeat(repeat) {
+                append("林岚抵达白塔城，取出星火令，与陈迹商议青云宗密藏。")
+                append("白塔城的旧案牵连玄冰剑，林岚决定同行。")
+            }
+        }
+    }
+
     private fun endingPostscriptSnippet(): String {
         return """
             码字码到没什么灵感，想了想，就给完本的太一道果写一下完结感言。
@@ -282,6 +380,14 @@ class V5SourceChapterValidatorTest {
             相关推荐
             手机阅读
         """.trimIndent()
+    }
+
+    private fun debugSummary(result: V5SourceRunResult, mark: V5ChapterMarkResult): String {
+        return buildString {
+            appendLine("mark=$mark")
+            appendLine("suggestions=${result.report.suggestions}")
+            result.report.logs.takeLast(30).forEach { line -> appendLine(line) }
+        }
     }
 
     private fun parseChapterIndex(name: String): Int {

@@ -956,6 +956,18 @@ class NovelPollutionAnalyzer(
                 graphAbsorption <= 0.15
         if (wholeChapterFragmentedRun) return true
 
+        val earlyMixedPrefixForeignRun =
+            prefixBookStrength <= 0.45 &&
+                evidenceCoverage >= 0.55 &&
+                evidenceChars >= 800 &&
+                membershipLow >= 0.90 &&
+                alienCluster >= 0.80 &&
+                alienEntityCount >= 5 &&
+                alienIdentityStrength >= 0.55 &&
+                graphAbsorption <= 0.10 &&
+                futureIntegration <= 0.10
+        if (earlyMixedPrefixForeignRun) return true
+
         val strongForeignEntityRun =
             evidenceChars >= 800 &&
                 alienCluster >= 0.90 &&
@@ -1880,7 +1892,7 @@ class NovelPollutionAnalyzer(
         val chunks = ArrayList<TextChunk>()
         chapters.forEach { chapter ->
             val content = chapter.content
-            val localChunkSize = if (content.length <= config.chunkSize * 2) {
+            val localChunkSize = if (content.length <= config.chunkSize * 4) {
                 (config.chunkSize / 2).coerceIn(320, config.chunkSize)
             } else {
                 config.chunkSize

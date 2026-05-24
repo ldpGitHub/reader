@@ -33,14 +33,49 @@ class V5ChapterValidationPlanner(
             "tailStart" to tailStart,
             "tailRiskWindow" to (chapterCount - tailStart)
         )
+        val storyChapterTitleCount = chapters.count { chapter ->
+            V5CatalogTitleClassifier.isStoryChapterTitle(chapter.title)
+        }
+        val requireStoryChapterTitle = storyChapterTitleCount >= MIN_CHAPTER_TITLE_GATE_MATCHES &&
+            storyChapterTitleCount * 100 >= chapterCount * CHAPTER_TITLE_GATE_PERCENT
+        diagnostics.emitV5Diagnostic(
+            diagnosticSink,
+            "v5.plan.title_gate",
+            "storyLike" to storyChapterTitleCount,
+            "chapters" to chapterCount,
+            "required" to requireStoryChapterTitle
+        )
+        val skippedByTitle = chapters
+            .withIndex()
+            .filter { (_, chapter) ->
+                V5CatalogTitleClassifier.shouldSkipBeforeContent(
+                    title = chapter.title,
+                    requireStoryChapterTitle = requireStoryChapterTitle
+                )
+            }
+            .map { (position, _) -> position }
+            .toSet()
+        if (skippedByTitle.isNotEmpty()) {
+            diagnostics.emitV5Diagnostic(
+                diagnosticSink,
+                "v5.plan.title_skip",
+                "count" to skippedByTitle.size,
+                "positions" to skippedByTitle.sorted().joinToString(","),
+                "indexes" to skippedByTitle.sorted().map { position -> chapters[position].index }.joinToString(",")
+            )
+        }
         val targetRolesByPosition = selectTargetProbePositions(chapterCount, tailStart)
+            .filterKeys { position -> position !in skippedByTitle }
         val targetPositions = targetRolesByPosition.keys.sorted()
         val targetPositionSet = targetPositions.toSet()
         val nearContextStart = (tailStart - NEAR_CONTEXT_SPAN).coerceAtLeast(0)
         val nearContextPositions = evenlySpacedPositions(nearContextStart, tailStart, NEAR_CONTEXT_PROBE_COUNT)
+            .filter { position -> position !in skippedByTitle }
         val midContextStart = (chapterCount * 35 / 100).coerceAtMost(nearContextStart)
         val midContextPositions = evenlySpacedPositions(midContextStart, nearContextStart, MID_CONTEXT_PROBE_COUNT)
+            .filter { position -> position !in skippedByTitle }
         val longAnchorPositions = evenlySpacedPositions(0, midContextStart, LONG_ANCHOR_PROBE_COUNT)
+            .filter { position -> position !in skippedByTitle }
 
         val rolesByPosition = LinkedHashMap<Int, String>()
         longAnchorPositions.forEach { position -> rolesByPosition[position] = ROLE_LONG_ANCHOR }
@@ -49,7 +84,11 @@ class V5ChapterValidationPlanner(
         targetRolesByPosition.forEach { (position, role) -> rolesByPosition[position] = role }
         targetPositions
             .flatMap { center -> ((center - TARGET_NEIGHBOR_RADIUS)..(center + TARGET_NEIGHBOR_RADIUS)).toList() }
-            .filter { position -> position in 0 until chapterCount && position !in targetPositionSet }
+            .filter { position ->
+                position in 0 until chapterCount &&
+                    position !in targetPositionSet &&
+                    position !in skippedByTitle
+            }
             .forEach { position -> rolesByPosition.putIfAbsent(position, ROLE_TARGET_NEIGHBOR_CONTEXT) }
 
         diagnostics.emitV5Diagnostic(
@@ -80,6 +119,7 @@ class V5ChapterValidationPlanner(
             tailStart = tailStart,
             excludedPositions = selectedPositions,
             targetPositions = targetPositionSet,
+            skippedPositions = skippedByTitle,
             maxAttempts = MAX_CONTEXT_BACKFILL_ATTEMPTS
         )
         diagnostics.emitV5Diagnostic(
@@ -191,6 +231,7 @@ class V5ChapterValidationPlanner(
         tailStart: Int,
         excludedPositions: Set<Int>,
         targetPositions: Set<Int>,
+        skippedPositions: Set<Int>,
         maxAttempts: Int
     ): List<Int> {
         if (chapterCount <= 0 || maxAttempts <= 0) return emptyList()
@@ -199,7 +240,8 @@ class V5ChapterValidationPlanner(
         fun add(position: Int) {
             if (position in 0 until endExclusive &&
                 position !in excludedPositions &&
-                position !in targetPositions
+                position !in targetPositions &&
+                position !in skippedPositions
             ) {
                 selected.add(position)
             }
@@ -260,6 +302,8 @@ class V5ChapterValidationPlanner(
         const val MIN_USABLE_CONTEXT_CHAPTERS = 8
         const val CONTEXT_RESERVE_CHAPTERS = 32
         const val MAX_CONTEXT_BACKFILL_ATTEMPTS = 256
+        const val MIN_CHAPTER_TITLE_GATE_MATCHES = 8
+        const val CHAPTER_TITLE_GATE_PERCENT = 50
 
         const val ROLE_LONG_ANCHOR = "LONG_ANCHOR"
         const val ROLE_MID_CONTEXT = "MID_CONTEXT"

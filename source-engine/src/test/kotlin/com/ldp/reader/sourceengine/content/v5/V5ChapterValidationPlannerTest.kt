@@ -65,6 +65,109 @@ class V5ChapterValidationPlannerTest {
     }
 
     @Test
+    fun skipsDefiniteNonStoryCatalogTitlesBeforeReadingContent() {
+        val chapters = chapters(20).toMutableList()
+        chapters[0] = V5ValidationChapter(0, "作者感言")
+        chapters[1] = V5ValidationChapter(1, "冬至快乐！")
+        chapters[2] = V5ValidationChapter(2, "第五册预告")
+        chapters[3] = V5ValidationChapter(3, "作者推书")
+        chapters[17] = V5ValidationChapter(17, "番外")
+        chapters[18] = V5ValidationChapter(18, "番外 作者拜年")
+        chapters[19] = V5ValidationChapter(19, "谢谢大家and番外")
+        val readPositions = ArrayList<Int>()
+
+        val plan = planner.selectChapters(chapters) { position, _ ->
+            readPositions.add(position)
+            storyContent()
+        }
+
+        assertFalse(18 in plan.analysisPositions)
+        assertFalse(19 in plan.analysisPositions)
+        assertFalse(18 in plan.targetPositions)
+        assertFalse(19 in plan.targetPositions)
+        assertFalse(0 in readPositions)
+        assertFalse(1 in readPositions)
+        assertFalse(2 in readPositions)
+        assertFalse(3 in readPositions)
+        assertFalse(17 in readPositions)
+        assertFalse(18 in readPositions)
+        assertFalse(19 in readPositions)
+        assertTrue(16 in plan.targetPositions)
+        assertTrue(plan.diagnostics.any { line ->
+            line.startsWith("v5.plan.title_skip") && line.contains("count=7")
+        })
+    }
+
+    @Test
+    fun keepsNumberedStoryTitlesInPlanEvenWhenTheyContainMetaWords() {
+        val chapters = chapters(20).toMutableList()
+        chapters[17] = V5ValidationChapter(17, "第十八章 作者说了什么")
+        chapters[18] = V5ValidationChapter(18, "89 番外")
+        chapters[19] = V5ValidationChapter(19, "第二十章 冬至快乐")
+        chapters.add(V5ValidationChapter(20, "番外一 山中旧事"))
+        val readPositions = ArrayList<Int>()
+
+        val plan = planner.selectChapters(chapters) { position, _ ->
+            readPositions.add(position)
+            storyContent()
+        }
+
+        assertTrue(17 in plan.analysisPositions)
+        assertTrue(18 in plan.analysisPositions)
+        assertTrue(19 in plan.analysisPositions)
+        assertTrue(20 in plan.analysisPositions)
+        assertFalse(plan.diagnostics.any { line -> line.startsWith("v5.plan.title_skip") })
+    }
+
+    @Test
+    fun skipsUnnumberedOutliersWhenCatalogMostlyUsesChapterTitles() {
+        val chapters = chapters(20).toMutableList()
+        chapters[17] = V5ValidationChapter(17, "荣耀五星卡牌~")
+        chapters[18] = V5ValidationChapter(18, "冬至番外○抟玄")
+        chapters[19] = V5ValidationChapter(19, "第五册预告")
+        val readPositions = ArrayList<Int>()
+
+        val plan = planner.selectChapters(chapters) { position, _ ->
+            readPositions.add(position)
+            storyContent()
+        }
+
+        assertFalse(17 in plan.analysisPositions)
+        assertFalse(18 in plan.analysisPositions)
+        assertFalse(19 in plan.analysisPositions)
+        assertFalse(17 in readPositions)
+        assertFalse(18 in readPositions)
+        assertFalse(19 in readPositions)
+        assertTrue(plan.diagnostics.any { line ->
+            line.startsWith("v5.plan.title_gate") && line.contains("required=true")
+        })
+        assertTrue(plan.diagnostics.any { line ->
+            line.startsWith("v5.plan.title_skip") && line.contains("count=3")
+        })
+    }
+
+    @Test
+    fun keepsPlainTitleCatalogWhenChapterTitleGateIsNotReliable() {
+        val chapters = (0 until 20).map { index ->
+            V5ValidationChapter(index, "青山旧事$index")
+        }
+        val readPositions = ArrayList<Int>()
+
+        val plan = planner.selectChapters(chapters) { position, _ ->
+            readPositions.add(position)
+            storyContent()
+        }
+
+        assertTrue(17 in plan.analysisPositions)
+        assertTrue(18 in plan.analysisPositions)
+        assertTrue(19 in plan.analysisPositions)
+        assertTrue(plan.diagnostics.any { line ->
+            line.startsWith("v5.plan.title_gate") && line.contains("required=false")
+        })
+        assertFalse(plan.diagnostics.any { line -> line.startsWith("v5.plan.title_skip") })
+    }
+
+    @Test
     fun emitsPlannerDiagnosticsToSink() {
         val diagnostics = ArrayList<String>()
 

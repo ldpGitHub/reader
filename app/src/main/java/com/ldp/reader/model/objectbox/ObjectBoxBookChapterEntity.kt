@@ -19,6 +19,9 @@ class ObjectBoxBookChapterEntity {
     var link: String? = null
     var title: String? = null
     var taskName: String? = null
+    var sourceIntegrityState: String? = null
+    var sourceIntegrityConfidence: Double = 0.0
+    var sourceIntegrityReason: String? = null
     var unreadble: Boolean = false
     var validInZhuishu: Boolean = false
     var start: Long = 0
@@ -35,7 +38,11 @@ class ObjectBoxBookChapterEntity {
             bookId,
             start,
             end
-        )
+        ).apply {
+            sourceIntegrityState = this@ObjectBoxBookChapterEntity.sourceIntegrityState
+            sourceIntegrityConfidence = this@ObjectBoxBookChapterEntity.sourceIntegrityConfidence
+            sourceIntegrityReason = this@ObjectBoxBookChapterEntity.sourceIntegrityReason
+        }
     }
 
     companion object {
@@ -47,6 +54,9 @@ class ObjectBoxBookChapterEntity {
             entity.link = chapter.link
             entity.title = chapter.title
             entity.taskName = chapter.taskName
+            entity.sourceIntegrityState = chapter.sourceIntegrityState
+            entity.sourceIntegrityConfidence = chapter.sourceIntegrityConfidence
+            entity.sourceIntegrityReason = chapter.sourceIntegrityReason
             entity.unreadble = chapter.getUnreadble()
             entity.validInZhuishu = chapter.getValidInZhuishu()
             entity.start = chapter.start
