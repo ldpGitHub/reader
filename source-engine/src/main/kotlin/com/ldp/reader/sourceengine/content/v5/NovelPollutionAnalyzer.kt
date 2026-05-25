@@ -619,7 +619,8 @@ class NovelPollutionAnalyzer(
                         type = PollutionType.SUFFIX_POLLUTION,
                         evidence = suffix,
                         bookModel = bookModel,
-                        arcEvidence = arcEvidence
+                        arcEvidence = arcEvidence,
+                        tailBackfillEligible = false
                     )
                     if (bestBoundaryCandidate == null || candidate.confidence > bestBoundaryCandidate.confidence) {
                         bestBoundaryCandidate = candidate
@@ -720,7 +721,8 @@ class NovelPollutionAnalyzer(
                             type = PollutionType.LOCAL_ABNORMAL,
                             evidence = run,
                             bookModel = bookModel,
-                            arcEvidence = arcEvidence
+                            arcEvidence = arcEvidence,
+                            tailBackfillEligible = false
                         )
                         val currentBoundaryCandidate = bestBoundaryCandidate
                         if (currentBoundaryCandidate == null || candidate.confidence > currentBoundaryCandidate.confidence) {
@@ -913,6 +915,14 @@ class NovelPollutionAnalyzer(
         val expositoryScore = expositorySegmentScore(evidence)
         val membershipLow = (1.0 - evidenceBelong).coerceIn(0.0, 1.0)
         val oodScore = (1.0 - max(max(prototypeSimilarity, worldConsistency), styleSimilarity)).coerceIn(0.0, 1.0)
+        val fragmentationScore = fragmentedSegmentScore(
+            suffixCohesion = suffixCohesion,
+            membershipLow = membershipLow,
+            prototypeSimilarity = prototypeSimilarity,
+            futureIntegration = futureIntegration,
+            titleAbsorption = titleAbsorption,
+            expositoryScore = expositoryScore
+        )
         val confidence = (
             0.18 * breakScore +
                 0.16 * separation +
@@ -921,7 +931,7 @@ class NovelPollutionAnalyzer(
                 0.20 * alienCluster +
                 0.04 * alienNovelty +
                 0.10 * (1.0 - graphAbsorption) +
-                0.02 * oodScore +
+                0.02 * max(oodScore, fragmentationScore) +
                 0.02 * (1.0 - futureIntegration)
             ).coerceIn(0.0, 1.0)
         val foreignRunConfidence = (
@@ -944,9 +954,23 @@ class NovelPollutionAnalyzer(
         } else {
             0.0
         }
+        val shortFragmentedSegmentConfidence = if (evidenceChars in 420..1_800 && evidenceCoverage >= 0.30) {
+            (
+                0.26 * fragmentationScore +
+                    0.18 * membershipLow +
+                    0.16 * (1.0 - suffixCohesion) +
+                    0.14 * (1.0 - prototypeSimilarity) +
+                    0.10 * alienNovelty +
+                    0.08 * alienCluster +
+                    0.08 * (1.0 - futureIntegration)
+                ).coerceIn(0.0, 1.0)
+        } else {
+            0.0
+        }
         return StructuralScores(
             breakScore = breakScore,
             suffixCohesion = suffixCohesion,
+            fragmentationScore = fragmentationScore,
             separation = separation,
             membershipLow = membershipLow,
             alienCluster = alienCluster,
@@ -965,7 +989,7 @@ class NovelPollutionAnalyzer(
             expositoryScore = expositoryScore,
             evidenceChars = evidenceChars,
             evidenceCoverage = evidenceCoverage,
-            confidence = max(max(confidence, foreignRunConfidence), shortWholeChapterConfidence)
+            confidence = max(max(max(confidence, foreignRunConfidence), shortWholeChapterConfidence), shortFragmentedSegmentConfidence)
         )
     }
 
@@ -1031,6 +1055,9 @@ class NovelPollutionAnalyzer(
                 prefixBookStrength >= 0.85 &&
                 evidenceChars >= 800
         if (sameBookReferenceSegment) return false
+
+        val shortFragmentedSegment = isShortFragmentedSegmentPollution()
+        if (shortFragmentedSegment) return true
 
         val hardMemoryBoundaryWithoutEntities =
             prefixBookStrength >= 0.65 &&
@@ -1185,27 +1212,57 @@ class NovelPollutionAnalyzer(
                 alienNovelty >= 0.55 &&
                 prefixAlienAbsorption <= 0.25
 
-        val shortFragmentedFullChapter = isShortFragmentedFullChapterPollution()
-
         return (confidence >= 0.70 && stateBreak && memoryOutlier && alienGraphOutlier) ||
             (confidence >= 0.60 && sequenceOutlier) ||
             (confidence >= 0.75 && fragmentedOutlier) ||
             (confidence >= 0.60 && sequenceBoundaryOutlier) ||
             (confidence >= 0.80 && strongAlienForeignCluster) ||
-            (confidence >= 0.55 && strongMixedAlienDominance) ||
-            shortFragmentedFullChapter
+            (confidence >= 0.55 && strongMixedAlienDominance)
     }
 
     private fun StructuralScores.isShortFragmentedFullChapterPollution(): Boolean {
-        return evidenceChars in 800..1_800 &&
+        return isShortFragmentedSegmentPollution() &&
             evidenceCoverage >= 0.90 &&
-            prefixBookStrength <= 0.05 &&
-            suffixCohesion <= 0.12 &&
-            worldConsistency >= 0.95 &&
-            futureIntegration <= 0.10 &&
-            prototypeSimilarity <= 0.20 &&
-            confidence >= 0.60 &&
-            (alienNovelty >= 0.80 || alienEntityCount >= 2 || alienCluster >= 0.35)
+            prefixBookStrength <= 0.05
+    }
+
+    private fun StructuralScores.isShortFragmentedSegmentPollution(): Boolean {
+        if (evidenceChars !in 420..1_800) return false
+        if (futureIntegration > 0.10) return false
+        if (titleAbsorption > 0.15) return false
+        if (expositoryScore > 0.35) return false
+        if (fragmentationScore < 0.58) return false
+        if (membershipLow < 0.45) return false
+        if (suffixCohesion > 0.50) return false
+        if (prototypeSimilarity > 0.70) return false
+        if (confidence < 0.55) return false
+
+        val wholeChapterOrTinyPrefix =
+            prefixBookStrength <= 0.20 &&
+                evidenceCoverage >= 0.55 &&
+                separation >= 0.35
+        val suffixAfterReadablePrefix =
+            prefixBookStrength >= 0.55 &&
+                evidenceCoverage >= 0.30 &&
+                breakScore >= 0.25 &&
+                separation >= 0.55 &&
+                worldConsistency <= 0.86 &&
+                (
+                    alienIdentityStrength >= 0.35 ||
+                        (alienCluster >= 0.70 && alienNovelty >= 0.75 && alienEntityCount >= 4) ||
+                        (
+                            alienEntityCount == 0 &&
+                                graphAbsorption <= 0.15 &&
+                                prototypeSimilarity <= 0.06 &&
+                                membershipLow >= 0.70
+                            )
+                    )
+        val identityOrStrongFragmentation =
+            alienNovelty >= 0.70 ||
+                alienEntityCount >= 2 ||
+                alienCluster >= 0.35 ||
+                fragmentationScore >= 0.68
+        return identityOrStrongFragmentation && (wholeChapterOrTinyPrefix || suffixAfterReadablePrefix)
     }
 
     private fun StructuralScores.isBoundaryBackfillCandidate(): Boolean {
@@ -1260,6 +1317,35 @@ class NovelPollutionAnalyzer(
                 confidence >= 0.70
         if (shortRunBoundaryNearMiss) return true
 
+        val shortFragmentedSegmentNearMiss =
+            evidenceChars in 420..1_800 &&
+                evidenceCoverage >= 0.30 &&
+                fragmentationScore >= 0.52 &&
+                membershipLow >= 0.40 &&
+                suffixCohesion <= 0.55 &&
+                prototypeSimilarity <= 0.75 &&
+                confidence >= 0.50 &&
+                (
+                    (prefixBookStrength <= 0.25 && evidenceCoverage >= 0.50 && separation >= 0.30) ||
+                        (
+                            prefixBookStrength >= 0.55 &&
+                                breakScore >= 0.20 &&
+                                separation >= 0.50 &&
+                                worldConsistency <= 0.88 &&
+                                (
+                                    alienIdentityStrength >= 0.30 ||
+                                        (alienCluster >= 0.65 && alienEntityCount >= 4) ||
+                                        (
+                                            alienEntityCount == 0 &&
+                                                graphAbsorption <= 0.15 &&
+                                                prototypeSimilarity <= 0.06 &&
+                                                membershipLow >= 0.70
+                                            )
+                                    )
+                            )
+                    )
+        if (shortFragmentedSegmentNearMiss) return true
+
         val shortHardBoundaryNearMiss =
             evidenceChars >= 320 &&
                 breakScore >= 0.60 &&
@@ -1300,10 +1386,13 @@ class NovelPollutionAnalyzer(
     ): StructuralDecision {
         val reasons = listOfNotNull(
             V5_SHORT_FRAGMENTED_FULL_CHAPTER_REASON.takeIf { isShortFragmentedFullChapterPollution() },
+            V5_SHORT_FRAGMENTED_SEGMENT_REASON.takeIf {
+                isShortFragmentedSegmentPollution() && !isShortFragmentedFullChapterPollution()
+            },
             "v3 break=${fmt(breakScore)} separation=${fmt(separation)} cohesion=${fmt(suffixCohesion)} evidenceChars=$evidenceChars",
             "v3 membershipLow=${fmt(membershipLow)} alienCluster=${fmt(alienCluster)} alienContinuity=${fmt(alienContinuity)} alienNovelty=${fmt(alienNovelty)} alienEntityCount=$alienEntityCount alienIdentity=${fmt(alienIdentityStrength)}",
             "v3 graphAbsorption=${fmt(graphAbsorption)} prototype=${fmt(prototypeSimilarity)} prefixBook=${fmt(prefixBookStrength)} prefixAlien=${fmt(prefixAlienAbsorption)}",
-            "v3 world=${fmt(worldConsistency)} futureIntegration=${fmt(futureIntegration)} titleAbsorption=${fmt(titleAbsorption)} expository=${fmt(expositoryScore)} ood=${fmt(oodScore)}",
+            "v3 world=${fmt(worldConsistency)} futureIntegration=${fmt(futureIntegration)} titleAbsorption=${fmt(titleAbsorption)} expository=${fmt(expositoryScore)} ood=${fmt(oodScore)} fragmentation=${fmt(fragmentationScore)}",
             "v5 sameBookArc=${arcEvidence.describe()}",
             "v3 alienEntities=${topAlienEntities(evidence, bookModel).joinToString(",")}"
         ) + evidence
@@ -1323,7 +1412,8 @@ class NovelPollutionAnalyzer(
         type: PollutionType,
         evidence: List<StructuralChunkFact>,
         bookModel: StructuralBookModel,
-        arcEvidence: SameBookArcEvidence = SameBookArcEvidence.Empty
+        arcEvidence: SameBookArcEvidence = SameBookArcEvidence.Empty,
+        tailBackfillEligible: Boolean = true
     ): V5BoundaryBackfillCandidate {
         val first = evidence.first().score.chunk
         val reasons = listOf(
@@ -1331,7 +1421,7 @@ class NovelPollutionAnalyzer(
             "v3 break=${fmt(breakScore)} separation=${fmt(separation)} cohesion=${fmt(suffixCohesion)} evidenceChars=$evidenceChars",
             "v3 membershipLow=${fmt(membershipLow)} alienCluster=${fmt(alienCluster)} alienContinuity=${fmt(alienContinuity)} alienNovelty=${fmt(alienNovelty)} alienEntityCount=$alienEntityCount alienIdentity=${fmt(alienIdentityStrength)}",
             "v3 graphAbsorption=${fmt(graphAbsorption)} prototype=${fmt(prototypeSimilarity)} prefixBook=${fmt(prefixBookStrength)} prefixAlien=${fmt(prefixAlienAbsorption)}",
-            "v3 world=${fmt(worldConsistency)} futureIntegration=${fmt(futureIntegration)} titleAbsorption=${fmt(titleAbsorption)} expository=${fmt(expositoryScore)} ood=${fmt(oodScore)}",
+            "v3 world=${fmt(worldConsistency)} futureIntegration=${fmt(futureIntegration)} titleAbsorption=${fmt(titleAbsorption)} expository=${fmt(expositoryScore)} ood=${fmt(oodScore)} fragmentation=${fmt(fragmentationScore)}",
             "v5 sameBookArc=${arcEvidence.describe()}",
             "v3 alienEntities=${topAlienEntities(evidence, bookModel).joinToString(",")}"
         ) + evidence
@@ -1347,7 +1437,8 @@ class NovelPollutionAnalyzer(
             },
             action = CleanAction.MARK_ONLY,
             confidence = confidence,
-            reasons = reasons.take(8)
+            reasons = reasons.take(8),
+            tailBackfillEligible = tailBackfillEligible
         )
     }
 
@@ -1356,7 +1447,7 @@ class NovelPollutionAnalyzer(
         bookModel: StructuralBookModel
     ): String {
         return "confidence=${fmt(confidence)} break=${fmt(breakScore)} separation=${fmt(separation)} " +
-            "cohesion=${fmt(suffixCohesion)} membershipLow=${fmt(membershipLow)} " +
+            "cohesion=${fmt(suffixCohesion)} fragmentation=${fmt(fragmentationScore)} membershipLow=${fmt(membershipLow)} " +
             "alienCluster=${fmt(alienCluster)} alienContinuity=${fmt(alienContinuity)} " +
             "alienNovelty=${fmt(alienNovelty)} alienEntityCount=$alienEntityCount alienIdentity=${fmt(alienIdentityStrength)} graphAbsorption=${fmt(graphAbsorption)} " +
             "prototype=${fmt(prototypeSimilarity)} world=${fmt(worldConsistency)} " +
@@ -1403,6 +1494,29 @@ class NovelPollutionAnalyzer(
         val punctuationDensity = (listPunctuation.toDouble() / (paragraphLike + 1)).coerceIn(0.0, 1.0)
         val connectorScore = (connectorHits.toDouble() / 5.0).coerceIn(0.0, 1.0)
         return max(connectorScore, punctuationDensity).coerceIn(0.0, 1.0)
+    }
+
+    private fun fragmentedSegmentScore(
+        suffixCohesion: Double,
+        membershipLow: Double,
+        prototypeSimilarity: Double,
+        futureIntegration: Double,
+        titleAbsorption: Double,
+        expositoryScore: Double
+    ): Double {
+        val internalTopicBreak = (1.0 - suffixCohesion).coerceIn(0.0, 1.0)
+        val weakPrototypeAnchor = (1.0 - prototypeSimilarity).coerceIn(0.0, 1.0)
+        val noFutureSupport = (1.0 - futureIntegration).coerceIn(0.0, 1.0)
+        val notTitleDriven = (1.0 - titleAbsorption).coerceIn(0.0, 1.0)
+        val notExpository = (1.0 - expositoryScore).coerceIn(0.0, 1.0)
+        return (
+            0.34 * internalTopicBreak +
+                0.24 * membershipLow +
+                0.20 * weakPrototypeAnchor +
+                0.14 * noFutureSupport +
+                0.04 * notTitleDriven +
+                0.04 * notExpository
+            ).coerceIn(0.0, 1.0)
     }
 
     private fun stripChapterOrdinal(title: String): String {
@@ -2760,6 +2874,7 @@ class NovelPollutionAnalyzer(
     private data class StructuralScores(
         val breakScore: Double,
         val suffixCohesion: Double,
+        val fragmentationScore: Double,
         val separation: Double,
         val membershipLow: Double,
         val alienCluster: Double,
@@ -2833,6 +2948,18 @@ class NovelPollutionAnalyzer(
                 scores.alienCluster >= 0.75 &&
                 pastMatchedChapters.isEmpty()
             if (strongForeignStart) return false
+            val shortFragmentedWeakPastBridge =
+                scores.evidenceChars in 420..1_800 &&
+                    scores.evidenceCoverage >= 0.30 &&
+                    scores.fragmentationScore >= 0.58 &&
+                    scores.membershipLow >= 0.45 &&
+                    scores.suffixCohesion <= 0.50 &&
+                    scores.prototypeSimilarity <= 0.70 &&
+                    scores.futureIntegration <= 0.10 &&
+                    pastReusedTerms.size <= 2 &&
+                    pastMaxLexicalSimilarity < 0.08 &&
+                    supportScore < 0.62
+            if (shortFragmentedWeakPastBridge) return false
             return (hasPastAnchor && nearbyPastArc && scores.worldConsistency >= 0.60) ||
                 nearbyStrongBridgeArc ||
                 (repeatedPastArc && scores.worldConsistency >= 0.70) ||

@@ -174,10 +174,12 @@ data class V5BoundaryBackfillCandidate(
     val stateType: NovelStateOutputType,
     val action: CleanAction,
     val confidence: Double,
-    val reasons: List<String>
+    val reasons: List<String>,
+    val tailBackfillEligible: Boolean = true
 )
 
 internal const val V5_SHORT_FRAGMENTED_FULL_CHAPTER_REASON = "short fragmented full-chapter pollution"
+internal const val V5_SHORT_FRAGMENTED_SEGMENT_REASON = "short fragmented segment pollution"
 
 data class CleanReport(
     val title: String,

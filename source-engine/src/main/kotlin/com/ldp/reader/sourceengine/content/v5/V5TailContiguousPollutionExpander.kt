@@ -118,7 +118,10 @@ class V5TailContiguousPollutionExpander(
             chapterDistance <= gapSize + 2 &&
                 leftRun.size + rightRun.size >= 2 &&
                 listOf(leftEdge, rightEdge).any { mark ->
-                    mark.reasons.any { reason -> reason.contains(V5_SHORT_FRAGMENTED_FULL_CHAPTER_REASON) }
+                    mark.reasons.any { reason ->
+                        reason.contains(V5_SHORT_FRAGMENTED_FULL_CHAPTER_REASON) ||
+                            reason.contains(V5_SHORT_FRAGMENTED_SEGMENT_REASON)
+                    }
                 }
         return fragmentedBridgeSupport
     }
@@ -154,15 +157,18 @@ class V5TailContiguousPollutionExpander(
         boundaryCandidates: List<V5BoundaryBackfillCandidate>
     ): List<V5ChapterMarkResult> {
         if (boundaryCandidates.isEmpty()) return marks
-        val candidatesByIndex = boundaryCandidates.associateBy { candidate -> candidate.chapterIndex }
+        val candidatesByIndex = boundaryCandidates
+            .filter { candidate -> candidate.tailBackfillEligible }
+            .associateBy { candidate -> candidate.chapterIndex }
         if (candidatesByIndex.isEmpty()) return marks
         val clusterStarts = confirmedClusterStarts(marks)
         if (clusterStarts.isEmpty()) return marks
         val candidateIndexes = candidatesByIndex.keys
+        val chainedStarts = connectedBoundaryBackfillStarts(marks, clusterStarts, candidateIndexes)
         return marks.map { mark ->
             val boundaryCandidate = candidatesByIndex[mark.chapterIndex]
             if (mark.state.isBadForTail || boundaryCandidate == null) return@map mark
-            val supportingStart = clusterStarts.firstOrNull { start ->
+            val supportingStart = chainedStarts[mark.chapterIndex] ?: clusterStarts.firstOrNull { start ->
                 val distance = mark.chapterIndex - start.chapterIndex
                 distance in -MAX_BOUNDARY_BACKFILL_DISTANCE..MAX_BOUNDARY_FORWARD_FILL_DISTANCE &&
                     noCleanBarrierBetween(marks, mark.chapterIndex, start.chapterIndex, candidateIndexes)
@@ -181,6 +187,35 @@ class V5TailContiguousPollutionExpander(
                     .take(12)
             )
         }
+    }
+
+    private fun connectedBoundaryBackfillStarts(
+        marks: List<V5ChapterMarkResult>,
+        clusterStarts: List<V5ChapterMarkResult>,
+        boundaryCandidateIndexes: Set<Int>
+    ): Map<Int, V5ChapterMarkResult> {
+        val sorted = marks.sortedBy { mark -> mark.chapterIndex }
+        val offsetsByIndex = sorted
+            .withIndex()
+            .associate { (offset, mark) -> mark.chapterIndex to offset }
+        val result = LinkedHashMap<Int, V5ChapterMarkResult>()
+        clusterStarts.forEach { start ->
+            var offset = offsetsByIndex[start.chapterIndex]?.minus(1) ?: return@forEach
+            var candidateSteps = 0
+            while (offset >= 0 && candidateSteps < MAX_BOUNDARY_CHAIN_BACKFILL_DISTANCE) {
+                val mark = sorted[offset]
+                if (mark.state.isBadForTail) {
+                    offset -= 1
+                    continue
+                }
+                if (mark.chapterIndex !in boundaryCandidateIndexes) break
+                if (!noCleanBarrierBetween(sorted, mark.chapterIndex, start.chapterIndex, boundaryCandidateIndexes)) break
+                result.putIfAbsent(mark.chapterIndex, start)
+                candidateSteps += 1
+                offset -= 1
+            }
+        }
+        return result
     }
 
     private fun confirmedClusterStarts(marks: List<V5ChapterMarkResult>): List<V5ChapterMarkResult> {
@@ -249,6 +284,7 @@ class V5TailContiguousPollutionExpander(
         private const val INTERNAL_GAP_FILL_CONFIDENCE = 0.70
         private const val MAX_BOUNDARY_BACKFILL_DISTANCE = 4
         private const val MAX_BOUNDARY_FORWARD_FILL_DISTANCE = 4
+        private const val MAX_BOUNDARY_CHAIN_BACKFILL_DISTANCE = 24
         private const val FOLLOWING_CLUSTER_SPAN = 8
         private const val MIN_FOLLOWING_BAD_MARKS = 2
         private const val MAX_INTERNAL_GAP_FILL_MARKS = 2

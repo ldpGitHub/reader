@@ -124,6 +124,46 @@ class V5SourceChapterValidatorTest {
     }
 
     @Test
+    fun detectsQingShanShortFragmentedTakeSwordChapter() {
+        val validator = V5SourceChapterValidator()
+        val chapters = qingShanContextChapters() + listOf(
+            ChapterInput(
+                index = 671,
+                title = "672、取剑",
+                content = qingShanFragmentedTakeSwordChapter()
+            ),
+            ChapterInput(
+                index = 672,
+                title = "673、乱流",
+                content = qingShanFragmentedFollowUpChapter()
+            )
+        )
+
+        val result = validator.validate(
+            V5SourceRunRequest(
+                title = "青山",
+                author = "测试作者",
+                sourceKey = "55dushu-qingshan",
+                chapters = chapters
+            )
+        )
+
+        val previous = result.marks.first { it.chapterIndex == 670 }
+        val mark = result.marks.first { it.chapterIndex == 671 }
+        val next = result.marks.first { it.chapterIndex == 672 }
+        assertEquals(debugSummary(result, previous), V5ChapterMarkState.NORMAL, previous.state)
+        assertEquals(debugSummary(result, mark), V5ChapterMarkState.WRONG, mark.state)
+        assertEquals(debugSummary(result, next), V5ChapterMarkState.WRONG, next.state)
+        assertTrue(
+            debugSummary(result, mark),
+            mark.reasons.any { reason ->
+                reason.contains(V5_SHORT_FRAGMENTED_FULL_CHAPTER_REASON) ||
+                    reason.contains(V5_SHORT_FRAGMENTED_SEGMENT_REASON)
+            }
+        )
+    }
+
+    @Test
     fun keepsNormalEarlySceneTransitionClean() {
         val validator = V5SourceChapterValidator()
         val chapters = normalBookChapters() + ChapterInput(
@@ -322,6 +362,69 @@ class V5SourceChapterValidatorTest {
         assertEquals(V5ChapterMarkState.WRONG, expanded.marks.first { it.chapterIndex == 8 }.state)
         assertEquals(V5ChapterMarkState.WRONG, expanded.marks.first { it.chapterIndex == 9 }.state)
         assertEquals(V5ChapterMarkState.NORMAL, expanded.marks.first { it.chapterIndex == 7 }.state)
+    }
+
+    @Test
+    fun backfillsConnectedBoundaryCandidateChainBeforeConfirmedBadCluster() {
+        val marks = (0 until 16).map { index ->
+            mark(
+                index = index,
+                state = if (index in setOf(12, 13, 15)) V5ChapterMarkState.WRONG else V5ChapterMarkState.NORMAL
+            )
+        }
+
+        val expanded = V5TailContiguousPollutionExpander().expand(
+            marks,
+            boundaryCandidates = (7..11).map { index -> boundaryCandidate(index) }
+        )
+
+        assertEquals((7..11).toList(), expanded.boundaryFilledChapterIndexes)
+        assertTrue(
+            expanded.marks
+                .filter { mark -> mark.chapterIndex in 7..15 }
+                .all { mark -> mark.state == V5ChapterMarkState.WRONG }
+        )
+        assertEquals(V5ChapterMarkState.NORMAL, expanded.marks.first { it.chapterIndex == 6 }.state)
+    }
+
+    @Test
+    fun stopsBoundaryCandidateChainAtCleanBarrier() {
+        val marks = (0 until 16).map { index ->
+            mark(
+                index = index,
+                state = if (index in setOf(12, 13, 15)) V5ChapterMarkState.WRONG else V5ChapterMarkState.NORMAL
+            )
+        }
+
+        val expanded = V5TailContiguousPollutionExpander().expand(
+            marks,
+            boundaryCandidates = listOf(8, 9, 11).map { index -> boundaryCandidate(index) }
+        )
+
+        assertEquals(listOf(11), expanded.boundaryFilledChapterIndexes)
+        assertEquals(V5ChapterMarkState.NORMAL, expanded.marks.first { it.chapterIndex == 9 }.state)
+        assertEquals(V5ChapterMarkState.NORMAL, expanded.marks.first { it.chapterIndex == 10 }.state)
+        assertEquals(V5ChapterMarkState.WRONG, expanded.marks.first { it.chapterIndex == 11 }.state)
+    }
+
+    @Test
+    fun doesNotBackfillSameBookArcAbsorbedBoundaryCandidate() {
+        val marks = (0 until 14).map { index ->
+            mark(
+                index = index,
+                state = if (index in setOf(10, 11, 13)) V5ChapterMarkState.WRONG else V5ChapterMarkState.NORMAL
+            )
+        }
+
+        val expanded = V5TailContiguousPollutionExpander().expand(
+            marks,
+            boundaryCandidates = listOf(
+                boundaryCandidate(9, tailBackfillEligible = false)
+            )
+        )
+
+        assertTrue(expanded.boundaryFilledChapterIndexes.isEmpty())
+        assertEquals(V5ChapterMarkState.NORMAL, expanded.marks.first { it.chapterIndex == 9 }.state)
     }
 
     @Test
@@ -536,6 +639,65 @@ class V5SourceChapterValidatorTest {
         }
     }
 
+    private fun qingShanContextChapters(): List<ChapterInput> {
+        return (663..670).map { index ->
+            ChapterInput(
+                index = index,
+                title = "${index + 1}、海上旧事",
+                content = qingShanNormalParagraph(repeat = 70)
+            )
+        }
+    }
+
+    private fun qingShanNormalParagraph(repeat: Int): String {
+        return buildString {
+            repeat(repeat) {
+                append("陈迹从艉楼出来，老耳朵坐在甲板边看海，楼船沿着镜城港外的潮线向前。")
+                append("靖海侯府的密谍司仍在追查旧案，陈迹把取剑之事藏在心底。")
+            }
+        }
+    }
+
+    private fun qingShanFragmentedTakeSwordChapter(): String {
+        return """
+            陈迹从艉楼出来时，海风正从甲板外灌进来，吹得灯笼轻轻摇晃。
+            老耳朵没有赌钱，他独自坐在船尾，看着远处黑沉沉的大海。
+            陈迹走到他身边：“您喜欢看大海？”
+            老耳朵依旧看着大海：“年轻时喜欢，老了以后也只剩下喜欢。”
+            陈迹沉默片刻，低声问起那把剑的来历，老耳朵却只是摆摆手，让他自己去取。
+            大家都不是傻子，屋中的烛火忽然跳了一下，像是被另一段故事强行接了进来。
+            时有些语无伦次的少年，柳琴心按住桌角，说自己昨夜看见北岭雪崩。
+            韩铁方苦笑着翻出一枚旧铁券，账册上却写着南荒粮道与三千石军粮。
+            有人提起城西的戏班，有人又说起荒村里的井，前后话头全都接不上。
+            唐军心说这事不能再拖，他把木盒塞进袖中，转身去找早已失踪的县尉。
+            廖承安忽然拍案，说南门外的税银其实在春雷观，不该交给那个卖药的道人。
+            沈照夜却只盯着窗纸上的影子，问洛河县的灯会为何提前散场。
+            苏小满把半页残谱压在茶盏下，残谱上写的又是另一座山里的婚约。
+            赵无咎听得头疼，前一句还在说军粮，后一句便跳到矿洞里的铜铃。
+        """.trimIndent()
+    }
+
+    private fun qingShanFragmentedFollowUpChapter(): String {
+        return """
+            周远山把一封没有落款的信交给掌柜，信里却夹着半张海图。
+            裴映雪说昨夜城门开过三次，守门的兵丁全都不记得来人长相。
+            白敬亭在酒楼二层听完，忽然提起北漠商队欠下的盐票。
+            众人还没问清盐票的来历，画面又跳到一处荒废驿站。
+            驿站墙上刻着旧年诗句，诗句旁边偏偏挂着王府赏银的告示。
+            孟秋娘说自己认得那枚印章，可她下一句又讲起江南水灾。
+            罗七把刀压在桌面，问谁偷走了铜匣，没人回答这个问题。
+            茶博士端来冷茶，冷茶里浮着细碎纸灰，像另一本书剩下的尾页。
+            秦渡把纸灰收进瓷瓶，瓷瓶底部却刻着草原部落的狼纹。
+            谢兰舟翻开县志，县志第一页写的是海外仙岛的船税。
+            顾南栀笑着说这不是船税，是十年前京师赌坊欠下的本金。
+            账房先生立刻摇头，转而讲起一位女将军在雪夜丢失的马。
+            冯不疑听到这里忽然拔剑，剑锋指向的却是一张婚书。
+            婚书上的新郎姓氏被墨涂掉，只剩下旁边三枚铜钱印。
+            码头外有人放起纸鸢，纸鸢线又牵出一段完全无关的山神祭。
+            这一页像被剪碎重排，所有人都在说话，却没有一句接着上一句。
+        """.trimIndent()
+    }
+
     private fun endingPostscriptSnippet(): String {
         return """
             码字码到没什么灵感，想了想，就给完本的太一道果写一下完结感言。
@@ -573,6 +735,7 @@ class V5SourceChapterValidatorTest {
         return buildString {
             appendLine("mark=$mark")
             appendLine("suggestions=${result.report.suggestions}")
+            appendLine("boundary=${result.report.boundaryBackfillCandidates}")
             result.report.logs.takeLast(30).forEach { line -> appendLine(line) }
         }
     }
@@ -602,14 +765,18 @@ class V5SourceChapterValidatorTest {
         )
     }
 
-    private fun boundaryCandidate(index: Int): V5BoundaryBackfillCandidate {
+    private fun boundaryCandidate(
+        index: Int,
+        tailBackfillEligible: Boolean = true
+    ): V5BoundaryBackfillCandidate {
         return V5BoundaryBackfillCandidate(
             chapterIndex = index,
             chapterTitle = "第${index + 1}章",
             stateType = NovelStateOutputType.POLLUTED_RUN,
             action = CleanAction.MARK_ONLY,
             confidence = 0.72,
-            reasons = listOf("near-miss alien run")
+            reasons = listOf("near-miss alien run"),
+            tailBackfillEligible = tailBackfillEligible
         )
     }
 }
