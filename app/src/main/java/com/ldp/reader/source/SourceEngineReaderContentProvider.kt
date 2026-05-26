@@ -44,13 +44,13 @@ import com.ldp.reader.widget.page.TxtChapter
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -112,8 +112,7 @@ class SourceEngineReaderContentProvider internal constructor(
     private val v5MarkCache = SourceEngineV5MarkCache()
     private val v5BackgroundScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val v5ValidationSemaphore = Semaphore(V5_VALIDATION_MAX_CONCURRENT_EPOCHS)
-    private val v5ValidationStarted = Collections.synchronizedSet(mutableSetOf<String>())
-    private val v5ValidationJobs = Collections.synchronizedMap(mutableMapOf<String, Job>())
+    private val v5ValidationTracker = SourceEngineV5ValidationTracker()
     private val v5ChapterMarks = Collections.synchronizedMap(mutableMapOf<String, Map<Int, V5ChapterMarkResult>>())
     private val contentLoadFailureCounts = Collections.synchronizedMap(mutableMapOf<String, AtomicInteger>())
     private val requestScopeIds = AtomicLong()
@@ -2938,31 +2937,7 @@ class SourceEngineReaderContentProvider internal constructor(
                 if (priority == V5ValidationPriority.READING) {
                     cancelStaleV5ValidationJobs(validationKey, resolved.detail.name, reason)
                 }
-                if (!v5ValidationStarted.add(validationKey)) {
-                    AiBridgeTrace.event(
-                        "source_catalog_v5_schedule_skipped",
-                        resolved.detail.name,
-                        AiBridgeTrace.fields(
-                            "reason" to "already_started",
-                            "trigger" to reason,
-                            "source" to sourceLabel(resolved.book),
-                            "priority" to priority.name.lowercase()
-                        )
-                    )
-                    return@forEach
-                }
-                AiBridgeTrace.event(
-                    "source_catalog_v5_epoch_started",
-                    resolved.detail.name,
-                    AiBridgeTrace.fields(
-                        "trigger" to reason,
-                        "source" to sourceLabel(resolved.book),
-                        "chapters" to resolved.catalog.chapters.size,
-                        "secondaryProbe" to allowSecondaryProbe,
-                        "priority" to priority.name.lowercase()
-                    )
-                )
-                val job = v5BackgroundScope.launch {
+                val job = v5BackgroundScope.launch(start = CoroutineStart.LAZY) {
                     try {
                         val completed = runCatching {
                             withTimeoutOrNull(V5_VALIDATION_TOTAL_TIMEOUT_MS) {
@@ -2982,7 +2957,6 @@ class SourceEngineReaderContentProvider internal constructor(
                                 }
                             }
                         }.getOrElse { error ->
-                            v5ValidationStarted.remove(validationKey)
                             if (error is CancellationException) {
                                 AiBridgeTrace.event(
                                     "source_catalog_v5_epoch_cancelled",
@@ -3015,7 +2989,6 @@ class SourceEngineReaderContentProvider internal constructor(
                             return@launch
                         }
                         if (completed == null) {
-                            v5ValidationStarted.remove(validationKey)
                             Log.w(
                                 TAG,
                                 "operation=sourceV5ValidationTimeout provider=$providerName " +
@@ -3033,36 +3006,50 @@ class SourceEngineReaderContentProvider internal constructor(
                             )
                         }
                     } finally {
-                        v5ValidationJobs.remove(validationKey)
+                        v5ValidationTracker.finish(validationKey)
                     }
                 }
-                v5ValidationJobs[validationKey] = job
-                if (job.isCompleted) {
-                    v5ValidationJobs.remove(validationKey)
+                if (!v5ValidationTracker.start(validationKey, job)) {
+                    job.cancel(CancellationException("Duplicate V5 validation."))
+                    AiBridgeTrace.event(
+                        "source_catalog_v5_schedule_skipped",
+                        resolved.detail.name,
+                        AiBridgeTrace.fields(
+                            "reason" to "already_started",
+                            "trigger" to reason,
+                            "source" to sourceLabel(resolved.book),
+                            "priority" to priority.name.lowercase()
+                        )
+                    )
+                    return@forEach
                 }
+                AiBridgeTrace.event(
+                    "source_catalog_v5_epoch_started",
+                    resolved.detail.name,
+                    AiBridgeTrace.fields(
+                        "trigger" to reason,
+                        "source" to sourceLabel(resolved.book),
+                        "chapters" to resolved.catalog.chapters.size,
+                        "secondaryProbe" to allowSecondaryProbe,
+                        "priority" to priority.name.lowercase()
+                    )
+                )
+                job.start()
             }
     }
 
     private fun cancelStaleV5ValidationJobs(currentValidationKey: String, title: String, reason: String) {
-        val cancelled = ArrayList<String>()
-        synchronized(v5ValidationJobs) {
-            val iterator = v5ValidationJobs.entries.iterator()
-            while (iterator.hasNext()) {
-                val entry = iterator.next()
-                if (entry.key == currentValidationKey) continue
-                entry.value.cancel(CancellationException("Superseded by current reading V5 validation."))
-                v5ValidationStarted.remove(entry.key)
-                iterator.remove()
-                cancelled.add(entry.key)
-            }
-        }
-        if (cancelled.isEmpty()) return
+        val cancelled = v5ValidationTracker.cancelStaleExcept(
+            currentValidationKey,
+            CancellationException("Superseded by current reading V5 validation.")
+        )
+        if (cancelled <= 0) return
         AiBridgeTrace.event(
             "source_catalog_v5_jobs_cancelled",
             title,
             AiBridgeTrace.fields(
                 "trigger" to reason,
-                "count" to cancelled.size
+                "count" to cancelled
             )
         )
     }
@@ -3079,7 +3066,6 @@ class SourceEngineReaderContentProvider internal constructor(
             chapter.sourceChapters.firstOrNull()
         }
         if (sourceChapters.isEmpty()) {
-            v5ValidationStarted.remove(validationKey)
             AiBridgeTrace.event(
                 "source_catalog_v5_epoch_failed",
                 resolved.detail.name,
@@ -3110,7 +3096,6 @@ class SourceEngineReaderContentProvider internal constructor(
             runBlocking { rawContentFor(position) }
         }
         if (plan.usableContext < V5ChapterValidationPlanner.MIN_USABLE_CONTEXT_CHAPTERS) {
-            v5ValidationStarted.remove(validationKey)
             AiBridgeTrace.event(
                 "source_catalog_v5_epoch_failed",
                 resolved.detail.name,
@@ -3313,7 +3298,7 @@ class SourceEngineReaderContentProvider internal constructor(
             .filter { index -> index >= 0 }
         val candidates = verifiedBooksSnapshot(waterfall)
             .filter { candidate -> sourceBookKey(candidate.book) != primaryKey }
-            .filter { candidate -> !v5ValidationStarted.contains(v5ValidationKey(candidate)) }
+            .filter { candidate -> !v5ValidationTracker.isActive(v5ValidationKey(candidate)) }
             .take(V5_SECONDARY_SOURCE_CANDIDATE_LIMIT)
         if (candidates.isEmpty()) {
             AiBridgeTrace.event(
