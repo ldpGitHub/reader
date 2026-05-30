@@ -1,1 +1,1 @@
-include ':app', ':source-engine', ':algorithm-test'
+include ':app', ':source-engine'

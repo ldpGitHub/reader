@@ -1,9 +1,0 @@
-Raw Corpus 101 Bundle Source Paths
-
-bundleRoot=algorithm-test/test-datasets/raw-corpus-101-bundle
-rawSource=algorithm-test/build/raw-corpus-101/device-full
-latestReplaySource=algorithm-test/algorithm-test/build/raw-corpus-target-replay-1779518978083
-fixtureSource=algorithm-test/src/test/resources
-
-manualDeviceCopy=adb push algorithm-test/test-datasets/raw-corpus-101-bundle/raw-corpus-101 /sdcard/Download/reader-test-data/
-deviceReplayRoot=/sdcard/Download/reader-test-data/raw-corpus-101/device-full/extracted-wsl/fetch-batch-1779484863140

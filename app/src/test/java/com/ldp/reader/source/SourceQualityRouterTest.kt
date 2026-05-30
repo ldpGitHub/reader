@@ -369,7 +369,7 @@ class SourceQualityRouterTest {
     }
 
     @Test
-    fun v5ValidTailGainRaisesBookSourceDespiteSmallBadTail() {
+    fun v8ValidTailGainRaisesBookSourceDespiteSmallBadTail() {
         val router = SourceQualityRouter(
             storage = InMemorySourceQualityStorage(),
             seed = seed(
@@ -382,7 +382,7 @@ class SourceQualityRouterTest {
         router.recordCatalogResolved(stale, chapterCount = 1_000, rawChapterCount = 1_000)
         router.recordCatalogResolved(fast, chapterCount = 1_000, rawChapterCount = 1_000)
 
-        router.recordV5ChapterMarks(
+        router.recordV8ChapterMarks(
             book = fast,
             latestObservedOrdinal = 1_002,
             latestNormalOrdinal = 1_001,

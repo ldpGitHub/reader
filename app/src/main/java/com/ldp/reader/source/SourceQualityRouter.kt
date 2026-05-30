@@ -6,8 +6,8 @@ import com.ldp.reader.sourceengine.model.BookSource
 import com.ldp.reader.sourceengine.model.CleanContent
 import com.ldp.reader.sourceengine.model.SourceBook
 import com.ldp.reader.sourceengine.model.SourceChapter
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
-import com.ldp.reader.sourceengine.content.v5.V5SourceRunResult
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8SourceRunResult
 import com.tencent.mmkv.MMKV
 import java.security.MessageDigest
 import java.util.ArrayDeque
@@ -315,22 +315,22 @@ internal class SourceQualityRouter(
         adjust(chapter.book, bookDelta = -120)
     }
 
-    fun recordV5SourceRun(book: SourceBook, run: V5SourceRunResult) {
+    fun recordV8SourceRun(book: SourceBook, run: V8SourceRunResult) {
         val counts = run.marks.groupingBy { mark -> mark.state }.eachCount()
-        recordV5ChapterMarks(
+        recordV8ChapterMarks(
             book = book,
             latestObservedOrdinal = run.latestObservedOrdinal,
             latestNormalOrdinal = run.latestNormalOrdinal,
             firstBadTailOrdinal = run.firstBadTailOrdinal,
-            normalCount = counts[V5ChapterMarkState.NORMAL] ?: 0,
-            wrongCount = counts[V5ChapterMarkState.WRONG] ?: 0,
-            nonStoryCount = counts[V5ChapterMarkState.NON_STORY] ?: 0,
-            badExtractionCount = counts[V5ChapterMarkState.BAD_EXTRACTION] ?: 0,
-            inconclusiveCount = counts[V5ChapterMarkState.INCONCLUSIVE] ?: 0
+            normalCount = counts[V8ChapterMarkState.NORMAL] ?: 0,
+            wrongCount = counts[V8ChapterMarkState.WRONG] ?: 0,
+            nonStoryCount = counts[V8ChapterMarkState.NON_STORY] ?: 0,
+            badExtractionCount = counts[V8ChapterMarkState.BAD_EXTRACTION] ?: 0,
+            inconclusiveCount = counts[V8ChapterMarkState.INCONCLUSIVE] ?: 0
         )
     }
 
-    fun recordV5ChapterMarks(
+    fun recordV8ChapterMarks(
         book: SourceBook,
         latestObservedOrdinal: Int,
         latestNormalOrdinal: Int,
@@ -345,19 +345,19 @@ internal class SourceQualityRouter(
         val stats = bookSourceStatsFor(book)
         val previousVerified = stats.latestVerifiedGoodOrdinal
         val verifiedGain = (latestNormalOrdinal - previousVerified).coerceAtLeast(0)
-        val normalChapterBonus = normalCount.coerceAtMost(V5_NORMAL_CHAPTER_REWARD_LIMIT) * V5_NORMAL_CHAPTER_REWARD
-        val verifiedGainBonus = verifiedGain * V5_VERIFIED_NEW_CHAPTER_REWARD
-        val noNormalPenalty = if (normalCount <= 0 && latestObservedOrdinal > 0) V5_NO_NORMAL_CHAPTER_PENALTY else 0
+        val normalChapterBonus = normalCount.coerceAtMost(V8_NORMAL_CHAPTER_REWARD_LIMIT) * V8_NORMAL_CHAPTER_REWARD
+        val verifiedGainBonus = verifiedGain * V8_VERIFIED_NEW_CHAPTER_REWARD
+        val noNormalPenalty = if (normalCount <= 0 && latestObservedOrdinal > 0) V8_NO_NORMAL_CHAPTER_PENALTY else 0
         val badPenalty =
-            wrongCount * V5_WRONG_CHAPTER_PENALTY +
-                badExtractionCount * V5_BAD_EXTRACTION_PENALTY +
-                nonStoryCount * V5_NON_STORY_PENALTY +
-                inconclusiveCount * V5_INCONCLUSIVE_PENALTY +
+            wrongCount * V8_WRONG_CHAPTER_PENALTY +
+                badExtractionCount * V8_BAD_EXTRACTION_PENALTY +
+                nonStoryCount * V8_NON_STORY_PENALTY +
+                inconclusiveCount * V8_INCONCLUSIVE_PENALTY +
                 noNormalPenalty
         val bookDelta = (verifiedGainBonus + normalChapterBonus - badPenalty)
-            .coerceIn(-V5_BOOK_SOURCE_MAX_PENALTY, V5_BOOK_SOURCE_MAX_REWARD)
+            .coerceIn(-V8_BOOK_SOURCE_MAX_PENALTY, V8_BOOK_SOURCE_MAX_REWARD)
         traceScoreEvidence(
-            eventName = "source_quality_v5_marks",
+            eventName = "source_quality_v8_marks",
             book = book,
             delta = bookDelta,
             fields = arrayOf(
@@ -679,16 +679,16 @@ internal class SourceQualityRouter(
         private const val BASE_SOURCE_SCORE = 5_000
         private const val BOOK_SOURCE_DYNAMIC_RANGE = 5_000
         private const val VERIFIED_NEW_CHAPTER_REWARD = 20
-        private const val V5_VERIFIED_NEW_CHAPTER_REWARD = 120
-        private const val V5_NORMAL_CHAPTER_REWARD = 8
-        private const val V5_NORMAL_CHAPTER_REWARD_LIMIT = 6
-        private const val V5_WRONG_CHAPTER_PENALTY = 70
-        private const val V5_BAD_EXTRACTION_PENALTY = 45
-        private const val V5_NON_STORY_PENALTY = 25
-        private const val V5_INCONCLUSIVE_PENALTY = 8
-        private const val V5_NO_NORMAL_CHAPTER_PENALTY = 120
-        private const val V5_BOOK_SOURCE_MAX_REWARD = 360
-        private const val V5_BOOK_SOURCE_MAX_PENALTY = 260
+        private const val V8_VERIFIED_NEW_CHAPTER_REWARD = 120
+        private const val V8_NORMAL_CHAPTER_REWARD = 8
+        private const val V8_NORMAL_CHAPTER_REWARD_LIMIT = 6
+        private const val V8_WRONG_CHAPTER_PENALTY = 70
+        private const val V8_BAD_EXTRACTION_PENALTY = 45
+        private const val V8_NON_STORY_PENALTY = 25
+        private const val V8_INCONCLUSIVE_PENALTY = 8
+        private const val V8_NO_NORMAL_CHAPTER_PENALTY = 120
+        private const val V8_BOOK_SOURCE_MAX_REWARD = 360
+        private const val V8_BOOK_SOURCE_MAX_PENALTY = 260
         private const val BOOK_LOCAL_SCORE_MULTIPLIER = 2
         private const val BOOK_PERSONAL_TIER_MIN_EVENTS = 2
         private const val BOOK_PERSONAL_TIER_MIN_SCORE = 4_800

@@ -189,8 +189,8 @@ dependencies {
     debugImplementation "com.github.simplepeng.SpiderMan:spiderman:${spider_man}"
     releaseImplementation "com.github.simplepeng.SpiderMan:spiderman-no-op:${spider_man}"
     debugImplementation 'com.github.mobileAiDev.ai-app-bridge:ai-app-bridge-android:0.2.8'
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.26.0'
     implementation project(':source-engine')
-    debugImplementation project(':algorithm-test')
 
     //调试工具/性能监测工具
 //    debugImplementation "io.github.didi.dokit:dokitx:${do_kit}"

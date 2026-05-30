@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.CollBookBean;
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState;
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState;
 
 import org.junit.After;
 import org.junit.Rule;
@@ -43,7 +43,7 @@ public class ObjectBoxBookStoreTest {
 
         store.saveCollBooks(Arrays.asList(older, newer));
         BookChapterBean markedChapter = chapter("chapter-2", "book-new", 20);
-        markedChapter.setSourceIntegrityState(V5ChapterMarkState.WRONG.name());
+        markedChapter.setSourceIntegrityState(V8ChapterMarkState.WRONG.name());
         markedChapter.setSourceIntegrityConfidence(0.8);
         markedChapter.setSourceIntegrityReason("cached");
         store.replaceBookChapters("book-new", Arrays.asList(
@@ -61,7 +61,7 @@ public class ObjectBoxBookStoreTest {
         assertEquals(2, hydrated.getBookChapters().size());
         assertEquals("chapter-1", hydrated.getBookChapters().get(0).getId());
         assertEquals("chapter-2", hydrated.getBookChapters().get(1).getId());
-        assertEquals(V5ChapterMarkState.WRONG.name(), hydrated.getBookChapters().get(1).getSourceIntegrityState());
+        assertEquals(V8ChapterMarkState.WRONG.name(), hydrated.getBookChapters().get(1).getSourceIntegrityState());
         assertEquals(0.8, hydrated.getBookChapters().get(1).getSourceIntegrityConfidence(), 0.0);
         assertEquals("cached", hydrated.getBookChapters().get(1).getSourceIntegrityReason());
 

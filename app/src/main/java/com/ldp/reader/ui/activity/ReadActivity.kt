@@ -289,7 +289,7 @@ class ReadActivity : BaseActivity<ActivityReadBinding>() {
                 )
                 return@observe
             }
-            persistSourceIntegrityMarksFromTxtChapters(chapters, "v5-update")
+            persistSourceIntegrityMarksFromTxtChapters(chapters, "v8-update")
             refreshCategoryAdapter(chapters)
             loader.refreshSourceIntegrityMarks()
             AiBridgeTrace.state(

@@ -14,7 +14,7 @@ import com.ldp.reader.sourceengine.model.ContentQualityReport
 import com.ldp.reader.sourceengine.model.SourceBook
 import com.ldp.reader.sourceengine.model.SourceChapter
 import com.ldp.reader.sourceengine.catalog.ChapterNormalizer
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
 import com.ldp.reader.sourceengine.search.RankedSearchBook
 import com.ldp.reader.widget.page.TxtChapter
 import kotlinx.coroutines.CoroutineScope
@@ -1215,9 +1215,9 @@ class SourceEngineReaderContentProviderTest {
     fun runtimeReadableMarkSkipsPrefetchChapter() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第389章 查找", 389).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = false
         }
 
@@ -1227,17 +1227,17 @@ class SourceEngineReaderContentProviderTest {
             cleanContent("月白风清 ".repeat(80), qualityScore = 30, coherenceScore = 0)
         )
 
-        assertEquals(V5ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
-        assertEquals(markReason("v5"), txtChapter.sourceIntegrityReason)
+        assertEquals(V8ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
+        assertEquals(markReason("v8"), txtChapter.sourceIntegrityReason)
     }
 
     @Test
     fun runtimeReadableMarkDoesNotClearCurrentDiagnosticChapterWithoutHeading() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第389章 查找", 389).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = true
         }
 
@@ -1247,8 +1247,8 @@ class SourceEngineReaderContentProviderTest {
             cleanContent("月白风清 ".repeat(80), qualityScore = 30, coherenceScore = 0)
         )
 
-        assertEquals(V5ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
-        assertEquals(markReason("v5"), txtChapter.sourceIntegrityReason)
+        assertEquals(V8ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
+        assertEquals(markReason("v8"), txtChapter.sourceIntegrityReason)
     }
 
     @Test
@@ -1274,9 +1274,9 @@ class SourceEngineReaderContentProviderTest {
     fun runtimeHeadingConflictDoesNotClearSingleSourceHiddenMark() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第390章 吞金", 390).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = true
         }
 
@@ -1290,17 +1290,17 @@ class SourceEngineReaderContentProviderTest {
             )
         )
 
-        assertEquals(V5ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
-        assertEquals(markReason("v5"), txtChapter.sourceIntegrityReason)
+        assertEquals(V8ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
+        assertEquals(markReason("v8"), txtChapter.sourceIntegrityReason)
     }
 
     @Test
     fun runtimeReadableMarkDoesNotClearHiddenReadableContentWithoutHeading() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第393章 出手", 393).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = true
         }
 
@@ -1311,17 +1311,17 @@ class SourceEngineReaderContentProviderTest {
             trustedEvidenceCount = 2
         )
 
-        assertEquals(V5ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
-        assertEquals(markReason("v5"), txtChapter.sourceIntegrityReason)
+        assertEquals(V8ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
+        assertEquals(markReason("v8"), txtChapter.sourceIntegrityReason)
     }
 
     @Test
     fun runtimeReadableMarkClearsCurrentChapterWhenTwoTrustedSourcesAgree() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第389章 查找", 389).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = true
         }
 
@@ -1336,7 +1336,7 @@ class SourceEngineReaderContentProviderTest {
             trustedEvidenceCount = 2
         )
 
-        assertEquals(V5ChapterMarkState.NORMAL.name, txtChapter.sourceIntegrityState)
+        assertEquals(V8ChapterMarkState.NORMAL.name, txtChapter.sourceIntegrityState)
         assertEquals(sourceIntegrityPersistedReason(listOf("runtime readable content v2")), txtChapter.sourceIntegrityReason)
     }
 
@@ -1344,9 +1344,9 @@ class SourceEngineReaderContentProviderTest {
     fun runtimeReadableMarkClearsPrefetchChapterWhenTwoTrustedSourcesAgree() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第389章 查找", 389).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = false
         }
 
@@ -1361,7 +1361,7 @@ class SourceEngineReaderContentProviderTest {
             trustedEvidenceCount = 2
         )
 
-        assertEquals(V5ChapterMarkState.NORMAL.name, txtChapter.sourceIntegrityState)
+        assertEquals(V8ChapterMarkState.NORMAL.name, txtChapter.sourceIntegrityState)
         assertEquals(sourceIntegrityPersistedReason(listOf("runtime readable content v2")), txtChapter.sourceIntegrityReason)
     }
 
@@ -1369,9 +1369,9 @@ class SourceEngineReaderContentProviderTest {
     fun runtimeReadableMarkDoesNotClearNumberDriftWhenTwoTrustedSourcesAgree() {
         val provider = SourceEngineReaderContentProvider()
         val txtChapter = sourceEngineTxtChapter("第390章 吞金", 390).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
-            sourceIntegrityReason = markReason("v5")
+            sourceIntegrityReason = markReason("v8")
             sourceEngineCurrentReadRequest = false
         }
 
@@ -1386,8 +1386,8 @@ class SourceEngineReaderContentProviderTest {
             trustedEvidenceCount = 2
         )
 
-        assertEquals(V5ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
-        assertEquals(markReason("v5"), txtChapter.sourceIntegrityReason)
+        assertEquals(V8ChapterMarkState.WRONG.name, txtChapter.sourceIntegrityState)
+        assertEquals(markReason("v8"), txtChapter.sourceIntegrityReason)
     }
 
     @Test

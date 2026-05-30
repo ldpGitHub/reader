@@ -14,9 +14,9 @@ object BookContentProviderRouter {
     private val backendProvider = BackendReaderContentProvider()
     private val sourceEngineProvider = SourceEngineReaderContentProvider()
 
-    fun startLowPriorityV5Maintenance() {
+    fun startLowPriorityV8Maintenance() {
         if (!SourceEngineSwitch.isEnabled()) return
-        sourceEngineProvider.startLowPriorityV5Maintenance {
+        sourceEngineProvider.startLowPriorityV8Maintenance {
             BookRepository.getInstance().collBooks
         }
     }
@@ -67,13 +67,13 @@ object BookContentProviderRouter {
     suspend fun getBookFolder(
         bookId: String?,
         collBookBean: CollBookBean,
-        triggerV5ForReading: Boolean = false
+        triggerV8ForReading: Boolean = false
     ): List<BookChapterBean> {
         val routeBookId = routeBookIdFor(bookId, collBookBean)
         val provider = providerForBook(routeBookId)
         logRoute("catalog", provider, routeBookId)
-        if (triggerV5ForReading && provider === sourceEngineProvider) {
-            return sourceEngineProvider.getBookFolder(routeBookId, collBookBean, triggerV5ForReading = true)
+        if (triggerV8ForReading && provider === sourceEngineProvider) {
+            return sourceEngineProvider.getBookFolder(routeBookId, collBookBean, triggerV8ForReading = true)
         }
         return provider.getBookFolder(routeBookId, collBookBean)
     }
@@ -93,7 +93,7 @@ object BookContentProviderRouter {
         bookId: String?,
         collBookBean: CollBookBean? = null,
         persist: Boolean = false,
-        triggerV5: Boolean = false,
+        triggerV8: Boolean = false,
         requestPriority: SourceRequestPriority = SourceRequestPriority.FOREGROUND
     ): Boolean {
         val routeBookId = if (collBookBean == null) {
@@ -103,7 +103,7 @@ object BookContentProviderRouter {
         }
         if (!SourceEngineBookRoute.isBookId(routeBookId)) return true
         logRoute("contentTier", sourceEngineProvider, routeBookId)
-        return sourceEngineProvider.prepareBookContentTier(routeBookId, collBookBean, persist, triggerV5, requestPriority)
+        return sourceEngineProvider.prepareBookContentTier(routeBookId, collBookBean, persist, triggerV8, requestPriority)
     }
 
     suspend fun getBookContent(

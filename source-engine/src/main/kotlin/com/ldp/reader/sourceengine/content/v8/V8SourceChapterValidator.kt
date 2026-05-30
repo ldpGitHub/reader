@@ -1,0 +1,249 @@
+package com.ldp.reader.sourceengine.content.v8
+
+class V8SourceChapterValidator(
+    semanticModel: V8SemanticModel,
+    private val config: V8PsbmtConfig = V8PsbmtConfig()
+) {
+    private val detector = V8PsbmtDetector(config, semanticModel)
+    private val qualityGate = V8ChapterQualityGate()
+
+    fun validate(request: V8SourceRunRequest): V8SourceRunResult {
+        val startedAtMs = System.currentTimeMillis()
+        request.diagnosticSink.record(
+            v8DiagnosticLine(
+                "v8.run.start",
+                "title" to request.title,
+                "author" to request.author,
+                "source" to request.sourceKey,
+                "chapters" to request.chapters.size,
+                "markable" to request.markableChapterIndexes.orEmpty().size
+            )
+        )
+
+        val sorted = request.chapters.sortedBy { chapter -> chapter.index }
+        val qualityByIndex = sorted.associate { chapter -> chapter.index to qualityGate.inspect(chapter) }
+        val byIndex = sorted.associateBy { chapter -> chapter.index }
+        val markableIndexes = request.markableChapterIndexes ?: sorted.map { chapter -> chapter.index }.toSet()
+        val marks = ArrayList<V8ChapterMarkResult>()
+        val trustedPrevious = ArrayList<V8ChapterInput>()
+        var badTailSeen = false
+
+        sorted.forEach { chapter ->
+            val quality = qualityByIndex.getValue(chapter.index)
+            if (chapter.index !in markableIndexes) {
+                if (quality.usableForStory) trustedPrevious.add(chapter)
+                return@forEach
+            }
+
+            val mark = if (!quality.usableForStory) {
+                qualityMark(chapter, quality)
+            } else {
+                val next = sorted
+                    .asSequence()
+                    .filter { candidate -> candidate.index > chapter.index }
+                    .take(config.maxFutureChapters)
+                    .toList()
+                val result = detector.detect(
+                    V8PsbmtInput(
+                        previousChapters = trustedPrevious.map { previous ->
+                            V8ChapterContext(previous.index, previous.title, previous.content)
+                        },
+                        current = V8ChapterContext(chapter.index, chapter.title, chapter.content),
+                        nextChapters = next.map { future ->
+                            V8ChapterContext(future.index, future.title, future.content)
+                        }
+                    )
+                )
+                resultMark(chapter, quality, result).let { mark ->
+                    if (badTailSeen && shouldMarkTailContinuationHole(result, mark)) {
+                        tailContinuationMark(mark)
+                    } else {
+                        mark
+                    }
+                }
+            }
+
+            marks.add(mark)
+            if (mark.state.isBadForTail) {
+                badTailSeen = true
+            }
+            if (mark.state == V8ChapterMarkState.NORMAL) {
+                byIndex[chapter.index]?.let { trustedPrevious.add(it) }
+            }
+            if (mark.state != V8ChapterMarkState.NORMAL) {
+                request.diagnosticSink.record(
+                    v8DiagnosticLine(
+                        "v8.mark.abnormal",
+                        "source" to request.sourceKey,
+                        "chapter" to mark.chapterIndex,
+                        "state" to mark.state,
+                        "confidence" to "%.3f".format(mark.confidence),
+                        "suggestion" to mark.suggestionState
+                    )
+                )
+            }
+        }
+
+        val counts = marks.groupingBy { mark -> mark.state }.eachCount()
+        val result = V8SourceRunResult(
+            title = request.title,
+            author = request.author,
+            sourceKey = request.sourceKey,
+            marks = marks
+        )
+        request.diagnosticSink.record(
+            v8DiagnosticLine(
+                "v8.mark.finish",
+                "source" to request.sourceKey,
+                "normal" to (counts[V8ChapterMarkState.NORMAL] ?: 0),
+                "wrong" to (counts[V8ChapterMarkState.WRONG] ?: 0),
+                "nonStory" to (counts[V8ChapterMarkState.NON_STORY] ?: 0),
+                "badExtraction" to (counts[V8ChapterMarkState.BAD_EXTRACTION] ?: 0),
+                "inconclusive" to (counts[V8ChapterMarkState.INCONCLUSIVE] ?: 0),
+                "latestObserved" to result.latestObservedOrdinal,
+                "latestNormal" to result.latestNormalOrdinal,
+                "badTail" to result.firstBadTailOrdinal,
+                "ms" to (System.currentTimeMillis() - startedAtMs)
+            )
+        )
+        return result
+    }
+
+    private fun qualityMark(chapter: V8ChapterInput, quality: V8ChapterQualityResult): V8ChapterMarkResult {
+        val state = when (quality.type) {
+            V8ChapterQualityType.NON_STORY -> V8ChapterMarkState.NON_STORY
+            V8ChapterQualityType.BAD_EXTRACTION -> V8ChapterMarkState.BAD_EXTRACTION
+            V8ChapterQualityType.TOO_SHORT_UNCERTAIN,
+            V8ChapterQualityType.MIXED_EXTRACTION_UNCERTAIN -> V8ChapterMarkState.INCONCLUSIVE
+            V8ChapterQualityType.CLEAN_STORY,
+            V8ChapterQualityType.CLEAN_WITH_TRIM -> V8ChapterMarkState.NORMAL
+        }
+        return V8ChapterMarkResult(
+            chapterIndex = chapter.index,
+            chapterTitle = chapter.title,
+            state = state,
+            confidence = quality.confidence,
+            qualityType = quality.type,
+            suggestionState = when (state) {
+                V8ChapterMarkState.NON_STORY -> V8NovelStateOutputType.NON_STORY
+                V8ChapterMarkState.BAD_EXTRACTION -> V8NovelStateOutputType.BAD_EXTRACTION
+                V8ChapterMarkState.INCONCLUSIVE -> V8NovelStateOutputType.UNCERTAIN
+                else -> V8NovelStateOutputType.NORMAL
+            },
+            action = if (state == V8ChapterMarkState.NORMAL) V8CleanAction.KEEP else V8CleanAction.MARK_ONLY,
+            reasons = quality.reasons.take(12)
+        )
+    }
+
+    private fun resultMark(
+        chapter: V8ChapterInput,
+        quality: V8ChapterQualityResult,
+        result: V8PsbmtResult
+    ): V8ChapterMarkResult {
+        val state = when (result.status) {
+            V8PsbmtStatus.NORMAL -> V8ChapterMarkState.NORMAL
+            V8PsbmtStatus.WRONG_CONFIRMED -> V8ChapterMarkState.WRONG
+            V8PsbmtStatus.SUSPECT_RECHECK_REQUIRED,
+            V8PsbmtStatus.INSUFFICIENT_CONTEXT,
+            V8PsbmtStatus.SOURCE_QUALITY_PROBLEM -> V8ChapterMarkState.INCONCLUSIVE
+        }
+        return V8ChapterMarkResult(
+            chapterIndex = chapter.index,
+            chapterTitle = chapter.title,
+            state = state,
+            confidence = result.confidence,
+            qualityType = quality.type,
+            suggestionState = when (state) {
+                V8ChapterMarkState.NORMAL -> V8NovelStateOutputType.NORMAL
+                V8ChapterMarkState.WRONG -> V8NovelStateOutputType.POLLUTED_SUFFIX
+                else -> V8NovelStateOutputType.UNCERTAIN
+            },
+            action = when (state) {
+                V8ChapterMarkState.NORMAL -> V8CleanAction.KEEP
+                V8ChapterMarkState.WRONG -> V8CleanAction.MARK_ONLY
+                else -> V8CleanAction.KEEP
+            },
+            reasons = v8Reasons(result)
+        )
+    }
+
+    private fun shouldMarkTailContinuationHole(
+        result: V8PsbmtResult,
+        mark: V8ChapterMarkResult
+    ): Boolean {
+        if (mark.state == V8ChapterMarkState.INCONCLUSIVE &&
+            result.status == V8PsbmtStatus.SUSPECT_RECHECK_REQUIRED &&
+            result.type == V8PsbmtType.POSSIBLE_TAIL_CLUSTER
+        ) {
+            return true
+        }
+        if (mark.state != V8ChapterMarkState.NORMAL || result.status != V8PsbmtStatus.NORMAL) return false
+        val futureRescue = result.booleanEvidence("futureRescue") || result.booleanEvidence("wholeFutureRescue")
+        if (!futureRescue) return false
+        val wholeLowRatio = result.doubleEvidence("wholeLowRatio")
+        if (wholeLowRatio >= config.wholeChapterWrongLowRatio) return true
+        val suffixLowRatio = result.doubleEvidence("suffixLowRatio")
+        val localRupture = result.doubleEvidence("localRupture")
+        return suffixLowRatio >= config.wrongSuffixLowRatio &&
+            localRupture >= config.suspectLocalRupture
+    }
+
+    private fun tailContinuationMark(mark: V8ChapterMarkResult): V8ChapterMarkResult {
+        return mark.copy(
+            state = V8ChapterMarkState.WRONG,
+            confidence = maxOf(mark.confidence, 0.75),
+            suggestionState = V8NovelStateOutputType.POLLUTED_RUN,
+            action = V8CleanAction.MARK_ONLY,
+            reasons = (mark.reasons + "v8 tailContinuationAfterBadTail=true").take(12)
+        )
+    }
+
+    private fun V8PsbmtResult.doubleEvidence(key: String): Double {
+        return (evidence[key] as? Number)?.toDouble() ?: 0.0
+    }
+
+    private fun V8PsbmtResult.booleanEvidence(key: String): Boolean {
+        return evidence[key] as? Boolean ?: false
+    }
+
+    private fun v8Reasons(result: V8PsbmtResult): List<String> {
+        return buildList {
+            add("v8 status=${result.status} type=${result.type} offset=${result.offset}")
+            add("v8 confidence=${"%.4f".format(result.confidence)} ms=${result.ms}")
+            result.evidence["suffixRepeatRatio"]?.let { value -> add("v8 suffixRepeatRatio=$value") }
+            result.evidence["localRupture"]?.let { value -> add("v8 localRupture=$value") }
+            result.evidence["futureRescue"]?.let { value -> add("v8 futureRescue=$value") }
+            result.evidence["fragmentTail"]?.let { value -> add("v8 fragmentTail=$value") }
+        }.take(12)
+    }
+}
+
+data class V8SourceRunRequest(
+    val title: String,
+    val author: String,
+    val sourceKey: String,
+    val chapters: List<V8ChapterInput>,
+    val markableChapterIndexes: Set<Int>? = null,
+    val diagnosticSink: V8DiagnosticSink = V8DiagnosticSink.None
+)
+
+data class V8SourceRunResult(
+    val title: String,
+    val author: String,
+    val sourceKey: String,
+    val marks: List<V8ChapterMarkResult>
+) {
+    val latestObservedOrdinal: Int
+        get() = marks.maxOfOrNull { mark -> mark.chapterIndex + 1 } ?: 0
+
+    val latestNormalOrdinal: Int
+        get() = marks
+            .filter { mark -> mark.state == V8ChapterMarkState.NORMAL }
+            .maxOfOrNull { mark -> mark.chapterIndex + 1 }
+            ?: 0
+
+    val firstBadTailOrdinal: Int?
+        get() = marks
+            .filter { mark -> mark.state.isBadForTail }
+            .minOfOrNull { mark -> mark.chapterIndex + 1 }
+}

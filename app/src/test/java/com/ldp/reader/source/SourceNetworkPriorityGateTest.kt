@@ -76,7 +76,7 @@ class SourceNetworkPriorityGateTest {
         )
         val backgroundScope = SourceRequestScope(
             id = 1,
-            name = "v5-background",
+            name = "v8-background",
             priority = SourceRequestPriority.BACKGROUND
         )
         try {

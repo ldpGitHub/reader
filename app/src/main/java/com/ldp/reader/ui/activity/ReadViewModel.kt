@@ -90,7 +90,7 @@ class ReadViewModel : ViewModel() {
                     val bookChapterBeans = BookContentProviderRouter.getBookFolder(
                         bookId,
                         collBookBean,
-                        triggerV5ForReading = isSourceEngineBookRequest(bookId, collBookBean)
+                        triggerV8ForReading = isSourceEngineBookRequest(bookId, collBookBean)
                     )
                     collBookBean.bookChapters = bookChapterBeans
                     collBookBean.chaptersCount = bookChapterBeans.size
@@ -338,7 +338,7 @@ class ReadViewModel : ViewModel() {
                         bookId,
                         collBookBean,
                         persist = true,
-                        triggerV5 = true,
+                        triggerV8 = true,
                         requestPriority = SourceRequestPriority.BACKGROUND
                     )
                 } catch (error: CancellationException) {

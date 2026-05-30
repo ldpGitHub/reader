@@ -35,6 +35,11 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral {
+            content {
+                includeGroup 'com.microsoft.onnxruntime'
+            }
+        }
         maven {
             url 'https://repo.maven.apache.org/maven2'
             content {

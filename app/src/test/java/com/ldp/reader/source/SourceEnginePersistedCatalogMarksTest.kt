@@ -1,7 +1,7 @@
 package com.ldp.reader.source
 
 import com.ldp.reader.model.bean.BookChapterBean
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
 import com.ldp.reader.sourceengine.legado.LegadoRuleSet
 import com.ldp.reader.sourceengine.model.BookSource
 import com.ldp.reader.sourceengine.model.SourceBook
@@ -16,14 +16,14 @@ class SourceEnginePersistedCatalogMarksTest {
         val source = source("https://exact.example")
         val book = book(source, "https://exact.example/book/1")
         val incoming = chapterBean(chapter(book, 3))
-        val persisted = chapterBean(chapter(book, 3)).applyMark(V5ChapterMarkState.WRONG)
+        val persisted = chapterBean(chapter(book, 3)).applyMark(V8ChapterMarkState.WRONG)
 
         val result = SourceEnginePersistedCatalogMarks.mergeInto(listOf(incoming), listOf(persisted))
 
         assertEquals(1, result.restored)
         assertEquals(1, result.exactRestored)
         assertEquals(0, result.identityRestored)
-        assertEquals(V5ChapterMarkState.WRONG.name, incoming.sourceIntegrityState)
+        assertEquals(V8ChapterMarkState.WRONG.name, incoming.sourceIntegrityState)
         assertEquals(0.8, incoming.sourceIntegrityConfidence, 0.0)
         assertEquals(reason("cached"), incoming.sourceIntegrityReason)
         assertEquals(1, SourceEnginePersistedCatalogMarks.countHidden(listOf(incoming)))
@@ -33,13 +33,13 @@ class SourceEnginePersistedCatalogMarksTest {
     fun preservesIncomingMarkWhenItAlreadyExists() {
         val source = source("https://incoming.example")
         val book = book(source, "https://incoming.example/book/1")
-        val incoming = chapterBean(chapter(book, 4)).applyMark(V5ChapterMarkState.NORMAL)
-        val persisted = chapterBean(chapter(book, 4)).applyMark(V5ChapterMarkState.BAD_EXTRACTION)
+        val incoming = chapterBean(chapter(book, 4)).applyMark(V8ChapterMarkState.NORMAL)
+        val persisted = chapterBean(chapter(book, 4)).applyMark(V8ChapterMarkState.BAD_EXTRACTION)
 
         val result = SourceEnginePersistedCatalogMarks.mergeInto(listOf(incoming), listOf(persisted))
 
         assertEquals(0, result.restored)
-        assertEquals(V5ChapterMarkState.NORMAL.name, incoming.sourceIntegrityState)
+        assertEquals(V8ChapterMarkState.NORMAL.name, incoming.sourceIntegrityState)
     }
 
     @Test
@@ -49,14 +49,14 @@ class SourceEnginePersistedCatalogMarksTest {
         val incomingBook = book(source, "https://identity.example/book/current")
         val incoming = chapterBean(chapter(incomingBook, 8, "第八章 山中旧事"))
         val persisted = chapterBean(chapter(persistedBook, 8, "第八章 山中旧事"))
-            .applyMark(V5ChapterMarkState.NON_STORY)
+            .applyMark(V8ChapterMarkState.NON_STORY)
 
         val result = SourceEnginePersistedCatalogMarks.mergeInto(listOf(incoming), listOf(persisted))
 
         assertEquals(1, result.restored)
         assertEquals(0, result.exactRestored)
         assertEquals(1, result.identityRestored)
-        assertEquals(V5ChapterMarkState.NON_STORY.name, incoming.sourceIntegrityState)
+        assertEquals(V8ChapterMarkState.NON_STORY.name, incoming.sourceIntegrityState)
     }
 
     @Test
@@ -67,7 +67,7 @@ class SourceEnginePersistedCatalogMarksTest {
         val incomingBook = book(incomingSource, "https://incoming.example/book/1")
         val incoming = chapterBean(chapter(incomingBook, 5, "第五章 同名"))
         val persisted = chapterBean(chapter(persistedBook, 5, "第五章 同名"))
-            .applyMark(V5ChapterMarkState.WRONG)
+            .applyMark(V8ChapterMarkState.WRONG)
 
         val result = SourceEnginePersistedCatalogMarks.mergeInto(listOf(incoming), listOf(persisted))
 
@@ -82,7 +82,7 @@ class SourceEnginePersistedCatalogMarksTest {
         val incomingBook = book(source, "https://title.example/book/current")
         val incoming = chapterBean(chapter(incomingBook, 6, "第六章 新标题"))
         val persisted = chapterBean(chapter(persistedBook, 6, "第六章 旧标题"))
-            .applyMark(V5ChapterMarkState.WRONG)
+            .applyMark(V8ChapterMarkState.WRONG)
 
         val result = SourceEnginePersistedCatalogMarks.mergeInto(listOf(incoming), listOf(persisted))
 
@@ -95,12 +95,12 @@ class SourceEnginePersistedCatalogMarksTest {
         val source = source("https://schema.example")
         val book = book(source, "https://schema.example/book/1")
         val incoming = chapterBean(chapter(book, 7)).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
             sourceIntegrityReason = "cached"
         }
         val persisted = chapterBean(chapter(book, 7)).apply {
-            sourceIntegrityState = V5ChapterMarkState.WRONG.name
+            sourceIntegrityState = V8ChapterMarkState.WRONG.name
             sourceIntegrityConfidence = 0.8
             sourceIntegrityReason = "cached"
         }
@@ -162,7 +162,7 @@ class SourceEnginePersistedCatalogMarksTest {
         }
     }
 
-    private fun BookChapterBean.applyMark(state: V5ChapterMarkState): BookChapterBean {
+    private fun BookChapterBean.applyMark(state: V8ChapterMarkState): BookChapterBean {
         sourceIntegrityState = state.name
         sourceIntegrityConfidence = 0.8
         sourceIntegrityReason = reason("cached")

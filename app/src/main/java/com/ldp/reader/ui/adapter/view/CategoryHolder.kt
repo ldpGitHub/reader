@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.ldp.reader.R
 import com.ldp.reader.databinding.ItemCategoryBinding
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
 import com.ldp.reader.ui.base.adapter.ViewHolderImpl
 import com.ldp.reader.utils.BookManager
 import com.ldp.reader.widget.page.TxtChapter
@@ -78,9 +78,9 @@ class CategoryHolder : ViewHolderImpl<TxtChapter>() {
 
     private fun integrityBadge(markState: String?): IntegrityBadge? {
         return when (markState) {
-            V5ChapterMarkState.WRONG.name,
-            V5ChapterMarkState.NON_STORY.name,
-            V5ChapterMarkState.BAD_EXTRACTION.name -> IntegrityBadge(
+            V8ChapterMarkState.WRONG.name,
+            V8ChapterMarkState.NON_STORY.name,
+            V8ChapterMarkState.BAD_EXTRACTION.name -> IntegrityBadge(
                 label = "错章",
                 textColor = color(R.color.chapter_mark_wrong_text),
                 backgroundColor = color(R.color.chapter_mark_wrong_bg)

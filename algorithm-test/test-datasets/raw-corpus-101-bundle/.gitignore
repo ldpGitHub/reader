@@ -1,6 +1,0 @@
-# Full novel text and generated replay details stay local.
-# Do not commit raw downloaded corpus content to GitHub.
-raw-corpus-101/
-results/
-fixtures/
-

@@ -16,7 +16,7 @@ class App : Application() {
         CrashReport.initCrashReport(applicationContext, "ab86f05cf4", true)
 
         MobSDK.submitPolicyGrantResult(true)
-        BookContentProviderRouter.startLowPriorityV5Maintenance()
+        BookContentProviderRouter.startLowPriorityV8Maintenance()
         if (BuildConfig.DEBUG) {
         }
     }

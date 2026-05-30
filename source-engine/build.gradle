@@ -18,10 +18,17 @@ compileTestKotlin {
     }
 }
 
+test {
+    systemProperty 'v8BgeTargetValidation', findProperty('v8BgeTargetValidation') ?: System.getProperty('v8BgeTargetValidation', 'false')
+    systemProperty 'v8BgeTargetBooks', findProperty('v8BgeTargetBooks') ?: System.getProperty('v8BgeTargetBooks', '青山,叩问仙道,清光宝鉴,仙人消失之后,苟在武道世界成圣,仙都')
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'org.jsoup:jsoup:1.17.2'
+    compileOnly 'com.microsoft.onnxruntime:onnxruntime:1.26.0'
 
     testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation 'com.microsoft.onnxruntime:onnxruntime:1.26.0'
 }

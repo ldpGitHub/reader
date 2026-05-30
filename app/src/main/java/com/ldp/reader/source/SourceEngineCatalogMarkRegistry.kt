@@ -3,9 +3,9 @@ package com.ldp.reader.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ldp.reader.model.bean.BookChapterBean
-import com.ldp.reader.sourceengine.content.v5.V5ChapterValidationPlanner
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkResult
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8ValidationPlanner
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkResult
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
 import com.ldp.reader.widget.page.TxtChapter
 import java.security.MessageDigest
 import java.nio.charset.Charset
@@ -27,7 +27,7 @@ object SourceEngineCatalogMarkRegistry {
         val sourceUrl: String?,
         val bookName: String?,
         val author: String?,
-        val marks: Map<Int, V5ChapterMarkResult>,
+        val marks: Map<Int, V8ChapterMarkResult>,
         val catalogIdentity: CatalogIdentity?,
         val updatedAtMs: Long = System.currentTimeMillis()
     )
@@ -42,7 +42,7 @@ object SourceEngineCatalogMarkRegistry {
     private val marksBySourceBook = LinkedHashMap<String, MarkSet>()
     private val marksBySourceBookIdentity = LinkedHashMap<String, MarkSet>()
     private val marksByBookIdentityTitle = LinkedHashMap<String, Map<String, TitleMark>>()
-    private val runtimeContentMarksByChapterLink = LinkedHashMap<String, V5ChapterMarkResult>()
+    private val runtimeContentMarksByChapterLink = LinkedHashMap<String, V8ChapterMarkResult>()
 
     val updates: LiveData<MarkUpdate> = markUpdates
 
@@ -50,7 +50,7 @@ object SourceEngineCatalogMarkRegistry {
     fun record(
         sourceBookKey: String,
         sourceLabel: String,
-        marks: List<V5ChapterMarkResult>
+        marks: List<V8ChapterMarkResult>
     ) {
         record(sourceBookKey, sourceLabel, null, null, null, marks)
     }
@@ -62,7 +62,7 @@ object SourceEngineCatalogMarkRegistry {
         sourceUrl: String?,
         bookName: String?,
         author: String?,
-        marks: List<V5ChapterMarkResult>,
+        marks: List<V8ChapterMarkResult>,
         catalogIdentity: CatalogIdentity? = null
     ) {
         val markSet = MarkSet(
@@ -113,10 +113,10 @@ object SourceEngineCatalogMarkRegistry {
         val link = chapter.link ?: return false
         if (!SourceEngineBookRoute.isChapterId(link)) return false
         val payload = runCatching { SourceEngineBookRoute.decodeChapterId(link) }.getOrNull() ?: return false
-        val mark = V5ChapterMarkResult(
+        val mark = V8ChapterMarkResult(
             chapterIndex = payload.index,
             chapterTitle = chapter.title ?: payload.chapterName,
-            state = V5ChapterMarkState.NORMAL,
+            state = V8ChapterMarkState.NORMAL,
             confidence = 1.0,
             qualityType = null,
             suggestionState = null,
@@ -238,7 +238,7 @@ object SourceEngineCatalogMarkRegistry {
             lastTitle = chapterTitles.lastOrNull().orEmpty(),
             tailTitleDigest = md5(
                 chapterTitles
-                    .takeLast(V5ChapterValidationPlanner.TAIL_RISK_WINDOW_CHAPTERS)
+                    .takeLast(V8ValidationPlanner.TAIL_RISK_WINDOW_CHAPTERS)
                     .joinToString("\n")
             )
         )
@@ -311,7 +311,7 @@ object SourceEngineCatalogMarkRegistry {
 
     private data class MarkSet(
         val catalogIdentity: CatalogIdentity?,
-        val byChapterIndex: Map<Int, V5ChapterMarkResult>
+        val byChapterIndex: Map<Int, V8ChapterMarkResult>
     ) {
         fun matches(currentCatalogIdentity: CatalogIdentity?): Boolean {
             return catalogIdentity == null || catalogIdentity == currentCatalogIdentity
@@ -320,7 +320,7 @@ object SourceEngineCatalogMarkRegistry {
 
     private data class TitleMark(
         val sourceBookKey: String,
-        val mark: V5ChapterMarkResult
+        val mark: V8ChapterMarkResult
     )
 
     private data class ChapterContext(
@@ -366,12 +366,12 @@ object SourceEngineCatalogMarkRegistry {
     }
 
     private sealed class MarkResolution {
-        data class Found(val mark: V5ChapterMarkResult) : MarkResolution()
+        data class Found(val mark: V8ChapterMarkResult) : MarkResolution()
         object Clear : MarkResolution()
         object NoRegistry : MarkResolution()
     }
 
-    private fun TxtChapter.applyIntegrityMark(mark: V5ChapterMarkResult?): Boolean {
+    private fun TxtChapter.applyIntegrityMark(mark: V8ChapterMarkResult?): Boolean {
         val state = mark?.state?.name
         val confidence = mark?.confidence ?: 0.0
         val reason = mark?.let { sourceIntegrityPersistedReason(it.reasons) }
@@ -387,7 +387,7 @@ object SourceEngineCatalogMarkRegistry {
         return true
     }
 
-    private fun BookChapterBean.applyIntegrityMark(mark: V5ChapterMarkResult?): Boolean {
+    private fun BookChapterBean.applyIntegrityMark(mark: V8ChapterMarkResult?): Boolean {
         val state = mark?.state?.name
         val confidence = mark?.confidence ?: 0.0
         val reason = mark?.let { sourceIntegrityPersistedReason(it.reasons) }
@@ -406,9 +406,9 @@ object SourceEngineCatalogMarkRegistry {
 
 fun TxtChapter.hasHiddenSourceIntegrityMark(): Boolean {
     return isCurrentSourceIntegrityReason(sourceIntegrityReason) &&
-        (sourceIntegrityState == V5ChapterMarkState.WRONG.name ||
-            sourceIntegrityState == V5ChapterMarkState.NON_STORY.name ||
-            sourceIntegrityState == V5ChapterMarkState.BAD_EXTRACTION.name)
+        (sourceIntegrityState == V8ChapterMarkState.WRONG.name ||
+            sourceIntegrityState == V8ChapterMarkState.NON_STORY.name ||
+            sourceIntegrityState == V8ChapterMarkState.BAD_EXTRACTION.name)
 }
 
 private fun TxtChapter.hasStaleSourceIntegrityMark(): Boolean {

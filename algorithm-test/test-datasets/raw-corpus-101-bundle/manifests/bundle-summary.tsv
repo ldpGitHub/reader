@@ -1,6 +1,0 @@
-"section"	"relativePath"	"sourcePath"	"files"	"sizeMB"	"notes"
-"raw-corpus-device-full"	"raw-corpus-101\device-full"	"algorithm-test\build\raw-corpus-101\device-full"	"158666"	"2881.96"	"Full downloaded corpus copied from phone-side fetch output."
-"latest-target-replay"	"results\raw-corpus-target-replay-1779518978083"	"algorithm-test\algorithm-test\build\raw-corpus-target-replay-1779518978083"	"405"	"5.77"	"Latest 101-book V5 target replay output."
-"raw-corpus-replay-audit"	"results\raw-corpus-replay-1779498601772"	"algorithm-test\build\raw-corpus-replay-1779498601772"	"444"	"3.2"	"Raw replay audit outputs."
-"test-fixtures"	"fixtures\src-test-resources"	"algorithm-test\src\test\resources"	"4501"	"39.73"	"Red/green fixture resources."
-"docs"	"results\docs"	"algorithm-test\docs"	"6"	"0.12"	"Algorithm design/progress/audit docs."

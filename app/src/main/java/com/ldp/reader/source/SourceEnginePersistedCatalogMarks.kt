@@ -1,7 +1,7 @@
 package com.ldp.reader.source
 
 import com.ldp.reader.model.bean.BookChapterBean
-import com.ldp.reader.sourceengine.content.v5.V5ChapterMarkState
+import com.ldp.reader.sourceengine.content.v8.V8ChapterMarkState
 import java.util.Locale
 
 object SourceEnginePersistedCatalogMarks {
@@ -96,9 +96,9 @@ object SourceEnginePersistedCatalogMarks {
 
 fun BookChapterBean.hasHiddenSourceIntegrityMark(): Boolean {
     return isCurrentSourceIntegrityReason(sourceIntegrityReason) &&
-        (sourceIntegrityState == V5ChapterMarkState.WRONG.name ||
-            sourceIntegrityState == V5ChapterMarkState.NON_STORY.name ||
-            sourceIntegrityState == V5ChapterMarkState.BAD_EXTRACTION.name)
+        (sourceIntegrityState == V8ChapterMarkState.WRONG.name ||
+            sourceIntegrityState == V8ChapterMarkState.NON_STORY.name ||
+            sourceIntegrityState == V8ChapterMarkState.BAD_EXTRACTION.name)
 }
 
 private fun BookChapterBean.hasSourceIntegrityMark(): Boolean {

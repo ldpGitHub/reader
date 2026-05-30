@@ -67,3 +67,6 @@ app/libs/
 /.ssh/
 /.idea/
 /.vscode/
+
+# Local runtime and verification artifacts
+/bridge-artifacts/

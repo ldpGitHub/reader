@@ -281,4 +281,3 @@ public class BookShelfViewModelFilterTest {
         return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8);
     }
 }
-

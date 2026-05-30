@@ -1,6 +1,0 @@
-id	title	author	mustSuggestIndexes	noSuggestIndexes	note
-item-16	叩问仙道	雨打青石	2781,2784,2785,2787		70-book batch first promoted case; all four suggested chapters were manually read and are mixed-source pollution
-item-06	仙工开物	蛊真人	1034,1035,1036,1037,1038,1039,1041	1030,1031,1032,1033,1040	70-book audit; all seven suggestions true pollution; neighboring chapters and non-story leave checked
-item-19	没钱修什么仙？	熊狼狗	634,1036,1037,1039,1040,1041,1042,1043	1033,1034,1035,1038,1044	70-book audit; original seven suggestions plus newly exposed polluted chapter 634 are true pollution; neighboring chapters and non-story leave checked
-item-50	贫道略通拳脚	九月当归	2010,2011,2012,2013,2014,2015,2016,2017	306,2008,2009	70-book audit; tail pollution fixed to include previously missed 2013/2016 while suppressing normal chapter 306
-item-24	异度旅社	远瞳	768,769,770,771,772,773,774,775	766,767	70-book audit; previously missed polluted chapters 768/769 are now included and neighboring 766/767 remain clean
