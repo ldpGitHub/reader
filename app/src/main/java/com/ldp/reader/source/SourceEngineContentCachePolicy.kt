@@ -24,7 +24,7 @@ object SourceEngineContentCachePolicy {
 
         if (folder.exists()) {
             folder.listFiles()
-                ?.filter { file -> file.isFile && file.name.endsWith(FileUtils.SUFFIX_NB) }
+                ?.filter { file -> file.isFile && file.name.endsWith(FileUtils.SUFFIX_CHAPTER_CACHE) }
                 ?.forEach { file -> FileUtils.deleteFile(file.absolutePath) }
         }
         folder.mkdirs()

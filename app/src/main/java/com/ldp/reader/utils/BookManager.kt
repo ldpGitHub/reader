@@ -158,7 +158,7 @@ class BookManager {
         @JvmStatic
         fun bookFilePath(folderName: String?, fileName: String?): String {
             return cacheFolderPath(folderName) +
-                File.separator + BookCacheKey.fileSegment(fileName) + FileUtils.SUFFIX_NB
+                File.separator + BookCacheKey.fileSegment(fileName) + FileUtils.SUFFIX_CHAPTER_CACHE
         }
 
         @JvmStatic

@@ -63,7 +63,7 @@ Removed:
    prevents a mostly-clean book from rerunning every maintenance cycle because
    one empty/too-short chapter was intentionally not trusted.
 8. Source-engine readable-body cache is bumped to `source-engine-content-v10` so
-   stale per-title `.nb` bodies from older source choices cannot be mistaken for
+   stale per-title chapter body cache files from older source choices cannot be mistaken for
    current schema verification evidence. The invalidation removes cached
    chapter bodies while preserving persisted source-tier metadata, and the V8
    maintenance loop runs that invalidation for every source-engine shelf book.

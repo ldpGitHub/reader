@@ -19,7 +19,7 @@ import kotlin.math.pow
  * Created by ldp on 17-5-11.
  */
 object FileUtils {
-    const val SUFFIX_NB = ".nb"
+    const val SUFFIX_CHAPTER_CACHE = ".txt"
     const val SUFFIX_TXT = ".txt"
     const val SUFFIX_EPUB = ".epub"
     const val SUFFIX_PDF = ".pdf"
